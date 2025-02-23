@@ -3,20 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package context;
+package controller;
 
+import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Product;
 
 /**
  *
- * @author TRAN NHU Y -  CE182032
+ * @author Dinh Van Do - CE182224
  */
-public class DBContext2 extends HttpServlet {
+@WebServlet(name="listProductsController", urlPatterns={"/listProductsController"})
+public class listProductsController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,15 +35,7 @@ public class DBContext2 extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet DBContext2</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet DBContext2 at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            
         }
     } 
 
@@ -66,7 +63,14 @@ public class DBContext2 extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDao l = new ProductDao();
+       List<Product> list = l.getAllProducts();
+       if (list.isEmpty()){
+           request.getRequestDispatcher("error.jsp").forward(request, response);
+       }
+           request.setAttribute("list", list);
+          
+           request.getRequestDispatcher("listProduct.jsp").forward(request, response);
     }
 
     /** 
