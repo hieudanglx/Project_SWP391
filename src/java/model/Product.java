@@ -44,6 +44,28 @@ public class Product {
         this.isDelete = isDelete;
     }
 
+    public Product(String productID, String productName, int price, String color, int quantityProduct, String imageURL, int isDelete) {
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.color = color;
+        this.quantityProduct = quantityProduct;
+        this.imageURL = imageURL;
+        this.isDelete = isDelete;
+    }
+
+    public Product(int category, String brand, String ram, String rom, String size, String refreshRate, String operatingSystem, String chip, String gpu) {
+        this.category = category;
+        this.brand = brand;
+        this.ram = ram;
+        this.rom = rom;
+        this.size = size;
+        this.operatingSystem = operatingSystem;
+        this.refreshRate = refreshRate;
+        this.chip = chip;
+        this.gpu = gpu;
+    }
+    
     public String getProductID() {
         return productID;
     }
