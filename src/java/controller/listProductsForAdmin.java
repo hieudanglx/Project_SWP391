@@ -15,13 +15,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Product;
+import model.ProductForAdmin;
 
 /**
  *
  * @author Dinh Van Do - CE182224
  */
-@WebServlet(name="listProductsController", urlPatterns={"/listProductsController"})
-public class listProductsController extends HttpServlet {
+@WebServlet(name="listProductsController", urlPatterns={"/listProductsForAdmin"})
+public class listProductsForAdmin extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,6 +36,13 @@ public class listProductsController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            ProductDao l = new ProductDao();
+       List<ProductForAdmin> list = l.getAllProductsForAdmin();
+       if (list.isEmpty()){
+           request.getRequestDispatcher("error.jsp").forward(request, response);
+       }
+           request.setAttribute("list", list);          
+           request.getRequestDispatcher("listProductForAdmin.jsp").forward(request, response);
             
         }
     } 
@@ -63,14 +71,8 @@ public class listProductsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ProductDao l = new ProductDao();
-       List<Product> list = l.getAllProducts();
-       if (list.isEmpty()){
-           request.getRequestDispatcher("error.jsp").forward(request, response);
-       }
-           request.setAttribute("list", list);
-          
-           request.getRequestDispatcher("listProduct.jsp").forward(request, response);
+         processRequest(request, response);
+        
     }
 
     /** 
