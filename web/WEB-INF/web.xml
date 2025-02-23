@@ -4,9 +4,17 @@
         <servlet-name>DBContext2</servlet-name>
         <servlet-class>context.DBContext2</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewDetailProduct</servlet-name>
+        <servlet-class>controller.ViewDetailProduct</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>DBContext2</servlet-name>
         <url-pattern>/DBContext2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewDetailProduct</servlet-name>
+        <url-pattern>/ViewDetailProduct</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
