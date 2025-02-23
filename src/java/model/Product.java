@@ -18,11 +18,12 @@ public class Product {
     private int quantitySell;
     private int quantityProduct;
     private String imageURL;
+    private int isDelete;
 
     public Product(String productID, String productName, int price, int category, String brand, 
                    String camera, String ram, String rom, String color, String operatingSystem, 
                    String size, String refreshRate, String chip, String gpu, int quantitySell, 
-                   int quantityProduct, String imageURL) {
+                   int quantityProduct, String imageURL,int isDelete) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
@@ -40,6 +41,7 @@ public class Product {
         this.quantitySell = quantitySell;
         this.quantityProduct = quantityProduct;
         this.imageURL = imageURL;
+        this.isDelete = isDelete;
     }
 
     public String getProductID() {
@@ -176,5 +178,12 @@ public class Product {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+    public int getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(int isDelete) {
+        this.isDelete = isDelete;
     }
 }

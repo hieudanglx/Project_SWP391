@@ -43,7 +43,8 @@ public class ProductDao extends DBContext {
                         rs.getString("GPU"),
                         rs.getInt("Quantity_Sell"),
                         rs.getInt("Quantity_Product"),
-                        rs.getString("ImageURL")
+                        rs.getString("ImageURL"),
+                        rs.getInt("isDelete")
                 );
                 list.add(product);
             }
