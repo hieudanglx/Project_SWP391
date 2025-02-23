@@ -4,7 +4,7 @@ public class Product {
     private String productID;
     private String productName;
     private int price;
-    private String category;
+    private int category;
     private String brand;
     private String camera;
     private String ram;
@@ -19,7 +19,7 @@ public class Product {
     private int quantityProduct;
     private String imageURL;
 
-    public Product(String productID, String productName, int price, String category, String brand, 
+    public Product(String productID, String productName, int price, int category, String brand, 
                    String camera, String ram, String rom, String color, String operatingSystem, 
                    String size, String refreshRate, String chip, String gpu, int quantitySell, 
                    int quantityProduct, String imageURL) {
@@ -66,11 +66,11 @@ public class Product {
         this.price = price;
     }
 
-    public String getCategory() {
+    public int getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(int category) {
         this.category = category;
     }
 

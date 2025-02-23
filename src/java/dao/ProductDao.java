@@ -30,7 +30,7 @@ public class ProductDao extends DBContext {
                         rs.getString("ProductID"),
                         rs.getString("productName"),
                         rs.getInt("Price"),
-                        rs.getString("categoryID"),
+                        rs.getInt("categoryID"),
                         rs.getString("Brand"),
                         rs.getString("Camera"),
                         rs.getString("Ram"),
