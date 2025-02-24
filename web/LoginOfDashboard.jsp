@@ -105,11 +105,15 @@
                 <p class="fs-5">Welcome Back</p>
                 <form action="LoginStaff_Admin" method="POST">
                     <div class="mb-3">
-                        <input type="text" class="form-control" placeholder="Email Address">
+                        <input type="text" id="Username" name="Username" class="form-control form-control-lg"
+                               placeholder="Enter a valid username" required>
+                        <label class="form-label" for="Username">Username</label>
                     </div>
                     <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" id="Password" name="Password" class="form-control"
+                               placeholder="Password" required>
                     </div>
+
                     <button type="submit" class="btn btn-primary">Login</button>
                     <button type="button" class="btn btn-secondary">Forgot Password</button>
                 </form>
