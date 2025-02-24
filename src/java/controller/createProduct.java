@@ -52,11 +52,10 @@ public class createProduct extends HttpServlet {
             int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
             int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
             String imageURL = request.getParameter("imageURL");
-            int isDelete = Integer.parseInt(request.getParameter("isDelete"));
+            
 
             Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-                    operatingSystem, size, refreshRate, chip, gpu, quantitySell, quantityProduct, imageURL, isDelete);
-
+                    operatingSystem, size, refreshRate, chip, gpu, quantitySell, quantityProduct, imageURL, 0);
 
             ProductDao productDAO = new ProductDao();
             boolean isAdded = productDAO.addProduct(product);

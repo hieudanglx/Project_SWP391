@@ -79,30 +79,39 @@ public class ProductDao extends DBContext {
     }
 
     public boolean addProduct(Product product) {
-        String query = "INSERT INTO [dbo].[Products] "
-                + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
-                + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
-                + "[Quantity_Product], [ImageURL], [IsDelete]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO [dbo].[Product] "
+            + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
+            + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
+            + "[Quantity_Product], [ImageURL], [IsDelete]) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
+            + "INSERT INTO [dbo].[Import_Inventory] "
+            + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
+            + "VALUES (?, ?, GETDATE(), ?, ?)";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, product.getProductID());
             pstmt.setString(2, product.getProductName());
             pstmt.setInt(3, product.getPrice());
-            pstmt.setInt(4, product.getCategory()); // Đúng với tên cột trong DB
+            pstmt.setInt(4, product.getCategory());
             pstmt.setString(5, product.getBrand());
             pstmt.setString(6, product.getCamera());
             pstmt.setString(7, product.getRam());
             pstmt.setString(8, product.getRom());
             pstmt.setString(9, product.getColor());
-            pstmt.setString(10, product.getOperatingSystem()); // Đổi thành Operating_System
+            pstmt.setString(10, product.getOperatingSystem());
             pstmt.setString(11, product.getSize());
-            pstmt.setString(12, product.getRefreshRate()); // Đổi thành Refresh_rate
+            pstmt.setString(12, product.getRefreshRate());
             pstmt.setString(13, product.getChip());
             pstmt.setString(14, product.getGpu());
-            pstmt.setInt(15, product.getQuantitySell()); // Đổi thành Quantity_Sell
-            pstmt.setInt(16, product.getQuantityProduct()); // Đổi thành Quantity_Product
+            pstmt.setInt(15, product.getQuantitySell());
+            pstmt.setInt(16, product.getQuantityProduct());
             pstmt.setString(17, product.getImageURL());
-            pstmt.setInt(18, product.getIsDelete()); // Đổi thành IsDelete
+            pstmt.setInt(18, product.getIsDelete());
+
+            // Set values for Import_Inventory table
+            pstmt.setString(19, product.getProductID()); // ProductID trong bảng Import_Inventory
+            pstmt.setInt(20, 0); // Import_price (giả sử chưa có)          
+            pstmt.setInt(21, 0); // Số lượng nhập hàng
+            pstmt.setString(22, "Unknown"); // Supplier (nếu không có thì đặt giá trị mặc định)
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
