@@ -5,12 +5,14 @@
 
 package controller;
 
+import dao.ProductDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Product;
 
 /**
  *
@@ -28,7 +30,12 @@ public class ViewProductDetailsController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        ProductDao link = new ProductDao();
+        String ProductID =(String) request.getAttribute("id");
+        Product p = link.getProductByProductID(ProductID);
         
+        request.setAttribute("product", p);
+        request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

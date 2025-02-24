@@ -136,6 +136,17 @@
                 <div  class="brand-button">${b}</div>
             </c:forEach>
         </div>
+        <div class="product-container">
+            <c:forEach items="${list}" var="p">
+                <div class="product-card">
+                    <a href="ViewProductDetailsController?id=${p.productID}">
+                        <img src="${p.imageURL}" alt="${p.productName}">
+                    </a>
+                    <div class="product-name">${p.productName}</div>
+                    <div class="product-price">${p.price}vnđ</div>
+                </div>
+            </c:forEach>
+        </div>
         <div id="filter" class="filter-container">
             <form id="filterForm" action="FilterGCController?CategotyID=${CategotyID}" method="POST">
                 <div class="filter-title">Filter Products</div>
@@ -233,17 +244,7 @@
                 </div>
             </form>
         </div>
-        <div class="product-container">
-            <c:forEach items="${list}" var="p">
-                <div class="product-card">
-                    <a href="ViewProductDetails.jsp?id=${p.id}">
-                        <img src="${p.imageURL}" alt="${p.productName}">
-                    </a>
-                    <div class="product-name">${p.productName}</div>
-                    <div class="product-price">${p.price}vnđ</div>
-                </div>
-            </c:forEach>
-        </div>
+        
         <script>
             function toggleFilter() {
                 const filter = document.getElementById('filter');

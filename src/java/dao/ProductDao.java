@@ -19,7 +19,6 @@ import model.ProductForAdmin;
  */
 public class ProductDao extends DBContext {
 
-
     public List<ProductForAdmin> getAllProductsForAdmin() {
         List<ProductForAdmin> list = new ArrayList<>();
         String query = "SELECT \n"
@@ -78,32 +77,28 @@ public class ProductDao extends DBContext {
         }
         return list;
     }
-    
-    
-    public boolean deleteProduct(String productID) {
-    String query = "UPDATE [dbo].[Product] SET isDelete = 1 WHERE ProductID = ?";
-    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-        pstmt.setString(1, productID);
-        int rs = pstmt.executeUpdate();
-        return rs > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return false;
-}
 
-    
-    
+    public boolean deleteProduct(String productID) {
+        String query = "UPDATE [dbo].[Product] SET isDelete = 1 WHERE ProductID = ?";
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, productID);
+            int rs = pstmt.executeUpdate();
+            return rs > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public boolean addProduct(Product product) {
         String query = "INSERT INTO [dbo].[Product] "
-            + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
-            + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
-            + "[Quantity_Product], [ImageURL], [IsDelete]) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
-            + "INSERT INTO [dbo].[Import_Inventory] "
-            + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
-            + "VALUES (?, ?, GETDATE(), ?, ?)";
+                + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
+                + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
+                + "[Quantity_Product], [ImageURL], [IsDelete]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
+                + "INSERT INTO [dbo].[Import_Inventory] "
+                + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
+                + "VALUES (?, ?, GETDATE(), ?, ?)";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, product.getProductID());
             pstmt.setString(2, product.getProductName());
@@ -137,7 +132,6 @@ public class ProductDao extends DBContext {
         }
         return false;
     }
-
 
     public List<Product> filterProducts(Product filter, int minPrice, int maxPrice) {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
@@ -187,9 +181,9 @@ public class ProductDao extends DBContext {
                 while (rs.next()) {
                     Product p = new Product(
                             rs.getString("ProductID"),
-                            rs.getString("ProductName"),
+                            rs.getString("productName"),
                             rs.getInt("Price"),
-                            rs.getInt("CategoryID"),
+                            rs.getInt("categoryID"),
                             rs.getString("Brand"),
                             rs.getString("Camera"),
                             rs.getString("Ram"),
@@ -218,10 +212,10 @@ public class ProductDao extends DBContext {
     }
 
     public Product getProductByProductID(String id) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE ");
+        StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
         addFilter(sql, params, "ProductID", id);
-        return executeProductQuery(sql.toString(), params).get(0);
+        return executeProductQuery(sql.toString(), params).get(1);
     }
 
     public List<Product> getProductByCategoryID(int id) {
@@ -255,7 +249,7 @@ public class ProductDao extends DBContext {
         String sql = "SELECT DISTINCT Brand FROM Product where CategoryID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
+            try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(rs.getString("Brand"));
                 }
