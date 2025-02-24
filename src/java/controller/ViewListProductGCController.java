@@ -85,6 +85,7 @@ public class ViewListProductGCController extends HttpServlet {
             request.setAttribute("err", ex.getMessage());
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
+
     }
 
     /**

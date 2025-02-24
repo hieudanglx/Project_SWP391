@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,15 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Product;
-import dao.ProductDao;
+import jakarta.servlet.http.HttpSession;
+import static org.apache.tomcat.jni.User.username;
 
 /**
  *
- * @author Dinh Van Do - CE182224
+ * @author Tran Phong Hai - CE180803
  */
-@WebServlet(name = "createProduct", urlPatterns = {"/createProduct"})
-public class createProduct extends HttpServlet {
+@WebServlet(name = "LoginStaff_Admin", urlPatterns = {"/LoginStaff_Admin"})
+public class LoginStaff_Admin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,38 +36,15 @@ public class createProduct extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String productID = request.getParameter("productID");
-            String productName = request.getParameter("productName");
-            int price = Integer.parseInt(request.getParameter("price"));
-            int category = Integer.parseInt(request.getParameter("category"));
-            String brand = request.getParameter("brand");
-            String camera = request.getParameter("camera");
-            String ram = request.getParameter("ram");
-            String rom = request.getParameter("rom");
-            String color = request.getParameter("color");
-            String operatingSystem = request.getParameter("operatingSystem");
-            String size = request.getParameter("size");
-            String refreshRate = request.getParameter("refreshRate");
-            String chip = request.getParameter("chip");
-            String gpu = request.getParameter("gpu");
-            int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
-            int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
-            String imageURL = request.getParameter("imageURL");
-            
-
-            Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-                    operatingSystem, size, refreshRate, chip, gpu, quantitySell, quantityProduct, imageURL, 0);
-
-            ProductDao productDAO = new ProductDao();
-            boolean isAdded = productDAO.addProduct(product);
-
-            if (isAdded) {
-                response.sendRedirect("listProductsForAdmin");
-            } else {
-                request.setAttribute("error", "Failed to add product");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-            }
-
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet LoginStaff_Admin</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet LoginStaff_Admin at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -96,7 +74,36 @@ public class createProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         response.setContentType("text/html;charset=UTF-8");
+
+        AccountDao accountDAO = new AccountDao();
+        String username = request.getParameter("Username");
+        String password = request.getParameter("Password");
+
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            request.setAttribute("error", "Username and Password cannot be empty");
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            if (accountDAO.ValidateStaff_Admin(username, password)) {
+                HttpSession session = request.getSession();
+                session.setAttribute("Username", username);
+
+                if ("admin".equalsIgnoreCase(username)) {
+                    response.sendRedirect("HomeDashBoard_Admin.jsp");
+                } else {
+                    response.sendRedirect("HomeDashBoard_Staff.jsp");
+                }
+            } else {
+                request.setAttribute("error", "Invalid username or password");
+                request.getRequestDispatcher("LoginOfDashnboard.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
     }
 
     /**

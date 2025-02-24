@@ -1,9 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
-public class Product {
+/**
+ *
+ * @author Dinh Van Do - CE182224
+ */
+public class ProductForAdmin {
     private String productID;
     private String productName;
     private int price;
+    private int importPrice;
     private int category;
     private String brand;
     private String camera;
@@ -20,13 +29,14 @@ public class Product {
     private String imageURL;
     private int isDelete;
 
-    public Product(String productID, String productName, int price, int category, String brand, 
+    public ProductForAdmin(String productID, String productName, int price, int importPrice, int category, String brand, 
                    String camera, String ram, String rom, String color, String operatingSystem, 
                    String size, String refreshRate, String chip, String gpu, int quantitySell, 
                    int quantityProduct, String imageURL,int isDelete) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
+         this.importPrice = importPrice;
         this.category = category;
         this.brand = brand;
         this.camera = camera;
@@ -44,31 +54,6 @@ public class Product {
         this.isDelete = isDelete;
     }
 
-    public Product(String productID, String productName, int price, String color, int quantityProduct, String imageURL, int isDelete) {
-        this.productID = productID;
-        this.productName = productName;
-        this.price = price;
-        this.color = color;
-        this.quantityProduct = quantityProduct;
-        this.imageURL = imageURL;
-        this.isDelete = isDelete;
-    }
-
-    public Product(int category, String brand, String ram, String rom, String size, String refreshRate, String chip, String gpu) {
-        this.category = category;
-        this.brand = brand;
-        this.ram = ram;
-        this.rom = rom;
-        this.size = size;
-        this.refreshRate = refreshRate;
-        this.chip = chip;
-        this.gpu = gpu;
-    }
-
-
-    public Product() {}
-
-    
     public String getProductID() {
         return productID;
     }
@@ -210,5 +195,12 @@ public class Product {
 
     public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
+    }
+    public int getImportPrice() {
+        return importPrice;
+    }
+
+    public void setImportPrice(int importPrice) {
+        this.importPrice = importPrice;
     }
 }
