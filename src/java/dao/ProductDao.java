@@ -79,6 +79,19 @@ public class ProductDao extends DBContext {
         }
         return list;
     }
+    
+    
+    public boolean deleteProduct(String productID) {
+    String query = "UPDATE [dbo].[Product] SET isDelete = 1 WHERE ProductID = ?";
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setString(1, productID);
+        int rs = pstmt.executeUpdate();
+        return rs > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 
     
     

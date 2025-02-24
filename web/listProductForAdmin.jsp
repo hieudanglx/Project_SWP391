@@ -38,22 +38,24 @@
     <tbody>
         <!-- Iterate through the list of products -->
         <c:forEach items="${list}" var="p">
-            <tr>
-                <td>${p.productID}</td>
-                <td>${p.productName}</td>
-                <td>${p.price}</td>
-                <td>${p.importPrice}</td>
-                <td>${p.quantityProduct}</td>
-                <td>
-                    <a href="updateProduct.jsp?productID=${p.productID}">
-                        <button class="btn btn-warning">Cập nhật</button>
-                    </a>
-                    <a href="deleteProduct?productID=${p.productID}" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
-                        <button class="btn btn-danger">Xóa</button>
-                    </a>
-                </td>
-            </tr>
-        </c:forEach>
+    <c:if test="${p.isDelete == 0}">
+        <tr>
+            <td>${p.productID}</td>
+            <td>${p.productName}</td>
+            <td>${p.price}</td>
+            <td>${p.importPrice}</td>
+            <td>${p.quantityProduct}</td>
+            <td>
+                <a href="updateProduct.jsp?productID=${p.productID}">
+                    <button class="btn btn-warning">Cập nhật</button>
+                </a>
+                <a href="deleteProduct?productID=${p.productID}" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                    <button class="btn btn-danger">Xóa</button>
+                </a>
+            </td>
+        </tr>
+    </c:if>
+</c:forEach>
     </tbody>
 </table>
 
