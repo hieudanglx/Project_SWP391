@@ -31,6 +31,8 @@ public class AccountCustomer {
         this.status = status;
         this.imgCustomer = imgCustomer;
     }
+    
+    
 
     public int getCustomerID() {
         return customerID;
@@ -95,5 +97,6 @@ public class AccountCustomer {
     public void setImgCustomer(String imgCustomer) {
         this.imgCustomer = imgCustomer;
     }
+    
      
 }
