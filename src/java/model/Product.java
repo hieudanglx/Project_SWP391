@@ -65,6 +65,10 @@ public class Product {
         this.chip = chip;
         this.gpu = gpu;
     }
+
+
+    public Product() {}
+
     
     public String getProductID() {
         return productID;
