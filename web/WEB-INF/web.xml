@@ -9,8 +9,8 @@
         <servlet-class>controller.ViewDetailProduct</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DBContext2</servlet-name>
-        <url-pattern>/DBContext2</url-pattern>
+        <servlet-name>DBContext</servlet-name>
+        <url-pattern>/DBContext</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ViewDetailProduct</servlet-name>

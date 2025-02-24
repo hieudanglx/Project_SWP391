@@ -132,5 +132,7 @@ public class ProductDao extends DBContext {
         }
         return productList;
     }
-
+    public void getAllCategory(){
+        
+    }
 }
