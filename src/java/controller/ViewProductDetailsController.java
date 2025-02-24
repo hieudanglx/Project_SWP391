@@ -12,6 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Product;
 
 /**
@@ -27,11 +30,12 @@ public class ViewProductDetailsController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
-        String ProductID =(String) request.getAttribute("id");
+        String ProductID =(String) request.getParameter("id");
         Product p = link.getProductByProductID(ProductID);
         
         request.setAttribute("product", p);
@@ -49,7 +53,11 @@ public class ViewProductDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     } 
 
     /** 
@@ -62,7 +70,11 @@ public class ViewProductDetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 

@@ -47,7 +47,7 @@
             }
 
                 .product-image {
-                    width: 100%;
+                    width: 50%;
                     max-width: 500px;
                     margin-bottom: 20px;
                 }
@@ -157,6 +157,7 @@
         </head>
         <body>
             <%@include file="header.jsp" %>
+            
             <div class="container">
                 <!-- Cột trái -->
                 <div class="left-box">

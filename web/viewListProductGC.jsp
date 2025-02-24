@@ -145,7 +145,7 @@
         <div class="product-container">
             <c:forEach items="${list}" var="p">
                 <div class="product-card">
-                    <a href="ViewCartController?id=${p.productID}">
+                    <a href="ViewProductDetailsController?id=${p.productID}">
                         <img src="${p.imageURL}" alt="${p.productName}">
                     </a>
                     <div class="product-name">${p.productName}</div>
