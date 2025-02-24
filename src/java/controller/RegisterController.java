@@ -2,26 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Controller;
+package controller;
 
 /**
  *
  * @author nguye
  */
-import DAOs.CustomerDAO;
+import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import Models.Customer;
+import model.Customer;
 import jakarta.servlet.annotation.WebServlet;
 
 /**
  * Servlet xử lý đăng ký khách hàng mới
  */
-@WebServlet("/RegisterController")
+@WebServlet(name="RegisterController", urlPatterns={"/RegisterController"})
 public class RegisterController extends HttpServlet {
 
     @Override
@@ -66,7 +66,7 @@ public class RegisterController extends HttpServlet {
             // Trả về phản hồi thành công
             response.setStatus(HttpServletResponse.SC_OK);
             out.print("{\"message\":\"Registration successful!\"}");
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("choiceLogin.jsp");
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"message\":\"An error occurred: " + e.getMessage() + "\"}");

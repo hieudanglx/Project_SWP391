@@ -35,7 +35,7 @@
                 <div class="top-header">
                     <header>Register</header>
                 </div>
-                <form action="http://localhost:8080/Project_SWP/RegisterController" method="post" onsubmit="return validateForm();">
+                <form action="RegisterController" method="post" onsubmit="return validateForm();">
                     <div class="input-field">
                         <input type="text" id="username" name="username" class="input" placeholder="Enter your username...">
                         <i class="bx bx-user" style="color: #000"></i>

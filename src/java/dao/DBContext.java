@@ -12,11 +12,11 @@ public class DBContext {
     public DBContext() {
         try {
             String url = "jdbc:sqlserver://localhost:1433;databaseName=Project_SWP";
-            String username = "sa";
+            String user = "sa";
             String password = "1";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(url, username, password);
-
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected to database successfully!");
         } catch (ClassNotFoundException | SQLException ex) {
             System.out.println(ex);
         }

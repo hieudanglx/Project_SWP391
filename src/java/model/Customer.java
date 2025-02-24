@@ -2,17 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Models;
+package model;
 
 /**
  *
  * @author nguye
  */
-import javax.persistence.*;
+
 
 public class Customer {
 
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
     private int id;
 
     private String username;

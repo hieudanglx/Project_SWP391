@@ -2,18 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package DAOs;
+package dao;
 
 /**
  *
  * @author nguye
  */
-import DB.DBContext;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import Models.Customer;
 
+import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.util.List;
+import model.Customer;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 public class CustomerDAO extends DBContext {
 
     public boolean isPhoneExisted(String phone) {
