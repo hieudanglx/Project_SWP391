@@ -3,11 +3,11 @@
     Created on : Feb 24, 2025, 8:02:38 PM
     Author     : Tran Phong Hai - CE180803
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+
 
     <head>
         <meta charset="UTF-8">

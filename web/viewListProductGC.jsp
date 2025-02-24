@@ -133,7 +133,7 @@
         <div class="brand-container">
             <button class="brand-button" onclick="toggleFilter()">Lọc</button>
             <c:forEach items="${brand}" var="b">
-                <div class="brand-button">${b}</div>
+                <div  class="brand-button">${b}</div>
             </c:forEach>
         </div>
         <div id="filter" class="filter-container">
@@ -196,36 +196,36 @@
                     </select>
                 </div>
                 <c:if test="${CategoryID}==1">
-                     <div class="filter-section">
-                    <label for="size">Screen size</label>
-                    <select id="size" name="size">
-                        <option value="">All size</option>
-                        <option value="13">13"</option>
-                        <option value="14">14"</option>
-                        <option value="15.6">15.6"</option>
-                        <option value="16">16"</option>
-                    </select>
-                </div>
+                    <div class="filter-section">
+                        <label for="size">Screen size</label>
+                        <select id="size" name="size">
+                            <option value="">All size</option>
+                            <option value="13">13"</option>
+                            <option value="14">14"</option>
+                            <option value="15.6">15.6"</option>
+                            <option value="16">16"</option>
+                        </select>
+                    </div>
                 </c:if>
                 <c:if test="${CategoryID}==1">
-                     <div class="filter-section">
-                    <label for="Chip">Chip</label>
-                    <select id="Chip" name="Chip">
-                        <option value="">All Chip</option>
-                         <option value="Intel Core">Intel Core</option>
-                        <option value="Apple">Apple</option>
-                    </select>
-                </div>
+                    <div class="filter-section">
+                        <label for="Chip">Chip</label>
+                        <select id="Chip" name="Chip">
+                            <option value="">All Chip</option>
+                            <option value="Intel Core">Intel Core</option>
+                            <option value="Apple">Apple</option>
+                        </select>
+                    </div>
                 </c:if>
                 <c:if test="${CategoryID}==1">
-                     <div class="filter-section">
-                    <label for="GPU">GPU</label>
-                    <select id="GPU" name="GPU">
-                        <option value="">All GPU</option>
-                        <option value="Card tích hợp">Card tích hợp</option>
-                        <option value="NVIDIA GeForce">NVIDIA GeForce</option>
-                    </select>
-                </div>
+                    <div class="filter-section">
+                        <label for="GPU">GPU</label>
+                        <select id="GPU" name="GPU">
+                            <option value="">All GPU</option>
+                            <option value="Card tích hợp">Card tích hợp</option>
+                            <option value="NVIDIA GeForce">NVIDIA GeForce</option>
+                        </select>
+                    </div>
                 </c:if>
                 <div class="filter-buttons">
                     <button type="button" class="btn-clear" onclick="clearFilters()">Clear</button>
@@ -236,7 +236,9 @@
         <div class="product-container">
             <c:forEach items="${list}" var="p">
                 <div class="product-card">
-                    <img src="${p.imageURL}" alt="${p.productName}">
+                    <a href="ViewProductDetails.jsp?id=${p.id}">
+                        <img src="${p.imageURL}" alt="${p.productName}">
+                    </a>
                     <div class="product-name">${p.productName}</div>
                     <div class="product-price">${p.price}vnđ</div>
                 </div>

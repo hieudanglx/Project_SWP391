@@ -3,7 +3,7 @@
     Created on : Feb 24, 2025, 5:56:12 PM
     Author     : CE180594_Phan Quốc Duy
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

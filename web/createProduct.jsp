@@ -3,7 +3,7 @@
     Created on : Feb 24, 2025, 1:12:38 AM
     Author     : Dinh Van Do - CE182224
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
