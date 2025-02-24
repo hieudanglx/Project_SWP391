@@ -28,7 +28,6 @@ public class ProductDao extends DBContext {
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
-
             while (rs.next()) {
                 Product product = new Product(
                         rs.getString("ProductID"),
@@ -72,16 +71,15 @@ public class ProductDao extends DBContext {
 //            sql.append(" AND Price <= ?");
 //            params.add(maxPrice);
 //        }
-//        if (filter.getCategoryID() > 0) {
-//            sql.append(" AND CategoryID = ?");
-//            params.add(filter.getCategoryID());
-//        }
+        if (filter.getCategory() > 0) {
+            sql.append(" AND CategoryID = ?");
+            params.add(filter.getCategory());
+        }
         addFilter(sql, params, "Brand", filter.getBrand());
         addFilter(sql, params, "Ram", filter.getRam());
         addFilter(sql, params, "Rom", filter.getRom());
         addFilter(sql, params, "Size", filter.getSize());
         addFilter(sql, params, "Refresh_rate", filter.getRefreshRate());
-        addFilter(sql, params, "Operating_System", filter.getOperatingSystem());
         addFilter(sql, params, "Chip", filter.getChip());
         addFilter(sql, params, "GPU", filter.getGpu());
 
@@ -146,11 +144,11 @@ public class ProductDao extends DBContext {
         return executeProductQuery(sql.toString(), params).get(0);
     }
 
-    public Product getProductByCategoryID(int id) {
+    public List<Product> getProductByCategoryID(int id) {
         String sql = "SELECT * FROM Product WHERE CategoryID = ?";
         List<Object> params = new ArrayList<>();
         params.add(id);
-        return executeProductQuery(sql, params).get(0);
+        return executeProductQuery(sql, params);
     }
 
     public List<Product> searchProductsByName(String name) {
@@ -172,10 +170,11 @@ public class ProductDao extends DBContext {
         return list;
     }
 
-    public List<String> getAllBrand() throws SQLException {
+    public List<String> getBrandbyCategoryID(int id) throws SQLException {
         List<String> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT Brand FROM Product";
+        String sql = "SELECT DISTINCT Brand FROM Product where CategoryID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     list.add(rs.getString("Brand"));
