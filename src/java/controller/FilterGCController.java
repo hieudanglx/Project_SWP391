@@ -48,21 +48,38 @@ public class FilterGCController extends HttpServlet {
         if (maxParam != null && !maxParam.trim().isEmpty()) {
             max = Integer.parseInt(maxParam);
         }
-        int categoryID = Integer.parseInt(request.getParameter("CategotyID"));
+        int CategoryID = 0;
+        String categoryIdParam = request.getParameter("CategoryID");
+        if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
+            try {
+                CategoryID = Integer.parseInt(categoryIdParam);
+            } catch (NumberFormatException e) {
+                // Xử lý trường hợp giá trị không phải số
+                request.setAttribute("error", "ID danh mục không hợp lệ");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+        } else {
+            // Xử lý trường hợp không có CategoryID
+            request.setAttribute("error", "Thiếu tham số CategoryID");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
 
         // Rest of your code
-        Product filter = new Product(categoryID,
+        Product filter = new Product(CategoryID,
                 request.getParameter("brand"),
                 request.getParameter("ram"),
                 request.getParameter("rom"),
                 request.getParameter("size"),
                 request.getParameter("refreshRate"),
                 request.getParameter("Chip"),
-                request.getParameter("GPU"));
-        List<String> brand = link.getBrandbyCategoryID(categoryID);
+                request.getParameter("GPU")); 
+        
+        List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, min, max);
-        request.setAttribute("CategotyID", categoryID);
-        request.setAttribute("brand", brand);
+        request.setAttribute("CategoryID", CategoryID);
+        request.setAttribute("listbrand", listbrand);
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }

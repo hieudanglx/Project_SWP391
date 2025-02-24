@@ -156,6 +156,7 @@
             </style>
         </head>
         <body>
+            <%@include file="header.jsp" %>
             <div class="container">
                 <!-- Cột trái -->
                 <div class="left-box">

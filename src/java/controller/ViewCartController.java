@@ -35,14 +35,12 @@ public class ViewCartController extends HttpServlet {
             throws ServletException, IOException {
         int CustomerID = 1;
         CartDao link = new CartDao();
-        List<Product> cart = new ArrayList<>();
-        cart = link.getCartByCustomerID(CustomerID);
-        request.setAttribute("product", cart);
-        if (cart.isEmpty()) {
+        List<Product> list = new ArrayList<>();
+        list = link.getCartByCustomerID(CustomerID);
+        if (list.isEmpty()) {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-        request.setAttribute("product", cart);
-
+        request.setAttribute("list", list);
         request.getRequestDispatcher("viewCart.jsp").forward(request, response);
     }
 

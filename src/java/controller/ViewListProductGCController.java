@@ -35,15 +35,36 @@ public class ViewListProductGCController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
-        int CategotyID = 1;
-        List<String> brand = link.getBrandbyCategoryID(CategotyID);
-        List<Product> list = link.getProductByCategoryID(CategotyID);
-        if (list.isEmpty()) {
+        int categoryID = 0; // Đổi tên biến cho đúng chính tả
+
+        // Xử lý tham số an toàn
+        String categoryIdParam = request.getParameter("CategoryID");
+        if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
+            try {
+                categoryID = Integer.parseInt(categoryIdParam);
+            } catch (NumberFormatException e) {
+                // Xử lý trường hợp giá trị không phải số
+                request.setAttribute("error", "ID danh mục không hợp lệ");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+        } else {
+            // Xử lý trường hợp không có CategoryID
+            request.setAttribute("error", "Thiếu tham số CategoryID");
             request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
         }
 
-        request.setAttribute("CategotyID", CategotyID);
-        request.setAttribute("brand", brand);
+        List<String> brand = link.getBrandbyCategoryID(categoryID);
+        List<Product> list = link.getProductByCategoryID(categoryID);
+
+        if (list.isEmpty()) {
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
+        request.setAttribute("CategoryID", categoryID); // Sửa tên attribute
+        request.setAttribute("listbrand", brand);
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }

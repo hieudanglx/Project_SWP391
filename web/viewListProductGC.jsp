@@ -127,19 +127,25 @@
                 width: 45%;
                 padding: 8px;
             }
+            a {
+                text-decoration: none;
+            }
         </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <div class="brand-container">
             <button class="brand-button" onclick="toggleFilter()">Lọc</button>
-            <c:forEach items="${brand}" var="b">
-                <div  class="brand-button">${b}</div>
+            <c:forEach items="${listbrand}" var="b">
+                <a href="FilterGCController?CategoryID=${CategoryID}&brand=${b}">
+                    <div  class="brand-button">${b}</div>
+                </a>
             </c:forEach>
         </div>
         <div class="product-container">
             <c:forEach items="${list}" var="p">
                 <div class="product-card">
-                    <a href="ViewProductDetailsController?id=${p.productID}">
+                    <a href="ViewCartController?id=${p.productID}">
                         <img src="${p.imageURL}" alt="${p.productName}">
                     </a>
                     <div class="product-name">${p.productName}</div>
@@ -148,7 +154,7 @@
             </c:forEach>
         </div>
         <div id="filter" class="filter-container">
-            <form id="filterForm" action="FilterGCController?CategotyID=${CategotyID}" method="POST">
+            <form id="filterForm" action="FilterGCController?CategoryID=${CategoryID}" method="POST">
                 <div class="filter-title">Filter Products</div>
                 <div class="filter-section">
                     <label for="price-range">Price Range</label>
@@ -206,7 +212,7 @@
                         <option value="144hz">144 Hz</option>
                     </select>
                 </div>
-                <c:if test="${CategoryID}==1">
+                <c:if test="${CategoryID==1}">
                     <div class="filter-section">
                         <label for="size">Screen size</label>
                         <select id="size" name="size">
@@ -218,7 +224,7 @@
                         </select>
                     </div>
                 </c:if>
-                <c:if test="${CategoryID}==1">
+                <c:if test="${CategoryID==1}">
                     <div class="filter-section">
                         <label for="Chip">Chip</label>
                         <select id="Chip" name="Chip">
@@ -228,7 +234,7 @@
                         </select>
                     </div>
                 </c:if>
-                <c:if test="${CategoryID}==1">
+                <c:if test="${CategoryID==1}">
                     <div class="filter-section">
                         <label for="GPU">GPU</label>
                         <select id="GPU" name="GPU">
@@ -244,7 +250,7 @@
                 </div>
             </form>
         </div>
-        
+
         <script>
             function toggleFilter() {
                 const filter = document.getElementById('filter');
