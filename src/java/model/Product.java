@@ -54,13 +54,12 @@ public class Product {
         this.isDelete = isDelete;
     }
 
-    public Product(int category, String brand, String ram, String rom, String size, String refreshRate, String operatingSystem, String chip, String gpu) {
+    public Product(int category, String brand, String ram, String rom, String size, String refreshRate, String chip, String gpu) {
         this.category = category;
         this.brand = brand;
         this.ram = ram;
         this.rom = rom;
         this.size = size;
-        this.operatingSystem = operatingSystem;
         this.refreshRate = refreshRate;
         this.chip = chip;
         this.gpu = gpu;

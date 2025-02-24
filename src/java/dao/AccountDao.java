@@ -13,7 +13,7 @@ import java.sql.SQLException;
  *
  * @author Tran Phong Hai - CE180803
  */
-public class AccountDao extends dao.DBContext{
+public class AccountDao extends DBContext{
       public boolean ValidateStaff_Admin(String username, String password) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");

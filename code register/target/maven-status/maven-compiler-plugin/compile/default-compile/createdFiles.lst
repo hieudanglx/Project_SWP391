@@ -1,5 +1,0 @@
-Controller\CustomerController.class
-DAOs\CustomerDAO.class
-DB\DBContext.class
-Controller\RegisterController.class
-Models\Customer.class
