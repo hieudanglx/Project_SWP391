@@ -12,7 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form action="listProductsController" method="POST">
+        <form action="ViewListProductGC" method="POST">
                             <!-- Username Input -->
                             <div class="form-outline mb-4">
                                 <input type="text" id="username" name="username" class="form-control form-control-lg"
