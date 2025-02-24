@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
+<<<<<<< HEAD
             <form action="ViewListProductGC" method="POST">
 
                 <!-- Username Input -->
@@ -39,6 +40,38 @@
                     <a href="forgotPassword.jsp" class="text-body">Forgot password?</a>
                 </div>
 
+=======
+<!--
+        <form action="listProductsForAdmin" method="POST">
+            =======-->
+            <form action="ViewListProductGC" method="POST">
+
+                <!-- Username Input -->
+                <div class="form-outline mb-4">
+                    <input type="text" id="username" name="username" class="form-control form-control-lg"
+                           placeholder="Enter a valid username" required />
+                    <label class="form-label" for="username">Username</label>
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-outline mb-3">
+                    <input type="password" id="password" name="password" class="form-control form-control-lg"
+                           placeholder="Enter password" required />
+                    <label class="form-label" for="password">Password</label>
+                </div>
+
+
+
+                <!-- Remember Me and Forgot Password -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="form-check mb-0">
+                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+                        <label class="form-check-label" for="form2Example3">Remember me</label>
+                    </div>
+                    <a href="forgotPassword.jsp" class="text-body">Forgot password?</a>
+                </div>
+
+>>>>>>> 5fe0b19 (add register-Huy)
                 <!-- Submit Button -->
                 <div class="text-center text-lg-start mt-4 pt-2">
                     <button type="submit" class="btn btn-primary btn-lg"
