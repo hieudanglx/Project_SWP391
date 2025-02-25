@@ -245,14 +245,14 @@ public class ProductDao extends DBContext {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-//        if (minPrice > 0) {
-//            sql.append(" AND Price >= ?");
-//            params.add(minPrice);
-//        }
-//        if (maxPrice > minPrice) {
-//            sql.append(" AND Price <= ?");
-//            params.add(maxPrice);
-//        }
+        if (minPrice > 0) {
+            sql.append(" AND Price >= ?");
+            params.add(minPrice);
+        }
+        if (maxPrice > minPrice) {
+            sql.append(" AND Price <= ?");
+            params.add(maxPrice);
+        }
         if (filter.getCategory() > 0) {
             sql.append(" AND CategoryID = ?");
             params.add(filter.getCategory());
@@ -323,7 +323,7 @@ public class ProductDao extends DBContext {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
         addFilter(sql, params, "ProductID", id);
-        return executeProductQuery(sql.toString(), params).get(1);
+        return executeProductQuery(sql.toString(), params).get(0);
     }
 
     public List<Product> getProductByCategoryID(int id) {

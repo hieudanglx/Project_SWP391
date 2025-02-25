@@ -175,7 +175,7 @@
                     <label for="brand">Brand</label>
                     <select id="brand" name="brand">
                         <option value="">All Brands</option>
-                        <c:forEach items="${brand}" var="v">
+                        <c:forEach items="${listbrand}" var="v">
                             <option value="${v}">${v}</option>
                         </c:forEach>
                     </select>
