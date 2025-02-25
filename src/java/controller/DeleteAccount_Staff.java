@@ -5,42 +5,42 @@
 
 package controller;
 
-import dao.ProductDao;
+import dao.AccountDao;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Product;
 
 /**
  *
- * @author CE180594_Phan Quốc Duy
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name = "ViewProductDetailsController", urlPatterns = {"/ViewProductDetailsController"})
-public class ViewProductDetailsController extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     * @throws java.sql.SQLException
-     */
+@WebServlet(name="DeleteAccount_Staff", urlPatterns={"/DeleteAccount_Staff"})
+public class DeleteAccount_Staff extends HttpServlet {
+   private AccountDao accountDao;
+
+    public void init() {
+        accountDao = new AccountDao();
+    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException, SQLException {
-        ProductDao link = new ProductDao();
-        String ProductID =(String) request.getParameter("id");
-        Product p = link.getProductByProductID(ProductID);
-        
-        request.setAttribute("product", p);
-        request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
-    } 
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            int staffID = Integer.parseInt(request.getParameter("staffID")); // Lấy staffID từ request parameter
+            boolean isDeleted = accountDao.deleteAccountStaff(staffID);
+
+            if (isDeleted) {
+                response.sendRedirect("ListAccountStaff"); // Chuyển hướng về trang danh sách staff sau khi xóa thành công
+            } else {
+                request.setAttribute("error", "Failed to delete staff member"); // Đặt thông báo lỗi
+                request.getRequestDispatcher("ListAccountStaff").forward(request, response); // Chuyển hướng về trang danh sách với thông báo lỗi
+            }
+        }
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -53,11 +53,7 @@ public class ViewProductDetailsController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     } 
 
     /** 
@@ -70,11 +66,7 @@ public class ViewProductDetailsController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /** 
