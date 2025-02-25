@@ -16,8 +16,6 @@
     </head>
     <body>
 
-        <pre>${requestScope.product}</pre>
-
         <div class="container mt-5">
             <h1 class="text-center">Edit Product</h1>
             <form action="updateProduct" method="POST" class="needs-validation" novalidate>

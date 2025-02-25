@@ -4,26 +4,24 @@
  */
 package controller;
 
-import dao.ProductDao;
+import dao.AccountDao;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Product;
+import model.AccountCustomer;
 
 /**
  *
- * @author CE180594_Phan Quốc Duy
+ * @author Tran Phong Hai - CE180803
  */
-@WebServlet(name = "SearchController", urlPatterns = {"/SearchController"})
-public class SearchController extends HttpServlet {
+@WebServlet(name = "SearchAccountCustomer", urlPatterns = {"/SearchAccountCustomer"})
+public class SearchAccountCustomer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,23 +31,22 @@ public class SearchController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
-     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
-        ProductDao link = new ProductDao();
-        String name = request.getParameter("keyword");
-        List<Product> list = link.searchProductsByName(name);
-        List<String> listbrand = new ArrayList<>();
-        if (!list.isEmpty()) {
-            int CategoryID = list.get(0).getCategory();
-            listbrand = link.getBrandbyCategoryID(CategoryID);
-            request.setAttribute("CategoryID", CategoryID);
-
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet SearchAccountCustomer</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet SearchAccountCustomer at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        request.setAttribute("listbrand", listbrand);
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,11 +61,7 @@ public class SearchController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -82,11 +75,15 @@ public class SearchController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Lấy từ khóa tìm kiếm từ request
+       String username = request.getParameter("username"); // Lấy username từ request
+
+        AccountDao dao = new AccountDao();
+        List<AccountCustomer> searchResults = dao.searchCustomerByUsername(username); // Gọi phương thức tìm kiếm
+
+        request.setAttribute("list", searchResults);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("manageAccountCustomer.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**

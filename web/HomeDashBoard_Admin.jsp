@@ -54,15 +54,17 @@
     </head>
     <body>
 
+
         <!-- Sidebar -->
         <div class="sidebar">
             <h4 class="text-center">Dashboard</h4>
             <a href="#"><i class="fas fa-home"></i> Home</a>
             <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Account Staff</a>
-            <a href="#"><i class="fas fa-users"></i> Users</a>
-            <a href="#"><i class="fas fa-box"></i> Products</a>
+            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Account Customer</a>
+            <a href="listProductsForAdmin"><i class="fas fa-box"></i>Manage Products</a>
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
             <button class="btn btn-danger" onclick="logout()">Logout</button>
+
         </div>
 
         <!-- Main Content -->
@@ -71,29 +73,53 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <h4>Welcome to Dashboard</h4>
-                    
-                          
+                    <div class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+                    <div class="ms-auto">
+                        <span class="me-3">Admin</span>
+                        <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User">
+                    </div>
                 </div>
             </nav>
 
             <!-- Dashboard Cards -->
-            
-        </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h5>Total Users</h5>
+                        <p class="fs-4">1,250</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h5>Total Sales</h5>
+                        <p class="fs-4">$12,500</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3">
+                        <h5>Products Sold</h5>
+                        <p class="fs-4">3,420</p>
+                    </div>
+                </div>
+            </div>
 
     </body>
     <script>
-    function logout() {
-        fetch('/LogOutStaffAndAdminController', { method: 'POST' })  // Gọi model
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/LoginOfDashboard.jsp';  // Chuyển về trang login
-                } else {
-                    alert('Logout Fail!.');
-                }
-            })
-            .catch(error => console.error('logout Error:', error));
-    }
-</script>
+        function logout() {
+            fetch('/LogOutStaffAndAdminController', {method: 'POST'})  // Gọi model
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/LoginOfDashboard.jsp';  // Chuyển về trang login
+                        } else {
+                            alert('Logout Fail!.');
+                        }
+                    })
+                    .catch(error => console.error('logout Error:', error));
+        }
+    </script>
 </html>
 
 
