@@ -4,23 +4,25 @@
  */
 package controller;
 
-import dao.CartDao;
+import dao.AccountDao;
+import dao.ProductDao;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
-import model.Product;
+import model.AccountStaff;
+import model.ProductForAdmin;
 
 /**
  *
- * @author CE180594_Phan Quốc Duy
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name = "ViewCartController", urlPatterns = {"/ViewCartController"})
-public class ViewCartController extends HttpServlet {
+@WebServlet(name = "ListAccountStaff", urlPatterns = {"/ListAccountStaff"})
+public class ListAccountStaff extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,18 +35,15 @@ public class ViewCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int CustomerID = 1;
-        CartDao link = new CartDao();
-        List<Product> list = new ArrayList<>();
-        list = link.getCartByCustomerID(CustomerID);
-        if (list.isEmpty()) {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
+        AccountDao a = new AccountDao();
+        List<AccountStaff> List = a.getAllAccountStaff();
+         
+            request.setAttribute("list", List);
+            request.getRequestDispatcher("viewlistAccountStaff.jsp").forward(request, response);
+        
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

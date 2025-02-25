@@ -46,7 +46,7 @@
             <td>${p.importPrice}</td>
             <td>${p.quantityProduct}</td>
             <td>
-                <a href="updateProduct.jsp?productID=${p.productID}">
+                <a href="updateProduct?productID=${p.productID}">
                     <button class="btn btn-warning">Cập nhật</button>
                 </a>
                 <a href="deleteProduct?productID=${p.productID}" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">

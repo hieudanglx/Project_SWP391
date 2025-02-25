@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Product;
-import dao.ProductDao;
 
 /**
  *
  * @author Dinh Van Do - CE182224
  */
-@WebServlet(name = "createProduct", urlPatterns = {"/createProduct"})
-public class createProduct extends HttpServlet {
+@WebServlet(name = "updateProduct", urlPatterns = {"/updateProduct"})
+public class updateProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,8 +35,11 @@ public class createProduct extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            // Nhận dữ liệu từ form JSP
             
-
+        } catch (Exception e) {
+            request.setAttribute("error", "Invalid data: " + e.getMessage());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }
 
@@ -52,7 +55,11 @@ public class createProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String id = request.getParameter("productID");
+        ProductDao productDao = new ProductDao();
+        Product product = productDao.getProductById(id);
+        request.setAttribute("product", product);
+        request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
     }
 
     /**
@@ -80,21 +87,23 @@ public class createProduct extends HttpServlet {
             String refreshRate = request.getParameter("refreshRate");
             String chip = request.getParameter("chip");
             String gpu = request.getParameter("gpu");
-//            int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
-//            int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
+            int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
+            int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
             String imageURL = request.getParameter("imageURL");
-            
 
+            // Tạo đối tượng Product
             Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-                    operatingSystem, size, refreshRate, chip, gpu, 0, 0, imageURL, 0);
+                    operatingSystem, size, refreshRate, chip, gpu, quantitySell,
+                    quantityProduct, imageURL, 0);
 
+            // Gọi DAO để cập nhật sản phẩm
             ProductDao productDAO = new ProductDao();
-            boolean isAdded = productDAO.addProduct(product);
+            boolean isUpdated = productDAO.updateProduct(product);
 
-            if (isAdded) {
+            if (isUpdated) {
                 response.sendRedirect("listProductsForAdmin");
             } else {
-                request.setAttribute("error", "Failed to add product");
+                request.setAttribute("error", "Failed to update product");
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             }
     }

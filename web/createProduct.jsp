@@ -3,7 +3,7 @@
     Created on : Feb 24, 2025, 1:12:38 AM
     Author     : Dinh Van Do - CE182224
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,10 +34,15 @@
                     <input type="number" class="form-control" id="price" name="price" required />
                 </div>
 
-                <div class="mb-3">
+                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
-                    <input type="number" class="form-control" id="category" name="category" required />
+                    <select class="form-control" id="category" name="category" required>
+                        <option value="1">1(Laptop)</option>
+                        <option value="2">2(DienThoai)</option>
+                        <option value="3">3(Tablet)</option>
+                    </select>
                 </div>
+
 
                 <div class="mb-3">
                     <label for="brand" class="form-label">Brand</label>
@@ -89,22 +94,22 @@
                     <input type="text" class="form-control" id="gpu" name="gpu" required />
                 </div>
 
-                <div class="mb-3">
-                    <label for="quantitySell" class="form-label">Quantity Sold</label>
-                    <input type="number" class="form-control" id="quantitySell" name="quantitySell" required />
-                </div>
+                <!--                <div class="mb-3">
+                                    <label for="quantitySell" class="form-label">Quantity Sold</label>
+                                    <input type="number" class="form-control" id="quantitySell" name="quantitySell" required />
+                                </div>-->
 
-                <div class="mb-3">
-                    <label for="quantityProduct" class="form-label">Quantity Available</label>
-                    <input type="number" class="form-control" id="quantityProduct" name="quantityProduct" required />
-                </div>
+                <!--                <div class="mb-3">
+                                    <label for="quantityProduct" class="form-label">Quantity Available</label>
+                                    <input type="number" class="form-control" id="quantityProduct" name="quantityProduct" required />
+                                </div>-->
 
                 <div class="mb-3">
                     <label for="imageURL" class="form-label">Image URL</label>
                     <input type="url" class="form-control" id="imageURL" name="imageURL" required />
                 </div>
 
-                <input type="hidden" name="isDelete" value="0" />
+                <!--                <input type="hidden" name="isDelete" value="0" />-->
 
                 <div class="d-flex justify-content-start">
                     <button type="submit" class="btn btn-primary me-2">Save</button>
@@ -113,22 +118,22 @@
             </form>
         </div>
         <script>
-    (function () {
-        'use strict';
-        window.addEventListener('load', function () {
-            var forms = document.getElementsByClassName('needs-validation');
-            Array.prototype.filter.call(forms, function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
                 }, false);
-            });
-        }, false);
-    })();
-</script>
+            })();
+        </script>
 
     </body>
 </html>

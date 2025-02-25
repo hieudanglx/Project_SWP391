@@ -2,52 +2,49 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+
 package controller;
 
-import dao.CartDao;
+import dao.ProductDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Product;
 
 /**
  *
  * @author CE180594_Phan Quốc Duy
  */
-@WebServlet(name = "ViewCartController", urlPatterns = {"/ViewCartController"})
-public class ViewCartController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
+@WebServlet(name = "ViewProductDetailsController", urlPatterns = {"/ViewProductDetailsController"})
+public class ViewProductDetailsController extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int CustomerID = 1;
-        CartDao link = new CartDao();
-        List<Product> list = new ArrayList<>();
-        list = link.getCartByCustomerID(CustomerID);
-        if (list.isEmpty()) {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
-    }
+    throws ServletException, IOException, SQLException {
+        ProductDao link = new ProductDao();
+        String ProductID =(String) request.getParameter("id");
+        Product p = link.getProductByProductID(ProductID);
+        
+        request.setAttribute("product", p);
+        request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
+    } 
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /** 
      * Handles the HTTP <code>GET</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -55,13 +52,16 @@ public class ViewCartController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+    throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    } 
 
-    /**
+    /** 
      * Handles the HTTP <code>POST</code> method.
-     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -69,13 +69,16 @@ public class ViewCartController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    /**
+    /** 
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override
