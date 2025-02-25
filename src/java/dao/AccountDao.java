@@ -142,17 +142,25 @@ public class AccountDao extends dao.DBContext {
     }
 
     public boolean deleteAccountCustomer(int customerID) {
-        String query = "DELETE FROM Customer WHERE customerID = ?";
-        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, customerID);
-            int rowAffected = pstmt.executeUpdate();
+
+        String deleteCartQuery = "DELETE FROM Cart WHERE CustomerID = ?";
+        String deleteCustomerQuery = "DELETE FROM Customer WHERE CustomerID = ?";
+
+        try ( PreparedStatement pstmtCart = connection.prepareStatement(deleteCartQuery);  PreparedStatement pstmtCustomer = connection.prepareStatement(deleteCustomerQuery)) {
+
+            // Xóa giỏ hàng trước
+            pstmtCart.setInt(1, customerID);
+            pstmtCart.executeUpdate();
+
+            // Xóa tài khoản khách hàng
+            pstmtCustomer.setInt(1, customerID);
+            int rowAffected = pstmtCustomer.executeUpdate();
+
             return rowAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
-        
-        
     }
 
     public List<AccountCustomer> searchCustomerByUsername(String username) {

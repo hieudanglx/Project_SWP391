@@ -44,7 +44,7 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h4 class="text-center">Dashboard</h4>
-            <a href="home.jsp">Home</a>
+            <a href="HomeDashBoard_Admin.jsp">Home</a>
             <a href="ListAccountStaff">Manager Account Staff</a>
             <a href="listAccountCustomer">Manage Account Customer</a>
             <a href="listProduct.jsp">Manage Products</a>
