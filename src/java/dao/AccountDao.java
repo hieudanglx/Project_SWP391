@@ -151,6 +151,8 @@ public class AccountDao extends dao.DBContext {
             e.printStackTrace();
         }
         return false;
+        
+        
     }
 
     public List<AccountCustomer> searchCustomerByUsername(String username) {
