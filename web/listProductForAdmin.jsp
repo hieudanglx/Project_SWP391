@@ -52,7 +52,7 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h4 class="text-center">Dashboard</h4>
-            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <a href="HomeDashBoard_Admin.jsp"><i class="fas fa-home"></i> Home</a>
             <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Account Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Account Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>

@@ -112,12 +112,16 @@
                             <input type="password" id="Password" name="Password" class="form-control"
                                    placeholder="Password" required>
                         </div>
-
+                        <c:if test="${not empty error}">
+                            <div class="text-danger text-center fw-bold mt-2">${error}</div>
+                        </c:if>
                         <button type="submit" class="btn btn-primary">Login</button>
                         <button type="button" class="btn btn-secondary">Forgot Password</button>
                     </form>
                 </div>
             </div>
+
+
         </div>
     </body>
 </html>

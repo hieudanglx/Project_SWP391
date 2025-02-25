@@ -60,16 +60,20 @@ public class DeletCustomerAccount extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         AccountDao accountDao = new AccountDao();
-       try (PrintWriter out = response.getWriter()) {
-            int customerID = Integer.parseInt(request.getParameter("customerID")); // Lấy staffID từ request parameter
+        try {
+            int customerID = Integer.parseInt(request.getParameter("customerID"));
+
             boolean isDeleted = accountDao.deleteAccountCustomer(customerID);
 
             if (isDeleted) {
-                response.sendRedirect("listAccountCustomer"); // Chuyển hướng về trang danh sách staff sau khi xóa thành công
+                response.sendRedirect("listAccountCustomer?message=success"); // Chuyển hướng với thông báo thành công
             } else {
-                request.setAttribute("error", "Failed to delete customer "); // Đặt thông báo lỗi
-                request.getRequestDispatcher("listAccountCustomer").forward(request, response); // Chuyển hướng về trang danh sách với thông báo lỗi
+                request.setAttribute("error", "Xóa khách hàng thất bại!");
+                request.getRequestDispatcher("listAccountCustomer.jsp").forward(request, response);
             }
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "ID khách hàng không hợp lệ!");
+            request.getRequestDispatcher("listAccountCustomer.jsp").forward(request, response);
         }
     }
 

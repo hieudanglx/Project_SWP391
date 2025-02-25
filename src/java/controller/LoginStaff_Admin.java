@@ -97,7 +97,7 @@ public class LoginStaff_Admin extends HttpServlet {
                 }
             } else {
                 request.setAttribute("error", "Invalid username or password");
-                request.getRequestDispatcher("LoginOfDashnboard.jsp").forward(request, response);
+                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();

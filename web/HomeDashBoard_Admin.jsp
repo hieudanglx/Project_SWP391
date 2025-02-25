@@ -59,8 +59,8 @@
         <div class="sidebar">
             <h4 class="text-center">Dashboard</h4>
             <a href="#"><i class="fas fa-home"></i> Home</a>
-            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Account Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Account Customer</a>
+            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
+            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i>Manage Products</a>
             <a href="#"><i class="fas fa-cog"></i> Settings</a>
             <button class="btn btn-danger" onclick="logout()">Logout</button>
