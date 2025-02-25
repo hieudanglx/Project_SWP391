@@ -58,31 +58,18 @@ public class DeletCustomerAccount extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String idParam = request.getParameter("customerID");
+        response.setContentType("text/html;charset=UTF-8");
+        AccountDao accountDao = new AccountDao();
+       try (PrintWriter out = response.getWriter()) {
+            int customerID = Integer.parseInt(request.getParameter("customerID")); // Lấy staffID từ request parameter
+            boolean isDeleted = accountDao.deleteAccountCustomer(customerID);
 
-        // Kiểm tra nếu customerID bị thiếu hoặc không hợp lệ
-        if (idParam == null || idParam.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Thiếu CustomerID");
-            return;
-        }
-
-        int customerID;
-        try {
-            customerID = Integer.parseInt(idParam); // Chuyển đổi String -> int
-        } catch (NumberFormatException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("CustomerID không hợp lệ");
-            return;
-        }
-
-        // Gọi DAO để xóa tài khoản khách hàng
-        AccountDao dao = new AccountDao();
-        if (dao.deleteAccountCustomer(customerID)) {
-            response.sendRedirect("listAccountCustomer"); // Chuyển hướng nếu xóa thành công
-        } else {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Lỗi khi xóa tài khoản");
+            if (isDeleted) {
+                response.sendRedirect("listAccountCustomer"); // Chuyển hướng về trang danh sách staff sau khi xóa thành công
+            } else {
+                request.setAttribute("error", "Failed to delete customer "); // Đặt thông báo lỗi
+                request.getRequestDispatcher("listAccountCustomer").forward(request, response); // Chuyển hướng về trang danh sách với thông báo lỗi
+            }
         }
     }
 
