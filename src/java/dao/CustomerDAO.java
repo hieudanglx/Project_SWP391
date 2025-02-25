@@ -8,13 +8,14 @@ package dao;
  *
  * @author nguye
  */
-
+import jakarta.servlet.annotation.WebServlet;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.util.List;
 import model.Customer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 public class CustomerDAO extends DBContext {
 
     public boolean isPhoneExisted(String phone) {
@@ -42,6 +43,10 @@ public class CustomerDAO extends DBContext {
     }
 
     public Customer getCustomerByEmail(String email) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null;
+        }
         String sql = "SELECT * FROM Customer WHERE email = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, email);
@@ -61,6 +66,24 @@ public class CustomerDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean validateEmail(String email) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return false;
+        }
+
+        String query = "SELECT email FROM customer WHERE email = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, email);
+            try ( ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void addCustomer(Customer customer) {
@@ -138,6 +161,55 @@ public class CustomerDAO extends DBContext {
             stmt.setString(5, customer.getPhoneNumber());
 
             stmt.executeUpdate();
+        }
+    }
+
+    public void saveResetToken(String email, String token) {
+        String sql = "UPDATE Customer SET reset_token = ? WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, token);
+            stmt.setString(2, email);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Customer getCustomerByToken(String token) {
+        String sql = "SELECT * FROM Customer WHERE reset_token = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, token);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Customer(
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("Status"),
+                        rs.getString("imgcustomer"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE Customers SET password = ? WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println("🔹 Rows Updated: " + rowsUpdated + " | Email: " + email);
+
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 
