@@ -4,8 +4,7 @@
     Author     : TRAN NHU Y -  CE182032
 --%>
 
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page pageEncoding="UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.Customer" %>
 <%
     HttpSession userSession = request.getSession(false);
@@ -51,6 +50,7 @@
     </script>
 </head>
 <body>
+    <%@include file="header.jsp" %>
     <div class="container">
         <h2>Welcome, <%= customer.getUsername() %>!</h2>        
 

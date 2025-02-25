@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -149,7 +150,9 @@
                         <img src="${p.imageURL}" alt="${p.productName}">
                     </a>
                     <div class="product-name">${p.productName}</div>
-                    <div class="product-price">${p.price}vnđ</div>
+                    <div class="product-price">
+                        <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="đ" />
+                    </div>
                 </div>
             </c:forEach>
         </div>

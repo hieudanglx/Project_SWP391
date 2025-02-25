@@ -134,16 +134,17 @@
         <header class="header">
             <!-- Top Row -->
             <div class="top-row">
-                <a href="home.jsp" class="logo">ELECTRONIC STORE</a>
+                <a href="ViewListProductGC?CategoryID=${1}" class="logo">ELECTRONIC STORE</a>
 
                 <div class="top-right">
                     <div class="auth-section">
                         <c:choose>
-                            <c:when test="${not empty sessionScope.user}">
+                            <c:when test="${not empty sessionScope.customer}">
+                                <p>${sessionScope.customer.username}</p>
                                 <a href="logout" class="login-btn">Đăng xuất</a>
                             </c:when>
                             <c:otherwise>
-                                <a href="login.jsp" class="login-btn">Đăng nhập</a>
+                                <a href="loginOfCustomer.jsp" class="login-btn">Đăng nhập</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
@@ -174,7 +175,6 @@
                         class="search-input" 
                         placeholder="Tìm kiếm sản phẩm..."
                         >
-                    <button type="submit" class="search-btn">Tìm kiếm</button>
                 </form>
             </div>
         </header>

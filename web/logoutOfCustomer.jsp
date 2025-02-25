@@ -30,6 +30,7 @@
     </style>
 </head>
 <body>
+    <%@include file="header.jsp" %>
     <div class="container">
         <h2>Forgot Password</h2>
         <p>Enter your email to reset your password.</p>

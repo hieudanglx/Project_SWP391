@@ -98,6 +98,7 @@
         </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <div class="container">
             <div class="image-container">
                 <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c58c23feba91aa62989c5ad68c169821d887bd88e66e6dcad3be1acbf4a&w=1480" 

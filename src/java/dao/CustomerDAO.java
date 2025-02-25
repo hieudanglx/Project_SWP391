@@ -53,6 +53,7 @@ public class CustomerDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Customer(
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"),

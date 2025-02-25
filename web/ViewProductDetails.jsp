@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
@@ -243,7 +244,9 @@
 
             <!-- Cột phải -->
             <div class="right-box">
-                <div class="product-price">${product.price}đ</div>
+                <div class="product-price">
+                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
+                </div>
 
                 <div class="color-display">
                     <span class="color-box">${product.color}</span>

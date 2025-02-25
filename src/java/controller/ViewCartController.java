@@ -11,8 +11,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.Customer;
 import model.Product;
 
 /**
@@ -33,15 +35,28 @@ public class ViewCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int CustomerID = 1;
         CartDao link = new CartDao();
-        List<Product> list = new ArrayList<>();
-        list = link.getCartByCustomerID(CustomerID);
-        if (list.isEmpty()) {
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Customer c = (Customer) session.getAttribute("customer");
+        if (c == null) {
+            response.sendRedirect("loginOfCustomer.jsp"); // hoặc trang thông báo
+            return;
         }
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("viewCart2.jsp").forward(request, response);
+        int CustomerID = c.getId();
+        List<Product> list = link.getCartByCustomerID(CustomerID);
+
+        if (list.isEmpty()) {
+            request.setAttribute("error", c.getId());
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        } else {
+            int size=0;
+            for (int i = 0; i < list.size(); i++) {
+                size += list.get(i).getQuantityProduct();
+            }
+            request.setAttribute("size", size);
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("viewCart2.jsp").forward(request, response);
+        }
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

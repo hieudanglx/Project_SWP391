@@ -88,6 +88,7 @@ public class loginOfCustomerController extends HttpServlet {
         Customer customer = cusDAO.getCustomerByEmail(email);
         if (customer != null) {
             HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(60 * 60);
             session.setAttribute("customer", customer);
             response.sendRedirect("homeOfCustomer.jsp");
         } else {
