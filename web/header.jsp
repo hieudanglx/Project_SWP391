@@ -167,8 +167,8 @@
                     <a href="ViewListProductGC?CategoryID=${3}" class="nav-link">Tablet</a>
                 </nav>
 
-                <form action="search" method="GET" class="search-container">
-                    <input 
+                <form action="SearchController" method="GET" class="search-container">
+                    <input id="keyword"
                         type="text" 
                         name="keyword"
                         class="search-input" 

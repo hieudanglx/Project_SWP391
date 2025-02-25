@@ -77,7 +77,7 @@ public class FilterGCController extends HttpServlet {
                 request.getParameter("GPU")); 
         
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
-        List<Product> list = link.filterProducts(filter, min, max);
+        List<Product> list = link.filterProducts(filter, null, min, max);
         request.setAttribute("CategoryID", CategoryID);
         request.setAttribute("listbrand", listbrand);
         request.setAttribute("list", list);

@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import model.Product;
 import model.ProductForAdmin;
@@ -90,7 +89,6 @@ public class ProductDao extends DBContext {
         return false;
     }
 
-
 //    public boolean isProductIDExists(String productID) {
 //    String query = "SELECT COUNT(*) FROM Product WHERE ProductID = ?";
 //    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -103,16 +101,12 @@ public class ProductDao extends DBContext {
 //    }
 //    return false;
 //}
-
-
-
     public boolean addProduct(Product product) {
-        
+
 //        if (isProductIDExists(product.getProductID())) {
 //        System.out.println("Product already exists, cannot add.");
 //        return false;
 //    }
-        
         String query = "INSERT INTO [dbo].[Product] "
                 + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
                 + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
@@ -151,12 +145,10 @@ public class ProductDao extends DBContext {
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            
 
         }
         return false;
     }
-
 
     public Product getProductById(String productID) {
         String query = "SELECT * FROM Product WHERE productID = ?";
@@ -240,8 +232,7 @@ public class ProductDao extends DBContext {
         return false; // Trả về false nếu có lỗi xảy ra
     }
 
-
-    public List<Product> filterProducts(Product filter, int minPrice, int maxPrice) {
+    public List<Product> filterProducts(Product filter, String name, int minPrice, int maxPrice) {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
@@ -257,6 +248,7 @@ public class ProductDao extends DBContext {
             sql.append(" AND CategoryID = ?");
             params.add(filter.getCategory());
         }
+        addFilter(sql, params, "ProductName", name);
         addFilter(sql, params, "Brand", filter.getBrand());
         addFilter(sql, params, "Ram", filter.getRam());
         addFilter(sql, params, "Rom", filter.getRom());
@@ -334,7 +326,10 @@ public class ProductDao extends DBContext {
     }
 
     public List<Product> searchProductsByName(String name) {
-        return executeProductQuery("SELECT * FROM Product WHERE productName LIKE ?", Arrays.asList("%" + name + "%"));
+        String sql = "SELECT * FROM Product WHERE productName LIKE ?";
+        List<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        return executeProductQuery(sql, params);
     }
 
     public List<String> getAllCategory() throws SQLException {
