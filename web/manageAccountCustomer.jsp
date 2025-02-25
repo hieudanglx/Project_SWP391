@@ -60,7 +60,8 @@
                 </td>
                 <td>
                     <a href="editCustomer?id=${customer.customerID}" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="DeletCustomerAccount?customerID=${customer.customerID}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="DeletCustomerAccount?customerID=${customer.customerID}" onclick="return confirm('Are you sure you want to delete this staff member?');"
+                    class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         </c:forEach>
