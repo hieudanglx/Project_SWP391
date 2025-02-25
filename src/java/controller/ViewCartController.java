@@ -41,7 +41,7 @@ public class ViewCartController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         request.setAttribute("list", list);
-        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
+        request.getRequestDispatcher("viewCart2.jsp").forward(request, response);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
