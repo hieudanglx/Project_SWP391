@@ -73,7 +73,7 @@ public class LoginStaff_Admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
 
         AccountDao accountDAO = new AccountDao();
         String username = request.getParameter("Username");
@@ -86,23 +86,31 @@ public class LoginStaff_Admin extends HttpServlet {
         }
 
         try {
-            if (accountDAO.ValidateStaff_Admin(username, password)) {
+            boolean status = accountDAO.ValidateStaff_Admin(username, password);
+
+            if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
                 HttpSession session = request.getSession();
                 session.setAttribute("Username", username);
+                session.setAttribute("fullname", accountDAO.getFullname(username));
 
                 if ("admin".equalsIgnoreCase(username)) {
                     response.sendRedirect("HomeDashBoard_Admin.jsp");
                 } else {
                     response.sendRedirect("HomeDashBoard_Staff.jsp");
                 }
-            } else {
+            } else if (Boolean.FALSE.equals(status)) { // Tài khoản bị chặn
+                request.setAttribute("error", "Your account is blocked. Please contact admin.");
+                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+            } else { // Không tìm thấy tài khoản
                 request.setAttribute("error", "Invalid username or password");
                 request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "Internal Server Error. Please try again later.");
+            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
         }
-    
+
     }
 
     /**

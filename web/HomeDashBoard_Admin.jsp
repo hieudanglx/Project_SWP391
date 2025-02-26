@@ -73,7 +73,7 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
-                    <h4>Welcome to Dashboard</h4>
+                    <h4>Welcome to Dashboard Admin</h4>
 
                     <!-- Thêm lớp mx-auto để căn giữa thanh search -->
                     <div class="mx-auto">
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="ms-auto">
-                        <a href="ManagerProfile.jsp" class="text-decoration-none text-dark me-3 fw-bold">Admin</a>
+                        <a href="ManagerProfile.jsp" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
                         <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
                     </div>
                 </div>

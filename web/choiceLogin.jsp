@@ -29,7 +29,7 @@
 
             <!-- Đăng nhập customer -->
             <div class="col-md-6 offset-md-1 border p-4">
-               <button class="btn btn-warning mb-3">DashBoard</button>
+               <button class="btn btn-warning mb-3">Login Customer</button>
                 <div class="text-center">
                     <button class="btn btn-primary" onclick="window.location.href = 'loginOfCustomer.jsp'">Đăng nhập</button>
                 </div>
