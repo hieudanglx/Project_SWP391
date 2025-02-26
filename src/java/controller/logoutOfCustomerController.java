@@ -40,7 +40,11 @@ public class logoutOfCustomerController extends HttpServlet {
             out.println("<title>Servlet logoutOfCustomerController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet logoutOfCustomerController at " + request.getContextPath() + "</h1>");
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
             out.println("</body>");
             out.println("</html>");
         }
@@ -72,11 +76,7 @@ public class logoutOfCustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate(); 
-        }
-        request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+         processRequest(request, response);
     }
 
     /**

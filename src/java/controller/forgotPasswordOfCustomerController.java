@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
+
 /**
  *
  * @author TRAN NHU Y - CE182032
@@ -73,11 +74,10 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         CustomerDAO cusDAO = new CustomerDAO();
         String email = request.getParameter("email");
 
-        
         boolean exists = cusDAO.isEmailExisted(email);
 
         if (!exists) {
@@ -90,13 +90,12 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
         String otp = OTPGenerate.generateOTP();
         HttpSession session = request.getSession();
         session.setAttribute("otp", otp);
-        session.setAttribute("resetEmail", email);
+        session.setAttribute("email", email);
 
         // Gửi OTP đến email
-        EmailSender.sendEmail(email, "Mã OTP đặt lại mật khẩu",
-                "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
-
-        response.sendRedirect("verifyOTP.jsp");
+        EmailSender.sendEmail(email, "OTP code reset password",
+                "Your OTP code is: " + otp + "\nPlease enter this OTP to continue.");
+        request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
     }
 
     /**

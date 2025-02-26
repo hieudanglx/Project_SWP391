@@ -88,7 +88,7 @@ public class verifyOTPController extends HttpServlet {
 
         // So sánh OTP dưới dạng chuỗi
         if (enteredOTP.equals(correctOTP)) {
-            response.sendRedirect("resetPasswordOfCustomer.jsp"); // Chuyển đến trang đặt lại mật khẩu
+            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
         } else {
             request.setAttribute("errorMessage", "Mã OTP không đúng!");
             request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);

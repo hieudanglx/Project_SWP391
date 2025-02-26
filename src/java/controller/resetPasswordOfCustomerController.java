@@ -77,7 +77,7 @@ public class resetPasswordOfCustomerController extends HttpServlet {
         CustomerDAO cusDAO = new CustomerDAO();
         HttpSession session = request.getSession();
 
-        String email = (String) session.getAttribute("resetEmail");
+        String email = (String) session.getAttribute("email");
 
         if (email == null) {
             request.setAttribute("errorMessage", "Phiên đặt lại mật khẩu đã hết hạn. Vui lòng thử lại!");
@@ -100,7 +100,7 @@ public class resetPasswordOfCustomerController extends HttpServlet {
         boolean isUpdated = cusDAO.updatePassword(email, newPassword);
 
         if (isUpdated) {
-            session.removeAttribute("resetEmail"); // Xóa email khỏi session sau khi đặt lại mật khẩu
+            session.removeAttribute("email"); // Xóa email khỏi session sau khi đặt lại mật khẩu
             response.sendRedirect("successForgotPassword.jsp");  // Chuyển đến trang thành công
         } else {
             request.setAttribute("errorMessage", "Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại!");
