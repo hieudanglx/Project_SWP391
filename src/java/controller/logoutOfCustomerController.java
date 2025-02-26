@@ -74,9 +74,9 @@ public class logoutOfCustomerController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.invalidate(); // Xóa session
+            session.invalidate(); 
         }
-        response.sendRedirect("loginOfCustomer.jsp"); // Chuyển về trang login
+        request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }
 
     /**
