@@ -47,7 +47,7 @@ public class CartDao extends DBContext {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Loi"+e.getMessage());
         }
         return productList;
     }

@@ -62,7 +62,7 @@ public class ViewListProductGCController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
-
+        request.setAttribute("search", "");
         request.setAttribute("CategoryID", categoryID); // Sửa tên attribute
         request.setAttribute("listbrand", brand);
         request.setAttribute("list", list);

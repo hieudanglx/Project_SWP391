@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
             .cart-container {
-                padding: 2rem 0;
+                padding: 1rem 0;
                 min-height: 70vh;
             }
             .product-color {
@@ -39,10 +39,10 @@
     <body>
         <%@include file="header.jsp" %>
 
-        <div class="container cart-container">
+        <div class="container cart-container" style="width: 1200px">
             <c:choose>
                 <c:when test="${not empty list}">
-                    <div class="row g-4">
+                    <div class="row g-8">
                         <!-- Danh sách sản phẩm -->
                         <div class="col-lg-8">
                             <h4 class="mb-4">Giỏ hàng của bạn</h4>
@@ -62,33 +62,33 @@
                                                     <div class="product-color" style="background: ${product.color};"></div>
                                                     <span class="text-muted">${product.color}</span>
                                                 </div>
-                                                <p class="text-danger fw-bold mb-3">
+                                            </div>
+                                            <div class="d-flex flex-column gap-2">
+                                                <p class="text-danger fw-bold text-center">
                                                     <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
                                                 </p>
-
                                                 <div class="d-flex align-items-center gap-2">
+                                                    <button class="btn btn-link text-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                     <div class="input-group" style="width: 120px;">
                                                         <button class="btn btn-outline-secondary px-3">-</button>
                                                         <input type="text" disabled="disabled" value="${product.quantityProduct}" class="form-control text-center quantity-input">
                                                         <button class="btn btn-outline-secondary px-3">+</button>
                                                     </div>
-                                                    <button class="btn btn-link text-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
                             </c:forEach>
                         </div>
-
                         <!-- Thông tin đặt hàng -->
                         <div class="col-lg-4">
                             <div class="card shadow-sm sticky-summary">
                                 <div class="card-body">
                                     <h4 class="mb-4">Thông tin đặt hàng</h4>
-
                                     <form>
                                         <!-- Thông tin khách hàng -->
                                         <div class="mb-3">
@@ -98,7 +98,6 @@
                                                    class="form-control"
                                                    required>
                                         </div>
-
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
                                             <input type="email" 
@@ -106,7 +105,6 @@
                                                    class="form-control"
                                                    required>
                                         </div>
-
                                         <div class="mb-3">
                                             <label class="form-label">Số điện thoại</label>
                                             <input type="tel" 
@@ -114,7 +112,6 @@
                                                    class="form-control"
                                                    required>
                                         </div>
-
                                         <!-- Địa chỉ giao hàng -->
                                         <div class="mb-4">
                                             <label class="form-label">Địa chỉ nhận hàng</label>
@@ -128,7 +125,6 @@
                                                    class="form-control"
                                                    placeholder="Số nhà, tên đường...">
                                         </div>
-
                                         <!-- Tổng thanh toán -->
                                         <div class="mb-4">
                                             <h5 class="mb-3">Tổng thanh toán</h5>
@@ -149,7 +145,6 @@
                                                 </strong>
                                             </div>
                                         </div>
-
                                         <!-- Hình thức thanh toán -->
                                         <div class="mb-4">
                                             <h5 class="mb-3">Hình thức thanh toán</h5>
@@ -167,7 +162,6 @@
                                                     COD - Thanh toán khi nhận hàng
                                                 </label>
                                             </div>
-
                                             <div class="form-check d-flex align-items-center">
                                                 <input class="form-check-input me-2" 
                                                        type="radio" 
@@ -182,7 +176,6 @@
                                                 </label>
                                             </div>
                                         </div>
-
                                         <button class="btn btn-danger w-100 py-2">
                                             <i class="fas fa-shopping-bag me-2"></i>
                                             Đặt hàng ngay

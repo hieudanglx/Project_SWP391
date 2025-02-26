@@ -38,11 +38,10 @@ public class ViewCartController extends HttpServlet {
         HttpSession session = request.getSession();
         Customer c = (Customer) session.getAttribute("customer");
         if (c == null) {
-            response.sendRedirect("loginOfCustomer.jsp"); // hoặc trang thông báo
+            response.sendRedirect("choiceLogin.jsp"); // hoặc trang thông báo
             return;
         }
-        int CustomerID = c.getId();
-        List<Product> list = link.getCartByCustomerID(CustomerID);
+        List<Product> list = link.getCartByCustomerID(c.getId());
 
         if (list.isEmpty()) {
             request.setAttribute("list", list);

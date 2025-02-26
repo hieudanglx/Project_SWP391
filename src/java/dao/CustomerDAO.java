@@ -83,7 +83,7 @@ public class CustomerDAO extends DBContext {
     }
 
     public Customer getCustomerByUsernameAndPassword(String username, String password) {
-        String sql = "SELECT * FROM Customers WHERE username = ? AND password = CAST(? AS VARCHAR)";
+        String sql = "SELECT * FROM Customer WHERE username = ? AND password = CAST(? AS VARCHAR)";
 
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
@@ -93,6 +93,7 @@ public class CustomerDAO extends DBContext {
             if (rs.next()) {
                 System.out.println("User found: " + rs.getString("username"));
                 return new Customer(
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"),

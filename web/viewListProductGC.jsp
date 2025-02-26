@@ -12,6 +12,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>view List Product</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
             .brand-container {
                 display: flex;
@@ -135,14 +137,16 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-        <div class="brand-container">
-            <button class="brand-button" onclick="toggleFilter()">Lọc</button>
-            <c:forEach items="${listbrand}" var="b">
-                <a href="FilterGCController?CategoryID=${CategoryID}&brand=${b}">
-                    <div  class="brand-button">${b}</div>
-                </a>
-            </c:forEach>
-        </div>
+        <c:if test="${empty search}">
+            <div class="brand-container">
+                <button class="brand-button" onclick="toggleFilter()">Lọc</button>
+                <c:forEach items="${listbrand}" var="b">
+                    <a href="FilterGCController?CategoryID=${CategoryID}&brand=${b}">
+                        <div  class="brand-button">${b}</div>
+                    </a>
+                </c:forEach>
+            </div>
+        </c:if>
         <div class="product-container">
             <c:forEach items="${list}" var="p">
                 <div class="product-card">

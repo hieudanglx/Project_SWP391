@@ -9,6 +9,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
             /* --- General Header Styles --- */
             .header {
@@ -163,20 +164,18 @@
                 <div class="top-right">
                     <div class="auth-section">
                         <c:choose>
-                            <c:when test="${not empty sessionScope.username}">
+                            <c:when test="${not empty sessionScope.customer}">
                                 <p>${sessionScope.customer.username}</p>
                                 <form>
                                     <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                 </form>
                                 <!--<a href="logout" class="login-btn">Đăng xuất</a>-->
-
                             </c:when>
                             <c:otherwise>
                                 <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
-
                     <a href="ViewCartController" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <!-- Top Row 

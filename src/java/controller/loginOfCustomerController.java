@@ -88,9 +88,10 @@ public class loginOfCustomerController extends HttpServlet {
         // Kiểm tra ussername password trong database
         CustomerDAO cusDAO = new CustomerDAO();
         if (cusDAO.validateCustomer(username, password)) {
+            Customer c = cusDAO.getCustomerByUsernameAndPassword(username, password);
             HttpSession session = request.getSession();
-            session.setAttribute("username", username);
-            response.sendRedirect("viewListProductGC.jsp");
+            session.setAttribute("customer", c);
+            request.getRequestDispatcher("ViewListProductGC?CategoryID=1").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "Invalid username or password!");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);

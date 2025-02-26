@@ -40,14 +40,7 @@ public class SearchController extends HttpServlet {
         ProductDao link = new ProductDao();
         String name = request.getParameter("keyword");
         List<Product> list = link.searchProductsByName(name);
-        List<String> listbrand = new ArrayList<>();
-        if (!list.isEmpty()) {
-            int CategoryID = list.get(0).getCategory();
-            listbrand = link.getBrandbyCategoryID(CategoryID);
-            request.setAttribute("CategoryID", CategoryID);
-
-        }
-        request.setAttribute("listbrand", listbrand);
+        request.setAttribute("search", "search");
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }
