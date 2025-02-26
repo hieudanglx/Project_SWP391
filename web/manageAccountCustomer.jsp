@@ -145,9 +145,13 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <a href="editCustomer?id=${customer.customerID}" class="btn btn-warning btn-sm">
-                                        ${customer.status == 0 ? 'Block' : 'Unblock'}
-                                    </a>
+                                    <form action="UpdateStatusCustomer" method="POST" style="display: inline;">
+                                        <input type="hidden" name="customerID" value="${customer.customerID}">
+                                        <input type="hidden" name="status" value="${customer.status}">
+                                        <button type="submit" class="btn ${customer.status == 0 ? 'btn-danger' : 'btn-success'} btn-sm">
+                                            ${customer.status == 0 ? 'Block' : 'Unblock'}
+                                        </button>
+                                    </form>
                                     <a href="DeletCustomerAccount?customerID=${customer.customerID}" 
                                        onclick="return confirm('Are you sure you want to delete this customer member?');"
                                        class="btn btn-danger btn-sm">Delete</a>

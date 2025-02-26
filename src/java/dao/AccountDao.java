@@ -244,4 +244,26 @@ public class AccountDao extends dao.DBContext {
         }
         return null; // Trả về null nếu không tìm thấy nhân viên
     }
+
+    private void updateCustomerStatus(int customerID, int status) {
+        String query = "UPDATE customer SET Status = ? WHERE customerID = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, status);
+            pstmt.setInt(2, customerID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Chặn tài khoản khách hàng
+    public void blockCustomer(int customerID) {
+        updateCustomerStatus(customerID, 1); // 1 = Blocked
+    }
+
+    // Mở khóa tài khoản khách hàng
+    public void unblockCustomer(int customerID) {
+        updateCustomerStatus(customerID, 0); // 0 = Active
+    }
 }
