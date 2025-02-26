@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import model.Customer;
 import model.Product;
@@ -46,8 +45,8 @@ public class ViewCartController extends HttpServlet {
         List<Product> list = link.getCartByCustomerID(CustomerID);
 
         if (list.isEmpty()) {
-            request.setAttribute("error", c.getId());
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("viewCart.jsp").forward(request, response);
         } else {
             int size=0;
             for (int i = 0; i < list.size(); i++) {
@@ -55,7 +54,7 @@ public class ViewCartController extends HttpServlet {
             }
             request.setAttribute("size", size);
             request.setAttribute("list", list);
-            request.getRequestDispatcher("viewCart2.jsp").forward(request, response);
+            request.getRequestDispatcher("viewCart.jsp").forward(request, response);
         }
     }
 
