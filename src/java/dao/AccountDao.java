@@ -29,13 +29,15 @@ public class AccountDao extends dao.DBContext {
             return false;
         }
 
-        String query = "Select username, password from Staff where username = ? and password = ?";
+        String query = "Select username, password, status from Staff where username = ? and password = ?";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
             try ( ResultSet rs = pstmt.executeQuery()) {
-                return rs.next();
+               if(rs.next()){
+                 return rs.getInt("status") == 0;
+               }
             }
         } catch (SQLException e) {
             e.printStackTrace();

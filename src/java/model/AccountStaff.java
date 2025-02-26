@@ -31,7 +31,7 @@ public class AccountStaff {
         this.username = username;
         this.status = status;
     }
-
+    
     public int getStaffID() {
         return staffID;
     }
