@@ -26,7 +26,7 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px 30px;
-                background: #1a237e;
+                background: #89A8B2;
             }
 
             .logo {

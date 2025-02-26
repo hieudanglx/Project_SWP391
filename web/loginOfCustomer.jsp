@@ -84,7 +84,7 @@
             .btn {
                 width: 100%;
                 padding: 12px;
-                background-color: #66748e;
+                background-color: #B3C8CF;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -101,7 +101,7 @@
                 text-decoration: none;
                 text-align: center;
                 font-size: 12px;
-                margin-left: 100px;
+                margin-left: 10px;
             }
             a:hover{
                 color: #0451df;
@@ -110,6 +110,7 @@
         </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <div class="container">
             <div class="image-container">
                 <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c58c23feba91aa62989c5ad68c169821d887bd88e66e6dcad3be1acbf4a&w=1480" 

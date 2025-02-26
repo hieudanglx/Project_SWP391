@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
+    <%@include file="header.jsp" %>
     <div class="container mt-5">
         <div class="row">
             <!-- Đăng nhập staff_Admin -->
@@ -29,7 +30,7 @@
 
             <!-- Đăng nhập customer -->
             <div class="col-md-6 offset-md-1 border p-4">
-               <button class="btn btn-warning mb-3">DashBoard</button>
+                <button class="btn btn-warning mb-3">DashBoard</button>
                 <div class="text-center">
                     <button class="btn btn-primary" onclick="window.location.href = 'loginOfCustomer.jsp'">Đăng nhập</button>
                 </div>

@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <h2> Mật khẩu đã được đặt lại thành công!</h2>
         <a href="loginOfCustomer.jsp">Đăng nhập lại</a>
     </body>
