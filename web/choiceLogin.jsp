@@ -19,7 +19,7 @@
 <body>
     <div class="container mt-5">
         <div class="row">
-            <!-- Đăng nhập Phụ huynh -->
+            <!-- Đăng nhập staff_Admin -->
             <div class="col-md-5 border p-4">
                 <button class="btn btn-warning mb-3">DashBoard</button>
                 <div class="text-center">
@@ -27,20 +27,12 @@
                 </div>
             </div>
 
-            <!-- Đăng nhập Sinh viên, Giảng viên, Cán bộ -->
+            <!-- Đăng nhập customer -->
             <div class="col-md-6 offset-md-1 border p-4">
-                <button class="btn btn-warning mb-3">Customer</button>
-                <div class="mb-3">
-                    <input type="text" id="Username" name="Username" class="form-control form-control-lg"
-                           placeholder="Enter a valid username" required>
+               <button class="btn btn-warning mb-3">DashBoard</button>
+                <div class="text-center">
+                    <button class="btn btn-primary" onclick="window.location.href = 'loginOfCustomer.jsp'">Đăng nhập</button>
                 </div>
-                <div class="mb-3">
-                    <input type="password" id="Password" name="Password" class="form-control"
-                           placeholder="Password" required>
-                </div>
-                <button class="btn btn-danger w-100 mb-2">G+ Login With Google</button>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <button type="button" class="btn btn-secondary">Forgot Password</button>
             </div>
         </div>
 

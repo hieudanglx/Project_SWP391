@@ -57,13 +57,14 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <h4 class="text-center">Dashboard</h4>
-            <a href="#"><i class="fas fa-home"></i> Home</a>
+            <h4 class="text-center">
+                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
+            </h4>
             <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i>Manage Products</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
-            <button class="btn btn-danger" onclick="logout()">Logout</button>
+            <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
+
 
         </div>
 
@@ -73,13 +74,18 @@
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
                     <h4>Welcome to Dashboard</h4>
-                    <div class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-primary">Search</button>
+
+                    <!-- Thêm lớp mx-auto để căn giữa thanh search -->
+                    <div class="mx-auto">
+                        <div class="d-flex">
+                            <input type="text" class="form-control me-2" placeholder="Search">
+                            <button class="btn btn-primary">Search</button>
+                        </div>
                     </div>
+
                     <div class="ms-auto">
-                        <span class="me-3">Admin</span>
-                        <img src="https://via.placeholder.com/40" class="rounded-circle" alt="User">
+                        <a href="ManagerProfile.jsp" class="text-decoration-none text-dark me-3 fw-bold">Admin</a>
+                        <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
                     </div>
                 </div>
             </nav>

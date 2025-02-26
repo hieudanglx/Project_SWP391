@@ -172,7 +172,7 @@
 
                             </c:when>
                             <c:otherwise>
-                                <a href="loginOfCustomer.jsp" class="login-btn">Đăng nhập</a>
+                                <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
