@@ -5,6 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -126,9 +127,32 @@
             /* Content Spacer */
             .header-spacer {
                 height: 120px;
+
             }
+            .container {
+                max-width: 800px;
+                margin-top: 50px;
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                text-align: center;
+            }
+            .logout-btn {
+                margin-top: 20px;
+            }
+
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <script>
+            function confirmLogout(event) {
+                event.preventDefault();
+                let confirmAction = confirm("Do you want log out?");
+                if (confirmAction) {
+                    document.getElementById("logoutOfCustomerController").submit();
+                }
+            }
+        </script>
     </head>
     <body>
         <header class="header">
@@ -139,9 +163,13 @@
                 <div class="top-right">
                     <div class="auth-section">
                         <c:choose>
-                            <c:when test="${not empty sessionScope.customer}">
+                            <c:when test="${not empty sessionScope.username}">
                                 <p>${sessionScope.customer.username}</p>
-                                <a href="logout" class="login-btn">Đăng xuất</a>
+                                <form>
+                                    <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
+                                </form>
+                                <!--<a href="logout" class="login-btn">Đăng xuất</a>-->
+
                             </c:when>
                             <c:otherwise>
                                 <a href="loginOfCustomer.jsp" class="login-btn">Đăng nhập</a>
@@ -170,11 +198,11 @@
 
                 <form action="SearchController" method="GET" class="search-container">
                     <input id="keyword"
-                        type="text" 
-                        name="keyword"
-                        class="search-input" 
-                        placeholder="Tìm kiếm sản phẩm..."
-                        >
+                           type="text" 
+                           name="keyword"
+                           class="search-input" 
+                           placeholder="Tìm kiếm sản phẩm..."
+                           >
                 </form>
             </div>
         </header>

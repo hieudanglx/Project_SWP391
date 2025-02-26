@@ -74,27 +74,36 @@ public class loginOfCustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CustomerDAO cusDAO = new CustomerDAO();
-        String email = request.getParameter("email");
+        response.setContentType("text/html;charset=UTF-8");
+        String username = request.getParameter("username").trim();
+        String password = request.getParameter("password").trim();
 
-        // Kiểm tra email rỗng hoặc null
-        if (email == null || email.trim().isEmpty()) {
-            request.setAttribute("errorMessage", "Email cannot empty!");
+        // Kiểm tra ussername password rỗng hoặc null
+        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            request.setAttribute("errorMessage", "Username and password cannot empty!");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
             return;
         }
 
-        // Kiểm tra email trong database
-        Customer customer = cusDAO.getCustomerByEmail(email);
-        if (customer != null) {
+        // Kiểm tra ussername password trong database
+        CustomerDAO cusDAO = new CustomerDAO();
+        if (cusDAO.validateCustomer(username, password)) {
             HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(60 * 60);
-            session.setAttribute("customer", customer);
-            response.sendRedirect("homeOfCustomer.jsp");
+            session.setAttribute("username", username);
+            response.sendRedirect("viewListProductGC.jsp");
         } else {
-            request.setAttribute("errorMessage", "Email is not exist!");
+            request.setAttribute("errorMessage", "Invalid username or password!");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
         }
+//        if (customer != null) {           
+//            HttpSession session = request.getSession();
+//            session.setAttribute("customer", customer);
+//            //  session.setAttribute("password", password);
+//            response.sendRedirect("viewListProductGC.jsp");
+//        } else {            
+//            request.setAttribute("errorMessage", "Invalid username or password!");
+//            request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
+//        }
     }
 
     /**

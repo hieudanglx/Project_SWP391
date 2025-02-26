@@ -42,6 +42,19 @@ public class CustomerDAO extends DBContext {
         return false;
     }
 
+    public boolean validateCustomer(String username, String password) {
+        String sql = "SELECT * FROM Customer WHERE username = ? AND password = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public Customer getCustomerByEmail(String email) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
@@ -53,7 +66,7 @@ public class CustomerDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Customer(
-                        rs.getInt("CustomerID"),
+                        rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("email"),
                         rs.getString("password"),
@@ -69,24 +82,51 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    public boolean validateEmail(String email) {
-        if (connection == null) {
-            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-            return false;
-        }
+    public Customer getCustomerByUsernameAndPassword(String username, String password) {
+        String sql = "SELECT * FROM Customers WHERE username = ? AND password = CAST(? AS VARCHAR)";
 
-        String query = "SELECT email FROM customer WHERE email = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, email);
-            try ( ResultSet rs = ps.executeQuery()) {
-                return rs.next();
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                System.out.println("User found: " + rs.getString("username"));
+                return new Customer(
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("status"),
+                        rs.getString("imgcustomer")
+                );
+            } else {
+                System.out.println("No user found with username: " + username + " and password: " + password);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
+    //    public boolean validateEmail(String email) {
+    //        if (connection == null) {
+    //            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+    //            return false;
+    //        }
+    //
+    //        String query = "SELECT email FROM customer WHERE email = ?";
+    //        try ( PreparedStatement ps = connection.prepareStatement(query)) {
+    //            ps.setString(1, email);
+    //            try ( ResultSet rs = ps.executeQuery()) {
+    //                return rs.next();
+    //            }
+    //        } catch (SQLException e) {
+    //            e.printStackTrace();
+    //        }
+    //        return false;
+    //    }
     public void addCustomer(Customer customer) {
         String sql = "INSERT INTO Customer (username, email, password, address, phoneNumber, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -200,18 +240,15 @@ public class CustomerDAO extends DBContext {
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE Customers SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
-
             stmt.setString(1, newPassword);
             stmt.setString(2, email);
 
-            int rowsUpdated = stmt.executeUpdate();
-            System.out.println("🔹 Rows Updated: " + rowsUpdated + " | Email: " + email);
-
-            return rowsUpdated > 0;
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất 1 hàng bị ảnh hưởng
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            e.printStackTrace(); // In lỗi SQL ra console để debug
         }
+        return false;
     }
 
 }

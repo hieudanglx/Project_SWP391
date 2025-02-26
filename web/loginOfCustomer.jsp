@@ -98,7 +98,6 @@
         </style>
     </head>
     <body>
-        <%@include file="header.jsp" %>
         <div class="container">
             <div class="image-container">
                 <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c58c23feba91aa62989c5ad68c169821d887bd88e66e6dcad3be1acbf4a&w=1480" 
@@ -108,15 +107,19 @@
                 <h2>LOGIN</h2>
                 <form action="loginOfCustomer" method="post">
                     <div class="input-group">                    
-                       <input type="email" name="email" placeholder="Your email" required>
-
+                        <input type="text" id="username" name="username" class="form-control form-control-lg"
+                               placeholder="Username" required> 
+                    </div>
+                    <div class="input-group">                        
+                        <input type="password" id="password" name="password" class="form-control"
+                               placeholder="Password" required>
                     </div>
                     <button class="btn">NEXT</button>
+                    <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
+                    <% if (errorMessage != null) { %>
+                    <p style="color: red;"><%= errorMessage %></p>
+                    <% } %>
                 </form>
-                <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
-                <% if (errorMessage != null) { %>
-                <p style="color: red;"><%= errorMessage %></p>
-                <% } %>
             </div>
         </div>  
     </body>
