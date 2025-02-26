@@ -145,15 +145,17 @@
 
         </style>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
         <script>
             function confirmLogout(event) {
-                event.preventDefault();
-                let confirmAction = confirm("Do you want log out?");
-                if (confirmAction) {
-                    document.getElementById("logoutOfCustomerController").submit();
+                event.preventDefault(); // Ngăn chặn hành động mặc định
+                let confirmAction = confirm("Do you want to log out?");
+                if (confirmAction) {                  
+                    window.location.href = "logoutOfCustomerController"; 
                 }
             }
         </script>
+
     </head>
     <body>
         <header class="header">
