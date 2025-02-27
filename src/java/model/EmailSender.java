@@ -15,7 +15,7 @@ import javax.mail.internet.*;
 public class EmailSender {
 
     public static void sendEmail(String to, String subject, String content) {
-         final String fromEmail = "Trannhuy095@gmail.com"; // Email hệ thống
+        final String fromEmail = "Trannhuy095@gmail.com"; // Email hệ thống
         final String password = "naow zhik ggdw mjkl"; // Mật khẩu ứng dụng Google
 
         Properties props = new Properties();

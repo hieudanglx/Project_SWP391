@@ -44,7 +44,8 @@ public class AccountDao extends dao.DBContext {
         }
         return false;
     }
-
+    
+    
     public String getFullname(String Username) {
         String query = "SELECT FullName FROM Staff WHERE Username = ?";
 

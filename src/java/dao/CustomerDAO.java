@@ -41,6 +41,28 @@ public class CustomerDAO extends DBContext {
         return false;
     }
 
+    public Integer ValidateStatusCustomer(String username, String password) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null; // Trả về null nếu không có kết nối
+        }
+
+        String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("status"); // Trả về status
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy tài khoản
+    }
+
     public boolean validateCustomer(String username, String password) {
         String sql = "SELECT * FROM Customer WHERE username = ? AND password = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -94,7 +116,6 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
-
 
     public void addCustomer(Customer customer) {
         String sql = "INSERT INTO Customer (username, email, password, address, phoneNumber, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?)";

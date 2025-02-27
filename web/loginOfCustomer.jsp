@@ -83,8 +83,8 @@
 
             .btn {
                 width: 100%;
-                padding: 12px;
-                background-color: #B3C8CF;
+                padding: 7px;
+                background-color: #687e8e;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -94,18 +94,34 @@
 
             .btn:hover {
                 background-color: #4f5b70;
+                color: white;
             }
 
-            a{
+            .forgotpassword{
                 color: #6d8fcd;
                 text-decoration: none;
                 text-align: center;
                 font-size: 12px;
                 margin-left: 10px;
             }
-            a:hover{
+            .forgotpassword:hover{
                 color: #0451df;
                 text-decoration: underline;
+            }
+            .register{
+                background-color: #687e8e;
+                border-radius: 4px;
+                height: 35px;
+                width: 155px;
+                margin-left: 6px;
+                color: white;
+                font-size: 16px;
+                border: none;
+                margin-top: 10px;
+            }
+            .register:hover{
+                background-color: #4f5b70;
+                color: white;
             }
         </style>
     </head>
@@ -117,7 +133,7 @@
                      alt="Login Illustration">
             </div>
             <div class="form-container">
-                <h2>LOGIN</h2>
+                <h2>ĐĂNG NHẬP</h2>
                 <form action="loginOfCustomer" method="post">
                     <div class="input-group">                    
                         <input type="text" id="username" name="username" class="form-control form-control-lg"
@@ -128,10 +144,14 @@
                                placeholder="Password" required>
                     </div>
                     <div>
-                        <button class="btn">NEXT</button>
+                        <button class="btn">TIẾP TỤC</button>
                     </div>
                     <div>
-                        <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword" >Quên mật khẩu</a>
+                        <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword" >Quên mật khẩu</a>                        
+                    </div>
+
+                    <div >
+                        <button class="register" onclick="location.href = 'register.jsp'">Tạo tài khoản mới</button>
                     </div>
 
                     <% String errorMessage = (String) request.getAttribute("errorMessage"); %>

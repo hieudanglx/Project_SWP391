@@ -75,25 +75,37 @@ public class loginOfCustomerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        CustomerDAO cusDAO = new CustomerDAO();
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
 
         // Kiểm tra ussername password rỗng hoặc null
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.setAttribute("errorMessage", "Username and password cannot empty!");
+            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
             return;
         }
 
-        // Kiểm tra ussername password trong database
-        CustomerDAO cusDAO = new CustomerDAO();
-        if (cusDAO.validateCustomer(username, password)) {
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);
-            response.sendRedirect("viewListProductGC.jsp");
-        } else {
-            request.setAttribute("errorMessage", "Invalid username or password!");
-            request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
+        try {
+            Integer status = cusDAO.ValidateStatusCustomer(username, password);
+
+            if (status != null) {
+                if (status == 0) { // Tài khoản hợp lệ & không bị chặn
+                    HttpSession session = request.getSession();
+                    session.setAttribute("username", username);
+                    response.sendRedirect("viewListProductGC.jsp");
+                } else if (status == 1) { // Tài khoản bị chặn
+                    request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");
+                    request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
+                }
+            } else {
+                // Nếu không có tài khoản nào khớp với tên người dùng và mật khẩu
+                request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu không hợp lệ!");
+                request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
         }
     }
 
