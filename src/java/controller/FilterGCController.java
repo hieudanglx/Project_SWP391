@@ -68,13 +68,16 @@ public class FilterGCController extends HttpServlet {
 
         // Rest of your code
         Product filter = new Product(CategoryID,
-                request.getParameter("brand"),
-                request.getParameter("ram"),
-                request.getParameter("rom"),
-                request.getParameter("size"),
-                request.getParameter("refreshRate"),
-                request.getParameter("Chip"),
-                request.getParameter("GPU")); 
+                request.get,
+                maxParam,
+                maxParam,
+                categoryIdParam,
+                maxParam,
+                categoryIdParam, 
+                maxParam,
+                maxParam,
+                maxParam,
+                maxParam);
         
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, null, min, max);

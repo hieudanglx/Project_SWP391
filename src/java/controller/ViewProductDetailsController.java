@@ -35,7 +35,7 @@ public class ViewProductDetailsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
-        String ProductID =(String) request.getParameter("id");
+        String ProductID = (String) request.getParameter("id");
         Product p = link.getProductByProductID(ProductID);
         
         request.setAttribute("product", p);

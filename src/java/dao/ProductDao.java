@@ -116,30 +116,37 @@ public class ProductDao extends DBContext {
                 + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
                 + "VALUES (?, ?, GETDATE(), ?, ?)";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, product.getProductID());
+            pstmt.setInt(1, product.getProductID());
             pstmt.setString(2, product.getProductName());
             pstmt.setInt(3, product.getPrice());
-            pstmt.setInt(4, product.getCategory());
+            pstmt.setInt(4, product.getCategoryID());
             pstmt.setString(5, product.getBrand());
-            pstmt.setString(6, product.getCamera());
-            pstmt.setString(7, product.getRam());
-            pstmt.setString(8, product.getRom());
-            pstmt.setString(9, product.getColor());
-            pstmt.setString(10, product.getOperatingSystem());
-            pstmt.setString(11, product.getSize());
-            pstmt.setString(12, product.getRefreshRate());
-            pstmt.setString(13, product.getChip());
-            pstmt.setString(14, product.getGpu());
-            pstmt.setInt(15, product.getQuantitySell());
-            pstmt.setInt(16, product.getQuantityProduct());
-            pstmt.setString(17, product.getImageURL());
-            pstmt.setInt(18, product.getIsDelete());
+            pstmt.setString(6, product.getCameraFront());
+            pstmt.setString(7, product.getCameraBehind());
+            pstmt.setString(8, product.getRam());
+            pstmt.setString(9, product.getRamType());
+            pstmt.setString(10, product.getSupportsUpgradingRAM());
+            pstmt.setString(11, product.getRom());
+            pstmt.setString(12, product.getSupportsUpgradingROM());
+            pstmt.setString(13, product.getColor());
+            pstmt.setString(14, product.getOperatingSystemName());
+            pstmt.setString(15, product.getOperatingSystemVersion());
+            pstmt.setString(16, product.getScreenSize());
+            pstmt.setString(17, product.getRefreshRate());
+            pstmt.setString(18, product.getChipName());
+            pstmt.setString(19, product.getChipType());
+            pstmt.setString(20, product.getGpuType());
+            pstmt.setString(21, product.getGpuName());
+            pstmt.setInt(22, product.getQuantitySell());
+            pstmt.setInt(23, product.getQuantityProduct());
+            pstmt.setString(24, product.getImageURL());
+            pstmt.setInt(25, product.getIsDelete());
 
             // Set values for Import_Inventory table
-            pstmt.setString(19, product.getProductID()); // ProductID trong bảng Import_Inventory
-            pstmt.setInt(20, 0); // Import_price (giả sử chưa có)          
-            pstmt.setInt(21, 0); // Số lượng nhập hàng
-            pstmt.setString(22, "Unknown"); // Supplier (nếu không có thì đặt giá trị mặc định)
+            pstmt.setInt(26, product.getProductID()); // ProductID trong bảng Import_Inventory
+            pstmt.setInt(27, 0); // Import_price (giả sử chưa có)          
+            pstmt.setInt(28, 0); // Số lượng nhập hàng
+            pstmt.setString(29, "Unknown"); // Supplier (nếu không có thì đặt giá trị mặc định)
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
@@ -158,20 +165,28 @@ public class ProductDao extends DBContext {
             try ( ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Product(
-                            rs.getString("ProductID"),
-                            rs.getString("productName"),
+                            rs.getInt("ProductID"),
+                            rs.getString("ProductName"),
                             rs.getInt("Price"),
-                            rs.getInt("categoryID"),
+                            rs.getInt("CategoryID"),
                             rs.getString("Brand"),
-                            rs.getString("Camera"),
+                            rs.getString("Camera_Front"),
+                            rs.getString("Camera_Behind"),
                             rs.getString("Ram"),
+                            rs.getString("RAM_type"),
+                            rs.getString("Supports_upgrading_RAM"),
                             rs.getString("Rom"),
+                            rs.getString("Supports_upgrading_ROM"),
                             rs.getString("Color"),
-                            rs.getString("Operating_System"),
-                            rs.getString("Size"),
+                            rs.getString("Operating_System_name"),
+                            rs.getString("Operating_system_version"),
+                            rs.getString("Size_screeen"),
                             rs.getString("Refresh_rate"),
-                            rs.getString("Chip"),
-                            rs.getString("GPU"),
+                            rs.getString("Screen_resolution"),
+                            rs.getString("Chip_type"),
+                            rs.getString("Chip_name"),
+                            rs.getString("GPU_type"),
+                            rs.getString("GPU_name"),
                             rs.getInt("Quantity_Sell"),
                             rs.getInt("Quantity_Product"),
                             rs.getString("ImageURL"),
@@ -244,18 +259,19 @@ public class ProductDao extends DBContext {
             sql.append(" AND Price <= ?");
             params.add(maxPrice);
         }
-        if (filter.getCategory() > 0) {
+        if (filter.getCategoryID() > 0) {
             sql.append(" AND CategoryID = ?");
-            params.add(filter.getCategory());
+            params.add(filter.getCategoryID());
         }
         addFilter(sql, params, "ProductName", name);
         addFilter(sql, params, "Brand", filter.getBrand());
         addFilter(sql, params, "Ram", filter.getRam());
         addFilter(sql, params, "Rom", filter.getRom());
-        addFilter(sql, params, "Size", filter.getSize());
+        addFilter(sql, params, "Operating_System_name", filter.getOperatingSystemName());
+        addFilter(sql, params, "Size_screeen", filter.getScreenSize());
+        addFilter(sql, params, "Screen_resolution", filter.getScreenResolution());
         addFilter(sql, params, "Refresh_rate", filter.getRefreshRate());
-        addFilter(sql, params, "Chip", filter.getChip());
-        addFilter(sql, params, "GPU", filter.getGpu());
+        addFilter(sql, params, "Chip_name", filter.getChipName());
 
         return executeProductQuery(sql.toString(), params);
     }
@@ -277,23 +293,32 @@ public class ProductDao extends DBContext {
                     ps.setInt(i + 1, (Integer) params.get(i));
                 }
             }
+            
             try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Product p = new Product(
-                            rs.getString("ProductID"),
-                            rs.getString("productName"),
+                            rs.getInt("ProductID"),
+                            rs.getString("ProductName"),
                             rs.getInt("Price"),
-                            rs.getInt("categoryID"),
+                            rs.getInt("CategoryID"),
                             rs.getString("Brand"),
-                            rs.getString("Camera"),
+                            rs.getString("Camera_Front"),
+                            rs.getString("Camera_Behind"),
                             rs.getString("Ram"),
+                            rs.getString("RAM_type"),
+                            rs.getString("Supports_upgrading_RAM"),
                             rs.getString("Rom"),
+                            rs.getString("Supports_upgrading_ROM"),
                             rs.getString("Color"),
-                            rs.getString("Operating_System"),
-                            rs.getString("Size"),
+                            rs.getString("Operating_System_name"),
+                            rs.getString("Operating_system_version"),
+                            rs.getString("Size_screeen"),
                             rs.getString("Refresh_rate"),
-                            rs.getString("Chip"),
-                            rs.getString("GPU"),
+                            rs.getString("Screen_resolution"),
+                            rs.getString("Chip_type"),
+                            rs.getString("Chip_name"),
+                            rs.getString("GPU_type"),
+                            rs.getString("GPU_name"),
                             rs.getInt("Quantity_Sell"),
                             rs.getInt("Quantity_Product"),
                             rs.getString("ImageURL"),
@@ -306,7 +331,7 @@ public class ProductDao extends DBContext {
             }
         } catch (Exception e) {
             System.out.println("Loi1");
-            System.out.println("Dao.ProductDAO.executeProductQuery()");
+            System.out.println(e.getMessage());
         }
         return productList;
     }
@@ -326,7 +351,7 @@ public class ProductDao extends DBContext {
     }
 
     public List<Product> searchProductsByName(String name) {
-        String sql = "SELECT * FROM Product WHERE productName LIKE ?";
+        String sql = "SELECT * FROM Product WHERE ProductName LIKE ?";
         List<Object> params = new ArrayList<>();
         params.add("%" + name + "%");
         return executeProductQuery(sql, params);
