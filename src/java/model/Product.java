@@ -70,7 +70,7 @@ public class Product {
     }
 
     public Product(int categoryID, String brand, String ram, String rom, String operatingSystemName, String screenSize
-            , String screenResolution, String refreshRate, String chipType, String chipName, String gpu) {
+            , String screenResolution, String refreshRate, String chipType, String chipName) {
         this.categoryID = categoryID;
         this.brand = brand;
         this.ram = ram;

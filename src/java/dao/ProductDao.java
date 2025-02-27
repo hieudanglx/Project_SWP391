@@ -157,11 +157,11 @@ public class ProductDao extends DBContext {
         return false;
     }
 
-    public Product getProductById(String productID) {
-        String query = "SELECT * FROM Product WHERE productID = ?";
+    public Product getProductById(int productID) {
+        String query = "SELECT * FROM Product WHERE ProductID = ?";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, productID);
+            pstmt.setInt(1, productID);
             try ( ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Product(

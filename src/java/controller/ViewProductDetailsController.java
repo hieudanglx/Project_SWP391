@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Product;
@@ -35,10 +36,13 @@ public class ViewProductDetailsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
-        String ProductID = (String) request.getParameter("id");
-        Product p = link.getProductByProductID(ProductID);
+        int ProductID = Integer.parseInt(request.getParameter("id"));
+        String ProductName= (String) request.getParameter("name");
+        Product p = link.getProductById(ProductID);
+        List<Product> list = link.searchProductsByName(ProductName);
         
         request.setAttribute("product", p);
+        request.setAttribute("list", list);
         request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
     } 
 

@@ -150,7 +150,7 @@
         <div class="product-container">
             <c:forEach items="${list}" var="p">
                 <div class="product-card">
-                    <a href="ViewProductDetailsController?id=${p.productID}">
+                    <a href="ViewProductDetailsController?name=${p.productName}&id=${p.productID}">
                         <img src="${p.imageURL}" alt="${p.productName}">
                     </a>
                     <div class="product-name">${p.productName}</div>
@@ -231,6 +231,16 @@
                         </select>
                     </div>
                 </c:if>
+                    <div class="filter-section">
+                        <label for="res">Screen Resolution</label>
+                        <select id="res" name="res">
+                            <option value="">All size</option>
+                            <option value="13">13"</option>
+                            <option value="14">14"</option>
+                            <option value="15.6">15.6"</option>
+                            <option value="16">16"</option>
+                        </select>
+                    </div>
                 <c:if test="${CategoryID==1}">
                     <div class="filter-section">
                         <label for="Chip">Chip</label>
@@ -238,16 +248,6 @@
                             <option value="">All Chip</option>
                             <option value="Intel Core">Intel Core</option>
                             <option value="Apple">Apple</option>
-                        </select>
-                    </div>
-                </c:if>
-                <c:if test="${CategoryID==1}">
-                    <div class="filter-section">
-                        <label for="GPU">GPU</label>
-                        <select id="GPU" name="GPU">
-                            <option value="">All GPU</option>
-                            <option value="Card tích hợp">Card tích hợp</option>
-                            <option value="NVIDIA GeForce">NVIDIA GeForce</option>
                         </select>
                     </div>
                 </c:if>
@@ -279,7 +279,8 @@
                 document.getElementById('maxPrice').value = '';
                 document.getElementById('ram').value = '';
                 document.getElementById('rom').value = '';
-                document.getElementById('refresh-rate').value = '';
+                document.getElementById('res').value = '';
+                document.getElementById('size').value = '';
             }
 
             function setPrice(min, max) {
