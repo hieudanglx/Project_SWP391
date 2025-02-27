@@ -91,7 +91,8 @@ public class loginOfCustomerController extends HttpServlet {
 
             if (status != null) {
                 if (status == 0) { // Tài khoản hợp lệ & không bị chặn
-                    HttpSession session = request.getSession();
+                    HttpSession session = request.getSession(); 
+                   
                     session.setAttribute("username", username);
                     response.sendRedirect("viewListProductGC.jsp");
                 } else if (status == 1) { // Tài khoản bị chặn

@@ -38,7 +38,6 @@
     </head>
     <body>
         <%@include file="header.jsp" %>
-
         <div class="container cart-container" style="width: 1200px">
             <c:choose>
                 <c:when test="${not empty list}">
