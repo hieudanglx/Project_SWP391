@@ -92,8 +92,8 @@ public class loginOfCustomerController extends HttpServlet {
             if (status != null) {
                 if (status == 0) { // Tài khoản hợp lệ & không bị chặn
                     HttpSession session = request.getSession(); 
-                   
-                    session.setAttribute("username", username);
+                    boolean customer = cusDAO.validateCustomer(username, password);
+                    session.setAttribute("customer", customer);
                     response.sendRedirect("viewListProductGC.jsp");
                 } else if (status == 1) { // Tài khoản bị chặn
                     request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");
