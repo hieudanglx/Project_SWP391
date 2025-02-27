@@ -76,7 +76,6 @@ public class resetPasswordOfCustomerController extends HttpServlet {
             throws ServletException, IOException {
         CustomerDAO cusDAO = new CustomerDAO();
         HttpSession session = request.getSession();
-
         String email = (String) session.getAttribute("email");
 
         if (email == null) {

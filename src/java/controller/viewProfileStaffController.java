@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.CustomerDAO;
+import dao.AccountDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,14 +13,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Customer;
+import javax.jws.WebService;
+import model.AccountStaff;
+import org.apache.catalina.ha.ClusterSession;
 
 /**
  *
  * @author TRAN NHU Y - CE182032
  */
-@WebServlet(name = "loginOfCustomer", urlPatterns = {"/loginOfCustomer"})
-public class loginOfCustomerController extends HttpServlet {
+@WebServlet(name = "viewProfileStaffController", urlPatterns = {"/viewProfileStaffController"})
+public class viewProfileStaffController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +41,10 @@ public class loginOfCustomerController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loginOfCustomerController</title>");
+            out.println("<title>Servlet viewProfileStaffController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loginOfCustomerController at " + request.getContextPath() + "</h1>");
+
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,6 +63,7 @@ public class loginOfCustomerController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
     }
 
     /**
@@ -74,40 +77,29 @@ public class loginOfCustomerController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        CustomerDAO cusDAO = new CustomerDAO();
-        String username = request.getParameter("username").trim();
-        String password = request.getParameter("password").trim();
-
-        // Kiểm tra ussername password rỗng hoặc null
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
-            request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
-            return;
-        }
-
+        AccountDao AccountDao = new AccountDao();
+        HttpSession session = request.getSession();
+     
+     
         try {
-            Integer status = cusDAO.ValidateStatusCustomer(username, password);
+            int staffId = Integer.parseInt(request.getParameter("id"));           
+           AccountStaff AccountStaff = AccountDao.getStaffById(staffId);
+            // Lưu thông tin vào session
+            session.setAttribute("staffID", AccountStaff.getStaffID());
+            session.setAttribute("address", AccountStaff.getAddress());
+            session.setAttribute("email", AccountStaff.getEmail());
+            session.setAttribute("password", AccountStaff.getPassword());
+            session.setAttribute("fullname", AccountStaff.getFullName());
+            session.setAttribute("phoneNumber", AccountStaff.getPhoneNumber());
+            session.setAttribute("username", AccountStaff.getUsername());
 
-            if (status != null) {
-                if (status == 0) { // Tài khoản hợp lệ & không bị chặn
-                    HttpSession session = request.getSession();
-                    boolean customer = cusDAO.validateCustomer(username, password);
-                    session.setAttribute("customer", customer);
-                    request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
-                } else if (status == 1) { // Tài khoản bị chặn
-                    request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");
-                    request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
-                }
-            } else {
-                // Nếu không có tài khoản nào khớp với tên người dùng và mật khẩu
-                request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu không hợp lệ!");
-                request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
+            response.sendRedirect("viewProfileStaff.jsp");
+
+        } catch (NumberFormatException e) {
+            session.setAttribute("error", "ID phải là số nguyên!");
+            response.sendRedirect("LoginOfDashboard.jsp");
         }
+
     }
 
     /**
