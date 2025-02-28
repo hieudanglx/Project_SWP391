@@ -43,12 +43,12 @@
     <body>
         <%@include file="header.jsp" %>
         <div class="container">
-            <h2>Forgot Password</h2>
-            <p>Enter your email to reset your password.</p>
+            <h2>Quên mật khẩu</h2>
+            <p>Nhập email của bạn để đặt lại mật khẩu.</p>
 
             <form action="forgotPasswordOfCustomerController" method="post">
                 <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
-                <button type="submit" class="submit mt-3">Submit</button>
+                <button type="submit" class="submit mt-3">Xác nhận</button>
             </form>
 
             <% String errorMessage = (String) request.getAttribute("errorMessage"); %>

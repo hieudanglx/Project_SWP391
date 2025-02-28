@@ -77,7 +77,6 @@ public class FilterGCController extends HttpServlet {
                 request.getParameter("rate"),
                 request.getParameter("chiptype"),
                 request.getParameter("chipname"));
-        
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, null, min, max);
         request.setAttribute("CategoryID", CategoryID);

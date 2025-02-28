@@ -35,9 +35,10 @@ public class AccountDao extends dao.DBContext {
             pstmt.setString(2, password);
 
             try ( ResultSet rs = pstmt.executeQuery()) {
-               if(rs.next()){
-                 return rs.getInt("status") == 0;
-               }
+
+                if (rs.next()) {
+                    return rs.getInt("status") == 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -247,6 +248,33 @@ public class AccountDao extends dao.DBContext {
         return null; // Trả về null nếu không tìm thấy nhân viên
     }
 
+    public AccountStaff getStaffById(int id) {
+        AccountStaff AccountStaff = null;
+        String sql = "SELECT * FROM staff WHERE id = ?";
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                AccountStaff = new AccountStaff(
+                        rs.getInt("staffID"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("fullName"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("username"),
+                        rs.getInt("status")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return AccountStaff;
+    }
+
     private void updateCustomerStatus(int customerID, int status) {
         String query = "UPDATE customer SET Status = ? WHERE customerID = ?";
 
@@ -268,4 +296,5 @@ public class AccountDao extends dao.DBContext {
     public void unblockCustomer(int customerID) {
         updateCustomerStatus(customerID, 0); // 0 = Active
     }
+
 }

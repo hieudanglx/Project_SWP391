@@ -1,3 +1,8 @@
+<%-- 
+    Document   : viewCart
+    Created on : Feb 25, 2025, 5:23:00 PM
+    Author     : CE180594_Phan Quốc Duy
+--%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -242,7 +247,7 @@
                                                    id="vnpay">
                                             <label class="form-check-label d-flex align-items-center gap-2" 
                                                    for="vnpay">
-                                                <img src="https://vnpay.vn/wp-content/uploads/2021/07/Logo-VNPAY-QR-1.png" 
+                                                <img src="https://images.seeklogo.com/logo-png/42/1/vnpay-logo-png_seeklogo-428006.png" 
                                                      class="payment-icon">
                                                 <div>
                                                     <div class="fw-bold">VNPAY QR</div>
@@ -295,8 +300,6 @@
 
             window.addEventListener('resize', enforceCartWidth);
             enforceCartWidth(); // Khởi chạy lần đầu
-
-
 
             // Xử lý API địa chỉ
             const citis = document.getElementById("city");

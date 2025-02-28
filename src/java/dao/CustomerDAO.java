@@ -75,7 +75,6 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
-
     public Customer getCustomer(String username, String password) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
@@ -103,7 +102,6 @@ public class CustomerDAO extends DBContext {
         }
         return null;
     }
-    
     public Customer getCustomerByEmail(String email) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");

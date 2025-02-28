@@ -1,6 +1,7 @@
 package model;
 
 public class Product {
+
     private int productID;
     private String productName;
     private int price;
@@ -57,8 +58,6 @@ public class Product {
         this.isDelete = isDelete;
     }
 
-    
-
     public Product(int productID, String productName, int price, String color, int quantityProduct, String imageURL, int isDelete) {
         this.productID = productID;
         this.productName = productName;
@@ -69,8 +68,8 @@ public class Product {
         this.isDelete = isDelete;
     }
 
-    public Product(int categoryID, String brand, String ram, String rom, String operatingSystemName, String screenSize
-            , String screenResolution, String refreshRate, String chipType, String chipName) {
+    public Product(int categoryID, String brand, String ram, String rom, String operatingSystemName, String screenSize,
+             String screenResolution, String refreshRate, String chipType, String chipName) {
         this.categoryID = categoryID;
         this.brand = brand;
         this.ram = ram;
@@ -83,8 +82,8 @@ public class Product {
         this.chipName = chipName;
     }
 
-
-    public Product() {}
+    public Product() {
+    }
 
     public int getProductID() {
         return productID;
@@ -293,5 +292,4 @@ public class Product {
     public void setIsDelete(int isDelete) {
         this.isDelete = isDelete;
     }
-
 }

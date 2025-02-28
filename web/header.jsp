@@ -149,8 +149,8 @@
             function confirmLogout(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định
                 let confirmAction = confirm("Do you want to log out?");
-                if (confirmAction) {                  
-                    window.location.href = "logoutOfCustomerController"; 
+                if (confirmAction) {
+                    window.location.href = "logoutOfCustomerController";
                 }
             }
         </script>
@@ -171,6 +171,7 @@
                                     <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                 </form>
                                 <!--<a href="logout" class="login-btn">Đăng xuất</a>-->
+
                             </c:when>
                             <c:otherwise>
                                 <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>

@@ -1,3 +1,8 @@
+<%-- 
+    Document   : viewListProductGC
+    Created on : Feb 24, 2025, 2:46:46 PM
+    Author     : CE180594_Phan Quốc Duy
+--%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
