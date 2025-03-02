@@ -128,7 +128,7 @@
                                placeholder="Password" required>
                     </div>
                     <div>
-                        <button class="btn">NEXT</button>
+                        <button class="btn">Đăng nhập</button>
                     </div>
                     <div>
                         <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword" >Quên mật khẩu</a>

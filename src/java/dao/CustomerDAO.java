@@ -40,41 +40,36 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
+   
 
     public Integer ValidateStatusCustomer(String username, String password) {
-        if (connection == null) {
-            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-            return null; // Trả về null nếu không có kết nối
-        }
+    if (connection == null) {
+        System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+        return null; 
+    }
 
-        String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setString(2, password);
+    String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ps.setString(2, password);
+        System.out.println("Đang kiểm tra tài khoản: " + username); // Log kiểm tra
 
-            try ( ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("status"); // Trả về status
-                }
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int status = rs.getInt("status");
+                System.out.println("Trạng thái tài khoản: " + status); // Log trạng thái
+                return status;
+            } else {
+                System.out.println("Không tìm thấy tài khoản với username và password cung cấp.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy tài khoản
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
-
-    public boolean validateCustomer(String username, String password) {
-        String sql = "SELECT * FROM Customer WHERE username = ? AND password = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    return null; 
+}
+    
+    
     public Customer getCustomer(String username, String password) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
@@ -102,6 +97,9 @@ public class CustomerDAO extends DBContext {
         }
         return null;
     }
+
+    
+
     public Customer getCustomerByEmail(String email) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");

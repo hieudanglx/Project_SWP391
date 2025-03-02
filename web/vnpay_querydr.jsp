@@ -8,30 +8,37 @@
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>Cổng thanh toán VNPAY DEMO</title>
+        <title>qerydr</title>
         <!-- Bootstrap core CSS -->
         <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
-        <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">      
+        <!-- Custom styles for this template -->   
         <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
     </head>
 
     <body>
 
-         <div class="container">
-           <div class="header clearfix">
+        <div class="container">
+            <div class="header clearfix">
 
                 <h3 class="text-muted">VNPAY DEMO</h3>
             </div>
+            <h3>Query</h3>
+            <div class="table-responsive">
+            <form action="vnpayQuery" id="frmQerydr" method="Post">
                 <div class="form-group">
-                    <button onclick="pay()">Giao dịch thanh toán</button><br>
+                <label for="order_id">Mã giao dịch cần truy vấn (Giá trị của vnp_TxnRef)</label>
+                <input class="form-control" id="order_id"
+                       name="order_id" type="text"/>
                 </div>
                 <div class="form-group">
-                    <button onclick="querydr()">API truy vấn kết quả thanh toán</button><br>
-                </div>
+                <label for="trans_date">Thời gian khởi tạo giao dịch (Giá trị của vnp_CreateDate yêu cầu thanh toán)</label>
+                <input class="form-control" id="trans_date"
+                       name="trans_date" type="text" placeholder="yyyyMMddHHmmss"/>
+            </div>
                 <div class="form-group">
-                    <button onclick="refund()">API hoàn tiền giao dịch</button><br>
-                </div>
+                <button type="submit" class="btn btn-primary">QueryDr</button>
+            </div>
+            </form>   
             <p>
                 &nbsp;
             </p>
@@ -39,16 +46,6 @@
                 <p>&copy; VNPAY 2020</p>
             </footer>
         </div> 
-        <script>
-             function pay() {
-              window.location.href = "vnpay_pay.jsp";
-            }
-            function querydr() {
-              window.location.href = "vnpay_querydr.jsp";
-            }
-             function refund() {
-              window.location.href = "vnpay_refund.jsp";
-            }
-        </script>
+        </div>
     </body>
 </html>
