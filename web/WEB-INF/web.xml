@@ -16,6 +16,15 @@
         <servlet-name>CreateAccountStaff</servlet-name>
         <url-pattern>/CreateAccountStaff</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>RevenueTotal</servlet-name>
+        <servlet-class>controller.RevenueTotal</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RevenueTotal</servlet-name>
+        <url-pattern>/RevenueTotal</url-pattern>
+    </servlet-mapping>
+   
     <session-config>
         <session-timeout>
             30

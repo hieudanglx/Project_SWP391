@@ -95,8 +95,10 @@
             <div class="navbar-custom">
                 <h3>Manage Customer Accounts</h3>
                 <div class="search-container">
-                    <input type="text" class="form-control w-50 me-2" placeholder="Search">
-                    <button class="btn btn-primary">Search</button>
+                    <form action="SearchAccountCustomer" method="POST" class="d-flex">
+                        <input type="text" name="username" class="form-control w-50 me-2" placeholder="Search username">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </form>
                 </div>
                 <div>
                     <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
