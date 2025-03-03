@@ -297,4 +297,41 @@ public class AccountDao extends dao.DBContext {
         updateCustomerStatus(customerID, 0); // 0 = Active
     }
 
+    public boolean isUsernameExists(String username) {
+        String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, boolean status) {
+        if (isUsernameExists(username)) {
+            return false; // Không thêm nếu Username đã tồn tại
+        }
+
+        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, fullName);
+            ps.setString(2, username);
+            ps.setString(3, password); // Cần mã hóa nếu cần bảo mật
+            ps.setString(4, email);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, address);
+            ps.setBoolean(7, status); // SQL Server hiểu 0 = Active, 1 = Inactive
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

@@ -106,7 +106,7 @@
 
             <!-- Create Staff Button -->
             <div class="d-flex justify-content-end mb-3">
-                <a href="createStaff.jsp" class="btn btn-primary">Create Staff</a>
+                <a href="Create_account_staff.jsp" class="btn btn-primary">Create Staff</a>
             </div>
 
             <!-- Staff List Table -->
@@ -135,7 +135,7 @@
                                 <td>${s.username}</td>
                                 <td>${s.status == 0 ? "Active" : "Inactive"}</td>
                                 <td>
-                                    <a href="EditAccount_Staff?staffID=${s.staffID}" class="btn btn-warning btn-sm">Update</a>
+                                    <a href="EditAccount_Staff?staffID=${s.staffID}" class="btn btn-warning btn-sm">Edit</a>
                                     <a href="DeleteAccount_Staff?staffID=${s.staffID}" 
                                        onclick="return confirm('Are you sure you want to delete this staff member?');"
                                        class="btn btn-danger btn-sm">Delete</a>
