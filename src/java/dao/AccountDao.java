@@ -9,12 +9,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import model.AccountCustomer;
 import model.AccountStaff;
 
 import model.AccountCustomer;
 
 import model.AccountStaff;
+import model.EmailSender;
 
 /**
  *
@@ -297,6 +299,7 @@ public class AccountDao extends dao.DBContext {
         updateCustomerStatus(customerID, 0); // 0 = Active
     }
 
+
     public boolean isUsernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -360,4 +363,61 @@ public class AccountDao extends dao.DBContext {
     return staffList;
 }
 
+
+    
+    // Phương thức cập nhật mật khẩu nhân viên
+    public boolean updateStaffPassword(String email, String newPassword) {
+        String query = "UPDATE Staff SET password = ? WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Phương thức tạo và gửi mã OTP
+    public String sendStaffOTP(String email) {
+        String otp = generateOTP();
+        String subject = "Xác nhận đổi mật khẩu";
+        String message = "Mã OTP của bạn là: " + otp + " (Có hiệu lực trong 5 phút)";
+        boolean isSent = EmailSender.sendEmail(email, subject, message);
+        return isSent ? otp : null;
+    }
+    
+    // Hàm tạo mã OTP 6 chữ số
+    private String generateOTP() {
+        Random random = new Random();
+        int otp = 100000 + random.nextInt(900000);
+        return String.valueOf(otp);
+    }
+    public AccountStaff getAccountStaffByEmail(String email) {
+    String query = "SELECT * FROM Staff WHERE email = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        stmt.setString(1, email);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            return new AccountStaff(
+                    rs.getInt("staffID"),
+                    rs.getString("address"),
+                    rs.getString("email"),
+                    rs.getString("password"),
+                    rs.getString("fullName"),
+                    rs.getString("phoneNumber"),
+                    rs.getString("username"),
+                    rs.getInt("status")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null; // Trả về null nếu không tìm thấy nhân viên
 }
+
+}
+
+

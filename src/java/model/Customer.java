@@ -8,25 +8,15 @@ package model;
  *
  * @author nguye
  */
-
-
 public class Customer {
 
-    
     private int id;
-
     private String username;
-
     private String email;
-
     private String password;
-
     private String address;
-
     private String phoneNumber;
-
     private String status;
-
     private String imgCustomer;
 
     public Customer() {

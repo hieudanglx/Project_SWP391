@@ -75,7 +75,7 @@ public class verifyOTPController extends HttpServlet {
         HttpSession session = request.getSession();
 
         // Lấy OTP nhập từ form
-        String enteredOTP = request.getParameter("otp");
+String enteredOTP = request.getParameter("otp");
 
         // Lấy OTP đúng từ session (luôn ở dạng String)
         String correctOTP = (String) session.getAttribute("otp");
