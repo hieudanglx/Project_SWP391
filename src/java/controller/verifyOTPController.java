@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.CustomerDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.PrintWriter;
+import model.Customer;
 
 /**
  *
@@ -72,36 +74,35 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        String email = request.getParameter("email");
+        String otpCode = request.getParameter("otp");
+        String newPassword = request.getParameter("newPassword");
 
-        // Lấy OTP nhập từ form
-        String enteredOTP = request.getParameter("otp");
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer customer = customerDAO.getCustomerByToken(otpCode);
 
-        // Lấy OTP đúng từ session (luôn ở dạng String)
-        String correctOTP = (String) session.getAttribute("otp");
-
-        if (correctOTP == null) {
-            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
-            request.getRequestDispatcher("forgotPasswordOfCustomer.jsp").forward(request, response);
+        if (customer == null || !customer.getEmail().equals(email)) {
+            request.setAttribute("error", "Mã xác nhận không đúng hoặc đã hết hạn!");
+            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
             return;
         }
 
-        // So sánh OTP dưới dạng chuỗi
-        if (enteredOTP.equals(correctOTP)) {
-            response.sendRedirect("resetPasswordOfCustomer.jsp"); // Chuyển đến trang đặt lại mật khẩu
-        } else {
-            request.setAttribute("errorMessage", "Mã OTP không đúng!");
-            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
-        }
+        // Cập nhật mật khẩu mới và xóa mã OTP
+        customerDAO.updatePassword(email, newPassword);
+        customerDAO.removeResetToken(email);
+
+        request.setAttribute("message", "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+
+/**
+ * Returns a short description of the servlet.
+ *
+ * @return a String containing servlet description
+ */
+@Override
+public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

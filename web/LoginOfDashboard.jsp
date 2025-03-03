@@ -116,7 +116,7 @@
                             <div class="text-danger text-center fw-bold mt-2">${error}</div>
                         </c:if>
                         <button type="submit" class="btn btn-primary">Login</button>
-                        <button type="button" class="btn btn-secondary">Forgot Password</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href = 'forgotPasswordStaff.jsp'" >Forgot Password</button>
                     </form>
                 </div>
             </div>

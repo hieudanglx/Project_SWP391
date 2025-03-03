@@ -9,16 +9,16 @@ public class DBContext {
 
     public Connection connection;
 
-    public DBContext() {
+     public DBContext() {
         try {
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=Project_SWP";
-            String username = "sa";
-            String password = "123";
+            String url = "jdbc:sqlserver://HWI\\SQLEXPRESS:1433;databaseName=Project_SWP;encrypt=true;trustServerCertificate=true;";
+            String user = "sa";
+            String password = "1";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(url, username, password);
-
-        } catch (ClassNotFoundException | SQLException ex) {
-            System.out.println(ex);
+            connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connected to database successfully!");
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("Database connection error: " + e.getMessage());
         }
     }
     
