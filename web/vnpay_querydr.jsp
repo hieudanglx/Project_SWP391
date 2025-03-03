@@ -16,7 +16,7 @@
     </head>
 
     <body>
-
+        <%@include file="header.jsp" %>
         <div class="container">
             <div class="header clearfix">
 
@@ -24,28 +24,28 @@
             </div>
             <h3>Query</h3>
             <div class="table-responsive">
-            <form action="vnpayQuery" id="frmQerydr" method="Post">
-                <div class="form-group">
-                <label for="order_id">Mã giao dịch cần truy vấn (Giá trị của vnp_TxnRef)</label>
-                <input class="form-control" id="order_id"
-                       name="order_id" type="text"/>
-                </div>
-                <div class="form-group">
-                <label for="trans_date">Thời gian khởi tạo giao dịch (Giá trị của vnp_CreateDate yêu cầu thanh toán)</label>
-                <input class="form-control" id="trans_date"
-                       name="trans_date" type="text" placeholder="yyyyMMddHHmmss"/>
-            </div>
-                <div class="form-group">
-                <button type="submit" class="btn btn-primary">QueryDr</button>
-            </div>
-            </form>   
-            <p>
-                &nbsp;
-            </p>
-            <footer class="footer">
-                <p>&copy; VNPAY 2020</p>
-            </footer>
-        </div> 
+                <form action="vnpayQuery" id="frmQerydr" method="Post">
+                    <div class="form-group">
+                        <label for="order_id">Mã giao dịch cần truy vấn (Giá trị của vnp_TxnRef)</label>
+                        <input class="form-control" id="order_id"
+                               name="order_id" type="text"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="trans_date">Thời gian khởi tạo giao dịch (Giá trị của vnp_CreateDate yêu cầu thanh toán)</label>
+                        <input class="form-control" id="trans_date"
+                               name="trans_date" type="text" placeholder="yyyyMMddHHmmss"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">QueryDr</button>
+                    </div>
+                </form>   
+                <p>
+                    &nbsp;
+                </p>
+                <footer class="footer">
+                    <p>&copy; VNPAY 2020</p>
+                </footer>
+            </div> 
         </div>
     </body>
 </html>

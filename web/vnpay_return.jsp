@@ -27,8 +27,74 @@
         <!-- Custom styles for this template -->
         <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet"> 
         <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+
+        <style>
+            /* --- Kết quả thanh toán --- */
+            .payment-container {
+                max-width: 800px;
+                margin: 60px auto;
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                text-align: center;
+            }
+
+            .payment-container h3 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            .payment-table {
+                width: 100%;
+                margin-top: 15px;
+            }
+
+            .payment-group {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .payment-group label {
+                font-weight: bold;
+                color: #444;
+            }
+
+            .payment-value {
+                color: #555;
+                font-weight: normal;
+            }
+
+            .payment-status {
+                font-size: 18px;
+                font-weight: bold;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 15px;
+            }
+
+            .payment-status.success {
+                color: #2e7d32;
+                background: #e8f5e9;
+            }
+
+            .payment-status.failed {
+                color: #d32f2f;
+                background: #ffebee;
+            }
+
+            .payment-footer {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #666;
+            }
+        </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <%
             //Begin process return from VNPAY
             Map fields = new HashMap();
@@ -51,42 +117,53 @@
 
         %>
         <!--Begin display -->
-        <div class="container">
-            <div class="header clearfix">
-                <h3 class="text-muted">KẾT QUẢ THANH TOÁN</h3>
+        <div class="payment-container">
+            <div>
+                <h3>KẾT QUẢ THANH TOÁN</h3>
             </div>
-            <div class="table-responsive">
-                <div class="form-group">
-                    <label >Mã giao dịch thanh toán:</label>
-                    <label><%=request.getParameter("vnp_TxnRef")%></label>
+            <div class="payment-table">
+                <div class="payment-group">
+                    <label>Mã giao dịch thanh toán:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_TxnRef")%></span>
                 </div>    
-                <div class="form-group">
-                    <label >Số tiền:</label>
-                    <label><%=request.getParameter("vnp_Amount")%></label>
+                <div class="payment-group">
+                    <label>Số tiền:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_Amount")%></span>
                 </div>  
-                <div class="form-group">
-                    <label >Mô tả giao dịch:</label>
-                    <label><%=request.getParameter("vnp_OrderInfo")%></label>
+                <div class="payment-group">
+                    <label>Mô tả giao dịch:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_OrderInfo")%></span>
                 </div> 
-                <div class="form-group">
-                    <label >Mã lỗi thanh toán:</label>
-                    <label><%=request.getParameter("vnp_ResponseCode")%></label>
+                <div class="payment-group">
+                    <label>Mã lỗi thanh toán:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_ResponseCode")%></span>
                 </div> 
-                <div class="form-group">
-                    <label >Mã giao dịch tại CTT VNPAY-QR:</label>
-                    <label><%=request.getParameter("vnp_TransactionNo")%></label>
+                <div class="payment-group">
+                    <label>Mã giao dịch tại CTT VNPAY-QR:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_TransactionNo")%></span>
                 </div> 
-                <div class="form-group">
-                    <label >Mã ngân hàng thanh toán:</label>
-                    <label><%=request.getParameter("vnp_BankCode")%></label>
+                <div class="payment-group">
+                    <label>Mã ngân hàng thanh toán:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_BankCode")%></span>
                 </div> 
-                <div class="form-group">
-                    <label >Thời gian thanh toán:</label>
-                    <label><%=request.getParameter("vnp_PayDate")%></label>
+                <div class="payment-group">
+                    <label>Thời gian thanh toán:</label>
+                    <span class="payment-value"><%=request.getParameter("vnp_PayDate")%></span>
                 </div> 
-                <div class="form-group">
-                    <label >Tình trạng giao dịch:</label>
-                    <label>
+                <div class="payment-group">
+                    <label>Tình trạng giao dịch:</label>
+                    <span class="payment-status
+                          <%
+                              if (signValue.equals(vnp_SecureHash)) {
+                                  if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
+                                      out.print("success");
+                                  } else {
+                                      out.print("failed");
+                                  }
+                              } else {
+                                  out.print("failed");
+                              }
+                          %>">
                         <%
                             if (signValue.equals(vnp_SecureHash)) {
                                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
@@ -94,19 +171,16 @@
                                 } else {
                                     out.print("Không thành công");
                                 }
-
                             } else {
-                                out.print("invalid signature");
+                                out.print("Invalid signature");
                             }
-                        %></label>
+                        %>
+                    </span>
                 </div> 
             </div>
-            <p>
-                &nbsp;
-            </p>
-            <footer class="footer">
+            <footer class="payment-footer">
                 <p>&copy; VNPAY 2020</p>
             </footer>
-        </div>  
+        </div>
     </body>
 </html>
