@@ -61,8 +61,7 @@
             <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
             <a href="#"><i class="fas fa-users"></i> Users</a>
             <a href="#"><i class="fas fa-box"></i> Products</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>
-            <button class="btn btn-danger" onclick="logout()">Logout</button>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>         
         </div>
 
         <!-- Main Content -->
@@ -70,30 +69,41 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light">
                 <div class="container-fluid">
-                    <h4>Welcome to Dashboard</h4>
-                    
-                          
+                    <h4>Welcome to Dashboard Staff</h4>
+                    <!-- Thêm lớp mx-auto để căn giữa thanh search -->
+                    <div class="mx-auto">
+                        <div class="d-flex">
+                            <input type="text" class="form-control me-2" placeholder="Search">
+                            <button class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+
+                    <div class="ms-auto">
+                        <a href="viewProfileStaff.jsp" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
+                        <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
+                    </div>
+
                 </div>
             </nav>
 
             <!-- Dashboard Cards -->
-            
+
         </div>
 
     </body>
     <script>
-    function logout() {
-        fetch('/LogOutStaffAndAdminController', { method: 'POST' })  // Gọi model
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/LoginOfDashboard.jsp';  // Chuyển về trang login
-                } else {
-                    alert('Logout Fail!.');
-                }
-            })
-            .catch(error => console.error('logout Error:', error));
-    }
-</script>
+        function logout() {
+            fetch('/LogOutStaffAndAdminController', {method: 'POST'})  // Gọi model
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/LoginOfDashboard.jsp';  // Chuyển về trang login
+                        } else {
+                            alert('Logout Fail!.');
+                        }
+                    })
+                    .catch(error => console.error('logout Error:', error));
+        }
+    </script>
 </html>
 
 

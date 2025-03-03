@@ -35,7 +35,6 @@ public class createProduct extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
 
         }
     }
@@ -67,36 +66,35 @@ public class createProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productID = request.getParameter("productID");
-            String productName = request.getParameter("productName");
-            int price = Integer.parseInt(request.getParameter("price"));
-            int category = Integer.parseInt(request.getParameter("category"));
-            String brand = request.getParameter("brand");
-            String camera = request.getParameter("camera");
-            String ram = request.getParameter("ram");
-            String rom = request.getParameter("rom");
-            String color = request.getParameter("color");
-            String operatingSystem = request.getParameter("operatingSystem");
-            String size = request.getParameter("size");
-            String refreshRate = request.getParameter("refreshRate");
-            String chip = request.getParameter("chip");
-            String gpu = request.getParameter("gpu");
+        String productName = request.getParameter("productName");
+        int price = Integer.parseInt(request.getParameter("price"));
+        int category = Integer.parseInt(request.getParameter("category"));
+        String brand = request.getParameter("brand");
+        String camera = request.getParameter("camera");
+        String ram = request.getParameter("ram");
+        String rom = request.getParameter("rom");
+        String color = request.getParameter("color");
+        String operatingSystem = request.getParameter("operatingSystem");
+        String size = request.getParameter("size");
+        String refreshRate = request.getParameter("refreshRate");
+        String chip = request.getParameter("chip");
+        String gpu = request.getParameter("gpu");
 //            int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
 //            int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
-            String imageURL = request.getParameter("imageURL");
-            
+        String imageURL = request.getParameter("imageURL");
 
-            Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-                    operatingSystem, size, refreshRate, chip, gpu, 0, 0, imageURL, 0);
-
-            ProductDao productDAO = new ProductDao();
-            boolean isAdded = productDAO.addProduct(product);
-
-            if (isAdded) {
-                response.sendRedirect("listProductsForAdmin");
-            } else {
-                request.setAttribute("error", "Failed to add product");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-            }
+//        Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
+//                operatingSystem, size, refreshRate, chip, gpu, 0, 0, imageURL, 0);
+//
+//        ProductDao productDAO = new ProductDao();
+//        boolean isAdded = productDAO.addProduct(product);
+//
+//        if (isAdded) {
+//            response.sendRedirect("listProductsForAdmin");
+//        } else {
+//            request.setAttribute("error", "Failed to add product");
+//            request.getRequestDispatcher("error.jsp").forward(request, response);
+//        }
     }
 
     /**

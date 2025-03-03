@@ -115,6 +115,10 @@
                         <c:if test="${not empty error}">
                             <div class="text-danger text-center fw-bold mt-2">${error}</div>
                         </c:if>
+                        <c:if test="${not empty blockedMessage}">
+                            <div class="text-danger text-center fw-bold mt-2">${blockedMessage}</div>
+                        </c:if>
+
                         <button type="submit" class="btn btn-primary">Login</button>
                         <button type="button" class="btn btn-secondary" onclick="window.location.href = 'forgotPasswordStaff.jsp'" >Forgot Password</button>
                     </form>

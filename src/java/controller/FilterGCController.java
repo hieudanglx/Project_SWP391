@@ -71,11 +71,12 @@ public class FilterGCController extends HttpServlet {
                 request.getParameter("brand"),
                 request.getParameter("ram"),
                 request.getParameter("rom"),
+                request.getParameter("os"),
                 request.getParameter("size"),
-                request.getParameter("refreshRate"),
-                request.getParameter("Chip"),
-                request.getParameter("GPU")); 
-        
+                request.getParameter("res"), 
+                request.getParameter("rate"),
+                request.getParameter("chiptype"),
+                request.getParameter("chipname"));
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, null, min, max);
         request.setAttribute("CategoryID", CategoryID);

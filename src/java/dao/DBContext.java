@@ -11,9 +11,11 @@ public class DBContext {
 
      public DBContext() {
         try {
+
             String url = "jdbc:sqlserver://HWI\\SQLEXPRESS:1433;databaseName=Project_SWP;encrypt=true;trustServerCertificate=true;";
             String user = "sa";
             String password = "1";
+
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("Connected to database successfully!");

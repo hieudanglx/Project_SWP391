@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="form-container">
-        <h1>Update Staff</h1>
+        <h1>Edit Staff</h1>
         <form action="EditAccount_Staff" method="POST">
     <input type="hidden" name="staffID" value="${staff.staffID}" />
     
@@ -60,9 +60,9 @@
     </div>
     
     <div class="mb-3">
-        <label for="username" class="form-label">Username:</label>
-        <input type="text" class="form-control" id="username" name="username" value="${staff.username}" required>
-    </div>
+    <label for="username" class="form-label">Username:</label>
+    <input type="text" class="form-control bg-light" id="username" name="username" value="${staff.username}" readonly>
+</div>
     
     <div class="mb-3">
         <label for="status" class="form-label">Status:</label>

@@ -9,7 +9,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <style>
             /* --- General Header Styles --- */
             .header {
@@ -27,7 +26,7 @@
                 justify-content: space-between;
                 align-items: center;
                 padding: 10px 30px;
-                background: #1a237e;
+                background: #89A8B2;
             }
 
             .logo {
@@ -150,8 +149,8 @@
             function confirmLogout(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định
                 let confirmAction = confirm("Do you want to log out?");
-                if (confirmAction) {                  
-                    window.location.href = "logoutOfCustomerController"; 
+                if (confirmAction) {
+                    window.location.href = "logoutOfCustomerController";
                 }
             }
         </script>
@@ -172,12 +171,14 @@
                                     <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                 </form>
                                 <!--<a href="logout" class="login-btn">Đăng xuất</a>-->
+
                             </c:when>
                             <c:otherwise>
                                 <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>
                             </c:otherwise>
                         </c:choose>
                     </div>
+
                     <a href="ViewCartController" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
                         <!-- Top Row 

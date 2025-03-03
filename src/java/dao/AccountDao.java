@@ -31,13 +31,16 @@ public class AccountDao extends dao.DBContext {
             return false;
         }
 
-        String query = "Select username, password from Staff where username = ? and password = ?";
+        String query = "Select username, password, status from Staff where username = ? and password = ?";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
             try ( ResultSet rs = pstmt.executeQuery()) {
-                return rs.next();
+
+                if (rs.next()) {
+                    return rs.getInt("status") == 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -247,6 +250,33 @@ public class AccountDao extends dao.DBContext {
         return null; // Trả về null nếu không tìm thấy nhân viên
     }
 
+    public AccountStaff getStaffById(int id) {
+        AccountStaff AccountStaff = null;
+        String sql = "SELECT * FROM staff WHERE id = ?";
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                AccountStaff = new AccountStaff(
+                        rs.getInt("staffID"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("fullName"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("username"),
+                        rs.getInt("status")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return AccountStaff;
+    }
+
     private void updateCustomerStatus(int customerID, int status) {
         String query = "UPDATE customer SET Status = ? WHERE customerID = ?";
 
@@ -268,29 +298,46 @@ public class AccountDao extends dao.DBContext {
     public void unblockCustomer(int customerID) {
         updateCustomerStatus(customerID, 0); // 0 = Active
     }
-    
-    public AccountStaff getAccountStaffByEmail(String email) {
-    String query = "SELECT * FROM Staff WHERE email = ?";
-    try (PreparedStatement stmt = connection.prepareStatement(query)) {
-        stmt.setString(1, email); // Thiết lập giá trị cho tham số email
-        ResultSet rs = stmt.executeQuery();
 
-        if (rs.next()) {
-            return new AccountStaff(
-                    rs.getInt("staffID"),
-                    rs.getString("address"),
-                    rs.getString("email"),
-                    rs.getString("password"),
-                    rs.getString("fullName"),
-                    rs.getString("phoneNumber"),
-                    rs.getString("username"),
-                    rs.getInt("status")
-            );
+
+    public boolean isUsernameExists(String username) {
+        String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return false;
     }
-    return null; // Trả về null nếu không tìm thấy nhân viên
+
+    public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, boolean status) {
+        if (isUsernameExists(username)) {
+            return false; // Không thêm nếu Username đã tồn tại
+        }
+
+        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, fullName);
+            ps.setString(2, username);
+            ps.setString(3, password); // Cần mã hóa nếu cần bảo mật
+            ps.setString(4, email);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, address);
+            ps.setBoolean(7, status); // SQL Server hiểu 0 = Active, 1 = Inactive
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
     
     // Phương thức cập nhật mật khẩu nhân viên

@@ -40,19 +40,65 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
+   
 
-    public boolean validateCustomer(String username, String password) {
-        String sql = "SELECT * FROM Customer WHERE username = ? AND password = ?";
+    public Integer ValidateStatusCustomer(String username, String password) {
+    if (connection == null) {
+        System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+        return null; 
+    }
+
+    String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ps.setString(2, password);
+        System.out.println("Đang kiểm tra tài khoản: " + username); // Log kiểm tra
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                int status = rs.getInt("status");
+                System.out.println("Trạng thái tài khoản: " + status); // Log trạng thái
+                return status;
+            } else {
+                System.out.println("Không tìm thấy tài khoản với username và password cung cấp.");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null; 
+}
+    
+    
+    public Customer getCustomer(String username, String password) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null;
+        }
+        String sql = "SELECT * FROM Customer WHERE Username = ? and Password = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             ps.setString(2, password);
             ResultSet rs = ps.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                return new Customer(
+                        rs.getInt("CustomerID"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("Status"),
+                        rs.getString("imgcustomer")
+                );
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
+
+    
 
     public Customer getCustomerByEmail(String email) {
         if (connection == null) {
@@ -81,52 +127,20 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    public Customer getCustomerByUsernameAndPassword(String username, String password) {
-        String sql = "SELECT * FROM Customer WHERE username = ? AND password = CAST(? AS VARCHAR)";
+    public boolean updatePassword(String email, String newPassword) {
+        String sql = "UPDATE Customer SET password = ? WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPassword);
+            stmt.setString(2, email);
 
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                System.out.println("User found: " + rs.getString("username"));
-                return new Customer(
-                        rs.getInt("CustomerID"),
-                        rs.getString("username"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("address"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("status"),
-                        rs.getString("imgcustomer")
-                );
-            } else {
-                System.out.println("No user found with username: " + username + " and password: " + password);
-            }
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất 1 hàng bị ảnh hưởng
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // In lỗi SQL ra console để debug
         }
-        return null;
+        return false;
     }
 
-    //    public boolean validateEmail(String email) {
-    //        if (connection == null) {
-    //            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-    //            return false;
-    //        }
-    //
-    //        String query = "SELECT email FROM customer WHERE email = ?";
-    //        try ( PreparedStatement ps = connection.prepareStatement(query)) {
-    //            ps.setString(1, email);
-    //            try ( ResultSet rs = ps.executeQuery()) {
-    //                return rs.next();
-    //            }
-    //        } catch (SQLException e) {
-    //            e.printStackTrace();
-    //        }
-    //        return false;
-    //    }
     public void addCustomer(Customer customer) {
         String sql = "INSERT INTO Customer (username, email, password, address, phoneNumber, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -237,6 +251,7 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
+
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE Customers SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -314,5 +329,6 @@ public class CustomerDAO extends DBContext {
         }
         return null;
     }
+
 
 }

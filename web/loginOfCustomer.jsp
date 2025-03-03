@@ -84,7 +84,7 @@
             .btn {
                 width: 100%;
                 padding: 12px;
-                background-color: #b88e2f;
+                background-color: #B3C8CF;
                 color: white;
                 border: none;
                 border-radius: 5px;
@@ -93,11 +93,24 @@
             }
 
             .btn:hover {
-                background-color: #a07420;
+                background-color: #4f5b70;
+            }
+
+            a{
+                color: #6d8fcd;
+                text-decoration: none;
+                text-align: center;
+                font-size: 12px;
+                margin-left: 10px;
+            }
+            a:hover{
+                color: #0451df;
+                text-decoration: underline;
             }
         </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <div class="container">
             <div class="image-container">
                 <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c58c23feba91aa62989c5ad68c169821d887bd88e66e6dcad3be1acbf4a&w=1480" 
@@ -114,7 +127,13 @@
                         <input type="password" id="password" name="password" class="form-control"
                                placeholder="Password" required>
                     </div>
-                    <button class="btn">NEXT</button>
+                    <div>
+                        <button class="btn">Đăng nhập</button>
+                    </div>
+                    <div>
+                        <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword" >Quên mật khẩu</a>
+                    </div>
+
                     <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
                     <% if (errorMessage != null) { %>
                     <p style="color: red;"><%= errorMessage %></p>

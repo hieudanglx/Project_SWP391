@@ -87,12 +87,15 @@ public class verifyOTPController extends HttpServlet {
             return;
         }
 
-        // Cập nhật mật khẩu mới và xóa mã OTP
-        customerDAO.updatePassword(email, newPassword);
-        customerDAO.removeResetToken(email);
 
-        request.setAttribute("message", "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.");
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        // So sánh OTP dưới dạng chuỗi
+        if (enteredOTP.equals(correctOTP)) {
+            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
+        } else {
+            request.setAttribute("errorMessage", "Mã OTP không đúng!");
+            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
+        }
+
     }
 
 

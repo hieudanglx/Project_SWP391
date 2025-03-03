@@ -27,17 +27,28 @@
                 width: 400px;
                 text-align: center;
             }
+            .submit{
+                background-color: #E5E1DA;
+                border-radius: 10px;
+                color: #547488;
+                font-weight: 500;   
+                border: none;
+            }
+            .submit:hover{
+                background-color: #89A8B2;
+                color: white;
+            }
         </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
         <div class="container">
-            <h2>Forgot Password</h2>
-            <p>Enter your email to reset your password.</p>
+            <h2>Quên mật khẩu</h2>
+            <p>Nhập email của bạn để đặt lại mật khẩu.</p>
 
             <form action="forgotPasswordOfCustomerController" method="post">
                 <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
-                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                <button type="submit" class="submit mt-3">Xác nhận</button>
             </form>
 
             <% String errorMessage = (String) request.getAttribute("errorMessage"); %>

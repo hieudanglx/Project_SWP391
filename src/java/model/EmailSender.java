@@ -13,9 +13,12 @@ import javax.mail.internet.*;
  * @author TRAN NHU Y - CE182032
  */
 public class EmailSender {
-    public static boolean sendEmail(String to, String subject, String content) {
+
+
+    public static void sendEmail(String to, String subject, String content) {
         final String fromEmail = "Trannhuy095@gmail.com"; // Email hệ thống
-        final String password = "lslk ippm uxeo nebd"; // Mật khẩu ứng dụng Google
+        final String password = "naow zhik ggdw mjkl"; // Mật khẩu ứng dụng Google
+
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");

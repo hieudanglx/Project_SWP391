@@ -3,7 +3,6 @@
     Created on : Feb 24, 2025, 11:01:10 PM
     Author     : CE180594_Phan Quốc Duy
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -16,275 +15,274 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
+            /* Custom container width */
             .container {
-                max-width: 1200px;
+                max-width: 1200px !important;
                 margin: 0 auto;
                 padding: 20px;
-                font-family: Arial, sans-serif;
-                display: flex;
-                gap: 40px;
             }
 
-            .left-box {
-                flex: 2;
+            .product-header {
+                border-bottom: 3px solid #0d6efd;
+                padding-bottom: 1rem;
             }
 
-            .right-box {
-                flex: 1;
-                background: #fff;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                height: fit-content;
-            }
-
-            .product-title {
-                font-size: 32px;
-                color: #1a237e;
-                font-weight: 700;
-                margin: 20px 0;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-                padding-bottom: 15px;
-                border-bottom: 3px solid #2196F3;
-                display: inline-block;
-            }
-
-            .product-image {
+            /* Image styling */
+            .product-main-image {
                 width: 50%;
-                max-width: 500px;
-                margin-bottom: 20px;
-            }
-
-            .tab-container {
-                margin-top: 20px;
-            }
-
-            .tab-header {
-                display: flex;
-                gap: 20px;
-                border-bottom: 2px solid #eee;
-                margin-bottom: 20px;
-            }
-
-            .tab-button {
-                padding: 10px 20px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                font-size: 18px;
-                color: #666;
-            }
-
-            .tab-button.active {
-                color: #2196F3;
-                border-bottom: 3px solid #2196F3;
-            }
-
-            .tab-content {
-                display: none;
-            }
-
-            .tab-content.active {
+                height: auto;
+                margin: 20px auto;
                 display: block;
-            }
-
-            .specs-table {
-                width: 100%;
-                border-collapse: collapse;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             }
 
             .specs-table td {
-                padding: 12px;
-                border-bottom: 1px solid #eee;
+                padding: 1rem;
+                border-bottom: 1px solid #dee2e6;
             }
 
-            .specs-table td:first-child {
-                width: 40%;
-                font-weight: bold;
-            }
-
-            .color-options {
-                display: flex;
-                gap: 10px;
-                margin: 20px 0;
-            }
-
-            .color-display {
-                display: flex;
-                gap: 10px;
-                margin: 20px 0;
-            }
-
-            .color-box {
-                padding: 8px 16px;
-                border: 2px solid #ddd;
-                border-radius: 12px;
-                background: #f9f9f9;
-                font-size: 16px;
-                font-weight: bold;
-                color: #333;
-                text-align: center;
-            }
-
-            .product-price {
-                font-size: 32px;
-                color: #e91e63;
-                margin: 20px 0;
-            }
-
-            .btn-group {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .btn {
-                padding: 15px 30px;
-                border: none;
-                border-radius: 25px;
+            .color-swatch {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                border: 2px solid #dee2e6;
                 cursor: pointer;
-                font-weight: bold;
-                text-align: center;
+                transition: all 0.2s;
             }
 
-            .btn-cart {
-                background: #4CAF50;
-                color: white;
+            .color-swatch.selected {
+                border-color: #0d6efd;
+                box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
             }
 
-            .btn-buy {
-                background: #2196F3;
-                color: white;
+            .storage-option {
+                min-width: 90px;
+            }
+            tr td {
+                text-align: left;
             }
         </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
 
-        <div class="container">
-            <!-- Cột trái -->
-            <div class="left-box">
-                <h1 class="product-title">${product.productName}</h1>
-                <img src="${product.imageURL}" alt="${product.productName}" class="product-image">
-
-                <div class="tab-container">
-                    <div class="tab-header">
-                        <button class="tab-button active" onclick="switchTab('specs')">Thông số kỹ thuật</button>
-                        <button class="tab-button" onclick="switchTab('reviews')">Bài viết đánh giá</button>
+        <div class="container py-5">
+            <div class="row g-4">
+                <!-- Left Column -->
+                <div class="col-lg-8">
+                    <div class="product-header mb-4">
+                        <h1 class="display-4 fw-bold">${product.productName}</h1>
                     </div>
 
-                    <div id="specs" class="tab-content active">
-                        <table class="specs-table">
-                            <tr>
-                                <td>Hệ điều hành</td>
-                                <td>${product.operatingSystem}</td>
-                            </tr>
-                            <tr>
-                                <td>Chip xử lý (CPU)</td>
-                                <td>${product.chip}</td>
-                            </tr>
-                            <tr>
-                                <td>Chip đồ họa (GPU)</td>
-                                <td>${product.gpu}</td>
-                            </tr>
-                            <tr>
-                                <td>RAM</td>
-                                <td>${product.ram}</td>
-                            </tr>
-                            <tr>
-                                <td>Bộ nhớ trong</td>
-                                <td>${product.rom}</td>
-                            </tr>
-                            <c:if test="${not empty product.camera}">
-                                <c:set var="cameraDetails" value="${fn:split(product.camera, ',')}" />
-                                <c:forEach var="detail" items="${cameraDetails}" varStatus="status">
+                    <!-- Product Image -->
+                    <img src="${product.imageURL}" 
+                         alt="${product.productName}" 
+                         class="product-main-image rounded-3">
+
+                    <!-- Tabs -->
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="specs-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#specs" type="button" role="tab">Thông số kỹ thuật</button>
+                            <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" 
+                                    data-bs-target="#reviews" type="button" role="tab">Đánh giá (128)</button>
+                        </div>
+                    </nav>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content mt-4">
+                        <!-- Specifications -->
+                        <div class="tab-pane fade show active" id="specs" role="tabpanel">
+                            <table class="table specs-table">
+                                <tr>
+                                    <td>Hệ điều hành</td>
+                                    <td>${product.operatingSystemName} ${product.operatingSystemVersion}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chip xử lý (CPU)</td>
+                                    <td>${product.chipType} ${product.chipName}</td>
+                                </tr>
+                                <tr>
+                                    <td>Chip đồ họa (GPU)</td>
+                                    <td>${product.gpuType} ${product.gpuName}</td>
+                                </tr>
+                                <tr>
+                                    <td>RAM</td>
+                                    <td>${product.ram}</td>
+                                </tr>
+                                <c:if test="${product.categoryID==1}">
                                     <tr>
+                                        <td>Loại RAM</td>
+                                        <td>${product.ramType}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td>Hỗ trợ RAM tối đa</td>
                                         <td>
                                             <c:choose>
-                                                <c:when test="${status.index == 0}">Camera trước</c:when>
-                                                <c:otherwise>Camera sau</c:otherwise>
+                                                <c:when test="${product.supportsUpgradingRAM == '1'}">
+                                                    Có hỗ trợ nâng cấp
+                                                </c:when>
+                                                <c:when test="${product.supportsUpgradingRAM == '0'}">
+                                                    Không hỗ trợ nâng cấp
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Unified (Hàng không công bố)
+                                                </c:otherwise>
                                             </c:choose>
                                         </td>
-                                        <td>${detail}</td>
                                     </tr>
-                                </c:forEach>
-                            </c:if>
-                            <tr>
-                                <td>Kích thước màn hình</td>
-                                <td>${product.size}</td>
-                            </tr>
-                            <tr>
-                                <td>Tần số quét</td>
-                                <td>${product.refreshRate}</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div id="reviews" class="tab-content">
-                        <div class="rating">4.9 ★ (128 đánh giá)</div>
-
-                        <div class="review">
-                            <div class="review-header">
-                                <strong>Nguyễn Đức Bình</strong>
-                                <div class="rating">★★★★★</div>
-                            </div>
-                            <p>Điện thoại chạy mượt, pin trâu cả ngày</p>
+                                </c:if>
+                                <tr>
+                                    <td>Bộ nhớ trong</td>
+                                    <td>${product.rom}</td>
+                                </tr>
+                                <c:if test="${product.categoryID==1}">
+                                    <tr>
+                                        <td>Hỗ trợ ROM tối đa</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${product.supportsUpgradingROM == '1'}">
+                                                    Có hỗ trợ nâng cấp
+                                                </c:when>
+                                                <c:when test="${product.supportsUpgradingROM == '0'}">
+                                                    Không hỗ trợ nâng cấp
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Unified (Hàng không công bố)
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                                <c:if test="${product.categoryID !=1}">
+                                    <tr>
+                                        <td>Camera trước</td>
+                                        <td>${product.cameraFront}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Camera sau</td>
+                                        <td>${product.cameraBehind}</td>
+                                    </tr>
+                                </c:if>
+                                <tr>
+                                    <td>Màn hình</td>
+                                    <td>${product.screenSize}</td>
+                                </tr>
+                                <tr>
+                                    <td>Độ phân giải</td>
+                                    <td>${product.screenResolution}</td>
+                                </tr>
+                                <tr>
+                                    <td>Tần số quét</td>
+                                    <td>${product.refreshRate}</td>
+                                </tr>
+                            </table>
                         </div>
 
-                        <div class="review">
-                            <div class="review-header">
-                                <strong>E Phương</strong>
-                                <div class="rating">★★★★☆</div>
+                        <!-- Reviews -->
+                        <div class="tab-pane fade" id="reviews" role="tabpanel">
+                            <div class="d-flex align-items-center mb-4">
+                                <h4 class="me-3">4.9</h4>
+                                <div class="text-warning fs-5">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
                             </div>
-                            <p>Hài lòng với chất lượng camera nhưng giá hơi cao</p>
-                        </div>
 
-                        <button class="btn">Xem tất cả đánh giá</button>
+                            <!-- Review Items -->
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="card-title">Nguyễn Đức Bình</h5>
+                                        <div class="text-warning">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <p class="card-text">Điện thoại chạy mượt, pin trâu cả ngày</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Cột phải -->
-            <div class="right-box">
-                <div class="product-price">
-                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
-                </div>
+                <!-- Right Column -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm sticky-top" style="top: 100px;">
+                        <div class="card-body">
+                            <!-- Storage Options -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Bộ nhớ</h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <c:forEach items="${list}" var="p">
+                                        <button type="button" 
+                                                class="btn btn-outline-dark storage-option ${p.rom == selectedRom ? 'active' : ''}">
+                                            ${p.rom}
+                                        </button>
+                                    </c:forEach>
+                                </div>
+                            </div>
 
-                <div class="color-display">
-                    <span class="color-box">${product.color}</span>
-                </div>
+                            <!-- Color Options -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Màu sắc</h5>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <c:forEach items="${list}" var="p">
+                                        <div class="text-center">
+                                            <div class="color-swatch ${p.color == selectedColor ? 'selected' : ''}" 
+                                                 style="background-color: ${fn:toLowerCase(p.color)}">
+                                            </div>
+                                            <div class="mt-2 small">${p.color}</div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                            </div>
 
-                <div class="btn-group">
-                    <button class="btn btn-cart">Thêm vào giỏ hàng</button>
-                    <button class="btn btn-buy">Mua ngay</button>
+                            <!-- Price -->
+                            <div class="mb-4">
+                                <h3 class="text-danger fw-bold">
+                                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
+                                </h3>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-lg btn-dark py-3">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    Thêm vào giỏ hàng
+                                </button>
+                                <button class="btn btn-lg btn-primary py-3">
+                                    <i class="fas fa-bolt me-2"></i>
+                                    Mua ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            function switchTab(tabName) {
-                // Ẩn tất cả các tab content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-
-                // Hiển thị tab được chọn
-                document.getElementById(tabName).classList.add('active');
-
-                // Cập nhật trạng thái nút tab
-                document.querySelectorAll('.tab-button').forEach(button => {
-                    button.classList.remove('active');
-                });
-                event.currentTarget.classList.add('active');
-            }
-
-            // Xử lý chọn màu
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.addEventListener('click', function () {
-                    document.querySelectorAll('.color-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
+            // Xử lý chọn màu sắc
+            document.querySelectorAll('.color-swatch').forEach(swatch => {
+                swatch.addEventListener('click', function () {
+                    document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
                     this.classList.add('selected');
+                });
+            });
+
+            // Xử lý chọn bộ nhớ
+            document.querySelectorAll('.storage-option').forEach(option => {
+                option.addEventListener('click', function () {
+                    document.querySelectorAll('.storage-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
                 });
             });
         </script>

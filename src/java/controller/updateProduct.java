@@ -57,8 +57,8 @@ public class updateProduct extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("productID");
         ProductDao productDao = new ProductDao();
-        Product product = productDao.getProductById(id);
-        request.setAttribute("product", product);
+//        Product product = productDao.getProductById(id);
+//        request.setAttribute("product", product);
         request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
     }
 
@@ -91,21 +91,21 @@ public class updateProduct extends HttpServlet {
             int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
             String imageURL = request.getParameter("imageURL");
 
-            // Tạo đối tượng Product
-            Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-                    operatingSystem, size, refreshRate, chip, gpu, quantitySell,
-                    quantityProduct, imageURL, 0);
-
-            // Gọi DAO để cập nhật sản phẩm
-            ProductDao productDAO = new ProductDao();
-            boolean isUpdated = productDAO.updateProduct(product);
-
-            if (isUpdated) {
-                response.sendRedirect("listProductsForAdmin");
-            } else {
-                request.setAttribute("error", "Failed to update product");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-            }
+//            // Tạo đối tượng Product
+//            Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
+//                    operatingSystem, size, refreshRate, chip, gpu, quantitySell,
+//                    quantityProduct, imageURL, 0);
+//
+//            // Gọi DAO để cập nhật sản phẩm
+//            ProductDao productDAO = new ProductDao();
+//            boolean isUpdated = productDAO.updateProduct(product);
+//
+//            if (isUpdated) {
+//                response.sendRedirect("listProductsForAdmin");
+//            } else {
+//                request.setAttribute("error", "Failed to update product");
+//                request.getRequestDispatcher("error.jsp").forward(request, response);
+//            }
     }
 
     /**

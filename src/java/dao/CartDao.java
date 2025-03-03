@@ -33,7 +33,7 @@ public class CartDao extends DBContext {
             try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Product product = new Product();
-                    product.setProductID(rs.getString("ProductID"));
+                    product.setProductID(rs.getInt("ProductID"));
                     product.setProductName(rs.getString("ProductName"));
                     product.setPrice(rs.getInt("Price"));
                     product.setColor(rs.getString("Color"));
