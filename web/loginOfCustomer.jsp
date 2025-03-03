@@ -1,7 +1,7 @@
 <%-- 
     Document   : loginOfCustomer
     Created on : Feb 24, 2025, 11:14:19 PM
-    Author     : TRAN NHU Y -  CE182032
+    Author     : TRAN NHU Y - CE182032
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -96,16 +96,22 @@
                 background-color: #4f5b70;
             }
 
-            a{
+            a {
                 color: #6d8fcd;
                 text-decoration: none;
                 text-align: center;
                 font-size: 12px;
                 margin-left: 10px;
             }
-            a:hover{
+
+            a:hover {
                 color: #0451df;
-                text-decoration: underline;
+text-decoration: underline;
+            }
+
+            .link-container {
+                margin-top: 10px;
+                text-align: center;
             }
         </style>
     </head>
@@ -113,7 +119,7 @@
         <%@include file="header.jsp" %>
         <div class="container">
             <div class="image-container">
-                <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c58c23feba91aa62989c5ad68c169821d887bd88e66e6dcad3be1acbf4a&w=1480" 
+                <img src="https://img.freepik.com/free-vector/mobile-login-concept-illustration_114360-83.jpg?t=st=1740414577~exp=1740418177~hmac=031d7c5...a&w=1480" 
                      alt="Login Illustration">
             </div>
             <div class="form-container">
@@ -128,10 +134,11 @@
                                placeholder="Password" required>
                     </div>
                     <div>
-                        <button class="btn">NEXT</button>
+                        <button class="btn">Đăng nhập</button>
                     </div>
-                    <div>
-                        <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword" >Quên mật khẩu</a>
+                    <div class="link-container">
+                        <a href="forgotPasswordOfCustomer.jsp" class="forgotpassword">Quên mật khẩu</a>
+                        | <a href="register.jsp" class="register">Đăng ký</a>
                     </div>
 
                     <% String errorMessage = (String) request.getAttribute("errorMessage"); %>

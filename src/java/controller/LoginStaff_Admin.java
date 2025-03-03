@@ -81,7 +81,7 @@ public class LoginStaff_Admin extends HttpServlet {
 
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Username and Password cannot be empty");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
             return;
         }
 
