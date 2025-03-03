@@ -20,57 +20,48 @@ public class ProductDao extends DBContext {
 
     public List<ProductForAdmin> getAllProductsForAdmin() {
         List<ProductForAdmin> list = new ArrayList<>();
-        String query = "SELECT \n"
-                + "    p.ProductID, \n"
-                + "    p.productName, \n"
-                + "    p.price , \n"
-                + "    ii.Import_Price, \n"
-                + "    p.CategoryID, \n"
-                + "    p.brand , \n"
-                + "    p.camera, \n"
-                + "    p.ram , \n"
-                + "    p.rom , \n"
-                + "    p.color, \n"
-                + "    p.Operating_System , \n"
-                + "    p.size , \n"
-                + "    p.Refresh_rate , \n"
-                + "    p.chip , \n"
-                + "    p.gpu , \n"
-                + "    p.Quantity_Sell, \n"
-                + "    p.Quantity_Product , \n"
-                + "    p.imageURL , \n"
-                + "    p.isDelete \n"
-                + "FROM Product p\n"
-                + "JOIN Import_Inventory ii ON p.ProductID = ii.ProductID;";
+        String query = "SELECT p.ProductID, p.ProductName, p.Price, "
+                + "p.CategoryID, p.Brand, p.Camera_Behind, p.Camera_Front, p.Ram, p.RAM_type, "
+                + "p.Supports_upgrading_RAM, p.Rom, p.Supports_upgrading_ROM, p.Color, "
+                + "p.Operating_System_name, p.Operating_system_version, p.Size_screeen, "
+                + "p.Refresh_rate, p.Screen_resolution, p.Chip_type, p.Chip_name, "
+                + "p.GPU_type, p.GPU_name, p.Quantity_Sell, p.Quantity_Product, p.ImageURL, p.IsDelete, "
+                + "COALESCE(ii.Import_price, 0) AS Import_price "
+                + "FROM Product p "
+                + "LEFT JOIN Import_Inventory ii ON p.ProductID = ii.ProductID";  // JOIN để lấy Import_price
 
-        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            ResultSet rs = pstmt.executeQuery();
+        try ( PreparedStatement pstmt = connection.prepareStatement(query);  ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                ProductForAdmin product = new ProductForAdmin(
-                        rs.getString("ProductID"),
-                        rs.getString("productName"),
+                list.add(new ProductForAdmin(
+                        rs.getInt("ProductID"),
+                        rs.getString("ProductName"),
                         rs.getInt("Price"),
-                        rs.getInt("Import_Price"),
-                        rs.getInt("categoryID"),
+                        rs.getInt("CategoryID"),
                         rs.getString("Brand"),
-                        rs.getString("Camera"),
+                        rs.getString("Camera_Behind"),
+                        rs.getString("Camera_Front"),
                         rs.getString("Ram"),
+                        rs.getString("RAM_type"),
+                        rs.getString("Supports_upgrading_RAM"),
                         rs.getString("Rom"),
+                        rs.getString("Supports_upgrading_ROM"),
                         rs.getString("Color"),
-                        rs.getString("Operating_System"),
-                        rs.getString("Size"),
+                        rs.getString("Operating_System_name"),
+                        rs.getString("Operating_system_version"),
+                        rs.getString("Size_screeen"),
                         rs.getString("Refresh_rate"),
-                        rs.getString("Chip"),
-                        rs.getString("GPU"),
+                        rs.getString("Screen_resolution"),
+                        rs.getString("Chip_type"),
+                        rs.getString("Chip_name"),
+                        rs.getString("GPU_type"),
+                        rs.getString("GPU_name"),
                         rs.getInt("Quantity_Sell"),
                         rs.getInt("Quantity_Product"),
                         rs.getString("ImageURL"),
-                        rs.getInt("isDelete")
-                );
-                list.add(product);
+                        rs.getInt("IsDelete"),
+                        rs.getInt("Import_price") // Sửa đúng kiểu dữ liệu
+                ));
             }
-
-            rs.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -89,52 +80,92 @@ public class ProductDao extends DBContext {
         return false;
     }
 
-//    public boolean isProductIDExists(String productID) {
-//    String query = "SELECT COUNT(*) FROM Product WHERE ProductID = ?";
-//    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-//        pstmt.setString(1, productID);
-//        try (ResultSet rs = pstmt.executeQuery()) {
-//            return rs.next() && rs.getInt(1) > 0;
-//        }
-//    } catch (SQLException e) {
-//        e.printStackTrace();
-//    }
-//    return false;
-//}
-    public boolean addProduct(Product product) {
+    public boolean isProductExists(Product product) {
+        String query = "SELECT COUNT(*) FROM Product WHERE "
+                + "(LOWER(ProductName) = LOWER(?)) AND "
+                + "(LOWER(Ram) = LOWER(?)) AND "
+                + "(LOWER(Rom) = LOWER(?)) AND "
+                + "(LOWER(Color) = LOWER(?)) AND "
+                + "(IsDelete = 0)";
 
-//        if (isProductIDExists(product.getProductID())) {
-//        System.out.println("Product already exists, cannot add.");
-//        return false;
-//    }
-        String query = "INSERT INTO [dbo].[Product] "
-                + "([ProductID], [ProductName], [Price], [CategoryID], [Brand], [Camera], [Ram], [Rom], "
-                + "[Color], [Operating_System], [Size], [Refresh_rate], [Chip], [GPU], [Quantity_Sell], "
-                + "[Quantity_Product], [ImageURL], [IsDelete]) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, product.getProductName().toLowerCase());
+            pstmt.setString(2, product.getRam().toLowerCase());
+            pstmt.setString(3, product.getRom().toLowerCase());
+            pstmt.setString(4, product.getColor().toLowerCase());
+
+            try ( ResultSet rs = pstmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean isLaptopExists(Product product) {
+    String query = "SELECT COUNT(*) FROM Product WHERE "
+            + "(LOWER(ProductName) = LOWER(?)) AND "
+            + "(LOWER(Ram) = LOWER(?)) AND "
+            + "(LOWER(Rom) = LOWER(?)) AND "
+            + "(LOWER(Color) = LOWER(?)) AND "
+            + "(LOWER(Chip_name) = LOWER(?)) AND "
+            + "(LOWER(GPU_name) = LOWER(?)) AND "
+            + "(IsDelete = 0)";
+
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setString(1, product.getProductName().toLowerCase());
+        pstmt.setString(2, product.getRam().toLowerCase());
+        pstmt.setString(3, product.getRom().toLowerCase());
+        pstmt.setString(4, product.getColor().toLowerCase());
+        pstmt.setString(5, product.getChipName().toLowerCase());
+        pstmt.setString(6, product.getGpuName().toLowerCase());
+
+        try (ResultSet rs = pstmt.executeQuery()) {
+            return rs.next() && rs.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
+
+    public boolean addProduct(Product product) {
+        String query = "DECLARE @InsertedProductID INT; "
+                + "INSERT INTO [dbo].[Product] "
+                + "([ProductName], [Price], [CategoryID], [Brand], [Camera_Front], [Camera_Behind], "
+                + "[Ram], [RAM_type], [Supports_upgrading_RAM], [Rom], [Supports_upgrading_ROM], "
+                + "[Color], [Operating_System_name], [Operating_system_version], [Size_screeen], "
+                + "[Refresh_rate], [Screen_resolution], [Chip_type], [Chip_name], [GPU_type], [GPU_name], "
+                + "[Quantity_Sell], [Quantity_Product], [ImageURL], [IsDelete]) "
+                + "VALUES (?, ?, ?, ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
+                + "SET @InsertedProductID = SCOPE_IDENTITY(); "
                 + "INSERT INTO [dbo].[Import_Inventory] "
                 + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
-                + "VALUES (?, ?, GETDATE(), ?, ?)";
+                + "VALUES (@InsertedProductID, ?, GETDATE(), ?, ?);";
+
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, product.getProductID());
-            pstmt.setString(2, product.getProductName());
-            pstmt.setInt(3, product.getPrice());
-            pstmt.setInt(4, product.getCategoryID());
-            pstmt.setString(5, product.getBrand());
-            pstmt.setString(6, product.getCameraFront());
-            pstmt.setString(7, product.getCameraBehind());
-            pstmt.setString(8, product.getRam());
-            pstmt.setString(9, product.getRamType());
-            pstmt.setString(10, product.getSupportsUpgradingRAM());
-            pstmt.setString(11, product.getRom());
-            pstmt.setString(12, product.getSupportsUpgradingROM());
-            pstmt.setString(13, product.getColor());
-            pstmt.setString(14, product.getOperatingSystemName());
-            pstmt.setString(15, product.getOperatingSystemVersion());
-            pstmt.setString(16, product.getScreenSize());
-            pstmt.setString(17, product.getRefreshRate());
-            pstmt.setString(18, product.getChipName());
-            pstmt.setString(19, product.getChipType());
+            // Set values for Product table
+            pstmt.setString(1, product.getProductName());
+            pstmt.setInt(2, product.getPrice());
+            pstmt.setInt(3, product.getCategoryID());
+            pstmt.setString(4, product.getBrand());
+            pstmt.setString(5, product.getCameraFront());
+            pstmt.setString(6, product.getCameraBehind());
+            pstmt.setString(7, product.getRam());
+            pstmt.setString(8, product.getRamType());
+            pstmt.setString(9, product.getSupportsUpgradingRAM());
+            pstmt.setString(10, product.getRom());
+            pstmt.setString(11, product.getSupportsUpgradingROM());
+            pstmt.setString(12, product.getColor());
+            pstmt.setString(13, product.getOperatingSystemName());
+            pstmt.setString(14, product.getOperatingSystemVersion());
+            pstmt.setString(15, product.getScreenSize());
+            pstmt.setString(16, product.getRefreshRate());
+            pstmt.setString(17, product.getScreenResolution());
+            pstmt.setString(18, product.getChipType());
+            pstmt.setString(19, product.getChipName());
             pstmt.setString(20, product.getGpuType());
             pstmt.setString(21, product.getGpuName());
             pstmt.setInt(22, product.getQuantitySell());
@@ -143,110 +174,131 @@ public class ProductDao extends DBContext {
             pstmt.setInt(25, product.getIsDelete());
 
             // Set values for Import_Inventory table
-            pstmt.setInt(26, product.getProductID()); // ProductID trong bảng Import_Inventory
-            pstmt.setInt(27, 0); // Import_price (giả sử chưa có)          
-            pstmt.setInt(28, 0); // Số lượng nhập hàng
-            pstmt.setString(29, "Unknown"); // Supplier (nếu không có thì đặt giá trị mặc định)
+            pstmt.setInt(26, 0); // Giá nhập hàng (giả sử mặc định 0)
+            pstmt.setInt(27, 0); // Số lượng nhập hàng (giả sử mặc định 0)
+            pstmt.setString(28, "Unknown"); // Nhà cung cấp mặc định
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
         return false;
     }
 
     public Product getProductById(int productID) {
-        String query = "SELECT * FROM Product WHERE ProductID = ?";
+    String query = "SELECT * FROM Product WHERE ProductID = ?";
 
-        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, productID);
-            try ( ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Product(
-                            rs.getInt("ProductID"),
-                            rs.getString("ProductName"),
-                            rs.getInt("Price"),
-                            rs.getInt("CategoryID"),
-                            rs.getString("Brand"),
-                            rs.getString("Camera_Front"),
-                            rs.getString("Camera_Behind"),
-                            rs.getString("Ram"),
-                            rs.getString("RAM_type"),
-                            rs.getString("Supports_upgrading_RAM"),
-                            rs.getString("Rom"),
-                            rs.getString("Supports_upgrading_ROM"),
-                            rs.getString("Color"),
-                            rs.getString("Operating_System_name"),
-                            rs.getString("Operating_system_version"),
-                            rs.getString("Size_screeen"),
-                            rs.getString("Refresh_rate"),
-                            rs.getString("Screen_resolution"),
-                            rs.getString("Chip_type"),
-                            rs.getString("Chip_name"),
-                            rs.getString("GPU_type"),
-                            rs.getString("GPU_name"),
-                            rs.getInt("Quantity_Sell"),
-                            rs.getInt("Quantity_Product"),
-                            rs.getString("ImageURL"),
-                            rs.getInt("isDelete")
-                    );
-                }
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setInt(1, productID);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return new Product(
+                        rs.getInt("ProductID"),
+                        rs.getString("ProductName"),
+                        rs.getInt("Price"),
+                        rs.getInt("CategoryID"),
+                        rs.getString("Brand"),
+                        rs.getString("Camera_Front"),
+                        rs.getString("Camera_Behind"),
+                        rs.getString("Ram"),
+                        rs.getString("RAM_type"),
+                        rs.getString("Supports_upgrading_RAM"),
+                        rs.getString("Rom"),
+                        rs.getString("Supports_upgrading_ROM"),
+                        rs.getString("Color"),
+                        rs.getString("Operating_System_name"),
+                        rs.getString("Operating_system_version"),
+                        rs.getString("Size_screeen"), // Sửa lỗi chính tả
+                        rs.getString("Refresh_rate"),
+                        rs.getString("Screen_resolution"),
+                        rs.getString("Chip_type"),
+                        rs.getString("Chip_name"),
+                        rs.getString("GPU_type"),
+                        rs.getString("GPU_name"),
+                        rs.getInt("Quantity_Sell"),
+                        rs.getInt("Quantity_Product"),
+                        rs.getString("ImageURL"),
+                        rs.getInt("IsDelete") // Đổi đúng tên cột
+                );
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return null;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return null;
+}
 
-//    public boolean updateProduct(Product product) {
-//        String query = "UPDATE Product SET "
-//                + "productName = ?, "
-//                + "price = ?, "
-//                + "CategoryID = ?, "
-//                + "brand = ?, "
-//                + "camera = ?, "
-//                + "ram = ?, "
-//                + "rom = ?, "
-//                + "color = ?, "
-//                + "Operating_System = ?, "
-//                + "size = ?, "
-//                + "Refresh_rate = ?, "
-//                + "chip = ?, "
-//                + "gpu = ?, "
-//                + "Quantity_Sell = ?, "
-//                + "Quantity_Product = ?, "
-//                + "imageURL = ? "
-//                + "WHERE productID = ?";
-//
-//        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-//            pstmt.setString(1, product.getProductName());
-//            pstmt.setInt(2, product.getPrice());
-//            pstmt.setInt(3, product.getCategory());
-//            pstmt.setString(4, product.getBrand());
-//            pstmt.setString(5, product.getCamera());
-//            pstmt.setString(6, product.getRam());
-//            pstmt.setString(7, product.getRom());
-//            pstmt.setString(8, product.getColor());
-//            pstmt.setString(9, product.getOperatingSystem());
-//            pstmt.setString(10, product.getSize());
-//            pstmt.setString(11, product.getRefreshRate());
-//            pstmt.setString(12, product.getChip());
-//            pstmt.setString(13, product.getGpu());
-//            pstmt.setInt(14, product.getQuantitySell());
-//            pstmt.setInt(15, product.getQuantityProduct());
-//            pstmt.setString(16, product.getImageURL());
-//            pstmt.setString(17, product.getProductID()); // Điều kiện WHERE để xác định sản phẩm cần cập nhật
-//
-//            int affectedRows = pstmt.executeUpdate(); // Thực thi UPDATE
-//            return affectedRows > 0; // Trả về true nếu cập nhật thành công
-//        } catch (SQLException e) {
-//            e.printStackTrace(); // Log lỗi SQL để debug
-//        }
-//        return false; // Trả về false nếu có lỗi xảy ra
-//    }
 
+    public boolean updateProduct(Product product) {
+    String query = "UPDATE Product SET "
+            + "ProductName = ?, "
+            + "Price = ?, "
+            + "CategoryID = ?, "
+            + "Brand = ?, "
+            + "Camera_Front = ?, "
+            + "Camera_Behind = ?, "
+            + "Ram = ?, "
+            + "RAM_type = ?, "
+            + "Supports_upgrading_RAM = ?, "
+            + "Rom = ?, "
+            + "Supports_upgrading_ROM = ?, "
+            + "Color = ?, "
+            + "Operating_System_name = ?, "
+            + "Operating_system_version = ?, "
+            + "Size_screeen = ?, "
+            + "Refresh_rate = ?, "
+            + "Screen_resolution = ?, "
+            + "Chip_type = ?, "
+            + "Chip_name = ?, "
+            + "GPU_type = ?, "
+            + "GPU_name = ?, "
+            + "Quantity_Sell = ?, "
+            + "Quantity_Product = ?, "
+            + "ImageURL = ?, "
+            + "IsDelete = ? "
+            + "WHERE productID = ?";
+
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setString(1, product.getProductName());
+        pstmt.setInt(2, product.getPrice());
+        pstmt.setInt(3, product.getCategoryID());
+        pstmt.setString(4, product.getBrand());
+        pstmt.setString(5, product.getCameraFront());
+        pstmt.setString(6, product.getCameraBehind());
+        pstmt.setString(7, product.getRam());
+        pstmt.setString(8, product.getRamType());
+        pstmt.setString(9, product.getSupportsUpgradingRAM());
+        pstmt.setString(10, product.getRom());
+        pstmt.setString(11, product.getSupportsUpgradingROM());
+        pstmt.setString(12, product.getColor());
+        pstmt.setString(13, product.getOperatingSystemName());
+        pstmt.setString(14, product.getOperatingSystemVersion());
+        pstmt.setString(15, product.getScreenSize());
+        pstmt.setString(16, product.getRefreshRate());
+        pstmt.setString(17, product.getScreenResolution());
+        pstmt.setString(18, product.getChipType());
+        pstmt.setString(19, product.getChipName());
+        pstmt.setString(20, product.getGpuType());
+        pstmt.setString(21, product.getGpuName());
+        pstmt.setInt(22, product.getQuantitySell());
+        pstmt.setInt(23, product.getQuantityProduct());
+        pstmt.setString(24, product.getImageURL());
+        pstmt.setInt(25, product.getIsDelete());
+        pstmt.setInt(26, product.getProductID());
+
+        int affectedRows = pstmt.executeUpdate();
+        return affectedRows > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } catch (NumberFormatException e) {
+        System.err.println("Invalid number format: " + e.getMessage());
+    }
+    return false;
+}
+
+    
+    
     public List<Product> filterProducts(Product filter, String name, int minPrice, int maxPrice) {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
@@ -293,7 +345,7 @@ public class ProductDao extends DBContext {
                     ps.setInt(i + 1, (Integer) params.get(i));
                 }
             }
-            
+
             try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Product p = new Product(

@@ -95,8 +95,19 @@
 
             <!-- Button to Create Product -->
             <div class="d-flex justify-content-end mb-3">
-                <a href="createProduct.jsp" class="btn btn-primary">Create Product</a>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Create Product
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="createProduct.jsp?category=2">Phone </a></li>
+                        <li><a class="dropdown-item" href="createTablet.jsp?category=3">Tablet </a></li>
+                        <li><a class="dropdown-item" href="createLaptop.jsp?category=1">Laptop</a></li>
+                        
+                    </ul>
+                </div>
             </div>
+
 
             <!-- Products Table -->
             <div class="table-responsive">
