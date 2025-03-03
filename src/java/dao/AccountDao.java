@@ -334,4 +334,30 @@ public class AccountDao extends dao.DBContext {
         }
         return false;
     }
+    
+    public List<AccountStaff> searchStaffByFullName(String fullName) {
+    List<AccountStaff> staffList = new ArrayList<>();
+    String query = "SELECT StaffID, FullName, Email, PhoneNumber, Address, Username, Status FROM Staff WHERE FullName LIKE ?";
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setString(1, "%" + fullName + "%"); // Tìm kiếm theo từ khóa
+        
+        ResultSet rs = pstmt.executeQuery();
+        while (rs.next()) {
+            AccountStaff staff = new AccountStaff();
+            staff.setStaffID(rs.getInt("StaffID"));
+            staff.setFullName(rs.getString("FullName"));
+            staff.setEmail(rs.getString("Email"));
+            staff.setPhoneNumber(rs.getString("PhoneNumber"));
+            staff.setAddress(rs.getString("Address"));
+            staff.setUsername(rs.getString("Username"));
+            staff.setStatus(rs.getInt("Status"));
+            staffList.add(staff);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return staffList;
+}
+
 }
