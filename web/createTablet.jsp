@@ -96,7 +96,7 @@
     <body>
         <div class="container">
             
-            <h2>Enter Phone Information</h2>
+            <h2>Enter Tablet Information</h2>
             <c:if test="${not empty error}">
                 <div style="color: red; text-align: center; margin-bottom: 15px;">
                     ${error}
@@ -169,7 +169,7 @@
                 <label for="os">Operating System:</label>
                 <select id="os" name="os" onchange="toggleInput('os', 'osInputContainer', 'osInput')">
                     <option value="Android" ${os == 'Android' ? 'selected' : ''}>Android</option>
-                    <option value="iOS" ${os == 'iOS' ? 'selected' : ''}>iOS</option>
+                    <option value="IpadOS" ${os == 'IpadOS' ? 'selected' : ''}>IpadOS</option>
                     <option value="other" ${os_custom != null ? 'selected' : ''}>Other</option>
                 </select>
 

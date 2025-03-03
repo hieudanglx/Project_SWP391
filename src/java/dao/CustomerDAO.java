@@ -251,4 +251,71 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
+
+
+    public void removeResetToken(String email) {
+        String sql = "UPDATE Customer SET reset_token = NULL WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCustomer(Customer customer, boolean updatePassword) {
+        String sql;
+        if (updatePassword) {
+            sql = "UPDATE Customer SET username=?, email=?, password=?, address=?, phoneNumber=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+        } else {
+            sql = "UPDATE Customer SET username=?, email=?, address=?, phoneNumber=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+        }
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, customer.getUsername());
+            ps.setString(2, customer.getEmail());
+            if (updatePassword) {
+                ps.setString(3, customer.getPassword());
+                ps.setString(4, customer.getAddress());
+                ps.setString(5, customer.getPhoneNumber());
+                ps.setString(6, customer.getStatus());
+                ps.setString(7, customer.getImgCustomer());
+                ps.setInt(8, customer.getId());
+            } else {
+                ps.setString(3, customer.getAddress());
+                ps.setString(4, customer.getPhoneNumber());
+                ps.setString(5, customer.getStatus());
+                ps.setString(6, customer.getImgCustomer());
+                ps.setInt(7, customer.getId());
+            }
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Customer getCustomerById(int customerId) {
+        String sql = "SELECT * FROM Customer WHERE CustomerID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Customer(
+                        rs.getInt("CustomerID"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("address"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("Status"),
+                        rs.getString("imgcustomer")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

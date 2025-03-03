@@ -57,8 +57,12 @@ public class updateProduct extends HttpServlet {
             throws ServletException, IOException {
         String id = request.getParameter("productID");
         ProductDao productDao = new ProductDao();
-//        Product product = productDao.getProductById(id);
-//        request.setAttribute("product", product);
+        Product product = productDao.getProductById(Integer.parseInt(id));
+        if(product.getColor().isEmpty()){
+            request.setAttribute("error", "Failed to create product");
+                    request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+        request.setAttribute("product", product);
         request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
     }
 
@@ -73,39 +77,58 @@ public class updateProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String productID = request.getParameter("productID");
-            String productName = request.getParameter("productName");
-            int price = Integer.parseInt(request.getParameter("price"));
-            int category = Integer.parseInt(request.getParameter("category"));
-            String brand = request.getParameter("brand");
-            String camera = request.getParameter("camera");
-            String ram = request.getParameter("ram");
-            String rom = request.getParameter("rom");
-            String color = request.getParameter("color");
-            String operatingSystem = request.getParameter("operatingSystem");
-            String size = request.getParameter("size");
-            String refreshRate = request.getParameter("refreshRate");
-            String chip = request.getParameter("chip");
-            String gpu = request.getParameter("gpu");
-            int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
-            int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
-            String imageURL = request.getParameter("imageURL");
+        try {
+        int productID = Integer.parseInt(request.getParameter("productID"));
+        String productName = request.getParameter("productName");
+        int price = Integer.parseInt(request.getParameter("price"));
+        int categoryID = Integer.parseInt(request.getParameter("categoryID"));
+        String brand = request.getParameter("brand");
+        String cameraFront = request.getParameter("cameraFront");
+        String cameraBehind = request.getParameter("cameraBehind");
+        String ram = request.getParameter("ram");
+        String ramType = request.getParameter("ramType");
+        String supportsUpgradingRAM = request.getParameter("supportsUpgradingRAM");
+        String rom = request.getParameter("rom");
+        String supportsUpgradingROM = request.getParameter("supportsUpgradingROM");
+        String color = request.getParameter("color");
+        String operatingSystemName = request.getParameter("operatingSystemName");
+        String operatingSystemVersion = request.getParameter("operatingSystemVersion");
+        String screenSize = request.getParameter("screenSize");
+        String refreshRate = request.getParameter("refreshRate");
+        String screenResolution = request.getParameter("screenResolution");
+        String chipType = request.getParameter("chipType");
+        String chipName = request.getParameter("chipName");
+        String gpuType = request.getParameter("gpuType");
+        String gpuName = request.getParameter("gpuName");
+        int quantitySell = Integer.parseInt(request.getParameter("quantitySell"));
+        int quantityProduct = Integer.parseInt(request.getParameter("quantityProduct"));
+        String imageURL = request.getParameter("imageURL");
+        int isDelete = 0;
 
-//            // Tạo đối tượng Product
-//            Product product = new Product(productID, productName, price, category, brand, camera, ram, rom, color,
-//                    operatingSystem, size, refreshRate, chip, gpu, quantitySell,
-//                    quantityProduct, imageURL, 0);
-//
-//            // Gọi DAO để cập nhật sản phẩm
-//            ProductDao productDAO = new ProductDao();
-//            boolean isUpdated = productDAO.updateProduct(product);
-//
-//            if (isUpdated) {
-//                response.sendRedirect("listProductsForAdmin");
-//            } else {
-//                request.setAttribute("error", "Failed to update product");
-//                request.getRequestDispatcher("error.jsp").forward(request, response);
-//            }
+        // Tạo đối tượng Product
+        Product product = new Product(productID, productName, price, categoryID, brand, cameraFront, cameraBehind, 
+                                      ram, ramType, supportsUpgradingRAM, rom, supportsUpgradingROM, color, 
+                                      operatingSystemName, operatingSystemVersion, screenSize, refreshRate, 
+                                      screenResolution, chipType, chipName, gpuType, gpuName, 
+                                      quantitySell, quantityProduct, imageURL, isDelete);
+
+        // Gọi DAO để cập nhật sản phẩm
+        ProductDao productDAO = new ProductDao();
+        boolean isUpdated = productDAO.updateProduct(product);
+
+        if (isUpdated) {
+            response.sendRedirect("listProductsForAdmin");
+        } else {
+            request.setAttribute("error", "Failed to update product");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+        }
+    } catch (NumberFormatException e) {
+        request.setAttribute("error", "Invalid number format");
+        request.getRequestDispatcher("error.jsp").forward(request, response);
+    } catch (Exception e) {
+        request.setAttribute("error", "An unexpected error occurred");
+        request.getRequestDispatcher("error.jsp").forward(request, response);
+    }
     }
 
     /**

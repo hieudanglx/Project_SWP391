@@ -76,7 +76,7 @@
             <h4 class="text-center">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
+            <a href="ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
             <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
@@ -95,8 +95,19 @@
 
             <!-- Button to Create Product -->
             <div class="d-flex justify-content-end mb-3">
-                <a href="createProduct.jsp" class="btn btn-primary">Create Product</a>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Create Product
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="createProduct.jsp?category=2">Phone </a></li>
+                        <li><a class="dropdown-item" href="createTablet.jsp?category=3">Tablet </a></li>
+                        <li><a class="dropdown-item" href="createLaptop.jsp?category=1">Laptop</a></li>
+                        
+                    </ul>
+                </div>
             </div>
+
 
             <!-- Products Table -->
             <div class="table-responsive">

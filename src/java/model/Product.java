@@ -28,6 +28,30 @@ public class Product {
     private int quantityProduct;
     private String imageURL;
     private int isDelete;
+    
+    // createProduct
+    public Product(String productName, int price, int categoryID, String brand, 
+                   String operatingSystemName, String operatingSystemVersion, 
+                   String ram, String rom, String color, String screenSize, 
+                   String cameraBehind, String cameraFront, String chipName, 
+                   String refreshRate, String imageURL, int isDelete) {
+        this.productName = productName;
+        this.price = price;
+        this.categoryID = categoryID;
+        this.brand = brand;
+        this.operatingSystemName = operatingSystemName;
+        this.operatingSystemVersion = operatingSystemVersion;
+        this.ram = ram;
+        this.rom = rom;
+        this.color = color;
+        this.screenSize = screenSize;
+        this.cameraBehind = cameraBehind;
+        this.cameraFront = cameraFront;
+        this.chipName = chipName;
+        this.refreshRate = refreshRate;
+        this.imageURL = imageURL;
+        this.isDelete = isDelete;
+    }
 
     public Product(int productID, String productName, int price, int categoryID, String brand, String cameraFront, String cameraBehind, String ram, String ramType, String supportsUpgradingRAM, String rom, String supportsUpgradingROM, String color, String operatingSystemName, String operatingSystemVersion, String screenSize, String refreshRate, String screenResolution, String chipType, String chipName, String gpuType, String gpuName, int quantitySell, int quantityProduct, String imageURL, int isDelete) {
         this.productID = productID;
