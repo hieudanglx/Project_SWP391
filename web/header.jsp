@@ -166,7 +166,7 @@
                     <div class="auth-section">
                         <c:choose>
                             <c:when test="${not empty sessionScope.customer}">
-                                <p>${sessionScope.customer.username}</p>
+                                <p>Welcome, <a href="ViewProfileOfCustomer.jsp" class="username-link">${sessionScope.customer.username}</a>!</p>
                                 <form>
                                     <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                 </form>
@@ -189,6 +189,8 @@
                     </a>
                 </div>
             </div>
+                
+                
 
             <!-- Bottom Row -->
             <div class="bottom-row">

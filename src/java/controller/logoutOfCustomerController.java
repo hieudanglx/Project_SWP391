@@ -44,7 +44,8 @@ public class logoutOfCustomerController extends HttpServlet {
             if (session != null) {
                 session.invalidate();
             }
-            request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+//            request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+            request.getRequestDispatcher("ViewListProductGC?CategoryID=1").forward(request, response);
             out.println("</body>");
             out.println("</html>");
         }
