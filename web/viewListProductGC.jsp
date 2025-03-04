@@ -27,28 +27,42 @@
             .price-range-btn {
                 white-space: nowrap;
             }
+            .chip-group {
+                margin-bottom: 1rem;
+            }
+            .chip-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            .chip-item {
+                border: 1px solid #ccc;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+            }
         </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
 
         <div class="container mt-4">
-            <!-- Brand Filter -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
-                    <i class="fas fa-filter me-2"></i>Lọc
-                </button>
+            <c:if test="${empty search}">
+                <!-- Brand Filter -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#filterCanvas">
+                        <i class="fas fa-filter me-2"></i>Lọc
+                    </button>
 
-                <div class="d-flex gap-2">
-                    <c:forEach items="${listbrand}" var="b">
-                        <a href="FilterGCController?CategoryID=${CategoryID}&brand=${b}" 
-                           class="btn btn-outline-secondary rounded-pill">
-                            ${b}
-                        </a>
-                    </c:forEach>
+                    <div class="d-flex gap-2">
+                        <c:forEach items="${listbrand}" var="b">
+                            <a href="FilterGCController?CategoryID=${CategoryID}&brand=${b}" 
+                               class="btn btn-outline-secondary rounded-pill">
+                                ${b}
+                            </a>
+                        </c:forEach>
+                    </div>
                 </div>
-            </div>
-
+            </c:if>
             <!-- Product Grid -->
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
                 <c:forEach items="${list}" var="p">
@@ -78,109 +92,141 @@
             <div class="offcanvas-body">
                 <form id="filterForm" action="FilterGCController?CategoryID=${CategoryID}" method="POST">
                     <!-- Price Filter -->
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label class="form-label">Khoảng giá</label>
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <button type="button" class="btn btn-outline-secondary price-range-btn" 
-                                    onclick="setPrice(0, 4000000)">Dưới 4 triệu</button>
+                                    onclick="setPrice(0, 10000000)">Dưới 10 triệu</button>
                             <button type="button" class="btn btn-outline-secondary price-range-btn" 
-                                    onclick="setPrice(4000000, 7000000)">4-7 triệu</button>
+                                    onclick="setPrice(10000000, 20000000)">10-20 triệu</button>
                             <button type="button" class="btn btn-outline-secondary price-range-btn" 
-                                    onclick="setPrice(7000000, 13000000)">7-13 triệu</button>
-                            <button type="button" class="btn btn-outline-secondary price-range-btn" 
-                                    onclick="setPrice(13000000, 20000000)">13-20 triệu</button>
-                            <button type="button" class="btn btn-outline-secondary price-range-btn" 
-                                    onclick="setPrice(20000000, 100000000)">Trên 20 triệu</button>
+                                    onclick="setPrice(20000000, 500000000)">Trên 20 triệu</button>
                         </div>
                         <div class="row g-2">
                             <div class="col">
                                 <input type="number" class="form-control" id="minPrice" name="minPrice" 
-                                       placeholder="Giá thấp nhất" step="100000" min="0">
+                                       placeholder="Giá thấp nhất" step="100000" min="0" max="499900000">
                             </div>
                             <div class="col">
                                 <input type="number" class="form-control" id="maxPrice" name="maxPrice" 
-                                       placeholder="Giá cao nhất" step="100000" min="0">
+                                       placeholder="Giá cao nhất" step="100000" min="100000" max="500000000" maxlength="9">
                             </div>
                         </div>
                     </div>
-
-                    <!-- Other Filters -->
-                    <div class="mb-3">
-                        <label class="form-label">Hãng sản xuất</label>
-                        <select class="form-select" id="brand" name="brand">
-                            <option value="">Tất cả hãng</option>
-                            <c:forEach items="${listbrand}" var="v">
-                                <option value="${v}">${v}</option>
-                            </c:forEach>
-                        </select>
+                    <div class="row g-3">
+                        <!-- Other Filters -->
+                        <div class="mb-6">
+                            <label class="form-label">Hãng sản xuất</label>
+                            <select class="form-select" id="brand" name="brand">
+                                <option value="">Tất cả hãng</option>
+                                <c:forEach items="${listbrand}" var="v">
+                                    <option value="${v}">${v}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label class="form-label">Loại sản phẩm</label>
+                            <select class="form-select" id="os" name="os">
+                                <option value="">Hệ điều hành</option>
+                                <c:if test="${CategoryID==1}">
+                                    <option value="Windows">Windows</option>
+                                    <option value="macOS">MacBook</option>
+                                </c:if>
+                                <c:if test="${CategoryID==2}">
+                                    <option value="iOS">IOS</option>
+                                    <option value="Android">Android</option>
+                                </c:if>
+                                <c:if test="${CategoryID==3}">
+                                    <option value="iPadOS">IPadOS</option>
+                                    <option value="Android">Android</option>
+                                </c:if>
+                            </select>
+                        </div>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">RAM</label>
                             <select class="form-select" id="ram" name="ram">
                                 <option value="">Tất cả RAM</option>
-                                <option value="6gb">6 GB</option>
+                                <c:if test="${CategoryID!=1}">
+                                    <option value="6gb">6 GB</option>
+                                </c:if>
                                 <option value="8gb">8 GB</option>
-                                <option value="12gb">12 GB</option>
-                                <option value="16gb">16 GB</option>
+                                <c:if test="${CategoryID!=1}">
+                                    <option value="12gb">12 GB</option>
+                                </c:if>
+                                <c:if test="${CategoryID!=3}">
+                                    <option value="16gb">16 GB</option>
+                                </c:if>
+                                <c:if test="${CategoryID==1}">
+                                    <option value="32gb">32 GB</option>
+                                </c:if>
                             </select>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Bộ nhớ</label>
                             <select class="form-select" id="rom" name="rom">
                                 <option value="">Tất cả bộ nhớ</option>
-                                <option value="64gb">64 GB</option>
-                                <option value="128gb">128 GB</option>
+                                <c:if test="${CategoryID!=1}">
+                                    <option value="128gb">128 GB</option>
+                                </c:if>
                                 <option value="256gb">256 GB</option>
                                 <option value="512gb">512 GB</option>
-                                <option value="1tb">1 TB</option>
-                                <option value="2tb">2 TB</option>
+                                <c:if test="${CategoryID==2}">
+                                    <option value="1tb">1 TB</option>
+                                </c:if>
                             </select>
                         </div>
-                    </div>
-                    <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">Refresh Rate</label>
-                            <select class="form-select" id="refresh_rate" name="refreshRate">
-                                <option value="">All Rates</option>
+                            <label class="form-label">Tần số quét</label>
+                            <select class="form-select" id="rate" name="rate">
+                                <option value="">Tất cả tần số quét</option>
                                 <option value="60hz">60 Hz</option>
-                                <option value="90hz">90 Hz</option>
+                                <c:if test="${CategoryID!=1}">
+                                    <option value="90hz">90 Hz</option>
+                                </c:if>
                                 <option value="120hz">120 Hz</option>
-                                <option value="144hz">144 Hz</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Screen Resolution</label>
-                            <select class="form-select" id="res" name="res">
-                                <option value="">All size</option>
-                                <option value="13">13"</option>
-                                <option value="14">14"</option>
-                                <option value="15.6">15.6"</option>
-                                <option value="16">16"</option>
+                                <c:if test="${CategoryID!=2}">
+                                    <option value="144hz">144 Hz</option>
+                                </c:if>
                             </select>
                         </div>
                         <c:if test="${CategoryID==1}">
                             <div class="col-md-6">
-                                <label class="form-label">Screen size</label>
+                                <label class="form-label">Độ phân giải</label>
+                                <select class="form-select" id="res" name="res">
+                                    <option value="">Tất cả độ phân giải</option>
+                                    <option value="Full HD">Full HD</option>
+                                    <option value="Full HD+">Full HD+</option>
+                                    <option value="2K">2K</option>
+                                    <option value="2K+">2K+</option>
+                                    <option value="3.5K">3.5K</option>
+                                    <option value="4K">4K</option>
+                                    <option value="4K OLED">4K OLED</option>
+                                    <option value="Retina">Retina</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Kích thước màn hình</label>
                                 <select class="form-select" id="size" name="size">
-                                    <option value="">All size</option>
+                                    <option value="">Tất cả kích thước màn hình</option>
                                     <option value="13">13"</option>
                                     <option value="14">14"</option>
                                     <option value="15.6">15.6"</option>
                                     <option value="16">16"</option>
                                 </select>
                             </div>
-                        </c:if>
-                        <c:if test="${CategoryID==1}">
-                            <div class="filter-section">
-                                <label class="form-label">Chip</label>
-                                <select class="form-select" id="Chip" name="Chip">
-                                    <option value="">All Chip</option>
-                                    <option value="Intel Core">Intel Core</option>
-                                    <option value="Apple">Apple</option>
-                                </select>
-                            </div>
+                            <c:forEach items="${Chip}" var="chipGroup" varStatus="i">
+                                <div class="col-md-6">
+                                    <label class="form-label">${Chiptype[i.count-1]}</label>
+                                    <select class="form-select" id="${Chiptype[i.count-1]}" name="${Chiptype[i.count-1]}">
+                                        <option value="">Tất cả chíp xử lí</option>
+                                        <c:forEach items="${chipGroup}" var="chip">
+                                            <option value="${chip}">${chip}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </c:forEach>
                         </c:if>
                     </div>
 
@@ -199,6 +245,26 @@
                                 document.getElementById('minPrice').value = min;
                                 document.getElementById('maxPrice').value = max;
                             }
+                            function validatePriceFields() {
+                                const minPriceInput = document.getElementById('minPrice');
+                                const maxPriceInput = document.getElementById('maxPrice');
+
+                                let minPrice = minPriceInput.value.trim();
+                                let maxPrice = maxPriceInput.value.trim();
+
+                                if (minPrice === "" && maxPrice !== "") {
+                                    minPriceInput.value = 0;
+                                }
+
+                                if (maxPrice === "" && minPrice !== "") {
+                                    maxPriceInput.value = 500000000;
+                                }
+                            }
+
+                            window.addEventListener('load', () => {
+                                document.getElementById('minPrice').addEventListener('blur', validatePriceFields);
+                                document.getElementById('maxPrice').addEventListener('blur', validatePriceFields);
+                            });
 
                             function clearFilters() {
                                 document.querySelectorAll('#filterForm select').forEach(select => {

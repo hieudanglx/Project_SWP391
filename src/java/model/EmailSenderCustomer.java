@@ -12,13 +12,11 @@ import javax.mail.internet.*;
  *
  * @author TRAN NHU Y - CE182032
  */
-public class EmailSender {
+public class EmailSenderCustomer {
 
-
-    public static boolean sendEmail(String to, String subject, String content) {
+    public static void sendEmail(String to, String subject, String content) {
         final String fromEmail = "Trannhuy095@gmail.com"; // Email hệ thống
         final String password = "naow zhik ggdw mjkl"; // Mật khẩu ứng dụng Google
-
 
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -41,12 +39,10 @@ public class EmailSender {
             message.setText(content);
 
             Transport.send(message);
-            System.out.println("Email đã gửi thành công!");
-            return true; // Gửi thành công
+            System.out.println(" Email đã gửi thành công!");
         } catch (MessagingException e) {
             e.printStackTrace();
-            System.out.println("Lỗi khi gửi email: " + e.getMessage());
-            return false; // Gửi thất bại
+            throw new RuntimeException(" Lỗi khi gửi email: " + e.getMessage());
         }
     }
 }

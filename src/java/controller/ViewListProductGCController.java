@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Product;
 
@@ -54,17 +55,19 @@ public class ViewListProductGCController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
-
         List<String> brand = link.getBrandbyCategoryID(categoryID);
+        ArrayList<List<String>> Chip = link.getChipByChipType();
+        List<String> Chiptype = link.getChipType();
         List<Product> list = link.getProductByCategoryID(categoryID);
 
         if (list.isEmpty()) {
             request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
-        request.setAttribute("search", "");
         request.setAttribute("CategoryID", categoryID); // Sửa tên attribute
         request.setAttribute("listbrand", brand);
+        request.setAttribute("Chiptype", Chiptype);
+        request.setAttribute("Chip", Chip);
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }

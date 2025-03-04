@@ -276,10 +276,6 @@
                         </div>
                         <h2 class="mb-3">Giỏ hàng của bạn đang trống</h2>
                         <p class="text-muted mb-4">Hãy khám phá các sản phẩm mới nhất của chúng tôi!</p>
-                        <a href="ViewListProductGC" class="btn btn-primary btn-lg px-5">
-                            <i class="fas fa-arrow-left me-2"></i>
-                            Mua sắm ngay
-                        </a>
                     </div>
                 </c:otherwise>
             </c:choose>

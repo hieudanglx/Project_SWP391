@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Customer;
-import model.EmailSender;
+import model.EmailSenderStaff;
 import model.OTPGenerate;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class ChangePasswordOfCustomerController extends HttpServlet {
         customerDAO.saveResetToken(email, otpCode);
 
         // Gửi OTP qua email
-        EmailSender.sendEmail(email, "Mã xác nhận đổi mật khẩu", "Mã xác nhận của bạn là: " + otpCode);
+        EmailSenderStaff.sendEmail(email, "Mã xác nhận đổi mật khẩu", "Mã xác nhận của bạn là: " + otpCode);
 
         // Chuyển hướng sang trang nhập OTP
         request.setAttribute("email", email);

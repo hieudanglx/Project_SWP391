@@ -4,21 +4,20 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
+import java.text.DecimalFormat;
 
 /**
  *
- * @author TRAN NHU Y - CE182032
+ * @author Tran Phong Hai - CE180803
  */
-@WebServlet(name = "verifyOTPController", urlPatterns = {"/verifyOTPController"})
-public class verifyOTPController extends HttpServlet {
+public class RevenueTotal extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +36,10 @@ public class verifyOTPController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTPController</title>");
+            out.println("<title>Servlet RevenueTotal</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTPController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RevenueTotal at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +57,21 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        OrderDAO dao = new OrderDAO();
+
+        // Lấy tổng doanh thu
+        double totalSales = dao.getTotalSales();
+        System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);
+
+        // Format số với dấu phẩy
+        DecimalFormat df = new DecimalFormat("#,###");
+        String formattedSales = df.format(totalSales);
+
+        System.out.println("[DEBUG] Tổng doanh thu sau khi format: " + formattedSales);
+
+// Gửi dữ liệu sang JSP
+        request.setAttribute("totalSales", formattedSales);
+        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
     }
 
     /**
@@ -72,27 +85,7 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        // Lấy OTP nhập từ form
-        String enteredOTP = request.getParameter("otp");
-
-        // Lấy OTP đúng từ session (luôn ở dạng String)
-        String correctOTP = (String) session.getAttribute("otp");
-
-        if (correctOTP == null) {
-            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
-            request.getRequestDispatcher("forgotPasswordOfCustomer.jsp").forward(request, response);
-            return;
-        }
-
-        // So sánh OTP dưới dạng chuỗi
-        if (enteredOTP.equals(correctOTP)) {
-            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
-        } else {
-            request.setAttribute("errorMessage", "Mã OTP không đúng!");
-            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -104,4 +97,23 @@ public class verifyOTPController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    
+    public static void main(String[] args) {
+        // Khởi tạo DAO
+        OrderDAO dao = new OrderDAO();
+        
+        // Gọi phương thức getTotalSales() để lấy tổng doanh thu
+        double totalSales = dao.getTotalSales();
+        
+        // Kiểm tra giá trị lấy từ DB
+        System.out.println("[TEST] Tổng doanh thu lấy từ DB: " + totalSales);
+
+        // Format số theo dạng có dấu phẩy ngăn cách
+        DecimalFormat df = new DecimalFormat("#,###");
+        String formattedSales = df.format(totalSales);
+        
+        // In kết quả sau khi format
+        System.out.println("[TEST] Tổng doanh thu sau khi format: " + formattedSales);
+    }
 }

@@ -1,0 +1,90 @@
+[33m1b8458d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m done view+update profile
+[33m3118b91[m done view+edit profile
+[33m72306ad[m Done Add_account_staff+ bat dieu kien cua update account khong dc update username
+[33m8008ba3[m edit giao dien payment
+[33m972fe0e[m them chuc nang payment(thanh toan qua vnpay)
+[33m7f86523[m hien thi viewCart, viewListProduct,viewProductDetail
+[33maa72d7c[m fix hien thi viewCart, ListProduct, ProductDetail
+[33m25f2225[m them chuc nang viewProfileStaff and EditStaff
+[33m4a84469[m sua lai luu session cua login customer
+[33m11ddcb1[m sua lai luu session cua login customer
+[33me41b1e7[m them chuc nang bat tai khoan customer co bi khoa hay khong
+[33m8533140[m Merge origin/master
+[33mb41cdbb[m add header, edit header color
+[33m101d859[m Update Login with status block or UnBlock of staff_ Admin Upadte UI dashboard
+[33m89ec03c[m edit forgot password feature
+[33m45febb0[m Block/Unblock Account customer
+[33m5c8b78d[m Merge origin/master
+[33m94d2aa7[m edit Login
+[33m739e473[m cap nhat LoginCustomer, ViewCart
+[33m0b94449[m edit Login
+[33m2c0fc3a[m Fix UI DashBoard + link header with choiceLogin and link loginOfcustomer
+[33m0a27a97[m edit Login
+[33m1e61e5d[m cap nhat LoginCustomer, ViewCart
+[33m85ead09[m Merge origin/master
+[33mca10c03[m Tich hop LoginCustomer, ViewCart
+[33m6e133f2[m Fix Delete Customer Account + upadte UI list Customer Account + set link in Dashboard
+[33m14bcba5[m 
+[33m228afc2[m 
+[33m485e176[m Merge origin/master
+[33m8d56ced[m add feature login, logout, forgotpassword of customer
+[33mf6d61d0[m 
+[33m4c4ba86[m Fix: choiceLogin UI + DeleteAcoountCustomer
+[33md286110[m dong bo giao dien manaPro
+[33m87e8b5f[m dong bo giao dien
+[33m333798a[m Them_giao_dien_trong_managerAcoountStaff
+[33m2d446b3[m pull
+[33m2530836[m them SearchProduct
+[33mbe447c1[m Fix: AccountDAo + HomeDashBoard_Admin
+[33md2857b5[m done create, delete, update, list view
+[33m37962d7[m fix filter
+[33mba57838[m Done login staff + Admin + Delete + Search + view Account Customer
+[33m6dc64a6[m Done View+Edit+Delete_Account_Staff and Logout Dashboard
+[33m89866bf[m ViewDetailsProduct (thieu add to cart, buy now, danh gia)
+[33m1db479c[m done create, delete, update, list
+[33mc0086ca[m done update,delete,list,create
+[33mc335c4e[m Bo xung header, viewProductList da filter dc het
+[33m48ed23b[m done update,delete,list,create
+[33mb00116a[m ViewProductDetail (can them danh gia, add to cart, Buy now)
+[33mc909c20[m Xong phần viewdetailProduct (Can chỉnh thêm phần đánh giá, add to cart, buy now)
+[33m92edaf9[m Update DBContext.java
+[33me8bc9af[m delete folder that unnecessary
+[33mc4f6b33[m add register.jsp_Huy
+[33med7fc2e[m Done Logout_Dashboard
+[33m17de2c7[m ViewListProduct
+[33mfa73e1c[m ViewListProduct
+[33m40e95a4[m Merge origin/master
+[33mc8e5413[m done update
+[33m428b888[m Them viewListProduct.jsp gan xong (co filter)
+[33ma8d7f98[m login staff + Admin
+[33mceabc2c[m Giao_Dien Login+home Dashboard
+[33m7e2ef70[m done delete
+[33m5565175[m done delete
+[33m1628626[m Add_Model_AcoountStaff+AccountCustomer+Feedback+Reply_FeedBack
+[33m21454a5[m done createPro
+[33m85b63c8[m Done reateProduct
+[33m4f56683[m code register
+[33m6354f86[m Them filter.jsp viewlisproductGC.jsp
+[33m3fa5da6[m Them model Category
+[33m46548a1[m CartDao them updateCartProduct(), removeProductFromCart()
+[33m7dd7911[m CartDao them updateCartProduct(), removeProductFromCart()
+[33m4dbf45d[m CartDao them updateCartProduct(), removeProductFromCart()
+[33m4ac4f74[m CartDao them updateCartProduct(), removeProductFromCart()
+[33ma5ff727[m CartDao them updateCartProduct(), removeProductFromCart()
+[33m4632967[m listfAd,create
+[33m5f23baf[m them filterController , viewCartController, viewListProductController UpdateCartController, SearchController
+[33m9307278[m add AccountDAO
+[33m4154ff8[m add ViewDetailProduct
+[33m65abebd[m add view
+[33md1c5703[m Merge origin/master
+[33m8ec2f0c[m deletePr
+[33me793b1f[m 
+[33m175f0b2[m moinhatnua
+[33mb421327[m moinhat
+[33md667e21[m createPr for Admin
+[33mef0c08a[m 
+[33meb1cc5d[m ket noi csdl,model,...
+[33ma94818a[m ket noi csdl
+[33m01e9ab8[m add DBContext2
+[33m815d286[m 
+[33m4942fd6[m 

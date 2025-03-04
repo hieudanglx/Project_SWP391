@@ -4,21 +4,23 @@
  */
 package controller;
 
+import dao.OrderDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
+import java.util.List;
+import model.Order_list;
 
 /**
  *
- * @author TRAN NHU Y - CE182032
+ * @author Tran Phong Hai - CE180803
  */
-@WebServlet(name = "verifyOTPController", urlPatterns = {"/verifyOTPController"})
-public class verifyOTPController extends HttpServlet {
+@WebServlet("/RevenueByMonth")
+public class RevenueByMonth extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +39,10 @@ public class verifyOTPController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTPController</title>");
+            out.println("<title>Servlet RevenueByMonth</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTPController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet RevenueByMonth at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +60,21 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String filter = request.getParameter("filter");
+        List<Order_list> revenueList = null;
+      
+        OrderDAO orderDAO = new OrderDAO();
+        if ("month".equals(filter)) {
+            revenueList = orderDAO.getRevenueByMonth();
+        } else if ("quarter".equals(filter)) {
+            revenueList = orderDAO.getRevenueByQuarter();
+        } else if ("year".equals(filter)) {
+            revenueList = orderDAO.getRevenueByYear();
+        }
+
+        request.setAttribute("revenuelist", revenueList);
+        request.setAttribute("filterType", filter);
+        request.getRequestDispatcher("manageRevenue.jsp").forward(request, response);
     }
 
     /**
@@ -72,27 +88,7 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-
-        // Lấy OTP nhập từ form
-        String enteredOTP = request.getParameter("otp");
-
-        // Lấy OTP đúng từ session (luôn ở dạng String)
-        String correctOTP = (String) session.getAttribute("otp");
-
-        if (correctOTP == null) {
-            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
-            request.getRequestDispatcher("forgotPasswordOfCustomer.jsp").forward(request, response);
-            return;
-        }
-
-        // So sánh OTP dưới dạng chuỗi
-        if (enteredOTP.equals(correctOTP)) {
-            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
-        } else {
-            request.setAttribute("errorMessage", "Mã OTP không đúng!");
-            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -104,4 +100,5 @@ public class verifyOTPController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

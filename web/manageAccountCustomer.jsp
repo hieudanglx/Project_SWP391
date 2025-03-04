@@ -95,7 +95,7 @@
             <div class="navbar-custom">
                 <h3>Manage Customer Accounts</h3>
                 <div class="search-container">
-                    <form action="SearchCustomer" method="GET" class="d-flex">
+                    <form action="SearchAccountCustomer" method="POST" class="d-flex">
                         <input type="text" name="username" class="form-control w-50 me-2" placeholder="Search username">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
