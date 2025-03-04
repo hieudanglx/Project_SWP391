@@ -106,7 +106,7 @@
 
             a:hover {
                 color: #0451df;
-text-decoration: underline;
+                text-decoration: underline;
             }
 
             .link-container {
@@ -145,6 +145,18 @@ text-decoration: underline;
                     <% if (errorMessage != null) { %>
                     <p style="color: red;"><%= errorMessage %></p>
                     <% } %>
+
+                    <% 
+                    String successMessage = (String) session.getAttribute("successMessage");
+                    if (successMessage != null) {
+                    %>
+                    <script>
+                        alert("<%= successMessage %>");
+                    </script>
+                    <% 
+                        session.removeAttribute("successMessage"); // Xóa thông báo sau khi hiển thị
+                        } 
+                    %>
                 </form>
             </div>
         </div>  

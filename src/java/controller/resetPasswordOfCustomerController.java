@@ -88,6 +88,16 @@ public class resetPasswordOfCustomerController extends HttpServlet {
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
 
+        // Regex kiểm tra mật khẩu: 8-16 ký tự, ít nhất 1 chữ hoa, 1 số
+        String passwordPattern = "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,16}$";
+
+        // Kiểm tra mật khẩu có hợp lệ không
+        if (!newPassword.matches(passwordPattern)) {
+            request.setAttribute("errorMessage", "Mật khẩu phải có 8-16 ký tự, ít nhất 1 chữ hoa và 1 số!");
+            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response);
+            return;
+        }
+
         // Kiểm tra xác nhận mật khẩu
         if (!newPassword.equals(confirmPassword)) {
             request.setAttribute("errorMessage", "Mật khẩu xác nhận không khớp!");
@@ -100,7 +110,8 @@ public class resetPasswordOfCustomerController extends HttpServlet {
 
         if (isUpdated) {
             session.removeAttribute("email"); // Xóa email khỏi session sau khi đặt lại mật khẩu
-            response.sendRedirect("successForgotPassword.jsp");  // Chuyển đến trang thành công
+            session.setAttribute("successMessage", "Mật khẩu đã được đặt lại thành công!");
+            response.sendRedirect("loginOfCustomer.jsp");
         } else {
             request.setAttribute("errorMessage", "Đã xảy ra lỗi khi đặt lại mật khẩu. Vui lòng thử lại!");
             request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response);
