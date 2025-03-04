@@ -12,6 +12,10 @@
         <servlet-name>SearchAccountStaff</servlet-name>
         <servlet-class>controller.SearchAccountStaff</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EmailSenderCustomer</servlet-name>
+        <servlet-class>model.EmailSenderCustomer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -20,7 +24,6 @@
         <servlet-name>CreateAccountStaff</servlet-name>
         <url-pattern>/CreateAccountStaff</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>RevenueTotal</servlet-name>
         <servlet-class>controller.RevenueTotal</servlet-class>
@@ -29,12 +32,14 @@
         <servlet-name>RevenueTotal</servlet-name>
         <url-pattern>/RevenueTotal</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>SearchAccountStaff</servlet-name>
         <url-pattern>/SearchAccountStaff</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>EmailSenderCustomer</servlet-name>
+        <url-pattern>/EmailSenderCustomer</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

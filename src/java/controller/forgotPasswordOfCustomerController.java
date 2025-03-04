@@ -5,7 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
-import model.EmailSender;
+import model.EmailSenderCustomer;
 import model.OTPGenerate;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -93,8 +93,7 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
         session.setAttribute("email", email);
 
         // Gửi OTP đến email
-
-        EmailSender.sendEmail(email, "Mã OTP đặt lại mật khẩu",
+        EmailSenderCustomer.sendEmail(email, "Mã OTP đặt lại mật khẩu",
                 "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
         request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
     }
