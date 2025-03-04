@@ -167,7 +167,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            <!-- Giữ nguyên phần đánh giá -->
+                            
                         </div>
                     </div>
                 </div>

@@ -79,13 +79,13 @@
         <!-- Main Container -->
         <div class="container-lg cart-container">
             <c:choose>
-                <c:when test="${not empty list}">
+                <c:when test="${size!=0}">
                     <div class="row g-5">
                         <!-- Product List Column -->
                         <div class="col-lg-8">
                             <div class="d-flex align-items-center mb-4">
                                 <h3 class="mb-0 me-3">Giỏ hàng</h3>
-                                <span class="badge bg-primary rounded-pill">${fn:length(list)} sản phẩm</span>
+                                <span class="badge bg-primary rounded-pill">${size} sản phẩm</span>
                             </div>
 
                             <c:forEach items="${list}" var="product">
