@@ -89,6 +89,7 @@
                             </div>
 
                             <c:forEach items="${list}" var="product">
+                                <c:if test="${product.quantityProduct>0}">
                                 <div class="card mb-3 shadow-sm">
                                     <div class="card-body">
                                         <div class="d-flex gap-4 align-items-center">
@@ -119,16 +120,16 @@
 
                                                     <div class="d-flex align-items-center gap-3">
                                                         <div class="input-group quantity-input-group">
-                                                            <a href="UpdateCartController?id=${product.productID}" 
+                                                            <a href="UpdateCartController?id=${product.productID}&type=-" 
                                                                class="btn btn-outline-secondary px-3">-</a>
                                                             <input type="text" 
                                                                    class="form-control text-center border-secondary"
                                                                    value="${product.quantityProduct}" 
                                                                    disabled>
-                                                            <a href="UpdateCartController?id=${product.productID}" 
+                                                            <a href="UpdateCartController?id=${product.productID}&type=%2B" 
                                                                class="btn btn-outline-secondary px-3">+</a>
                                                         </div>
-                                                        <a href="RemoveCartItem?id=${product.productID}" 
+                                                        <a href="UpdateCartController?id=${product.productID}&type=R" 
                                                            class="btn btn-link text-danger">
                                                             <i class="fas fa-trash fa-lg"></i>
                                                         </a>
@@ -138,6 +139,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                </c:if>
                             </c:forEach>
                         </div>
 

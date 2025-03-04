@@ -40,37 +40,69 @@ public class CartDao extends DBContext {
                     product.setQuantityProduct(rs.getInt("Quantity"));
                     product.setImageURL(rs.getString("ImageURL"));
                     product.setIsDelete(rs.getInt("isDelete"));
-                    
+
                     if (product.getIsDelete() != 1) {
                         productList.add(product);
                     }
                 }
             }
         } catch (Exception e) {
-            System.out.println("Loi"+e.getMessage());
+            System.out.println("Loi" + e.getMessage());
         }
         return productList;
     }
 
-    public Boolean updateCartProduct(int customerID, String productID) {
-        String sql = "UPDATE Cart SET Quantity = Quantity - 1 WHERE CustomerID = ? AND ProductID = ? AND Quantity > 0";
+    public Boolean updateCartProduct(int customerID, int productID, String type) {
+        String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 WHERE CustomerID = ? AND ProductID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
-            ps.setString(2, productID);
+            ps.setInt(2, productID);
             if (ps.executeUpdate() == 1) {
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("dao.CartDao.updateCartProduct(): " + e.getMessage());
         }
         return false;
     }
 
-    public Boolean removeProductFromCart(int customerID, String productID) {
-        String sql = "DELETE FROM Cart WHERE CustomerID = ? AND ProductID = ?";
+    public Boolean AddProductToCart(int customerID, int productID) {
+        if (ProductExistsInCart(customerID, productID)) {
+            return updateCartProduct(customerID, productID, "+");
+        }
+        String sql = "INSERT INTO Cart (CustomerID, ProductID, Price, Quantity) VALUES (?, ?, (SELECT Price FROM Product WHERE ProductID = ?), 1)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
-            ps.setString(2, productID);
+            ps.setInt(2, productID);
+            ps.setInt(3, productID);
+            if (ps.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("dao.CartDao.AddProductToCart(): " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Boolean ProductExistsInCart(int customerID, int productID) {
+        String sql = "SELECT 1 FROM Cart WHERE CustomerID = ? AND ProductID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, productID);
+            try ( ResultSet rs = ps.executeQuery()) {
+                return rs.next(); // Checks if there's at least one result
+            }
+        } catch (Exception e) {
+            System.out.println("dao.CartDao.ProductExistsInCart(): " + e.getMessage());
+        }
+        return false;
+    }
+
+    public Boolean removeProductFromCart(int customerID, int productID) {
+        String sql = "UPDATE Cart SET Quantity = 0 WHERE CustomerID = ? AND ProductID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, productID);
             if (ps.executeUpdate() == 1) {
                 return true;
             }
