@@ -13,6 +13,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Edit Product</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <script>
+            function toggleFields() {
+                var category = document.getElementById("category").value;
+
+                // Nếu category = 1 (Laptop) -> Ẩn Camera, Hiện RAM Type & Upgrading
+                if (category == "1") {
+                    document.querySelectorAll('.category-1').forEach(el => el.style.display = "block");
+                    document.querySelectorAll('.category-23').forEach(el => el.style.display = "none");
+                }
+                // Nếu category = 2 hoặc 3 (Dien Thoai/Tablet) -> Ẩn RAM Type & Upgrading, Hiện Camera
+                else {
+                    document.querySelectorAll('.category-1').forEach(el => el.style.display = "none");
+                    document.querySelectorAll('.category-23').forEach(el => el.style.display = "block");
+                }
+            }
+
+            // Gọi hàm khi trang tải xong để áp dụng ngay
+            window.onload = toggleFields;
+        </script>
+
     </head>
     <body>
 
@@ -46,7 +67,7 @@
                 <!-- Category -->
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
-                    <select class="form-control" id="category" name="categoryID" required>
+                    <select class="form-control" id="category" name="categoryID" required onchange="toggleFields()">
                         <option value="1" ${product.categoryID == 1 ? 'selected' : ''}>Laptop</option>
                         <option value="2" ${product.categoryID == 2 ? 'selected' : ''}>Dien Thoai</option>
                         <option value="3" ${product.categoryID == 3 ? 'selected' : ''}>Tablet</option>
@@ -60,12 +81,12 @@
                 </div>
 
                 <!-- Camera -->
-                <div class="mb-3">
+                <div class="mb-3 category-23">
                     <label for="cameraFront" class="form-label">Front Camera</label>
                     <input type="text" class="form-control" id="cameraFront" name="cameraFront" value="${product.cameraFront}" required />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 category-23">
                     <label for="cameraBehind" class="form-label">Behind Camera</label>
                     <input type="text" class="form-control" id="cameraBehind" name="cameraBehind" value="${product.cameraBehind}" required />
                 </div>
@@ -76,12 +97,12 @@
                     <input type="text" class="form-control" id="ram" name="ram" value="${product.ram}" required />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 category-1">
                     <label for="ramType" class="form-label">RAM Type</label>
                     <input type="text" class="form-control" id="ramType" name="ramType" value="${product.ramType}" required />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 category-1">
                     <label for="supportsUpgradingRAM" class="form-label">Supports Upgrading RAM</label>
                     <select class="form-control" id="supportsUpgradingRAM" name="supportsUpgradingRAM" required>
                         <option value="1" ${product.supportsUpgradingRAM == '1' ? 'selected' : ''}>Yes</option>
@@ -95,7 +116,7 @@
                     <input type="text" class="form-control" id="rom" name="rom" value="${product.rom}" required />
                 </div>
 
-                <div class="mb-3">
+                <div class="mb-3 category-1">
                     <label for="supportsUpgradingROM" class="form-label">Supports Upgrading ROM</label>
                     <select class="form-control" id="supportsUpgradingROM" name="supportsUpgradingROM" required>
                         <option value="1" ${product.supportsUpgradingROM == '1' ? 'selected' : ''}>Yes</option>
@@ -125,8 +146,8 @@
                     <label for="screenSize" class="form-label">Screen Size</label>
                     <input type="text" class="form-control" id="screenSize" name="screenSize" value="${product.screenSize}" required />
                 </div>
-                
-                 <!-- Refresh Rate -->
+
+                <!-- Refresh Rate -->
                 <div class="mb-3">
                     <label for="refreshRate" class="form-label">Refresh Rate</label>
                     <input type="text" class="form-control" id="refreshRate" name="refreshRate" value="${product.refreshRate}" required />
@@ -137,7 +158,7 @@
                     <input type="text" class="form-control" id="screenResolution" name="screenResolution" value="${product.screenResolution}" required />
                 </div>
 
-               
+
 
                 <!-- Chip Type & Name -->
                 <div class="mb-3">

@@ -22,6 +22,24 @@
                 width: 600px;
                 margin-top: 20px;
             }
+            .btn-back {
+                display: block;
+                text-align: center;
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                background-color: #6c757d;
+                color: white;
+                border-radius: 4px;
+                text-decoration: none;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-back:hover {
+                background-color: #5a6268;
+            }
             h2 {
                 text-align: center;
                 color: #333;
@@ -79,13 +97,13 @@
             }
 
             document.addEventListener("DOMContentLoaded", function () {
-    function formatInputWithUnit(inputId, unit) {
-        var input = document.getElementById(inputId);
-        input.addEventListener("input", function () {
-            let value = this.value.replace(/\D/g, ''); // Ch? gi? l?i s?
-            this.value = value ? value + unit : ""; // Thêm ??n v? ngay sau s?, không có kho?ng tr?ng
-        });
-    }
+                function formatInputWithUnit(inputId, unit) {
+                    var input = document.getElementById(inputId);
+                    input.addEventListener("input", function () {
+                        let value = this.value.replace(/\D/g, ''); // Ch? gi? l?i s?
+                        this.value = value ? value + unit : ""; // Thêm ??n v? ngay sau s?, không có kho?ng tr?ng
+                    });
+                }
 
                 formatInputWithUnit("ramInput", "GB");
                 formatInputWithUnit("storageInput", "TB");
@@ -95,7 +113,7 @@
     </head>
     <body>
         <div class="container">
-            
+
             <h2>Enter Tablet Information</h2>
             <c:if test="${not empty error}">
                 <div style="color: red; text-align: center; margin-bottom: 15px;">
@@ -231,6 +249,7 @@
                 <label for="imageURL">Image URL:</label>
                 <input type="url" id="imageURL" name="imageURL" value="${product.imageURL}" required>
                 <button type="submit">Save</button>
+                <a href="listProductsForAdmin" class="btn-back">Back to List</a>
             </form>
         </div>
     </body>

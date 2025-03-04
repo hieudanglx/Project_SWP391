@@ -264,13 +264,13 @@ public class ProductDao extends DBContext {
         pstmt.setInt(2, product.getPrice());
         pstmt.setInt(3, product.getCategoryID());
         pstmt.setString(4, product.getBrand());
-        pstmt.setString(5, product.getCameraFront());
-        pstmt.setString(6, product.getCameraBehind());
+        pstmt.setString(5, isEmpty(product.getCameraFront()) ? null : product.getCameraFront());
+        pstmt.setString(6, isEmpty(product.getCameraBehind()) ? null : product.getCameraBehind());
         pstmt.setString(7, product.getRam());
-        pstmt.setString(8, product.getRamType());
-        pstmt.setString(9, product.getSupportsUpgradingRAM());
+        pstmt.setString(8, isEmpty(product.getRamType()) ? null : product.getRamType());
+        pstmt.setString(9, isEmpty(product.getSupportsUpgradingRAM()) ? null : product.getSupportsUpgradingRAM());
         pstmt.setString(10, product.getRom());
-        pstmt.setString(11, product.getSupportsUpgradingROM());
+        pstmt.setString(11, isEmpty(product.getSupportsUpgradingROM()) ? null : product.getSupportsUpgradingROM());
         pstmt.setString(12, product.getColor());
         pstmt.setString(13, product.getOperatingSystemName());
         pstmt.setString(14, product.getOperatingSystemVersion());
@@ -295,6 +295,10 @@ public class ProductDao extends DBContext {
         System.err.println("Invalid number format: " + e.getMessage());
     }
     return false;
+}
+    // Hàm kiểm tra chuỗi rỗng hoặc null
+private boolean isEmpty(String str) {
+    return str == null || str.trim().isEmpty();
 }
 
     
