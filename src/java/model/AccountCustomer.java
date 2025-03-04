@@ -11,28 +11,32 @@ package model;
 public class AccountCustomer {
     private int customerID;
     private String username;
+    private String fullName;
     private String email;
     private String password;
     private String address;
     private String phoneNumber;
     private int status;
+    private String sex;
+    private String dob;
     private String imgCustomer;
 
     public AccountCustomer() {
     }
 
-    public AccountCustomer(int customerID, String username, String email, String password, String address, String phoneNumber, int status, String imgCustomer) {
+    public AccountCustomer(int customerID, String username, String fullName, String email, String password, String address, String phoneNumber, int status, String sex, String dob, String imgCustomer) {
         this.customerID = customerID;
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.sex = sex;
+        this.dob = dob;
         this.imgCustomer = imgCustomer;
     }
-    
-    
 
     public int getCustomerID() {
         return customerID;
@@ -48,6 +52,14 @@ public class AccountCustomer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -90,6 +102,22 @@ public class AccountCustomer {
         this.status = status;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public String getImgCustomer() {
         return imgCustomer;
     }
@@ -97,6 +125,8 @@ public class AccountCustomer {
     public void setImgCustomer(String imgCustomer) {
         this.imgCustomer = imgCustomer;
     }
+
+    
     
      
 }

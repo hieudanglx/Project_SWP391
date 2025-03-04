@@ -157,7 +157,10 @@
                 <form action="UpdateProfile" method="POST">
                     <div class="profile-details">
                         <label>Username</label>
-                        <input type="text" name="username" value="${sessionScope.customer.username}" required>
+                        <input type="text" name="username" value="${sessionScope.customer.username}" readonly>
+                        
+                        <label>Full Name</label>
+                        <input type="text" name="fullName" value="${sessionScope.customer.fullName}" required>
 
                         <label>Email</label>
                         <input type="email" name="email" value="${sessionScope.customer.email}" required>
@@ -167,7 +170,13 @@
 
                         <label>Address</label>
                         <input type="text" name="address" value="${sessionScope.customer.address}" required>
-
+                        
+                        <label>BirthDay</label>
+                        <input type="text" name="dob" value="${sessionScope.customer.dob}" required>
+                        
+                        <label>Gender</label>
+                        <input type="text" name="sex" value="${sessionScope.customer.sex}" required>
+                        
                         <button type="submit" class="save-btn">Save Changes</button>
                     </div>
                 </form>

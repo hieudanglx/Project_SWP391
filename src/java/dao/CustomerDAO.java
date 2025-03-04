@@ -8,6 +8,7 @@ package dao;
  *
  * @author nguye
  */
+import java.sql.Date;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -84,11 +85,14 @@ public class CustomerDAO extends DBContext {
                 return new Customer(
                         rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getString("Status"),
+                        rs.getString("sex"),
+                        rs.getString("dob"),
                         rs.getString("imgcustomer")
                 );
             }
@@ -111,13 +115,16 @@ public class CustomerDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Customer(
-                        rs.getInt("id"),
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getString("Status"),
+                        rs.getString("sex"),
+                        rs.getString("dob"),
                         rs.getString("imgcustomer")
                 );
             }
@@ -142,15 +149,18 @@ public class CustomerDAO extends DBContext {
     }
 
     public void addCustomer(Customer customer) {
-        String sql = "INSERT INTO Customer (username, email, password, address, phoneNumber, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Customer (username, fullname, email, password, address, phoneNumber,sex , dob, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
-            ps.setString(2, customer.getEmail());
-            ps.setString(3, customer.getPassword());
-            ps.setString(4, customer.getAddress());
-            ps.setString(5, customer.getPhoneNumber());
-            ps.setString(6, customer.getStatus());
-            ps.setString(7, customer.getImgCustomer());
+            ps.setString(2,customer.getFullName());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, customer.getPassword());
+            ps.setString(5, customer.getAddress());
+            ps.setString(6, customer.getPhoneNumber());
+            ps.setString(7, customer.getSex());
+            ps.setString(8, customer.getDob());
+            ps.setString(9, customer.getStatus());
+            ps.setString(10, customer.getImgCustomer());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -158,16 +168,19 @@ public class CustomerDAO extends DBContext {
     }
 
     public void updateCustomer(Customer customer) {
-        String sql = "UPDATE Customer SET username=?, email=?, password=?, address=?, phoneNumber=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+        String sql = "UPDATE Customer SET username=?,fullname=?, email=?, password=?, address=?, phoneNumber=?,sex=?, dob=?, Status=?, imgcustomer=? WHERE CustomerID=?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
-            ps.setString(2, customer.getEmail());
-            ps.setString(3, customer.getPassword());
-            ps.setString(4, customer.getAddress());
-            ps.setString(5, customer.getPhoneNumber());
-            ps.setString(6, customer.getStatus());
-            ps.setString(7, customer.getImgCustomer());
-            ps.setLong(8, customer.getId());
+            ps.setString(2,customer.getFullName());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, customer.getPassword());
+            ps.setString(5, customer.getAddress());
+            ps.setString(6, customer.getPhoneNumber());
+            ps.setString(7, customer.getSex());
+            ps.setString(8, customer.getDob());
+            ps.setString(9, customer.getStatus());
+            ps.setString(10, customer.getImgCustomer());
+            ps.setLong(11, customer.getCustomerID());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -191,12 +204,16 @@ public class CustomerDAO extends DBContext {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 customers.add(new Customer(
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getString("Status"),
+                        rs.getString("sex"),
+                        rs.getString("dob"),
                         rs.getString("imgcustomer")
                 ));
             }
@@ -207,13 +224,18 @@ public class CustomerDAO extends DBContext {
     }
 
     public void add(Customer customer) throws SQLException {
-        String sql = "INSERT INTO Customer (username, email, password, address, phoneNumber) VALUES (?, ?, ?, ?, ?)";
+         String sql = "INSERT INTO Customer (username, fullname, email, password, address, phoneNumber, sex, dob, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) { // Sửa conn thành connection
             stmt.setString(1, customer.getUsername());
-            stmt.setString(2, customer.getEmail());
-            stmt.setString(3, customer.getPassword());
-            stmt.setString(4, customer.getAddress());
-            stmt.setString(5, customer.getPhoneNumber());
+            stmt.setString(2, customer.getFullName());
+            stmt.setString(3, customer.getEmail());
+            stmt.setString(4, customer.getPassword());
+            stmt.setString(5, customer.getAddress());
+            stmt.setString(6, customer.getPhoneNumber());
+            stmt.setString(7,customer.getSex());
+            stmt.setString(8,customer.getDob());
+            stmt.setString(9, "0");
+            stmt.setString(10, customer.getImgCustomer());
 
             stmt.executeUpdate();
         }
@@ -237,12 +259,16 @@ public class CustomerDAO extends DBContext {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Customer(
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getString("Status"),
+                        rs.getString("sex"),
+                        rs.getString("dob"),
                         rs.getString("imgcustomer"));
             }
         } catch (Exception e) {
@@ -266,27 +292,34 @@ public class CustomerDAO extends DBContext {
     public void updateCustomer(Customer customer, boolean updatePassword) {
         String sql;
         if (updatePassword) {
-            sql = "UPDATE Customer SET username=?, email=?, password=?, address=?, phoneNumber=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+            sql = "UPDATE Customer SET username=?,fullname=?, email=?, password=?, address=?, phoneNumber=?,sex=?, dob=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+
         } else {
-            sql = "UPDATE Customer SET username=?, email=?, address=?, phoneNumber=?, Status=?, imgcustomer=? WHERE CustomerID=?";
+            sql = "UPDATE Customer SET username=?,fullname=?, email=?, address=?, phoneNumber=?,sex=?, dob=?, Status=?, imgcustomer=? WHERE CustomerID=?";
         }
 
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getEmail());
             if (updatePassword) {
-                ps.setString(3, customer.getPassword());
+                ps.setString(3, customer.getFullName());
+                ps.setString(4, customer.getPassword());
+                ps.setString(5, customer.getAddress());
+                ps.setString(6, customer.getPhoneNumber()); 
+                ps.setString(7, customer.getSex());
+                ps.setString(8, customer.getDob());
+                ps.setString(9, customer.getStatus());
+                ps.setString(10, customer.getImgCustomer());
+                ps.setInt(11, customer.getCustomerID());
+            } else {
+                ps.setString(3, customer.getFullName());
                 ps.setString(4, customer.getAddress());
                 ps.setString(5, customer.getPhoneNumber());
-                ps.setString(6, customer.getStatus());
-                ps.setString(7, customer.getImgCustomer());
-                ps.setInt(8, customer.getId());
-            } else {
-                ps.setString(3, customer.getAddress());
-                ps.setString(4, customer.getPhoneNumber());
-                ps.setString(5, customer.getStatus());
-                ps.setString(6, customer.getImgCustomer());
-                ps.setInt(7, customer.getId());
+                ps.setString(6, customer.getSex());
+                ps.setString(7, customer.getDob());
+                ps.setString(8, customer.getStatus());
+                ps.setString(9, customer.getImgCustomer());
+                ps.setInt(10, customer.getCustomerID());
             }
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -303,11 +336,14 @@ public class CustomerDAO extends DBContext {
                 return new Customer(
                         rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getString("Status"),
+                        rs.getString("sex"),
+                        rs.getString("dob"),
                         rs.getString("imgcustomer")
                 );
             }

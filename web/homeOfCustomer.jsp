@@ -52,7 +52,7 @@
 <body>
     <%@include file="header.jsp" %>
     <div class="container">
-        <h2>Welcome, <%= customer.getUsername() %>!</h2>        
+        <h2>Welcome, <a href="ViewProfileOfCustomer.jsp" class="username-link"><%= customer.getUsername() %></a>!</h2>       
 
         <form id="logoutOfCustomerController" action="logoutOfCustomerController" method="post">
             <a href="forgotPasswordOfCustomer.jsp" class="btn btn-warning">Forgot Password</a>

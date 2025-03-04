@@ -73,9 +73,10 @@ public class EditAccount_Staff extends HttpServlet {
         String fullName = request.getParameter("fullName");
         String phoneNumber = request.getParameter("phoneNumber");
         String username = request.getParameter("username");
+        String cccd = request.getParameter("cccd");
         int status = Integer.parseInt(request.getParameter("status"));
 
-        AccountStaff staff = new AccountStaff(staffID, address, email, password, fullName, phoneNumber, username, status);
+        AccountStaff staff = new AccountStaff(staffID, address, email, password, fullName, phoneNumber, username,cccd, status);
         boolean isUpdated = accountDao.updateAccountStaff(staff);
 
         if (isUpdated) {

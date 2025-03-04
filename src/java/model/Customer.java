@@ -10,46 +10,55 @@ package model;
  */
 public class Customer {
 
-    private int id;
+    private int customerID;
     private String username;
+    private String fullName;
     private String email;
     private String password;
     private String address;
     private String phoneNumber;
     private String status;
+    private String sex;
+    private String dob;
     private String imgCustomer;
 
     public Customer() {
     }
 
-    public Customer(String username, String email, String password, String address, String phoneNumber, String status, String imgCustomer) {
+    public Customer(int customerID, String username, String fullName, String email, String password, String address, String phoneNumber, String status, String sex, String dob, String imgCustomer) {
+        this.customerID = customerID;
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.status = status;
+        this.sex = sex;
+        this.dob = dob;
         this.imgCustomer = imgCustomer;
     }
 
-    public Customer(int id, String username, String email, String password, String address, String phoneNumber, String status, String imgCustomer) {
-        this.id = id;
+    public Customer(String username, String fullName, String email, String password, String address, String phoneNumber, String sex, String dob, String status, String imgCustomer) {
+
         this.username = username;
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.status = status;
+        this.sex = sex;
+        this.dob = dob;
+        this.status = (status == null) ? "0" : status; // Gán mặc định "0" nếu status là null
         this.imgCustomer = imgCustomer;
     }
 
-    // Getters và Setters
-    public int getId() {
-        return id;
+    public int getCustomerID() {
+        return customerID;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
     public String getUsername() {
@@ -58,6 +67,14 @@ public class Customer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -100,6 +117,22 @@ public class Customer {
         this.status = status;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public String getImgCustomer() {
         return imgCustomer;
     }
@@ -107,4 +140,5 @@ public class Customer {
     public void setImgCustomer(String imgCustomer) {
         this.imgCustomer = imgCustomer;
     }
+
 }

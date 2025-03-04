@@ -95,7 +95,7 @@
                     <thead class="table-dark">
                         <tr>
                             <th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th>
-                            <th>Address</th><th>Username</th><th>Status</th><th>Actions</th>
+                            <th>Address</th><th>Username</th><th>CCCD</th><th>Status</th>><th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,7 +107,9 @@
                                 <td>${s.phoneNumber}</td>
                                 <td>${s.address}</td>
                                 <td>${s.username}</td>
+                                <<td>${s.cccd}</td>
                                 <td>${s.status == 0 ? "Active" : "Inactive"}</td>
+                                
                                 <td>
                                     <a href="EditAccount_Staff?staffID=${s.staffID}" class="btn btn-warning btn-sm">Edit</a>
                                     <a href="DeleteAccount_Staff?staffID=${s.staffID}" 

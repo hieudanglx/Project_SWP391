@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html lang="en">
 
     <head>
@@ -6,17 +8,20 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <title>Electronic Store - Register</title>
-        <link href="css/register.css" rel="stylesheet" type="text/css"/>
+        <link href="css/register.css" rel="stylesheet" type="text/css" />
         <style>
             .input::placeholder {
                 color: black;
             }
+
             .error-message {
                 color: red;
                 font-size: 12px;
                 margin-top: 5px;
             }
+
             body {
                 background: url('/img/OIP.jpg') no-repeat center center fixed;
                 background-size: cover;
@@ -25,7 +30,6 @@
                 align-items: center;
                 height: 100vh;
             }
-
         </style>
     </head>
 
@@ -35,47 +39,82 @@
                 <div class="top-header">
                     <header>Register</header>
                 </div>
+                <% if (request.getAttribute("successMessage") != null) { %>
+                <div class="alert alert-success text-center">
+                    <%= request.getAttribute("successMessage") %>
+                </div>
+                <% } %>
                 <form action="RegisterController" method="post" onsubmit="return validateForm();">
-                    <div class="input-field">
-                        <input type="text" id="username" name="username" class="input" placeholder="Enter your username...">
-                        <i class="bx bx-user" style="color: #000"></i>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username...">
                         <div id="usernameError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="text" id="phoneNumber" name="phoneNumber" class="input" placeholder="Enter your phone...">
-                        <i class='bx bx-phone' style="color: #000"></i>
+
+                    <div class="mb-3">
+                        <label for="fullName" class="form-label">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name...">
+                        <div id="fullNameError" class="error-message"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Enter your phone...">
                         <div id="phoneError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="text" id="email" name="email" class="input" placeholder="Enter your email...">
-                        <i class='bx bx-envelope' style="color: #000"></i>
+
+                    <div class="mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" class="form-control">
+                        <div id="dobError" class="error-message"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" id="email" name="email" class="form-control" placeholder="Enter your email...">
                         <div id="emailError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="password" id="password" name="password" class="input" placeholder="Enter password...">
-                        <i class="bx bx-lock-alt" style="color: #000"></i>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter password...">
                         <div id="passwordError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="password" id="confirmPassword" name="confirmPassword" class="input" placeholder="Confirm password...">
-                        <i class="bx bx-lock-alt" style="color: #000"></i>
+
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm password...">
                         <div id="confirmPasswordError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="text" id="address" name="address" class="input" placeholder="Enter your address...">
-                        <i class='bx bx-home' style="color: #000"></i>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" id="address" name="address" class="form-control" placeholder="Enter your address...">
                         <div id="addressError" class="error-message"></div>
                     </div>
-                    <div class="input-field">
-                        <input type="submit" class="submit" value="Register">
+
+                    <!-- Dropdown chọn giới tính -->
+                    <div class="mb-3">
+                        <label for="sex" class="form-label">Gender</label>
+                        <select id="sex" name="sex" class="form-select" required>
+                            <option value="" disabled selected>-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div id="sexError" class="error-message"></div> <!-- Thêm dòng này -->
+                    </div>
+
+                    <div class="mb-3 text-center">
+                        <input type="submit" class="btn btn-primary w-100" value="Register">
                     </div>
                 </form>
             </div>
         </div>
 
         <script>
-            const existingPhoneNumbers = ["0123456789", "0987654321"]; // Danh s�ch s? ?i?n tho?i ?� t?n t?i
-            const existingEmails = ["test@example.com", "user@domain.com"]; // Danh s�ch email ?� t?n t?i
+            const existingPhoneNumbers = ["0123456789", "0987654321"]; // Danh sách s? ?i?n tho?i ?ã t?n t?i
+            const existingEmails = ["test@example.com", "user@domain.com"]; // Danh sách email ?ã t?n t?i
 
             function validateForm() {
                 let isValid = true;
@@ -86,11 +125,29 @@
                 const password = document.getElementById('password').value.trim();
                 const confirmPassword = document.getElementById('confirmPassword').value.trim();
                 const address = document.getElementById('address').value.trim();
+                const fullName = document.getElementById('fullName').value.trim();
+                const sex = document.getElementById('sex').value.trim();
+                const dob = document.getElementById('dob').value.trim();
 
                 clearErrors();
 
                 if (!username) {
                     showError('usernameError', "Username cannot be empty!");
+                    isValid = false;
+                }
+
+                if (!fullName) {
+                    showError('fullNameError', "Full Name cannot be empty!");
+                    isValid = false;
+                }
+
+                if (!dob) {
+                    showError('dobError', "Date of Birth cannot be empty!");
+                    isValid = false;
+                }
+
+                if (!sex) {
+                    showError('sexError', "Please select a gender!");
                     isValid = false;
                 }
 
@@ -137,7 +194,7 @@
                     isValid = false;
                 }
 
-                return isValid;
+                return isValid; // Chặn submit nếu có lỗi
             }
 
             function isValidPhone(phoneNumber) {

@@ -17,11 +17,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Customer;
 import jakarta.servlet.annotation.WebServlet;
+import java.util.Date;
 
 /**
  * Servlet xử lý đăng ký khách hàng mới
  */
-@WebServlet(name="RegisterController", urlPatterns={"/RegisterController"})
+@WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
 public class RegisterController extends HttpServlet {
 
     @Override
@@ -33,10 +34,13 @@ public class RegisterController extends HttpServlet {
         try {
             // Nhận dữ liệu từ form
             String username = request.getParameter("username").trim();
-            String phoneNumber = request.getParameter("phoneNumber").trim();
+            String fullName = request.getParameter("fullName").trim();
             String email = request.getParameter("email").trim();
             String password = request.getParameter("password").trim();
             String address = request.getParameter("address").trim();
+            String phoneNumber = request.getParameter("phoneNumber").trim();
+            String sex = request.getParameter("sex").trim();
+            String dob = request.getParameter("dob").trim();
 
             // Kiểm tra dữ liệu đầu vào
             if (username.isEmpty() || phoneNumber.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty()) {
@@ -59,8 +63,7 @@ public class RegisterController extends HttpServlet {
                 return;
             }
 
-            // Tạo khách hàng mới (Không có status và imgCustomer)
-            Customer newCustomer = new Customer(username, email, password, address, phoneNumber, null, null);
+            Customer newCustomer = new Customer(username, fullName, email, password, address, phoneNumber, sex, dob, null, null);
             customerDAO.add(newCustomer);
 
             // Trả về phản hồi thành công

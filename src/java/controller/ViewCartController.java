@@ -41,7 +41,7 @@ public class ViewCartController extends HttpServlet {
             response.sendRedirect("choiceLogin.jsp"); // hoặc trang thông báo
             return;
         }
-        List<Product> list = link.getCartByCustomerID(c.getId());
+        List<Product> list = link.getCartByCustomerID(c.getCustomerID());
 
         if (list.isEmpty()) {
             request.setAttribute("list", list);

@@ -51,21 +51,21 @@ public class CustomerController {
         }
     }
 
-    public static void main(String[] args) {
-        CustomerController controller = new CustomerController();
-
-        // Test get all customers
-        controller.getAllCustomers();
-
-        // Test add new customer
-        Customer newCustomer = new Customer(0, "JohnDoe", "john@example.com", "123456", "123 Main St", "123456789", "Active", "img.jpg");
-        controller.addCustomer(newCustomer);
-
-        // Test update customer
-        newCustomer.setUsername("JohnUpdated");
-        controller.updateCustomer(newCustomer);
-
-        // Test delete customer
-        controller.deleteCustomer(3);
-    }
+//    public static void main(String[] args) {
+//        CustomerController controller = new CustomerController();
+//
+//        // Test get all customers
+//        controller.getAllCustomers();
+//
+//        // Test add new customer
+//        //Customer newCustomer = new Customer(0, "JohnDoe", "john@example.com", "123456", "123 Main St", "123456789", "Active", "img.jpg");
+//        controller.addCustomer(newCustomer);
+//
+//        // Test update customer
+//        newCustomer.setUsername("JohnUpdated");
+//        controller.updateCustomer(newCustomer);
+//
+//        // Test delete customer
+//        controller.deleteCustomer(3);
+//    }
 }

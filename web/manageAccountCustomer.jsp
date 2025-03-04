@@ -115,9 +115,12 @@
                         <tr>
                             <th>ID</th>
                             <th>Username</th>
+                            <th>Fullname</th>
                             <th>Email</th>
                             <th>Address</th>
                             <th>Phone</th>
+                            <th>Gender</th>
+                            <th>BirthDay</th>
                             <th>Status</th>
                             <th>Image</th>
                             <th>Actions</th>
@@ -128,9 +131,12 @@
                             <tr>
                                 <td>${customer.customerID}</td>
                                 <td>${customer.username}</td>
+                                <td>${customer.fullName}</td>
                                 <td>${customer.email}</td>
-                                <td>${customer.address}</td>
+                                <td>${customer.address}</td>                               
                                 <td>${customer.phoneNumber}</td>
+                                <td>${customer.sex}</td>
+                                <td>${customer.dob}</td>
                                 <td>
                                     <span class="badge ${customer.status == 0 ? 'bg-success' : 'bg-danger'}">
                                         ${customer.status == 0 ? 'Active' : 'Inactive'}
