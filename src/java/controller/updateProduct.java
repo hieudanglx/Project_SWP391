@@ -114,6 +114,13 @@ public class updateProduct extends HttpServlet {
 
         // Gọi DAO để cập nhật sản phẩm
         ProductDao productDAO = new ProductDao();
+        
+        boolean exist = productDAO.isProductExists(product);
+            if (exist) {
+                request.setAttribute("error", "The product has existed");
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
+            }
         boolean isUpdated = productDAO.updateProduct(product);
 
         if (isUpdated) {
