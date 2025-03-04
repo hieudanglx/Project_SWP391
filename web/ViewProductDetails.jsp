@@ -167,7 +167,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            <!-- Giữ nguyên phần đánh giá -->
+                            
                         </div>
                     </div>
                 </div>
@@ -221,14 +221,14 @@
 
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <button class="btn btn-lg btn-dark py-3">
+                                <a href="UpdateCartController?id=${product.productID}&type=add" class="btn btn-lg btn-dark py-3">
                                     <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
-                                </button>
-                                <button class="btn btn-lg btn-primary py-3">
+                                </a>
+                                <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
                                     <i class="fas fa-bolt me-2"></i>
                                     Mua ngay
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
