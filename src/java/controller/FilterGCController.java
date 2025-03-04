@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,17 +38,9 @@ public class FilterGCController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
-        int min = 0;
-        int max = Integer.MAX_VALUE;
-        String minParam = request.getParameter("minPrice");
-        String maxParam = request.getParameter("maxPrice");
+        int min = Integer.parseInt(request.getParameter("minPrice") == null || request.getParameter("minPrice").isEmpty() ? "0" : request.getParameter("minPrice")) ;
+        int max = Integer.parseInt(request.getParameter("maxPrice") == null || request.getParameter("maxPrice").isEmpty() ? "0" : request.getParameter("maxPrice")) ;
 
-        if (minParam != null && !minParam.trim().isEmpty()) {
-            min = Integer.parseInt(minParam);
-        }
-        if (maxParam != null && !maxParam.trim().isEmpty()) {
-            max = Integer.parseInt(maxParam);
-        }
         int CategoryID = 0;
         String categoryIdParam = request.getParameter("CategoryID");
         if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
@@ -73,14 +66,27 @@ public class FilterGCController extends HttpServlet {
                 request.getParameter("rom"),
                 request.getParameter("os"),
                 request.getParameter("size"),
-                request.getParameter("res"), 
+                request.getParameter("res"),
                 request.getParameter("rate"),
-                request.getParameter("chiptype"),
-                request.getParameter("chipname"));
+                "",
+                "");
+        List<String> chiptype = link.getChipType();
+        ArrayList<List<String>> Chip = link.getChipByChipType();
+        for (String type : chiptype) {
+            String temp = request.getParameter(type);
+            System.out.println(type);
+            if (temp != null && !temp.isEmpty()) {
+                filter.setChipType(type);
+                filter.setChipName(request.getParameter(type));
+            }
+
+        }
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, null, min, max);
         request.setAttribute("CategoryID", CategoryID);
         request.setAttribute("listbrand", listbrand);
+        request.setAttribute("Chiptype", chiptype);
+        request.setAttribute("Chip", Chip);
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
     }

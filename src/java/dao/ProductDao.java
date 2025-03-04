@@ -315,14 +315,18 @@ public class ProductDao extends DBContext {
             sql.append(" AND CategoryID = ?");
             params.add(filter.getCategoryID());
         }
+        if (filter.getRam() != null && !filter.getRam().isEmpty()) {
+            sql.append(" AND Ram like ?");
+            params.add(filter.getRam());
+        }
         addFilter(sql, params, "ProductName", name);
         addFilter(sql, params, "Brand", filter.getBrand());
-        addFilter(sql, params, "Ram", filter.getRam());
         addFilter(sql, params, "Rom", filter.getRom());
         addFilter(sql, params, "Operating_System_name", filter.getOperatingSystemName());
         addFilter(sql, params, "Size_screeen", filter.getScreenSize());
         addFilter(sql, params, "Screen_resolution", filter.getScreenResolution());
         addFilter(sql, params, "Refresh_rate", filter.getRefreshRate());
+        addFilter(sql, params, "Chip_type", filter.getChipType());
         addFilter(sql, params, "Chip_name", filter.getChipName());
 
         return executeProductQuery(sql.toString(), params);
@@ -438,6 +442,56 @@ public class ProductDao extends DBContext {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public List<String> getChipType() throws SQLException {
+        List<String> list = new ArrayList<>();
+        String sql = "Select distinct Chip_type from Product where CategoryID = 1";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(rs.getString("Chip_type"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public ArrayList<List<String>> getChipByChipType() throws SQLException {
+        ArrayList<List<String>> list = new ArrayList<>();
+        List<String> ChipType = getChipType();
+        String sql = "SELECT DISTINCT \n"
+                + "    CASE \n"
+                + "        WHEN CHARINDEX(' ', Chip_name) > 0 THEN \n"
+                + "            LEFT(Chip_name, \n"
+                + "                 CASE \n"
+                + "                     WHEN CHARINDEX(' ', Chip_name, CHARINDEX(' ', Chip_name) + 1) > 0 \n"
+                + "                     THEN CHARINDEX(' ', Chip_name, CHARINDEX(' ', Chip_name) + 1) - 1\n"
+                + "                     ELSE CHARINDEX(' ', Chip_name) - 1\n"
+                + "                 END)\n"
+                + "        ELSE Chip_name\n"
+                + "    END AS Chip_Series\n"
+                + "FROM Product\n"
+                + "WHERE Chip_type LIKE ? AND CategoryID = 1;";
+        for (int i = 0; i < ChipType.size(); i++) {
+            String type = ChipType.get(i);
+            List<String> chip = new ArrayList<>(); // Move this inside the loop
+
+            try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.setString(1, "%" + type + "%");
+                try ( ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        chip.add(rs.getString("Chip_Series"));
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Product DAO: " + e.getMessage());
+            }
+            list.add(chip);
         }
         return list;
     }
