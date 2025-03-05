@@ -70,11 +70,10 @@ public class CartDao extends DBContext {
         if (ProductExistsInCart(customerID, productID)) {
             return updateCartProduct(customerID, productID, "+");
         }
-        String sql = "INSERT INTO Cart (CustomerID, ProductID, Price, Quantity) VALUES (?, ?, (SELECT Price FROM Product WHERE ProductID = ?), 1)";
+        String sql = "INSERT INTO Cart (CustomerID, ProductID, Quantity) VALUES (?, ?, 1)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
-            ps.setInt(3, productID);
             if (ps.executeUpdate() == 1) {
                 return true;
             }
@@ -90,7 +89,7 @@ public class CartDao extends DBContext {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
             try ( ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // Checks if there's at least one result
+                return rs.next();
             }
         } catch (Exception e) {
             System.out.println("dao.CartDao.ProductExistsInCart(): " + e.getMessage());
@@ -107,7 +106,7 @@ public class CartDao extends DBContext {
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("dao.CartDao.removeProductFromCart(): " + e.getMessage());
         }
         return false;
     }
