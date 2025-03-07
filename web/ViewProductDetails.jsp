@@ -7,6 +7,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import="java.util.List, java.util.Map, model.Feedback" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,6 +18,17 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
+
+            .tab-pane {
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out;
+            }
+
+            .tab-pane.active {
+                opacity: 1;
+            }
+
+
             .container {
                 max-width: 1200px !important; /* Thêm !important để override Bootstrap */
                 width: 100% !important;       /* Sử dụng width 100% để responsive */
@@ -53,6 +66,24 @@
                 position: relative;
             }
         </style>
+        <style>
+            /* Avatar cơ bản (chỉ màu nền + chữ) */
+            .avatar-basic {
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                font-size: 20px;
+                color: white;
+                background-color: #6c757d; /* Xám mặc định */
+                text-transform: uppercase;
+            }
+        </style>
+
+
     </head>
     <body>
         <%@include file="header.jsp" %>
@@ -78,8 +109,10 @@
                         </div>
                     </nav>
 
+
                     <div class="tab-content mt-4">
                         <div class="tab-pane fade show active" id="specs" role="tabpanel">
+                            <!-- Nội dung Thông số kỹ thuật -->
                             <table class="table specs-table">
                                 <tr>
                                     <td>Hệ điều hành</td>
@@ -165,96 +198,186 @@
                                 </tr>
                             </table>
                         </div>
-
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            
+                            <!-- Nội dung Đánh giá -->
+
+
+
+                            <div class="mb-4">
+                                <h4>Viết đánh giá của bạn</h4>
+                                <form action="SubmitReviewController" method="post">
+                                    <input type="hidden" name="productID" value="${product.productID}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Đánh giá (1-5 sao):</label>
+                                        <select class="form-select" name="rating" required>
+                                            <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
+                                            <option value="4">⭐⭐⭐⭐ - Tốt</option>
+                                            <option value="3">⭐⭐⭐ - Bình thường</option>
+                                            <option value="2">⭐⭐ - Tệ</option>
+                                            <option value="1">⭐ - Rất tệ</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Nội dung đánh giá:</label>
+                                        <textarea class="form-control" name="comment" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                </form>
+                            </div>
+                            <% if (session.getAttribute("successMessage") != null) { %>
+                            <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
+                            <% session.removeAttribute("successMessage"); %>
+                            <% } %>
+
+                            <% if (session.getAttribute("errorMessage") != null) { %>
+                            <div class="alert alert-danger"><%= session.getAttribute("errorMessage") %></div>
+                            <% session.removeAttribute("errorMessage"); %>
+                            <% } %>
+
+                            <%
+     List<Feedback> feedbackList = (List<Feedback>) request.getAttribute("feedbackList");
+     Map<Integer, String> customerNames = (Map<Integer, String>) request.getAttribute("customerNames");
+                            %>
+
+                            <div class="mt-4">
+                                <h4>Đánh giá sản phẩm</h4>
+
+                                <% if (feedbackList != null && !feedbackList.isEmpty()) { %>
+                                <% for (Feedback feedback : feedbackList) { 
+                                    String customerName = customerNames.getOrDefault(feedback.getCustomerID(), "Khách hàng Ẩn danh"); 
+                                    String initials = customerName.substring(0, 1).toUpperCase(); // ✅ Lấy chữ cái đầu tiên
+                                %>
+                                <div class="card shadow-sm mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <!-- Avatar basic (hình tròn có chữ viết tắt) -->
+                                            <div class="avatar-basic me-3"><%= initials %></div>
+
+                                            <div>
+                                                <h6 class="mb-0"><%= customerName %></h6>
+                                                <small class="text-muted">Mã phản hồi: <%= feedback.getFeedbackID() %></small>
+                                            </div>
+                                        </div>
+                                        <p class="mb-1"><%= feedback.getContent() %></p>
+                                        <div class="text-warning">
+                                            <% for (int i = 0; i < feedback.getRatePoint(); i++) { %> ⭐ <% } %> 
+                                            (<%= feedback.getRatePoint() %>/5)
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } else { %>
+                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                <% } %>
+                            </div>
+
+
                         </div>
+
+
+
                     </div>
-                </div>
+                </div
+            </div>
 
-                <!-- Right Column -->
-                <div class="col-lg-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <!-- Storage Options -->
-                            <div class="mb-4">
-                                <h5 class="mb-3">Bộ nhớ</h5>
-                                <div class="d-flex flex-wrap gap-2">
-                                    <c:set var="shownROMs" value="" />
-                                    <c:forEach items="${list}" var="p">
-                                        <c:if test="${not fn:contains(shownROMs, p.rom)}">
-                                            <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
-                                            <button type="button" 
-                                                    class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
-                                                    onclick="selectOption('rom', '${p.rom}')">
-                                                ${p.rom}
-                                            </button>
-                                        </c:if>
-                                    </c:forEach>
-                                </div>
-                            </div>
 
-                            <!-- Color Options -->
-                            <div class="mb-4">
-                                <h5 class="mb-3">Màu sắc</h5>
-                                <div class="d-flex flex-wrap gap-3">
-                                    <c:set var="shownColors" value="" />
-                                    <c:forEach items="${list}" var="p">
-                                        <c:if test="${not fn:contains(shownColors, p.color)}">
-                                            <c:set var="shownColors" value="${shownColors}${p.color};" />
-                                            <button type="button" 
-                                                    class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
-                                                    onclick="selectOption('color', '${p.color}')">
-                                                ${p.color}
-                                            </button>
-                                        </c:if>
-                                    </c:forEach>
-                                </div>
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Storage Options -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Bộ nhớ</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <c:set var="shownROMs" value="" />
+                                <c:forEach items="${list}" var="p">
+                                    <c:if test="${not fn:contains(shownROMs, p.rom)}">
+                                        <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
+                                        <button type="button" 
+                                                class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
+                                                onclick="selectOption('rom', '${p.rom}')">
+                                            ${p.rom}
+                                        </button>
+                                    </c:if>
+                                </c:forEach>
                             </div>
+                        </div>
 
-                            <!-- Price -->
-                            <div class="mb-4">
-                                <h3 class="text-danger fw-bold">
-                                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
-                                </h3>
+                        <!-- Color Options -->
+                        <div class="mb-4">
+                            <h5 class="mb-3">Màu sắc</h5>
+                            <div class="d-flex flex-wrap gap-3">
+                                <c:set var="shownColors" value="" />
+                                <c:forEach items="${list}" var="p">
+                                    <c:if test="${not fn:contains(shownColors, p.color)}">
+                                        <c:set var="shownColors" value="${shownColors}${p.color};" />
+                                        <button type="button" 
+                                                class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
+                                                onclick="selectOption('color', '${p.color}')">
+                                            ${p.color}
+                                        </button>
+                                    </c:if>
+                                </c:forEach>
                             </div>
+                        </div>
 
-                            <!-- Action Buttons -->
-                            <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&type=add" class="btn btn-lg btn-dark py-3">
-                                    <i class="fas fa-cart-plus me-2"></i>
-                                    Thêm vào giỏ hàng
-                                </a>
-                                <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
-                                    <i class="fas fa-bolt me-2"></i>
-                                    Mua ngay
-                                </a>
-                            </div>
+                        <!-- Price -->
+                        <div class="mb-4">
+                            <h3 class="text-danger fw-bold">
+                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
+                            </h3>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-grid gap-2">
+                            <a href="UpdateCartController?id=${product.productID}&type=add" class="btn btn-lg btn-dark py-3">
+                                <i class="fas fa-cart-plus me-2"></i>
+                                Thêm vào giỏ hàng
+                            </a>
+                            <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
+                                <i class="fas fa-bolt me-2"></i>
+                                Mua ngay
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
-                                                        function selectOption(type, value) {
-                                                            const productID = ${product.productID};
-                                                            const currentRom = "${product.rom}";
-                                                            const currentColor = "${product.color}";
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+                                                    function selectOption(type, value) {
+                                                        const productID = ${product.productID};
+                                                        const currentRom = "${product.rom}";
+                                                        const currentColor = "${product.color}";
 
-                                                            // Tạo URL mới với tham số mới
-                                                            let url = "ViewProductDetailsController?id=" + productID;
+                                                        // Tạo URL mới với tham số mới
+                                                        let url = "ViewProductDetailsController?id=" + productID;
 
-                                                            if (type === 'rom') {
-                                                                url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
-                                                            } else if (type === 'color') {
-                                                                url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
-                                                            }
-
-                                                            // Load lại trang với tham số mới
-                                                            window.location.href = url;
+                                                        if (type === 'rom') {
+                                                            url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
+                                                        } else if (type === 'color') {
+                                                            url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
                                                         }
-        </script>
-    </body>
+
+                                                        // Load lại trang với tham số mới
+                                                        window.location.href = url;
+                                                    }
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabLinks = document.querySelectorAll('#nav-tab button');
+
+            tabLinks.forEach(button => {
+                button.addEventListener('shown.bs.tab', function (event) {
+                    const targetTab = document.querySelector(event.target.dataset.bsTarget);
+                    targetTab.classList.add("fade");
+                });
+            });
+        });
+    </script>
+
+</body>
 </html>

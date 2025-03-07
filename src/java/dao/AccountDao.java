@@ -48,6 +48,52 @@ public class AccountDao extends dao.DBContext {
         return false;
     }
 
+    public Integer getStaffIdByUsername(String username) {
+        String query = "SELECT staffID FROM Staff WHERE username = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, username);
+
+            try ( ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("staffID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Trả về null nếu không tìm thấy
+    }
+
+    public AccountStaff getStaffByEmail(String email) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null;
+        }
+        String sql = "SELECT * FROM Staff WHERE Email = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new AccountStaff(
+                        rs.getInt("StaffID"),
+                        rs.getString("Address"),
+                        rs.getString("Email"),
+                        rs.getString("Password"),
+                        rs.getString("FullName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getString("Username"),
+                        rs.getString("CCCD"),
+                        rs.getInt("Status")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getFullname(String Username) {
         String query = "SELECT FullName FROM Staff WHERE Username = ?";
 
@@ -101,17 +147,17 @@ public class AccountDao extends dao.DBContext {
             try ( ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new AccountCustomer(
-                        rs.getInt("CustomerID"),
-                        rs.getString("username"),
-                        rs.getString("fullName"),
-                        rs.getString("email"),
-                        rs.getString("password"),
-                        rs.getString("address"),
-                        rs.getString("phoneNumber"),
-                        rs.getInt("Status"),
-                        rs.getString("sex"),
-                        rs.getString("dob"),
-                        rs.getString("imgcustomer")
+                            rs.getInt("CustomerID"),
+                            rs.getString("username"),
+                            rs.getString("fullName"),
+                            rs.getString("email"),
+                            rs.getString("password"),
+                            rs.getString("address"),
+                            rs.getString("phoneNumber"),
+                            rs.getInt("Status"),
+                            rs.getString("sex"),
+                            rs.getString("dob"),
+                            rs.getString("imgcustomer")
                     );
                 }
             } catch (SQLException e) {
@@ -264,7 +310,7 @@ public class AccountDao extends dao.DBContext {
 
     public AccountStaff getStaffById(int id) {
         AccountStaff AccountStaff = null;
-        String sql = "SELECT * FROM staff WHERE id = ?";
+        String sql = "SELECT * FROM staff WHERE staffID = ?";
 
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
 

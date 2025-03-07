@@ -94,6 +94,8 @@ public class loginOfCustomerController extends HttpServlet {
                     HttpSession session = request.getSession();
                     Customer customer = cusDAO.getCustomer(username, password);
                     session.setAttribute("customer", customer);
+                    session.setAttribute("customerID", customer.getCustomerID());
+
                     request.getRequestDispatcher("ViewListProductGC?CategoryID=1").forward(request, response);
 
                 } else if (status == 1) { // Tài khoản bị chặn

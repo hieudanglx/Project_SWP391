@@ -6,9 +6,10 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page session="true" %>
-<%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page import="model.AccountCustomer" %>
-<%@ page import="javax.servlet.http.HttpServletRequest" %>
+<%@ page import="jakarta.servlet.http.HttpSession" %>
+<%@ page import="jakarta.servlet.http.HttpServletRequest" %>
+
 
 <%
     AccountCustomer customer = (AccountCustomer) session.getAttribute("loggedCustomer");

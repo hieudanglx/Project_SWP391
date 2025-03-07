@@ -79,7 +79,7 @@
                     </div>
 
                     <div class="ms-auto">
-                        <a href="viewProfileStaff.jsp" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
+                        <a href="/viewProfileStaff" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
                         <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
                     </div>
 
