@@ -56,15 +56,15 @@
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 order-md-1 order-2">
                             <div class="form-seach-product">
-                                <form action="/" method="GET" role="form">
-                                    <select id="input" class="form-control" required="required">
+                                <form action="SearchController" method="post" role="form">
+                                    <select name="CatogoryID" class="form-control" required="required">
                                         <option value="">Chọn danh mục</option>
-                                        <option value="1">Điện thoại</option>
-                                        <option value="2">Máy tính bản</option>
-                                        <option value="3">Lap top</option>
+                                        <option value="2">Điện thoại</option>
+                                        <option value="3">Máy tính bản</option>
+                                        <option value="1">Lap top</option>
                                     </select>
                                     <div class="input-seach">
-                                        <input type="text" name="s" id="" class="form-control">
+                                        <input type="text" name="keyword" id="" class="form-control">
                                         <button type="submit" class="btn-search-pro"><i class="fa fa-search"></i></button>
                                     </div>
                                     <div class="clear"></div>
@@ -76,7 +76,7 @@
                                 <div class="icon">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     <c:if test="${not empty sessionScope.customer}">
-                                        <span class="cart-count">${cart.totalItems}</span>
+                                        <span class="cart-count">${sessionScope.size}</span>
                                     </c:if>
                                 </div>
                                 <span class="clear"></span>
@@ -89,7 +89,7 @@
                 <div class="container">
                     <div id="nav-menu">
                         <ul>
-                            <li class="current-menu-item"><a href="#">Trang chủ</a></li>
+                            <li class="current-menu-item"><a href="homeController?CatogoryID=2">Trang chủ</a></li>
                             <li>
                                 <a href="ViewListProductGC?CategoryID=${1}">Sản phẩm</a>
                                 <ul>

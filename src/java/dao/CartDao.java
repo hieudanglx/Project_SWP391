@@ -66,6 +66,18 @@ public class CartDao extends DBContext {
         return false;
     }
 
+    public int getTotalItems(List<Product> list, int CustomerID) {
+        int size = 0;
+        if (list.isEmpty()) {
+            list = getCartByCustomerID(CustomerID);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            size += list.get(i).getQuantityProduct();
+        }
+        return size;
+    }
+
     public Boolean AddProductToCart(int customerID, int productID) {
         if (ProductExistsInCart(customerID, productID)) {
             return updateCartProduct(customerID, productID, "+");

@@ -12,7 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import model.Customer;
+import model.Product;
 
 /**
  *
@@ -67,6 +70,8 @@ public class UpdateCartController extends HttpServlet {
                 link.updateCartProduct(c.getCustomerID(), id, type);
                 break;
         }
+        List<Product> list = new ArrayList<>();
+        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
         request.getRequestDispatcher(url).forward(request, response);
 
     }

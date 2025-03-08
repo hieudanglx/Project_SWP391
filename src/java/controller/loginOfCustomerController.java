@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.CartDao;
 import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +14,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import model.Customer;
+import model.Product;
 
 /**
  *
@@ -76,6 +80,7 @@ public class loginOfCustomerController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         CustomerDAO cusDAO = new CustomerDAO();
+        CartDao link = new CartDao();
         String username = request.getParameter("username").trim();
         String password = request.getParameter("password").trim();
 
@@ -93,6 +98,8 @@ public class loginOfCustomerController extends HttpServlet {
                 if (status == 0) { // Tài khoản hợp lệ & không bị chặn
                     HttpSession session = request.getSession();
                     Customer customer = cusDAO.getCustomer(username, password);
+                    List<Product> list = new ArrayList<>();
+                    session.setAttribute("size", link.getTotalItems(list, customer.getCustomerID()));
                     session.setAttribute("customer", customer);
                     session.setAttribute("customerID", customer.getCustomerID());
 
