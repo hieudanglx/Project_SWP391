@@ -195,34 +195,75 @@
                 <section id="changePassword" class="content-section">
                     <h2><strong>Change Password</strong></h2>
 
+                    <!-- Hiển thị thông báo lỗi nếu có -->
                     <c:if test="${not empty errorMessage}">
                         <p style="color: red;">${errorMessage}</p>
                     </c:if>
 
-                    <form action="changePasswordStaff" method="POST">
-                        <label>Email</label>
-                        <input type="email" name="email" value="${sessionScope.staff.email}" required>
+                    <form action="changePasswordStaff" method="POST" onsubmit="return validatePassword()">
 
+                        <input type="hidden" name="email" value="${sessionScope.staff.email}" required>
                         <label>Current Password</label>
                         <input type="password" name="currentPassword" required>
 
                         <label>New Password</label>
-                        <input type="password" name="newPassword" required>
+                        <input type="password" id="newPassword" name="newPassword" required>
 
                         <label>Confirm New Password</label>
-                        <input type="password" name="confirmNewPassword" required>
+                        <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
                         <button type="submit" class="save-btn">Update Password</button>
                     </form>
-                </section>
 
-                <!-- Order History Section -->
-                <section id="orderHistory" class="content-section">
-                    <h2><strong>Order History</strong></h2>
-                    <p>View your past orders.</p>
-                </section>
+
+                    <!-- Order History Section -->
+                    <section id="orderHistory" class="content-section">
+                        <h2><strong>Order History</strong></h2>
+                        <p>View your past orders.</p>
+                    </section>
             </main>
         </div>
+
+        <script>
+            function validatePassword() {
+                let currentPassword = document.querySelector("input[name='currentPassword']").value;
+                let newPassword = document.getElementById("newPassword").value;
+                let confirmNewPassword = document.getElementById("confirmNewPassword").value;
+
+                // Điều kiện: Ít nhất 1 chữ hoa, 1 số, và tối thiểu 8 ký tự
+                let passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+                if (!passwordRegex.test(newPassword)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Password",
+                        text: "Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa và 1 số!"
+                    });
+                    return false;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Mismatch Password",
+                        text: "Mật khẩu xác nhận không khớp!"
+                    });
+                    return false;
+                }
+
+                if (newPassword === currentPassword) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Password",
+                        text: "Mật khẩu mới không được trùng với mật khẩu cũ!"
+                    });
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
+
 
         <script>
             function showSection(sectionId) {
