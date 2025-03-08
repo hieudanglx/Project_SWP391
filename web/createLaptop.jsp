@@ -114,11 +114,7 @@
         <div class="container">
 
             <h2>Enter Laptop Information</h2>
-            <c:if test="${not empty error}">
-                <div style="color: red; text-align: center; margin-bottom: 15px;">
-                    ${error}
-                </div>
-            </c:if>
+             
             <form action="createProduct" method="post">
                 <input type="hidden" name="category" value= "1">
                 <input type="hidden" name="frontCamera" value="">

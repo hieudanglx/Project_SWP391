@@ -45,13 +45,15 @@
                 <c:if test="${not empty requestScope.error}">
                     <div class="alert alert-danger">${requestScope.error}</div>
                 </c:if>
+                    
+                    
 
                 <!-- Product ID (readonly) -->
                 <div class="mb-3">
                     <label for="productID" class="form-label">Product ID</label>
                     <input type="text" class="form-control" id="productID" name="productID" value="${product.productID}" readonly />
                 </div>
-
+                
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="productName" class="form-label">Product Name</label>
