@@ -35,7 +35,7 @@ public class UpdateCartController extends HttpServlet {
         CartDao link = new CartDao();
         HttpSession session = request.getSession();
         String type = request.getParameter("type");
-        System.out.println(request.getParameter("id"));
+        String page = request.getParameter("page");
         int id = Integer.parseInt(request.getParameter("id"));
         Customer c = (Customer) session.getAttribute("customer");
         if (c == null) {
@@ -51,7 +51,12 @@ public class UpdateCartController extends HttpServlet {
                 if (!link.AddProductToCart(c.getCustomerID(), id)){
                     System.out.println("controller.UpdateCartController.processRequest() add sai r");
                 }
-                url = "ViewProductDetailsController";
+                if (page.contains("list")){
+                     url = "ViewListProductGC?CategoryID=1";
+                } else {
+                     url = "ViewProductDetailsController?id="+id;
+                }
+                System.out.println("link: "+url);
                 break;
             case "buy":
                 if (!link.AddProductToCart(c.getCustomerID(), id)){

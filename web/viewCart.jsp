@@ -79,7 +79,7 @@
         <!-- Main Container -->
         <div class="container-lg cart-container">
             <c:choose>
-                <c:when test="${size!=0}">
+                <c:when test="${size>0}">
                     <div class="row g-5">
                         <!-- Product List Column -->
                         <div class="col-lg-8">

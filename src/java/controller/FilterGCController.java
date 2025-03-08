@@ -88,7 +88,7 @@ public class FilterGCController extends HttpServlet {
         request.setAttribute("Chiptype", chiptype);
         request.setAttribute("Chip", Chip);
         request.setAttribute("list", list);
-        request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+        request.getRequestDispatcher("new.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

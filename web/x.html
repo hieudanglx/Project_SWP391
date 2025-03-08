@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 bg-light p-4">
+                    <h5 class="mb-4">SHOP BY</h5>
+
+                    <!-- Category Section -->
+                    <h6 class="mt-3">Category</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            Camera
+                            <span class="badge bg-primary rounded-pill">></span>
+                        </a>
+                        <div class="ps-4"> <!-- Sub-items indentation -->
+                            <a href="#" class="list-group-item list-group-item-action">gaming</a>
+                            <a href="#" class="list-group-item list-group-item-action">office</a>
+                            <a href="#" class="list-group-item list-group-item-action">kids</a>
+                            <a href="#" class="list-group-item list-group-item-action">for women</a>
+                        </div>
+
+                        <!-- Repeat for other categories -->
+                        <a href="#" class="list-group-item list-group-item-action">Desktops</a>
+                        <a href="#" class="list-group-item list-group-item-action">Pants</a>
+                        <a href="#" class="list-group-item list-group-item-action">Bags</a>
+                        <a href="#" class="list-group-item list-group-item-action">Hats</a>
+                        <a href="#" class="list-group-item list-group-item-action">Accessories</a>
+                    </div>
+
+                    <!-- Price Slider -->
+                    <h6 class="mt-4">Price Slider</h6>
+                    <div class="d-flex justify-content-between">
+                        <span>$200</span>
+                        <span>$800</span>
+                    </div>
+                    <input type="range" 
+                           class="form-range" 
+                           min="200" 
+                           max="800" 
+                           step="50"
+                           id="priceRange">
+
+                    <!-- Show Now Button -->
+                    <button class="btn btn-primary w-100 mt-4">Show Now</button>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9">
+                    <!-- Your main content here -->
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

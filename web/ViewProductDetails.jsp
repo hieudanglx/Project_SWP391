@@ -16,48 +16,50 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
         <style>
-            .container {
-                max-width: 1200px !important; /* Thêm !important để override Bootstrap */
-                width: 100% !important;       /* Sử dụng width 100% để responsive */
-                padding: 20px;
-                margin: 0 auto;
-                box-sizing: border-box;       /* Quan trọng: Tính toán kích thước bao gồm padding */
-            }
+            .details{
+                .container {
+                    max-width: 1200px !important; /* Thêm !important để override Bootstrap */
+                    width: 100% !important;       /* Sử dụng width 100% để responsive */
+                    padding: 20px;
+                    margin: 0 auto;
+                    box-sizing: border-box;       /* Quan trọng: Tính toán kích thước bao gồm padding */
+                }
 
-            /* Giữ nguyên các style khác */
-            .product-header {
-                border-bottom: 3px solid #0d6efd;
-                padding-bottom: 1rem;
-            }
+                /* Giữ nguyên các style khác */
+                .product-header {
+                    border-bottom: 3px solid #0d6efd;
+                    padding-bottom: 1rem;
+                }
 
-            .product-main-image {
-                width: 50%;
-                height: auto;
-                margin: 20px auto;
-                display: block;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            }
+                .product-main-image {
+                    width: 50%;
+                    height: auto;
+                    margin: 20px auto;
+                    display: block;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
 
-            .specs-table td {
-                padding: 1rem;
-                border-bottom: 1px solid #dee2e6;
-                text-align: left;
-            }
+                .specs-table td {
+                    padding: 1rem;
+                    border-bottom: 1px solid #dee2e6;
+                    text-align: left;
+                }
 
-            .storage-option {
-                min-width: 90px;
-            }
+                .storage-option {
+                    min-width: 90px;
+                }
 
-            .color-option {
-                min-width: 90px;
-                position: relative;
+                .color-option {
+                    min-width: 90px;
+                    position: relative;
+                }
             }
         </style>
     </head>
     <body>
         <%@include file="header.jsp" %>
 
-        <div class="container py-5">
+        <div class="container py-5 details">
             <div class="row g-4">
                 <!-- Left Column -->
                 <div class="col-lg-8">
@@ -167,7 +169,7 @@
                         </div>
 
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            
+
                         </div>
                     </div>
                 </div>
@@ -221,7 +223,7 @@
 
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&type=add" class="btn btn-lg btn-dark py-3">
+                                <a href="UpdateCartController?id=${product.productID}&type=add&page=detail" class="btn btn-lg btn-dark py-3">
                                     <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
                                 </a>

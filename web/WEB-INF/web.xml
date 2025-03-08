@@ -16,6 +16,10 @@
         <servlet-name>EmailSenderCustomer</servlet-name>
         <servlet-class>model.EmailSenderCustomer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>homeController</servlet-name>
+        <servlet-class>controller.homeController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>EmailSenderCustomer</servlet-name>
         <url-pattern>/EmailSenderCustomer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>homeController</servlet-name>
+        <url-pattern>/homeController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
