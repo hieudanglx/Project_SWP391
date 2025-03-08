@@ -37,7 +37,7 @@
                                         <h2 class="title-product">
                                         <c:if test="${ empty list}">
                                             <h1>
-                                                Hiện cửa hàng chứa có sản phẩm phù hợp
+                                                Hiện cửa hàng chưa có sản phẩm phù hợp
                                             </h1>
                                         </c:if>
                                         <c:if test="${not empty list}">

@@ -421,6 +421,13 @@ private boolean isEmpty(String str) {
         params.add("%" + name + "%");
         return executeProductQuery(sql, params);
     }
+    public List<Product> searchProductsByName(String name, int CategoryID) {
+        String sql = "SELECT * FROM Product WHERE ProductName LIKE ? and CategoryID = ?";
+        List<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        params.add(CategoryID);
+        return executeProductQuery(sql, params);
+    }
 
     public List<String> getAllCategory() throws SQLException {
         List<String> list = new ArrayList<>();

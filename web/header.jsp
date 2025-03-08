@@ -57,7 +57,7 @@
                         <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 order-md-1 order-2">
                             <div class="form-seach-product">
                                 <form action="SearchController" method="post" role="form">
-                                    <select name="CatogoryID" class="form-control" required="required">
+                                    <select name="CategoryID" class="form-control" required="required">
                                         <option value="">Chọn danh mục</option>
                                         <option value="2">Điện thoại</option>
                                         <option value="3">Máy tính bản</option>

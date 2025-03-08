@@ -57,10 +57,9 @@
                                         <h3>Danh mục sản phẩm</h3>
                                         <div class="content-cat">
                                             <ul>
-                                                <li><i class="fa fa-angle-right"></i> <a href="filter.jsp">Điện thoại</a></li>
+                                                <li><i class="fa fa-angle-right"></i> <a href="ViewListProductGC?CategoryID=2">Điện thoại</a></li>
                                                 <li><i class="fa fa-angle-right"></i> <a href="ViewListProductGC?CategoryID=3">Máy tính bảng</a></li>
                                                 <li><i class="fa fa-angle-right"></i> <a href="ViewListProductGC?CategoryID=1">laptop</a></li>
-                                                <li><i class="fa fa-angle-right"></i> <a href="ViewListProductGC?CategoryID=2">Apple</a></li>
                                             </ul>
                                         </div>
                                     </div>
