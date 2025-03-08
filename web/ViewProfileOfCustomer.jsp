@@ -218,6 +218,7 @@
 
             <script>
                 function validatePassword() {
+                    let currentPassword = document.querySelector("input[name='currentPassword']").value;
                     let newPassword = document.getElementById("newPassword").value;
                     let confirmNewPassword = document.getElementById("confirmNewPassword").value;
 
@@ -228,7 +229,7 @@
                         Swal.fire({
                             icon: "error",
                             title: "Invalid Password",
-                            text: "Mật khẩu mới phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa và 1 số"
+                            text: "Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa và 1 số!"
                         });
                         return false;
                     }
@@ -242,9 +243,19 @@
                         return false;
                     }
 
+                    if (newPassword === currentPassword) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Invalid Password",
+                            text: "Mật khẩu mới không được trùng với mật khẩu cũ!"
+                        });
+                        return false;
+                    }
+
                     return true;
                 }
             </script>
+
             <script>
                 function showSection(sectionId) {
                     document.querySelectorAll('.content-section').forEach(section => {
