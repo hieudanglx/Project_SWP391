@@ -121,7 +121,7 @@
                                                                     <fmt:formatNumber value="${p.price}" type="currency" currencySymbol="đ"/>
                                                                 </span>
                                                             </div>
-                                                            <a href="ViewProductDetailsController" class="view-more">Xem chi tiết</a>
+                                                            <a href="ViewProductDetailsController?id=${p.productID}" class="view-more">Xem chi tiết</a>
                                                         </div>
                                                     </div>
                                                 </div>

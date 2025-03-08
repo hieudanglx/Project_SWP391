@@ -22,14 +22,42 @@ public class ViewProductDetailsController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+        
+         System.out.println("🔍 Bắt đầu xử lý request...");
+        
         ProductDao productDao = new ProductDao();
         FeedbackDAO feedbackDao = new FeedbackDAO();
 
-        int productID = Integer.parseInt(request.getParameter("id"));
+        // ✅ Kiểm tra id trước khi chuyển đổi
+        String idParam = request.getParameter("id");
+        int productID = 0;
+
+        try {
+            if (idParam != null) {
+                productID = Integer.parseInt(idParam);
+            } else {
+                request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ!");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
         String selectedRom = request.getParameter("selectedRom");
         String selectedColor = request.getParameter("selectedColor");
 
         Product currentProduct = productDao.getProductById(productID);
+
+        // ✅ Kiểm tra nếu sản phẩm không tồn tại
+        if (currentProduct == null) {
+            request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
         List<Product> list = productDao.searchProductsByName(currentProduct.getProductName());
 
         Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
@@ -67,6 +95,7 @@ public class ViewProductDetailsController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi hệ thống!");
         }
     }
 
@@ -77,11 +106,12 @@ public class ViewProductDetailsController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi hệ thống!");
         }
     }
 
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "ViewProductDetailsController";
     }
 }
