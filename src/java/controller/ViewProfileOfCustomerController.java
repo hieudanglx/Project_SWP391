@@ -22,22 +22,33 @@ import java.io.IOException;
 public class ViewProfileOfCustomerController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-
     private CustomerDAO customerDAO;
 
     public void init() {
         customerDAO = new CustomerDAO();
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int customerId = 1; // Bạn có thể lấy ID từ session hoặc request nếu cần
-        Customer customer = customerDAO.getCustomerById(customerId);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
 
+        // Lấy customerId từ session
+        Integer customerId = (Integer) session.getAttribute("customerID");
+
+        if (customerId == null) {
+            // Chưa đăng nhập, chuyển hướng về trang đăng nhập
+            response.sendRedirect("LoginOfDashboard.jsp");
+            return;
+        }
+
+        // Lấy thông tin khách hàng từ database
+        Customer customer = customerDAO.getCustomerById(customerId);
+        System.out.println(customer.getFullName()+" "+customer.getCustomerID());
         if (customer != null) {
-            HttpSession session = request.getSession();
             session.setAttribute("customer", customer);
         }
 
+        // Chuyển hướng đến trang ViewProfileOfCustomer.jsp
         request.getRequestDispatcher("ViewProfileOfCustomer.jsp").forward(request, response);
     }
 }

@@ -1,25 +1,24 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package controller;
 
-import dao.AccountDao;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  *
- * @author Tran Phong Hai - CE180803
+ * @author nguye
  */
-@WebServlet(name = "LoginStaff_Admin", urlPatterns = {"/LoginStaff_Admin"})
-public class LoginStaff_Admin extends HttpServlet {
+@WebServlet(name = "verifyOTPStaffController", urlPatterns = {"/verifyOTPStaffController"})
+public class verifyOTPStaffController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +37,10 @@ public class LoginStaff_Admin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginStaff_Admin</title>");
+            out.println("<title>Servlet verifyOTPController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginStaff_Admin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet verifyOTPController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,45 +72,27 @@ public class LoginStaff_Admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
 
-        AccountDao accountDAO = new AccountDao();
-        String username = request.getParameter("Username");
-        String password = request.getParameter("Password");
+        // Lấy OTP nhập từ form
+        String enteredOTP = request.getParameter("otp");
 
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.setAttribute("error", "Username and Password cannot be empty");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        // Lấy OTP đúng từ session (luôn ở dạng String)
+        String correctOTP = (String) session.getAttribute("otp");
+
+        if (correctOTP == null) {
+            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
+            request.getRequestDispatcher("ViewProfileOfCustomer.jsp").forward(request, response);
             return;
         }
 
-        try {
-            boolean status = accountDAO.ValidateStaff_Admin(username, password);
-
-            if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
-                HttpSession session = request.getSession();
-                session.setAttribute("Username", username);
-                session.setAttribute("fullname", accountDAO.getFullname(username));
-
-                if ("admin".equalsIgnoreCase(username)) {
-                    response.sendRedirect("HomeDashBoard_Admin.jsp");
-                } else {
-                    session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
-                    response.sendRedirect("HomeDashBoard_Staff.jsp");
-                }
-            } else if (Boolean.FALSE.equals(status)) { // Tài khoản bị chặn
-                request.setAttribute("error", "Your account is blocked. Please contact admin.");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            } else { // Không tìm thấy tài khoản
-                request.setAttribute("error", "Invalid username or password");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Internal Server Error. Please try again later.");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        // So sánh OTP dưới dạng chuỗi
+        if (enteredOTP.equals(correctOTP)) {
+            request.getRequestDispatcher("resetPasswordStaff.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
+        } else {
+            request.setAttribute("errorMessage", "Mã OTP không đúng!");
+            request.getRequestDispatcher("verifyStaffOTP.jsp").forward(request, response);
         }
-
     }
 
     /**
@@ -123,5 +104,5 @@ public class LoginStaff_Admin extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
+

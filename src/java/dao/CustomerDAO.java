@@ -41,6 +41,19 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
+    
+    public boolean isUsernameExisted(String username) {
+    String sql = "SELECT * FROM Customer WHERE LOWER(username) = LOWER(?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // Nếu có kết quả, username đã tồn tại
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
    
 
     public Integer ValidateStatusCustomer(String username, String password) {
@@ -300,9 +313,9 @@ public class CustomerDAO extends DBContext {
 
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
-            ps.setString(2, customer.getEmail());
+            ps.setString(2, customer.getFullName());
+            ps.setString(3, customer.getEmail());
             if (updatePassword) {
-                ps.setString(3, customer.getFullName());
                 ps.setString(4, customer.getPassword());
                 ps.setString(5, customer.getAddress());
                 ps.setString(6, customer.getPhoneNumber()); 
@@ -312,7 +325,6 @@ public class CustomerDAO extends DBContext {
                 ps.setString(10, customer.getImgCustomer());
                 ps.setInt(11, customer.getCustomerID());
             } else {
-                ps.setString(3, customer.getFullName());
                 ps.setString(4, customer.getAddress());
                 ps.setString(5, customer.getPhoneNumber());
                 ps.setString(6, customer.getSex());

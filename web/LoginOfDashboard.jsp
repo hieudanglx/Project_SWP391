@@ -1,5 +1,5 @@
 <%-- 
-    Document   : LoginOfDashBoard
+    Document   : LoginOfDashboard
     Created on : Feb 24, 2025, 8:03:39 PM
     Author     : Dang Khac Hieu_CE180465
 --%>

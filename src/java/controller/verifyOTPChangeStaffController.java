@@ -6,20 +6,20 @@ package controller;
 
 import dao.AccountDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 
 /**
  *
- * @author Tran Phong Hai - CE180803
+ * @author nguye
  */
-@WebServlet(name = "LoginStaff_Admin", urlPatterns = {"/LoginStaff_Admin"})
-public class LoginStaff_Admin extends HttpServlet {
+@WebServlet(name = "verifyOTPChangeStaffController", urlPatterns = {"/verifyOTPChangeStaffController"})
+public class verifyOTPChangeStaffController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +38,10 @@ public class LoginStaff_Admin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginStaff_Admin</title>");
+            out.println("<title>Servlet verifyOTPChangePCController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginStaff_Admin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet verifyOTPChangePCController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -73,55 +73,47 @@ public class LoginStaff_Admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
 
-        AccountDao accountDAO = new AccountDao();
-        String username = request.getParameter("Username");
-        String password = request.getParameter("Password");
+        String enteredOTP = request.getParameter("otp");
+        String correctOTP = (String) session.getAttribute("otp");
+        String email = (String) session.getAttribute("email");
+        String newPassword = (String) session.getAttribute("tempPassword");
 
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.setAttribute("error", "Username and Password cannot be empty");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        // Kiểm tra nếu OTP, email hoặc mật khẩu mới bị mất trong session
+        if (correctOTP == null || email == null || newPassword == null) {
+            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng thử lại!");
+            request.getRequestDispatcher("verifyOTPChangeStaff.jsp").forward(request, response);
             return;
         }
 
-        try {
-            boolean status = accountDAO.ValidateStaff_Admin(username, password);
-
-            if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
-                HttpSession session = request.getSession();
-                session.setAttribute("Username", username);
-                session.setAttribute("fullname", accountDAO.getFullname(username));
-
-                if ("admin".equalsIgnoreCase(username)) {
-                    response.sendRedirect("HomeDashBoard_Admin.jsp");
-                } else {
-                    session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
-                    response.sendRedirect("HomeDashBoard_Staff.jsp");
-                }
-            } else if (Boolean.FALSE.equals(status)) { // Tài khoản bị chặn
-                request.setAttribute("error", "Your account is blocked. Please contact admin.");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            } else { // Không tìm thấy tài khoản
-                request.setAttribute("error", "Invalid username or password");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Internal Server Error. Please try again later.");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        // Kiểm tra OTP có khớp không
+        if (!enteredOTP.equals(correctOTP)) {
+            request.setAttribute("errorMessage", "Mã OTP không đúng!");
+            request.getRequestDispatcher("verifyOTPChangeStaff.jsp").forward(request, response);
+            return;
         }
 
+        // Cập nhật mật khẩu vào CSDL
+        AccountDao accountDao = new AccountDao();
+        boolean isUpdated = accountDao.updateStaffPassword(email, newPassword);
+
+        if (!isUpdated) {
+            request.setAttribute("errorMessage", "Cập nhật mật khẩu thất bại!");
+            request.getRequestDispatcher("verifyOTPChangeStaff.jsp").forward(request, response);
+            return;
+        }
+
+        // Xóa dữ liệu OTP khỏi session
+        session.removeAttribute("otp");
+        session.removeAttribute("tempPassword");
+
+        // Chuyển hướng đến trang đăng nhập nhân viên
+        response.sendRedirect("LoginOfDashboard.jsp");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Servlet xử lý xác minh OTP và đổi mật khẩu của nhân viên";
+    }
 }
