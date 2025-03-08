@@ -29,7 +29,30 @@ public class viewProfileStaffController extends HttpServlet {
     public void init() {
         accountDao = new AccountDao();
     }
-
+ /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet logoutOfCustomerController</title>");
+            out.println("</head>");
+            out.println("<body>");            
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,38 +78,18 @@ public class viewProfileStaffController extends HttpServlet {
         request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountDao accountDao = new AccountDao();
-        HttpSession session = request.getSession();
-
-        try {
-            // Lấy staffID từ request
-            int staffId = Integer.parseInt(request.getParameter("id"));
-
-            // Tìm kiếm nhân viên theo ID
-            AccountStaff accountStaff = accountDao.getStaffById(staffId);
-
-            if (accountStaff != null) {
-                // Lưu thông tin nhân viên vào session
-                session.setAttribute("staffID", accountStaff.getStaffID());
-                session.setAttribute("username", accountStaff.getUsername());
-                session.setAttribute("fullName", accountStaff.getFullName());
-                session.setAttribute("email", accountStaff.getEmail());
-                session.setAttribute("phoneNumber", accountStaff.getPhoneNumber());
-                session.setAttribute("address", accountStaff.getAddress());
-                session.setAttribute("cccd", accountStaff.getCccd());
-                // Chuyển hướng đến trang hồ sơ nhân viên
-                response.sendRedirect("viewProfileStaff.jsp");
-            } else {
-                session.setAttribute("error", "Không tìm thấy nhân viên!");
-                response.sendRedirect("LoginOfDashboard.jsp");
-            }
-        } catch (NumberFormatException e) {
-            session.setAttribute("error", "ID phải là số nguyên!");
-            response.sendRedirect("LoginOfDashboard.jsp");
-        }
+         processRequest(request, response);
     }
 
     @Override

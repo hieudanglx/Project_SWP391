@@ -37,7 +37,7 @@ public class EditAccount_Staff extends HttpServlet {
         }
 
         session.setAttribute("staff", staff); // Cập nhật session với thông tin mới
-        request.getRequestDispatcher("ViewProfileStaff.jsp").forward(request, response);
+        request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
     }
 
     @Override
@@ -85,10 +85,10 @@ public class EditAccount_Staff extends HttpServlet {
         if (isUpdated) {
             session.setAttribute("staff", existingStaff); // Cập nhật session
             session.setAttribute("updateSuccess", "Profile updated successfully!");
-            response.sendRedirect("/viewProfileStaffController"); // Quay lại trang hồ sơ
+            response.sendRedirect("viewProfileStaff.jsp"); // Quay lại trang hồ sơ
         } else {
             request.setAttribute("errorMessage", "Failed to update profile.");
-            request.getRequestDispatcher("/viewProfileStaffController").forward(request, response);
+            request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
         }
     }
 
