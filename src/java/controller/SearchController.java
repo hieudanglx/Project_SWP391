@@ -39,7 +39,8 @@ public class SearchController extends HttpServlet {
             throws ServletException, IOException, SQLException {
         ProductDao link = new ProductDao();
         String name = request.getParameter("keyword");
-        List<Product> list = link.searchProductsByName(name);
+        int CategoryID = Integer.parseInt(request.getParameter("CategoryID"));
+        List<Product> list = link.searchProductsByName(name, CategoryID);
         request.setAttribute("search", "search");
         request.setAttribute("list", list);
         request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);

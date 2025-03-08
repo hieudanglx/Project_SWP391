@@ -5,128 +5,109 @@
 package controller;
 
 import dao.AccountDao;
+import dao.CustomerDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Properties;
+import jakarta.servlet.http.HttpSession;
+import java.io.PrintWriter;
 import java.util.Random;
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import model.AccountStaff;
+import model.EmailSenderCustomer;
+import model.OTPGenerate;
 /**
  *
  * @author nguye
  */
-@WebServlet(name = "ForgotPasswordStaffController", urlPatterns = {"/forgotPasswordStaff"})
+@WebServlet(name = "ForgotPasswordStaff", urlPatterns = {"/ForgotPasswordOfStaff"})
 public class ForgotPasswordStaffController extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet forgotPasswordOfStaffController</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet forgotPasswordOfStaffController at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("forgotPasswordStaff.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountDao dao = new AccountDao();
+        AccountDao staffDao = new AccountDao();
         String email = request.getParameter("email");
 
-        // Kiểm tra nhân viên dựa trên email
-        AccountStaff staff = dao.getAccountStaffByEmail(email);
+        boolean exists = staffDao.isEmailStaffExists(email);
 
-        if (staff == null) {
-            response.setStatus(HttpServletResponse.SC_CONFLICT);
+        if (!exists) {
+            request.setAttribute("error", "Email không tồn tại trong hệ thống!");
+            request.getRequestDispatcher("forgotPasswordOfStaff.jsp").forward(request, response);
             return;
         }
 
-        // Tạo mật khẩu mới
-        String newPassword = generateSecurePassword();
-        staff.setPassword(newPassword);
+        // Tạo OTP và lưu vào session
+        String otp = OTPGenerate.generateOTP();
+        HttpSession session = request.getSession();
+        session.setAttribute("otp", otp);
+        session.setAttribute("email", email);
 
-        // Cập nhật mật khẩu mới trong database
-        boolean isUpdated = dao.updateAccountStaff(staff);
-        if (!isUpdated) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
-
-        // Gửi email thông báo mật khẩu mới
-        String subject = "Your New Password - Electronic Store";
-        String body = "<html><body>"
-                + "<p>Dear " + staff.getFullName() + ",</p>"
-                + "<p>We have received a request to reset your password.</p>"
-                + "<p>Your new password is: <b>" + newPassword + "</b></p>"
-                + "<p>Please log in and change your password for security reasons.</p>"
-                + "<p>Best regards,<br>Electronic Store Team</p>"
-                + "</body></html>";
-response.sendRedirect("index.");
-//        sendEmail(email, subject, body);
+        // Gửi OTP đến email
+        EmailSenderCustomer.sendEmail(email, "Mã OTP đặt lại mật khẩu",
+                "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
+        request.getRequestDispatcher("verifyStaffOTP.jsp").forward(request, response);
     }
 
-    private boolean sendEmail(String to, String subject, String body) {
-        String host = "smtp.gmail.com";
-        String port = "587";
-        String username = "electronicstore.support@gmail.com"; // Email hệ thống
-        String password = "your-email-password"; // Mật khẩu email hệ thống
-        final String finalUsername = username;
-        final String finalPassword = password;
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
-        Properties props = new Properties();
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", port);
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        Authenticator authenticator = new Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(finalUsername, finalPassword);
-            }
-        };
-
-        Session session = Session.getInstance(props, authenticator);
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject, "UTF-8");
-            message.setContent(body, "text/html; charset=UTF-8");
-
-            Transport.send(message);
-            return true;
-        } catch (MessagingException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    private String generateSecurePassword() {
-        String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowerCase = "abcdefghijklmnopqrstuvwxyz";
-        String numbers = "0123456789";
-        String allChars = upperCase + lowerCase + numbers;
-
-        Random random = new Random();
-        int length = 8 + random.nextInt(9); // Tạo mật khẩu từ 8 đến 16 ký tự
-
-        StringBuilder password = new StringBuilder();
-        password.append(upperCase.charAt(random.nextInt(upperCase.length()))); // Ít nhất một chữ in hoa
-        password.append(numbers.charAt(random.nextInt(numbers.length()))); // Ít nhất một số
-
-        for (int i = 2; i < length; i++) {
-            password.append(allChars.charAt(random.nextInt(allChars.length())));
-        }
-
-        return password.toString();
-    }
 }

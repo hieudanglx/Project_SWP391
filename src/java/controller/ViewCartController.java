@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Customer;
 import model.Product;
@@ -37,22 +38,18 @@ public class ViewCartController extends HttpServlet {
         CartDao link = new CartDao();
         HttpSession session = request.getSession();
         Customer c = (Customer) session.getAttribute("customer");
+        
         if (c == null) {
             response.sendRedirect("choiceLogin.jsp"); // hoặc trang thông báo
             return;
         }
-        List<Product> list = link.getCartByCustomerID(c.getId());
+        List<Product> list = link.getCartByCustomerID(c.getCustomerID());
 
+        request.setAttribute("list", list);
         if (list.isEmpty()) {
-            request.setAttribute("list", list);
             request.getRequestDispatcher("viewCart.jsp").forward(request, response);
         } else {
-            int size=0;
-            for (int i = 0; i < list.size(); i++) {
-                size += list.get(i).getQuantityProduct();
-            }
-            request.setAttribute("size", size);
-            request.setAttribute("list", list);
+            session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
             request.getRequestDispatcher("viewCart.jsp").forward(request, response);
         }
     }

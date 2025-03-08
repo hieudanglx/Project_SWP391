@@ -17,61 +17,63 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Customer;
 import jakarta.servlet.annotation.WebServlet;
+import java.util.Date;
 
 /**
  * Servlet xử lý đăng ký khách hàng mới
  */
-@WebServlet(name="RegisterController", urlPatterns={"/RegisterController"})
+@WebServlet(name = "RegisterController", urlPatterns = {"/RegisterController"})
 public class RegisterController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
         try {
-            // Nhận dữ liệu từ form
             String username = request.getParameter("username").trim();
-            String phoneNumber = request.getParameter("phoneNumber").trim();
+            String fullName = request.getParameter("fullName").trim();
             String email = request.getParameter("email").trim();
             String password = request.getParameter("password").trim();
             String address = request.getParameter("address").trim();
+            String phoneNumber = request.getParameter("phoneNumber").trim();
+            String sex = request.getParameter("sex").trim();
+            String dob = request.getParameter("dob").trim();
 
             // Kiểm tra dữ liệu đầu vào
             if (username.isEmpty() || phoneNumber.isEmpty() || email.isEmpty() || password.isEmpty() || address.isEmpty()) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                out.print("{\"message\":\"All fields are required!\"}");
+                request.setAttribute("errorMessage", "All fields are required!");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
-            // Kiểm tra số điện thoại và email đã tồn tại chưa
             CustomerDAO customerDAO = new CustomerDAO();
+
+            if (customerDAO.isUsernameExisted(username)) {
+                request.setAttribute("errorMessage", "Username already exists!");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
+                return;
+            }
+
             if (customerDAO.isPhoneExisted(phoneNumber)) {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
-                out.print("{\"message\":\"Phone number already exists!\"}");
+                request.setAttribute("errorMessage", "Phone number already exists!");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
             if (customerDAO.isEmailExisted(email)) {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
-                out.print("{\"message\":\"Email already exists!\"}");
+                request.setAttribute("errorMessage", "Email already exists!");
+                request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
-            // Tạo khách hàng mới (Không có status và imgCustomer)
-            Customer newCustomer = new Customer(username, email, password, address, phoneNumber, null, null);
+            Customer newCustomer = new Customer(username, fullName, email, password, address, phoneNumber, sex, dob, null, null);
             customerDAO.add(newCustomer);
 
-            // Trả về phản hồi thành công
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.print("{\"message\":\"Registration successful!\"}");
-            response.sendRedirect("choiceLogin.jsp");
+            // Đăng ký thành công
+            request.setAttribute("successMessage", "Registration successful! You can now log in.");
+            request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.print("{\"message\":\"An error occurred: " + e.getMessage() + "\"}");
-            e.printStackTrace();
+            request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
-
     }
 }

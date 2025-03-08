@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.FeedbackDAO;
 import dao.ProductDao;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -12,78 +9,71 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Feedback;
 import model.Product;
 
-/**
- *
- * @author CE180594_Phan Quốc Duy
- */
 @WebServlet(name = "ViewProductDetailsController", urlPatterns = {"/ViewProductDetailsController"})
 public class ViewProductDetailsController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     * @throws java.sql.SQLException
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        ProductDao link = new ProductDao();
-        int productID = Integer.parseInt(request.getParameter("id"));
+        
+         System.out.println("🔍 Bắt đầu xử lý request...");
+        
+        ProductDao productDao = new ProductDao();
+        FeedbackDAO feedbackDao = new FeedbackDAO();
+
+        // ✅ Kiểm tra id trước khi chuyển đổi
+        String idParam = request.getParameter("id");
+        int productID = 0;
+
+        try {
+            if (idParam != null) {
+                productID = Integer.parseInt(idParam);
+            } else {
+                request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ!");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
         String selectedRom = request.getParameter("selectedRom");
         String selectedColor = request.getParameter("selectedColor");
 
-        Product currentProduct = link.getProductById(productID);
-        List<Product> list = link.searchProductsByName(currentProduct.getProductName());
+        Product currentProduct = productDao.getProductById(productID);
 
-        Product selectedProduct = null;
-
-        // Kiểm tra nếu danh sách có 2 phiên bản và không mix ROM/Color
-        if (list.size() == 2) {
-            Product p1 = list.get(0);
-            Product p2 = list.get(1);
-
-            // Nếu 2 phiên bản có ROM và Color riêng
-            if (!p1.getRom().equals(p2.getRom()) && !p1.getColor().equals(p2.getColor())) {
-                // Tự động chọn phiên bản dựa trên ROM/Color được chọn
-                if (selectedRom != null) {
-                    for (Product p : list) {
-                        if (p.getRom().equals(selectedRom)) {
-                            selectedProduct = p;
-                            break;
-                        }
-                    }
-                } else if (selectedColor != null) {
-                    for (Product p : list) {
-                        if (p.getColor().equals(selectedColor)) {
-                            selectedProduct = p;
-                            break;
-                        }
-                    }
-                }
-            } else {
-                // Xử lý trường hợp khác
-                selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
-            }
-        } else {
-            // Xử lý trường hợp thông thường
-            selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
+        // ✅ Kiểm tra nếu sản phẩm không tồn tại
+        if (currentProduct == null) {
+            request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
         }
 
+        List<Product> list = productDao.searchProductsByName(currentProduct.getProductName());
+
+        Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
         if (selectedProduct == null) {
             selectedProduct = currentProduct;
         }
 
+        // ✅ Tạo Map lưu tên khách hàng
+        Map<Integer, String> customerNames = new HashMap<>();
+        List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(productID, customerNames);
+
         request.setAttribute("product", selectedProduct);
         request.setAttribute("list", list);
+        request.setAttribute("feedbackList", feedbackList);
+        request.setAttribute("customerNames", customerNames); // ✅ Gửi Map sang JSP
+
         request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
     }
 
@@ -98,15 +88,6 @@ public class ViewProductDetailsController extends HttpServlet {
         return null;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -114,17 +95,10 @@ public class ViewProductDetailsController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi hệ thống!");
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -132,17 +106,12 @@ public class ViewProductDetailsController extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(ViewProductDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi hệ thống!");
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "ViewProductDetailsController";
+    }
 }

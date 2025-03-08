@@ -1,0 +1,74 @@
+body{
+    margin-top:160px; 
+    font-size:14px;
+    font-family:'Roboto', sans-serif
+}
+ul,li{
+    margin:0;
+    padding:0;
+    list-style:none
+}
+a:hover{
+    text-decoration:none
+}
+img{
+    max-width:100%
+}
+input:focus,button:focus{
+    outline:none
+}
+.clear{
+    clear:both
+}
+footer{
+    background:#333;
+    color:#fff;
+    padding-top:40px
+}
+footer .box-footer h3{
+    font-size:17px;
+    text-transform:uppercase;
+    font-weight:400;
+    margin-bottom:25px
+}
+footer .box-footer strong{
+    font-weight:500;
+    color:#2196f3
+}
+footer .box-footer p{
+    margin-bottom:10px
+}
+footer .content-list li{
+    margin-bottom:15px
+}
+footer .content-list li .fa{
+    color:#2196f3
+}
+footer .content-list li a{
+    color:#fff
+}
+footer .content-contact .form-control{
+    max-height:80px;
+    margin-bottom:8px;
+    font-size:14px;
+    box-shadow:none !important;
+    border-radius:2px;
+    border:1px solid #888888;
+    background:#333
+}
+footer button.btn-contact{
+    border-radius:30px;
+    border:0;
+    padding:5px 20px;
+    color:#fff;
+    background:#2196f3
+}
+footer .copyright{
+    text-align:center;
+    padding:10px;
+    background:#4c4c4c;
+    margin-top:40px
+}
+footer .copyright p{
+    margin-bottom:0
+}

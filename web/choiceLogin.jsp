@@ -15,11 +15,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-    
+    <style>
+        body{
+            padding-top:100px;
+            font-size:14px;
+            font-family:'Roboto', sans-serif
+        }
+    </style>
 </head>
 <body>
     <%@include file="header.jsp" %>
-    <div class="container mt-5">
+    <div class="container">
         <div class="row">
             <!-- Đăng nhập staff_Admin -->
             <div class="col-md-5 border p-4">
@@ -31,7 +37,7 @@
 
             <!-- Đăng nhập customer -->
             <div class="col-md-6 offset-md-1 border p-4">
-               <button class="btn btn-warning mb-3">Login Customer</button>
+                <button class="btn btn-warning mb-3">Login Customer</button>
                 <div class="text-center">
                     <button class="btn btn-primary" onclick="window.location.href = 'loginOfCustomer.jsp'">Đăng nhập</button>
                 </div>

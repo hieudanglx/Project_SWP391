@@ -69,55 +69,64 @@ public class CreateAccountStaff extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fullName = request.getParameter("fullName");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password"); // Cân nhắc mã hóa
-        String email = request.getParameter("email");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
+    String fullName = request.getParameter("fullName");
+    String username = request.getParameter("username");
+    String password = request.getParameter("password"); // Cân nhắc mã hóa
+    String email = request.getParameter("email");
+    String phoneNumber = request.getParameter("phoneNumber");
+    String address = request.getParameter("address");
+    String cccd = request.getParameter("cccd");
 
-        // Chuyển status từ String sang int (0 hoặc 1)
-        int status = Integer.parseInt(request.getParameter("status"));
-        boolean statusBoolean = (status == 1); // SQL Server dùng kiểu BIT (1 = Inactive, 0 = Active)
+    int status = Integer.parseInt(request.getParameter("status"));
+    boolean statusBoolean = (status == 1);
 
-        AccountDao staffDAO = new AccountDao();
-
-        // Kiểm tra username đã tồn tại chưa
-        if (staffDAO.isUsernameExists(username)) {
-            request.setAttribute("errorMessage", "Lỗi: Tên đăng nhập đã tồn tại!");
-
-            // Giữ lại dữ liệu nhập trên form
-            request.setAttribute("fullName", fullName);
-            request.setAttribute("username", username);
-            request.setAttribute("email", email);
-            request.setAttribute("phoneNumber", phoneNumber);
-            request.setAttribute("address", address);
-            request.setAttribute("status", status);
-
-            // Dùng forward để giữ nguyên request mà không reset dữ liệu
-            request.getRequestDispatcher("Create_account_staff.jsp").forward(request, response);
-            return;
-        }
-
-        // Thêm nhân viên vào database
-        boolean success = staffDAO.addStaff(fullName, username, password, email, phoneNumber, address, statusBoolean);
-        if (success) {
-            response.sendRedirect("ListAccountStaff"); // Chuyển hướng đến danh sách nhân viên (KHÔNG hiển thị thông báo)
-        } else {
-            request.setAttribute("errorMessage", "Thêm nhân viên thất bại!");
-
-            // Giữ lại dữ liệu nhập trên form
-            request.setAttribute("fullName", fullName);
-            request.setAttribute("username", username);
-            request.setAttribute("email", email);
-            request.setAttribute("phoneNumber", phoneNumber);
-            request.setAttribute("address", address);
-            request.setAttribute("status", status);
-
-            // Dùng forward để giữ nguyên request
-            request.getRequestDispatcher("Create_account_staff.jsp").forward(request, response);
-        }
+    AccountDao staffDAO = new AccountDao();
+    
+    // Kiểm tra trùng lặp
+    String errorMessage = null;
+    if (staffDAO.isUsernameStaffExists(username)) {
+        errorMessage = "Lỗi: Tên đăng nhập đã tồn tại!";
+    } else if (staffDAO.isEmailStaffExists(email)) {
+        errorMessage = "Lỗi: Email đã tồn tại!";
+    } else if (staffDAO.isPhoneNumberStaffExists(phoneNumber)) {
+        errorMessage = "Lỗi: Số điện thoại đã tồn tại!";
+    } else if (staffDAO.isCCCDExists(cccd)) {
+        errorMessage = "Lỗi: CCCD đã tồn tại!";
     }
+
+    if (errorMessage != null) {
+        request.setAttribute("errorMessage", errorMessage);
+
+        // Giữ lại dữ liệu nhập trên form
+        request.setAttribute("fullName", fullName);
+        request.setAttribute("username", username);
+        request.setAttribute("email", email);
+        request.setAttribute("phoneNumber", phoneNumber);
+        request.setAttribute("address", address);
+        request.setAttribute("cccd", cccd);
+        request.setAttribute("status", status);
+
+        request.getRequestDispatcher("Create_account_staff.jsp").forward(request, response);
+        return;
+    }
+
+    // Thêm nhân viên vào database
+    boolean success = staffDAO.addStaff(fullName, username, password, email, phoneNumber, address,cccd, statusBoolean);
+    if (success) {
+        response.sendRedirect("ListAccountStaff");
+    } else {
+        request.setAttribute("errorMessage", "Thêm nhân viên thất bại!");
+        request.setAttribute("fullName", fullName);
+        request.setAttribute("username", username);
+        request.setAttribute("email", email);
+        request.setAttribute("phoneNumber", phoneNumber);
+        request.setAttribute("address", address);
+        request.setAttribute("cccd", cccd);
+        request.setAttribute("status", status);
+
+        request.getRequestDispatcher("Create_account_staff.jsp").forward(request, response);
+    }
+}
 
     /**
      * Returns a short description of the servlet.

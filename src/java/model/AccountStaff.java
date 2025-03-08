@@ -16,12 +16,13 @@ public class AccountStaff {
     private String fullName;
     private String phoneNumber;
     private String username;
+    private String cccd;
     private int status;
 
     public AccountStaff() {
     }
 
-    public AccountStaff(int staffID, String address, String email, String password, String fullName, String phoneNumber, String username, int status) {
+    public AccountStaff(int staffID, String address, String email, String password, String fullName, String phoneNumber, String username, String cccd, int status) {
         this.staffID = staffID;
         this.address = address;
         this.email = email;
@@ -29,9 +30,10 @@ public class AccountStaff {
         this.fullName = fullName;
         this.phoneNumber = phoneNumber;
         this.username = username;
+        this.cccd = cccd;
         this.status = status;
     }
-    
+
     public int getStaffID() {
         return staffID;
     }
@@ -88,6 +90,14 @@ public class AccountStaff {
         this.username = username;
     }
 
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -95,5 +105,7 @@ public class AccountStaff {
     public void setStatus(int status) {
         this.status = status;
     }
+    
+
     
 }

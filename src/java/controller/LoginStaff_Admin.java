@@ -96,6 +96,7 @@ public class LoginStaff_Admin extends HttpServlet {
                 if ("admin".equalsIgnoreCase(username)) {
                     response.sendRedirect("HomeDashBoard_Admin.jsp");
                 } else {
+                    session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
                     response.sendRedirect("HomeDashBoard_Staff.jsp");
                 }
             } else if (Boolean.FALSE.equals(status)) { // Tài khoản bị chặn

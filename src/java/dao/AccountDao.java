@@ -48,6 +48,52 @@ public class AccountDao extends dao.DBContext {
         return false;
     }
 
+    public Integer getStaffIdByUsername(String username) {
+        String query = "SELECT staffID FROM Staff WHERE username = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, username);
+
+            try ( ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("staffID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Trả về null nếu không tìm thấy
+    }
+
+    public AccountStaff getStaffByEmail(String email) {
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null;
+        }
+        String sql = "SELECT * FROM Staff WHERE Email = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new AccountStaff(
+                        rs.getInt("StaffID"),
+                        rs.getString("Address"),
+                        rs.getString("Email"),
+                        rs.getString("Password"),
+                        rs.getString("FullName"),
+                        rs.getString("PhoneNumber"),
+                        rs.getString("Username"),
+                        rs.getString("CCCD"),
+                        rs.getInt("Status")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getFullname(String Username) {
         String query = "SELECT FullName FROM Staff WHERE Username = ?";
 
@@ -78,6 +124,7 @@ public class AccountDao extends dao.DBContext {
                         rs.getString("FullName"),
                         rs.getString("PhoneNumber"),
                         rs.getString("Username"),
+                        rs.getString("CCCD"),
                         rs.getInt("Status")
                 );
                 list.add(staff);
@@ -99,14 +146,18 @@ public class AccountDao extends dao.DBContext {
             pstmt.setInt(1, customerID);
             try ( ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new AccountCustomer(rs.getInt("customerID"),
+                    return new AccountCustomer(
+                            rs.getInt("CustomerID"),
                             rs.getString("username"),
+                            rs.getString("fullName"),
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("address"),
                             rs.getString("phoneNumber"),
                             rs.getInt("Status"),
-                            rs.getString("imgCustomer")
+                            rs.getString("sex"),
+                            rs.getString("dob"),
+                            rs.getString("imgcustomer")
                     );
                 }
             } catch (SQLException e) {
@@ -128,14 +179,17 @@ public class AccountDao extends dao.DBContext {
 
             while (rs.next()) {
                 AccountCustomer accountCustomer = new AccountCustomer(
-                        rs.getInt("customerID"),
+                        rs.getInt("CustomerID"),
                         rs.getString("username"),
+                        rs.getString("fullName"),
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("address"),
                         rs.getString("phoneNumber"),
                         rs.getInt("Status"),
-                        rs.getString("imgCustomer")
+                        rs.getString("sex"),
+                        rs.getString("dob"),
+                        rs.getString("imgcustomer")
                 );
 
                 list.add(accountCustomer);
@@ -170,7 +224,7 @@ public class AccountDao extends dao.DBContext {
 
     public List<AccountCustomer> searchCustomerByUsername(String username) {
         List<AccountCustomer> customers = new ArrayList<>();
-        String query = "SELECT customerID, username, email, address, phoneNumber, status, imgCustomer FROM Customer WHERE username = ?";
+        String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username = ?";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, username);
@@ -180,9 +234,12 @@ public class AccountDao extends dao.DBContext {
                 AccountCustomer customer = new AccountCustomer();
                 customer.setCustomerID(rs.getInt("customerID"));
                 customer.setUsername(rs.getString("username"));
+                customer.setFullName(rs.getString("fullName"));
                 customer.setEmail(rs.getString("email"));
                 customer.setAddress(rs.getString("address"));
                 customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setSex(rs.getString("sex"));
+                customer.setDob(rs.getString("dob"));
                 customer.setStatus(rs.getInt("status"));
                 customer.setImgCustomer(rs.getString("imgCustomer"));
 
@@ -241,6 +298,7 @@ public class AccountDao extends dao.DBContext {
                         rs.getString("fullName"),
                         rs.getString("phoneNumber"),
                         rs.getString("username"),
+                        rs.getString("CCCD"),
                         rs.getInt("status")
                 );
             }
@@ -252,7 +310,7 @@ public class AccountDao extends dao.DBContext {
 
     public AccountStaff getStaffById(int id) {
         AccountStaff AccountStaff = null;
-        String sql = "SELECT * FROM staff WHERE id = ?";
+        String sql = "SELECT * FROM staff WHERE staffID = ?";
 
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
 
@@ -268,6 +326,7 @@ public class AccountDao extends dao.DBContext {
                         rs.getString("fullName"),
                         rs.getString("phoneNumber"),
                         rs.getString("username"),
+                        rs.getString("CCCD"),
                         rs.getInt("status")
                 );
             }
@@ -299,7 +358,7 @@ public class AccountDao extends dao.DBContext {
         updateCustomerStatus(customerID, 0); // 0 = Active
     }
 
-    public boolean isUsernameExists(String username) {
+    public boolean isUsernameStaffExists(String username) {
         String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
@@ -314,23 +373,69 @@ public class AccountDao extends dao.DBContext {
         return false;
     }
 
-    public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, boolean status) {
-        if (isUsernameExists(username)) {
-            return false; // Không thêm nếu Username đã tồn tại
+    public boolean isEmailStaffExists(String email) {
+        String sql = "SELECT COUNT(*) FROM Staff WHERE email = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isPhoneNumberStaffExists(String phoneNumber) {
+        String sql = "SELECT COUNT(*) FROM Staff WHERE phoneNumber= ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, phoneNumber);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean isCCCDExists(String cccd) {
+        String sql = "SELECT COUNT(*) FROM Staff WHERE cccd = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, cccd);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, String cccd, boolean status) {
+        // Kiểm tra trùng lặp trước khi thêm
+        if (isUsernameStaffExists(username) || isEmailStaffExists(email) || isPhoneNumberStaffExists(phoneNumber) || isCCCDExists(cccd)) {
+            return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
         }
 
-        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-
             ps.setString(1, fullName);
             ps.setString(2, username);
-            ps.setString(3, password); // Cần mã hóa nếu cần bảo mật
+            ps.setString(3, password); // Cân nhắc mã hóa nếu cần bảo mật
             ps.setString(4, email);
             ps.setString(5, phoneNumber);
             ps.setString(6, address);
-            ps.setBoolean(7, status); // SQL Server hiểu 0 = Active, 1 = Inactive
+            ps.setString(7, cccd);
+            ps.setBoolean(8, status); // SQL Server hiểu 0 = Active, 1 = Inactive
 
-            return ps.executeUpdate() > 0;
+            return ps.executeUpdate() > 0; // Trả về true nếu thêm thành công
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -407,6 +512,7 @@ public class AccountDao extends dao.DBContext {
                         rs.getString("fullName"),
                         rs.getString("phoneNumber"),
                         rs.getString("username"),
+                        rs.getString("CCCD"),
                         rs.getInt("status")
                 );
             }
