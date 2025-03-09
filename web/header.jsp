@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" type="text/css" >
         <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css" type="text/css" >
         <link rel="stylesheet" href="css/header.css"  type="text/css" >
+        <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
     <body>
@@ -116,6 +117,7 @@
         </script>
         <script src="libs/jquery-3.4.1.min.js"></script>
         <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/popup.js"></script>
 
     </body>
 </html>

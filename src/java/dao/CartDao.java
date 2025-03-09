@@ -53,10 +53,17 @@ public class CartDao extends DBContext {
     }
 
     public Boolean updateCartProduct(int customerID, int productID, String type) {
-        String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 WHERE CustomerID = ? AND ProductID = ?";
+        String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 "
+                + "WHERE CustomerID = ? AND ProductID = ? ";
+        if (type.contains("+")) {
+            sql += "AND Quantity < 5 AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity + 1)";
+        }
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
+            if (type.contains("+")) {
+                ps.setInt(3, productID);
+            }
             if (ps.executeUpdate() == 1) {
                 return true;
             }

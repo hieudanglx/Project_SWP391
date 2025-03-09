@@ -21,8 +21,9 @@
         <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/responsive.css">
         <link rel="stylesheet" href="css/viewListProduct.css">
+        <link rel="stylesheet" href="css/popup.css">
     </head>
-    <body>
+    <body data-status="${status}">
         <div id="wallpaper">
             <%@include file="header.jsp" %>
             <div id="content">
@@ -67,7 +68,7 @@
                                                             </a>
                                                             <div class="action">
                                                                 <a href="UpdateCartController?id=${p.productID}&type=buy" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
-                                                                <a href="UpdateCartController?id=${p.productID}&type=add&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
+                                                                <a href="UpdateCartController?id=${p.productID}&CategoryID=${p.categoryID}&type=add&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
                                                                 <div class="clear"></div>
                                                             </div>
                                                         </div>
@@ -98,6 +99,15 @@
                 </div>
             </div>
         </div>
+        <!-- Popup container -->
+        <div class="popup-overlay" id="popupOverlay">
+            <div class="popup-content">
+                <span class="close-btn" onclick="closePopup()">&times;</span>
+                <div id="popupIcon" class="popup-icon"></div>
+                <h3 id="popupMessage"></h3>
+                <div class="popup-buttons" id="popupButtons"></div>
+            </div>
+        </div>
         <%@include file="footer.jsp" %>
     </body>
     <script src="libs/jquery-3.4.1.min.js"></script>
@@ -107,5 +117,6 @@
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/popup.js"></script>
 
 </html>

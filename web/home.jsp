@@ -21,6 +21,7 @@
         <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/responsive.css">
         <link rel="stylesheet" href="css/home.css">
+        <link rel="stylesheet" href="css/popup.css">
     </head>
     <body>
         <div id="wallpaper">
@@ -86,6 +87,9 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 order-lg-1 order-0">
+
+
+
                                 <div class="product-section">
                                     <h2 class="title-product">
                                         <a href="#" class="title">Sản phẩm nổi bật</a>
@@ -133,11 +137,20 @@
                     </div>
                 </div>
             </div>
+            <!-- Popup container -->
+            <div class="popup-overlay" id="popupOverlay">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closePopup()">&times;</span>
+                    <div id="popupIcon" class="popup-icon"></div>
+                    <h3 id="popupMessage"></h3>
+                    <div class="popup-buttons" id="popupButtons"></div>
+                </div>
+            </div>
             <%@include file="footer.jsp" %>
         </div>
     </body>
     <script src="libs/jquery-3.4.1.min.js"></script>
     <script src="libs/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/popup.js"></script>
 
 </html>
