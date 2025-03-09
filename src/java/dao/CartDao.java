@@ -53,10 +53,17 @@ public class CartDao extends DBContext {
     }
 
     public Boolean updateCartProduct(int customerID, int productID, String type) {
-        String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 WHERE CustomerID = ? AND ProductID = ?";
+        String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 "
+                + "WHERE CustomerID = ? AND ProductID = ? ";
+        if (type.contains("+")) {
+            sql += "AND Quantity < 5 AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity + 1)";
+        }
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
+            if (type.contains("+")) {
+                ps.setInt(3, productID);
+            }
             if (ps.executeUpdate() == 1) {
                 return true;
             }
@@ -66,15 +73,26 @@ public class CartDao extends DBContext {
         return false;
     }
 
+    public int getTotalItems(List<Product> list, int CustomerID) {
+        int size = 0;
+        if (list.isEmpty()) {
+            list = getCartByCustomerID(CustomerID);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            size += list.get(i).getQuantityProduct();
+        }
+        return size;
+    }
+
     public Boolean AddProductToCart(int customerID, int productID) {
         if (ProductExistsInCart(customerID, productID)) {
             return updateCartProduct(customerID, productID, "+");
         }
-        String sql = "INSERT INTO Cart (CustomerID, ProductID, Price, Quantity) VALUES (?, ?, (SELECT Price FROM Product WHERE ProductID = ?), 1)";
+        String sql = "INSERT INTO Cart (CustomerID, ProductID, Quantity) VALUES (?, ?, 1)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
-            ps.setInt(3, productID);
             if (ps.executeUpdate() == 1) {
                 return true;
             }
@@ -90,7 +108,7 @@ public class CartDao extends DBContext {
             ps.setInt(1, customerID);
             ps.setInt(2, productID);
             try ( ResultSet rs = ps.executeQuery()) {
-                return rs.next(); // Checks if there's at least one result
+                return rs.next();
             }
         } catch (Exception e) {
             System.out.println("dao.CartDao.ProductExistsInCart(): " + e.getMessage());
@@ -107,7 +125,7 @@ public class CartDao extends DBContext {
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("dao.CartDao.removeProductFromCart(): " + e.getMessage());
         }
         return false;
     }

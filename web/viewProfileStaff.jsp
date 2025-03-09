@@ -1,95 +1,278 @@
 <%-- 
-    Document   : viewProfileStaff
-    Created on : Feb 27, 2025, 9:12:06 PM
-    Author     : TRAN NHU Y -  CE182032
+    Document   : ViewProfileStaff
+    Created on : Mar 3, 2025, 6:11:10 PM
+    Author     : nguye
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.AccountStaff" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="css/style.css">
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <title>Staff Profile</title>  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            body {
+                font-family: 'Poppins', sans-serif;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }
+            .profile-container {
+                display: flex;
+                max-width: 1200px;
+                margin: 40px auto;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                overflow: hidden;
+            }
+            .sidebar {
+                width: 250px;
+                background: #333;
+                color: white;
+                padding: 30px 20px;
+            }
+            .sidebar .user-info {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .sidebar .user-info i {
+                font-size: 60px;
+                color: #ffcc00;
+            }
+            .sidebar .profile-nav ul {
+                list-style: none;
+                padding: 0;
+            }
+            .sidebar .profile-nav ul li {
+                margin: 15px 0;
+                text-align: left;
+            }
+            .sidebar .profile-nav ul li a {
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                display: block;
+                padding: 10px 15px;
+                border-radius: 5px;
+                transition: 0.3s;
+            }
+            .sidebar .profile-nav ul li a:hover {
+                background: #ffcc00;
+                color: black;
+            }
+            .profile-content {
+                flex: 1;
+                padding: 40px;
+                background: #f8f9fa;
+            }
+            .content-section {
+                display: none;
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            .content-section.active {
+                display: block;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            h2 {
+                border-left: 5px solid #ffcc00;
+                padding-left: 10px;
+                font-size: 22px;
+            }
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+            input {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .save-btn {
+                margin-top: 20px;
+                padding: 12px;
+                background: #ffcc00;
+                color: black;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                font-size: 16px;
+                transition: 0.3s;
+            }
+            .save-btn:hover {
+                background: #ff9900;
+            }
+        </style>
     </head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
+    <body>
+        <div class="profile-container">
+            <aside class="sidebar">
+                <div class="user-info">
+                    <i class="fas fa-user-circle fa-3x"></i>
+                    <p>${sessionScope.staff.username}</p>
+                </div>
+                <nav class="profile-nav">
+                    <ul>
+                        <li><a onclick="showSection('profile')">Hồ sơ</a></li>
+                        <li><a onclick="showSection('changePassword')">Ðổi mật khẩu</a></li>
+                    </ul>
+                </nav>
+            </aside>
 
-        .profile-container {
-            width: 50%;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            text-align: center;
-        }
+            <main class="profile-content">
+                <!-- Profile Section -->
+                <section id="profile" class="content-section active">
+                    <h2><strong>Hồ sơ của tôi</strong></h2>
+                    <p>Quản lý thông tin hồ sơ của bạn.</p>
+                    <c:if test="${not empty sessionScope.updateSuccess}">
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: '${sessionScope.updateSuccess}',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                        </script>
+                        <% session.removeAttribute("updateSuccess"); %> 
+                    </c:if>
 
-        h2 {
-            color: #333;
-        }
+                    <c:if test="${not empty errorMessage}">
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: '${errorMessage}',
+                                showConfirmButton: true
+                            });
+                        </script>
+                    </c:if>
 
-        .profile-details {
-            text-align: left;
-            margin: 20px 0;
-        }
+                    <form action="EditAccount_Staff" method="POST">
+                        <div class="profile-details">
+                            <label>Staff ID</label>
+                            <input type="text" name="staffID" value="${sessionScope.staff.staffID}" readonly>
 
-        .profile-details .form-container {
-            max-width: 100%;
-        }
+                            <label>Tên người dùng</label>
+                            <input type="text" name="username" value="${sessionScope.staff.username}" readonly>
 
-        .profile-details label {
-            font-weight: bold;
-        }
+                            <label>Họ và tên</label>
+                            <input type="text" name="fullName" value="${sessionScope.staff.fullName}" required>
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-top: 10px;
-            text-decoration: none;
-            color: #fff;
-            background: #007bff;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
+                            <label>Email</label>
+                            <input type="email" name="email" value="${sessionScope.staff.email}" required>
 
-        .btn-primary {
-            background-color: #28a745;
-        }
+                            <label>Số điện thoại</label>
+                            <input type="text" name="phoneNumber" value="${sessionScope.staff.phoneNumber}" required>
 
-        .btn-danger {
-            background-color: #dc3545;
-        }
+                            <label>Địa chỉ</label>
+                            <input type="text" name="address" value="${sessionScope.staff.address}" required>
 
-    </style>
-</head>
-<body>
-    <form action="viewProfileStaffController">
-        <div class="container mt-5">
-        <h2>Thông Tin Nhân Viên</h2>
-        <table class="table table-bordered">
-            <tr><th>StaffID</th><td><${sessionScope.staffID}</td></tr>
-            <tr><th>Địa chỉ</th><td>${sessionScope.address}</td></tr>
-            <tr><th>Email</th><td>${sessionScope.email}</td></tr>
-            <tr><th>Mật khẩu</th><td>${sessionScope.password}</td></tr>
-             <tr><th>Họ và tên</th><td>${sessionScope.fullname}</td></tr>
-            <tr><th>Số Điện Thoại</th><td${sessionScope.phoneNumber}</td></tr>
-            <tr><th>Tên Đăng Nhập</th><td>${sessionScope.username}</td></tr>
-        </table>
-        <a href="EditStaff.jsp" class="btn btn-warning">Chỉnh Sửa</a>
-        
-    </div>
-    </form>
-   
-</body>
+                            <label>CCCD</label>
+                            <input type="text" name="cccd" value="${sessionScope.staff.cccd}" readonly>
+                            <button type="submit" class="save-btn">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Change Password Section -->
+                <section id="changePassword" class="content-section">
+                    <h2><strong>Change Password</strong></h2>
+
+                    <!-- Hiển thị thông báo lỗi nếu có -->
+                    <c:if test="${not empty errorMessage}">
+                        <p style="color: red;">${errorMessage}</p>
+                    </c:if>
+
+                    <form action="changePasswordStaff" method="POST" onsubmit="return validatePassword()">
+
+                        <input type="hidden" name="email" value="${sessionScope.staff.email}" required>
+                        <label>Current Password</label>
+                        <input type="password" name="currentPassword" required>
+
+                        <label>New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+
+                        <button type="submit" class="save-btn">Update Password</button>
+                    </form>
+
+
+                    <!-- Order History Section -->
+                    <section id="orderHistory" class="content-section">
+                        <h2><strong>Order History</strong></h2>
+                        <p>View your past orders.</p>
+                    </section>
+            </main>
+        </div>
+
+        <script>
+            function validatePassword() {
+                let currentPassword = document.querySelector("input[name='currentPassword']").value;
+                let newPassword = document.getElementById("newPassword").value;
+                let confirmNewPassword = document.getElementById("confirmNewPassword").value;
+
+                // Điều kiện: Ít nhất 1 chữ hoa, 1 số, và tối thiểu 8 ký tự
+                let passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+                if (!passwordRegex.test(newPassword)) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Password",
+                        text: "Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa và 1 số!"
+                    });
+                    return false;
+                }
+
+                if (newPassword !== confirmNewPassword) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Mismatch Password",
+                        text: "Mật khẩu xác nhận không khớp!"
+                    });
+                    return false;
+                }
+
+                if (newPassword === currentPassword) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Password",
+                        text: "Mật khẩu mới không được trùng với mật khẩu cũ!"
+                    });
+                    return false;
+                }
+
+                return true;
+            }
+        </script>
+
+
+        <script>
+            function showSection(sectionId) {
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+            }
+        </script>
+    </body>
 </html>
+

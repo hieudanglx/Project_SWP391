@@ -7,6 +7,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ page import="java.util.List, java.util.Map, model.Feedback" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,49 +17,78 @@
         <title>${product.productName}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/popup.css">
         <style>
-            .container {
-                max-width: 1200px !important; /* Thêm !important để override Bootstrap */
-                width: 100% !important;       /* Sử dụng width 100% để responsive */
-                padding: 20px;
-                margin: 0 auto;
-                box-sizing: border-box;       /* Quan trọng: Tính toán kích thước bao gồm padding */
-            }
+            .details{
+                .tab-pane {
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                }
 
-            /* Giữ nguyên các style khác */
-            .product-header {
-                border-bottom: 3px solid #0d6efd;
-                padding-bottom: 1rem;
-            }
+                .tab-pane.active {
+                    opacity: 1;
+                }
 
-            .product-main-image {
-                width: 50%;
-                height: auto;
-                margin: 20px auto;
-                display: block;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            }
 
-            .specs-table td {
-                padding: 1rem;
-                border-bottom: 1px solid #dee2e6;
-                text-align: left;
-            }
+                .container {
+                    max-width: 1200px !important; /* Thêm !important để override Bootstrap */
+                    width: 100% !important;       /* Sử dụng width 100% để responsive */
+                    padding: 20px;
+                    margin: 0 auto;
+                    box-sizing: border-box;       /* Quan trọng: Tính toán kích thước bao gồm padding */
+                }
 
-            .storage-option {
-                min-width: 90px;
-            }
+                /* Giữ nguyên các style khác */
+                .product-header {
+                    border-bottom: 3px solid #0d6efd;
+                    padding-bottom: 1rem;
+                }
 
-            .color-option {
-                min-width: 90px;
-                position: relative;
+                .product-main-image {
+                    width: 50%;
+                    height: auto;
+                    margin: 20px auto;
+                    display: block;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                }
+
+                .specs-table td {
+                    padding: 1rem;
+                    border-bottom: 1px solid #dee2e6;
+                    text-align: left;
+                }
+
+                .storage-option {
+                    min-width: 90px;
+                }
+
+                .color-option {
+                    min-width: 90px;
+                    position: relative;
+                }
+                /* Avatar cơ bản (chỉ màu nền + chữ) */
+                .avatar-basic {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 20px;
+                    color: white;
+                    background-color: #6c757d; /* Xám mặc định */
+                    text-transform: uppercase;
+                }
             }
         </style>
+
+
     </head>
-    <body>
+    <body data-status="${status}">
         <%@include file="header.jsp" %>
 
-        <div class="container py-5">
+        <div class="container py-5 details">
             <div class="row g-4">
                 <!-- Left Column -->
                 <div class="col-lg-8">
@@ -78,8 +109,10 @@
                         </div>
                     </nav>
 
+
                     <div class="tab-content mt-4">
                         <div class="tab-pane fade show active" id="specs" role="tabpanel">
+                            <!-- Nội dung Thông số kỹ thuật -->
                             <table class="table specs-table">
                                 <tr>
                                     <td>Hệ điều hành</td>
@@ -165,13 +198,78 @@
                                 </tr>
                             </table>
                         </div>
-
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
-                            
+                            <!-- Nội dung Đánh giá -->
+
+                            <div class="mb-4">
+                                <h4>Viết đánh giá của bạn</h4>
+                                <form action="SubmitReviewController" method="post">
+                                    <input type="hidden" name="productID" value="${product.productID}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Đánh giá (1-5 sao):</label>
+                                        <select class="form-select" name="rating" required>
+                                            <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
+                                            <option value="4">⭐⭐⭐⭐ - Tốt</option>
+                                            <option value="3">⭐⭐⭐ - Bình thường</option>
+                                            <option value="2">⭐⭐ - Tệ</option>
+                                            <option value="1">⭐ - Rất tệ</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Nội dung đánh giá:</label>
+                                        <textarea class="form-control" name="comment" rows="3" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                </form>
+                            </div>
+                            <% if (session.getAttribute("successMessage") != null) { %>
+                            <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
+                            <% session.removeAttribute("successMessage"); %>
+                            <% } %>
+
+                            <% if (session.getAttribute("errorMessage") != null) { %>
+                            <div class="alert alert-danger"><%= session.getAttribute("errorMessage") %></div>
+                            <% session.removeAttribute("errorMessage"); %>
+                            <% }
+
+     List<Feedback> feedbackList = (List<Feedback>) request.getAttribute("feedbackList");
+     Map<Integer, String> customerNames = (Map<Integer, String>) request.getAttribute("customerNames");
+                            %>
+
+                            <div class="mt-4">
+                                <h4>Đánh giá sản phẩm</h4>
+
+                                <% if (feedbackList != null && !feedbackList.isEmpty()) { %>
+                                <% for (Feedback feedback : feedbackList) { 
+                                    String customerName = customerNames.getOrDefault(feedback.getCustomerID(), "Khách hàng Ẩn danh"); 
+                                    String initials = customerName.substring(0, 1).toUpperCase(); // ✅ Lấy chữ cái đầu tiên
+                                %>
+                                <div class="card shadow-sm mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <!-- Avatar basic (hình tròn có chữ viết tắt) -->
+                                            <div class="avatar-basic me-3"><%= initials %></div>
+
+                                            <div>
+                                                <h6 class="mb-0"><%= customerName %></h6>
+                                                <small class="text-muted">Mã phản hồi: <%= feedback.getFeedbackID() %></small>
+                                            </div>
+                                        </div>
+                                        <p class="mb-1"><%= feedback.getContent() %></p>
+                                        <div class="text-warning">
+                                            <% for (int i = 0; i < feedback.getRatePoint(); i++) { %> ⭐ <% } %> 
+                                            (<%= feedback.getRatePoint() %>/5)
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                <% } else { %>
+                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Right Column -->
                 <div class="col-lg-4">
                     <div class="card shadow-sm">
@@ -193,7 +291,12 @@
                                     </c:forEach>
                                 </div>
                             </div>
-
+                            <!-- Price -->
+                            <div class="mb-4">
+                                <h3 class="text-danger fw-bold">
+                                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
+                                </h3>
+                            </div>
                             <!-- Color Options -->
                             <div class="mb-4">
                                 <h5 class="mb-3">Màu sắc</h5>
@@ -212,16 +315,9 @@
                                 </div>
                             </div>
 
-                            <!-- Price -->
-                            <div class="mb-4">
-                                <h3 class="text-danger fw-bold">
-                                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
-                                </h3>
-                            </div>
-
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&type=add" class="btn btn-lg btn-dark py-3">
+                                <a href="UpdateCartController?id=${product.productID}&CategoryID=${product.categoryID}&type=add&page=detail" class="btn btn-lg btn-dark py-3">
                                     <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
                                 </a>
@@ -235,8 +331,9 @@
                 </div>
             </div>
         </div>
-
+        <%@include file="footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/popup.js"></script>
         <script>
                                                         function selectOption(type, value) {
                                                             const productID = ${product.productID};
@@ -255,6 +352,26 @@
                                                             // Load lại trang với tham số mới
                                                             window.location.href = url;
                                                         }
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            const tabLinks = document.querySelectorAll('#nav-tab button');
+
+                                                            tabLinks.forEach(button => {
+                                                                button.addEventListener('shown.bs.tab', function (event) {
+                                                                    const targetTab = document.querySelector(event.target.dataset.bsTarget);
+                                                                    targetTab.classList.add("fade");
+                                                                });
+                                                            });
+                                                        });
         </script>
+
     </body>
+    <!-- Popup container -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <div id="popupIcon" class="popup-icon"></div>
+            <h3 id="popupMessage"></h3>
+            <div class="popup-buttons" id="popupButtons"></div>
+        </div>
+    </div>
 </html>

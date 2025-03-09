@@ -1,0 +1,561 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.filter{
+    /* main ie fix */
+
+    main {
+        display: block;
+    }
+
+
+    /* headers */
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Roboto Slab", Times, "Times New Roman", serif;
+    }
+
+    h1 {
+        font-size: 2.2em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.8em;
+    }
+
+    h4 {
+        font-size: 1.6em;
+    }
+
+    h5 {
+        font-size: 1.4em;
+    }
+
+    h6 {
+        font-size: 1.2em;
+    }
+
+
+    /* anchor links */
+
+    a {
+        color: #009688;
+    }
+
+    a:hover,
+        a:active {
+        text-decoration: none;
+    }
+
+
+    /* form elements */
+
+    label {
+        display: block;
+    }
+
+    select,
+    textarea,
+    input {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: inherit;
+        font-weight: inherit;
+        font-size: inherit;
+        color: inherit;
+    }
+
+    input[type=submit] {
+        cursor: pointer;
+    }
+
+
+    /* img */
+
+    img {
+        max-width: 100%;
+        height: auto;
+        border: none;
+    }
+
+
+    /* add-ons */
+
+
+    /* clearfix */
+
+    .cf:before,
+        .cf:after {
+        content: " ";
+        display: table;
+    }
+
+    .cf:after {
+        clear: both;
+    }
+
+    .cf {
+        *zoom: 1;
+    }
+
+
+    /* inline block */
+
+    .ib {
+        display: -moz-inline-stack;
+        display: inline-block;
+        zoom: 1;
+        *display: inline;
+        vertical-align: top;
+    }
+
+    .ib-m {
+        display: -moz-inline-stack;
+        display: inline-block;
+        zoom: 1;
+        *display: inline;
+        vertical-align: initial;
+    }
+
+
+    /* ul-reset */
+
+    .ul-reset {
+        padding-left: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+        list-style: none;
+    }
+
+
+    /* global classes */
+
+
+    /* wrapper */
+
+    .wrapper {
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto;
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+
+    /* styles */
+
+
+    /* header */
+
+    .site-title {
+        text-align: center;
+    }
+
+    .subtitle {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        text-align: center;
+        color: #666;
+    }
+
+    .navigation {
+        background-color: #333;
+        text-align: center;
+    }
+
+    .navigation-link {
+        display: block;
+        padding: 10px 20px;
+        text-decoration: none;
+        color: #fff;
+    }
+
+    .navigation-link:hover {
+        opacity: .5;
+    }
+
+
+    /* main */
+
+    .main {
+        padding-top: 20px;
+        padding-bottom: 40px;
+    }
+
+    .breadcrumb {
+        margin-bottom: 20px;
+    }
+
+    .sidebar {
+        float: left;
+        width: 100%;
+    }
+
+    .sidebar-heading {
+        padding: 10px;
+        margin-top: 0;
+        margin-bottom: 0;
+        background-color: #eee;
+        font-size: 1.6em;
+    }
+
+    .filter-item {
+        border-right: 1px solid #eee;
+        border-left: 1px solid #eee;
+    }
+
+    .filter-item-inner {
+        border-bottom: 1px solid #eee;
+    }
+
+    .filter-item-inner-heading {
+        position: relative;
+        padding: 10px;
+        padding-right: 30px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 1.2em;
+        cursor: pointer;
+    }
+
+    .filter-item-inner-heading.minus:after,
+        .filter-item-inner-heading.plus:after {
+        position: absolute;
+        top: 33%;
+        right: 7.5%;
+        font-size: .6em;
+    }
+
+    .filter-item-inner-heading.minus:after {
+        content: "▲";
+    }
+
+    .filter-item-inner-heading.plus:after {
+        content: "▼";
+    }
+
+    .filter-attribute-list {
+        display: none;
+    }
+
+    .filter-attribute-list-inner {
+        padding: 0 10px 15px;
+    }
+
+    .filter-attribute-item {
+        padding-left: 10px;
+        margin-top: 5px;
+    }
+
+    .filter-attribute-item:first-child {
+        margin-top: 0;
+    }
+
+    .content {
+        float: left;
+        width: 80%;
+    }
+
+    .content-upper {
+        padding-left: 20px;
+    }
+
+    .content-heading {
+        margin-top: 0;
+    }
+
+    .product-list {
+        font-size: 0;
+    }
+
+    .product-item {
+        width: 33.33333%;
+        padding-left: 20px;
+        margin-top: 20px;
+        font-size: 1rem;
+    }
+
+    .product-item-inner {
+        padding: 10px;
+        border: 1px solid #eee;
+    }
+
+    .product-title {
+        margin-top: 10px;
+        margin-bottom: 0;
+        font-size: 1em;
+    }
+
+    .product-title-link {
+        display: block;
+        text-decoration: none;
+    }
+
+    .product-title-link:hover {
+        opacity: .5;
+    }
+
+    .product-price {
+        margin-top: 10px;
+        font-weight: 700;
+    }
+
+    .product-add-to-cart {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        margin-top: 10px;
+        background-color: #ff5722;
+        color: #fff;
+    }
+
+    .product-add-to-cart:hover {
+        opacity: .75;
+    }
+
+
+    /* Import Google Font - Poppins */
+
+    ::selection {
+        color: #fff;
+        background: #17a2b8;
+    }
+    .price-input {
+        width: 100%;
+        display: flex;
+        margin: 20px 0 25px;
+    }
+    .price-input .field {
+        display: flex;
+        width: 100%;
+        height: 45px;
+        align-items: center;
+    }
+    .field input {
+        width: 100%;
+        height: 100%;
+        outline: none;
+        font-size: 12px;
+        margin-left: 12px;
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid #999;
+        -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    .price-input .separator {
+        width: 130px;
+        display: flex;
+        font-size: 19px;
+        align-items: center;
+        justify-content: center;
+    }
+    .slider {
+        height: 5px;
+        position: relative;
+        background: #ddd;
+        border-radius: 5px;
+    }
+    .slider .progress {
+        height: 100%;
+        left: 25%;
+        right: 25%;
+        position: absolute;
+        border-radius: 5px;
+        background: #17a2b8;
+    }
+    .range-input {
+        position: relative;
+    }
+    .range-input input {
+        position: absolute;
+        width: 100%;
+        height: 5px;
+        top: -5px;
+        background: none;
+        pointer-events: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        height: 17px;
+        width: 17px;
+        border-radius: 50%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -webkit-appearance: none;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+    input[type="range"]::-moz-range-thumb {
+        height: 17px;
+        width: 17px;
+        border: none;
+        border-radius: 50%;
+        background: #17a2b8;
+        pointer-events: auto;
+        -moz-appearance: none;
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Support */
+    .support-box {
+        top: 2rem;
+        position: relative;
+        bottom: 0;
+        text-align: center;
+        display: block;
+    }
+    .b-btn {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .b-btn.paypal i {
+        color: blue;
+    }
+    .b-btn:hover {
+        text-decoration: none;
+        font-weight: bold;
+    }
+    .b-btn i {
+        font-size: 20px;
+        color: yellow;
+        margin-top: 2rem;
+    }
+
+    <!-- filter.css -->
+
+    .price-input input[type="number"] {
+        text-align: right;
+        padding-right: 10px;
+        font-family: monospace; /* Đảm bảo dấu chấm hiển thị đều */
+    }
+    .price-range {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .price-range input[type="number"] {
+        width: 100px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    button[type="submit"] {
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+
+}
+
+@media only screen and (min-width:1600px) {
+    .product-item {
+        width: 25%;
+    }
+}
+
+@media only screen and (max-width:1280px) {
+    .wrapper {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width:1024px) {
+    .wrapper {
+        width: 100%;
+    }
+    .product-item {
+        width: 50%;
+    }
+    .footer-col {
+        text-align: center;
+        width: 50%;
+        margin-top: 40px;
+        font-size: 1em;
+    }
+    .footer-col:first-child,
+    .footer-col:nth-child(2) {
+        margin-top: 0;
+    }
+}
+
+@media only screen and (max-width:900px) {
+    .sidebar {
+        width: 30%;
+    }
+    .content {
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width:768px) {
+    .product-item {
+        width: 100%;
+    }
+}
+/* Responsive */
+@media (max-width: 768px) {
+    #content .item-product {
+        height: 380px;
+    }
+
+    #content .item-product .thumb {
+        height: 200px;
+    }
+}
+@media only screen and (max-width:600px) {
+    .sidebar {
+        float: none;
+        width: 100%;
+    }
+    .content {
+        float: none;
+        width: 100%;
+    }
+    .content-upper {
+        margin-top: 20px;
+        padding-left: 0;
+    }
+    .product-item {
+        padding-left: 0;
+    }
+    .footer-col {
+        width: 100%;
+    }
+    .footer-col:first-child {
+        margin-top: 0;
+    }
+    .footer-col:nth-child(2) {
+        margin-top: 40px;
+    }
+}

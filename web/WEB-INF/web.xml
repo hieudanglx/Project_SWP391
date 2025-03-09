@@ -17,12 +17,8 @@
         <servlet-class>model.EmailSenderCustomer</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ListInventory</servlet-name>
-        <servlet-class>controller.ListInventory</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SearchInventory</servlet-name>
-        <servlet-class>controller.SearchInventory</servlet-class>
+        <servlet-name>homeController</servlet-name>
+        <servlet-class>controller.homeController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>

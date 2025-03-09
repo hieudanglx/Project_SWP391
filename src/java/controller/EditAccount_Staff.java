@@ -1,99 +1,99 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
-
 package controller;
 
 import dao.AccountDao;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.AccountStaff;
+import java.io.IOException;
 
-/**
- *
- * @author Dang Khac Hieu_CE180465
- */
-@WebServlet(name="EditAccount_Staff", urlPatterns={"/EditAccount_Staff"})
+@WebServlet(name = "EditAccount_Staff", urlPatterns = {"/EditAccount_Staff"})
 public class EditAccount_Staff extends HttpServlet {
-   private AccountDao accountDao;
+    private AccountDao accountDao;
 
+    @Override
     public void init() {
         accountDao = new AccountDao();
     }
 
-   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    try (PrintWriter out = response.getWriter()) {
-        
-    }
-
-    } 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-       int staffID = Integer.parseInt(request.getParameter("staffID"));
-        AccountDao accountDao = new AccountDao();
-        AccountStaff staff = accountDao.getAccountStaffByID(staffID); // Giả sử bạn có phương thức này trong DAO
-        request.setAttribute("staff", staff);
-        request.getRequestDispatcher("EditStaff.jsp").forward(request, response);
-    }
-    
-     
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Integer staffID = (Integer) session.getAttribute("staffID");
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+        if (staffID == null) {
+            response.sendRedirect("LoginOfDashboard.jsp");
+            return;
+        }
+
+        AccountStaff staff = accountDao.getAccountStaffByID(staffID);
+        if (staff == null) {
+            response.sendRedirect("error.jsp"); // Chuyển hướng nếu không tìm thấy nhân viên
+            return;
+        }
+
+        session.setAttribute("staff", staff); // Cập nhật session với thông tin mới
+        request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        int staffID = Integer.parseInt(request.getParameter("staffID"));
-        String address = request.getParameter("address");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Integer staffID = (Integer) session.getAttribute("staffId");
+
+        if (staffID == null) {
+            response.sendRedirect("LoginOfDashboard.jsp");
+            return;
+        }
+
+        // Nhận dữ liệu từ form
         String fullName = request.getParameter("fullName");
+        String email = request.getParameter("email");
         String phoneNumber = request.getParameter("phoneNumber");
-        String username = request.getParameter("username");
+        String address = request.getParameter("address");
         String cccd = request.getParameter("cccd");
-        int status = Integer.parseInt(request.getParameter("status"));
 
-        AccountStaff staff = new AccountStaff(staffID, address, email, password, fullName, phoneNumber, username,cccd, status);
-        boolean isUpdated = accountDao.updateAccountStaff(staff);
+         //Kiểm tra dữ liệu hợp lệ
+        if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null ||
+            fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
+            request.setAttribute("errorMessage", "All fields are required!");
+            request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
+            return;
+        }
 
+        // Lấy thông tin nhân viên hiện tại
+        AccountStaff existingStaff = (AccountStaff) session.getAttribute("staff");
+        if (existingStaff == null) {
+            response.sendRedirect("error.jsp");
+            return;
+        }
+
+        // Cập nhật thông tin
+        existingStaff.setFullName(fullName);
+        existingStaff.setEmail(email);
+        existingStaff.setPhoneNumber(phoneNumber);
+        existingStaff.setAddress(address);
+        existingStaff.setCccd(cccd);
+
+        // Gọi DAO để cập nhật
+        boolean isUpdated = accountDao.updateAccountStaff(existingStaff);
         if (isUpdated) {
-            response.sendRedirect("ListAccountStaff"); // Chuyển hướng về trang danh sách staff sau khi cập nhật thành công
+            session.setAttribute("staff", existingStaff); // Cập nhật session
+            session.setAttribute("updateSuccess", "Profile updated successfully!");
+            response.sendRedirect("viewProfileStaff.jsp"); // Quay lại trang hồ sơ
         } else {
-            request.setAttribute("error", "Failed to update staff member"); // Đặt thông báo lỗi
-            request.getRequestDispatcher("EditStaff.jsp").forward(request, response); // Chuyển hướng về trang cập nhật với thông báo lỗi
+            request.setAttribute("errorMessage", "Failed to update profile.");
+            request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
         }
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Edit Account Staff Controller";
+    }
 }

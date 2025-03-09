@@ -21,10 +21,15 @@ import org.apache.catalina.ha.ClusterSession;
  *
  * @author TRAN NHU Y - CE182032
  */
-@WebServlet(name = "viewProfileStaffController", urlPatterns = {"/viewProfileStaffController"})
+@WebServlet(name = "viewProfileStaff", urlPatterns = {"/viewProfileStaff"})
 public class viewProfileStaffController extends HttpServlet {
 
-    /**
+    private AccountDao accountDao;
+
+    public void init() {
+        accountDao = new AccountDao();
+    }
+ /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
      *
@@ -41,29 +46,36 @@ public class viewProfileStaffController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet viewProfileStaffController</title>");
+            out.println("<title>Servlet logoutOfCustomerController</title>");
             out.println("</head>");
-            out.println("<body>");
-
+            out.println("<body>");            
             out.println("</body>");
             out.println("</html>");
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Lấy session
+        HttpSession session = request.getSession();
 
+        // Kiểm tra nếu chưa có nhân viên đăng nhập thì chuyển hướng về trang đăng nhập
+        Integer staffId = (Integer) session.getAttribute("staffId");
+
+        if (staffId == null) {
+            response.sendRedirect("LoginOfDashboard.jsp");
+            return;
+        }
+
+        // Lấy thông tin nhân viên từ database
+        AccountStaff staff = accountDao.getStaffById(staffId);
+
+        if (staff != null) {
+            session.setAttribute("staff", staff);
+        }
+        System.out.println("day la du lieu staff: "+staff.getFullName()+ staff.getStaffID()+":CMND-"+staff.getCccd());
+        // Chuyển hướng đến trang hồ sơ nhân viên
+        request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
     }
 
     /**
@@ -77,39 +89,11 @@ public class viewProfileStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountDao AccountDao = new AccountDao();
-        HttpSession session = request.getSession();
-     
-     
-        try {
-            int staffId = Integer.parseInt(request.getParameter("id"));           
-           AccountStaff AccountStaff = AccountDao.getStaffById(staffId);
-            // Lưu thông tin vào session
-            session.setAttribute("staffID", AccountStaff.getStaffID());
-            session.setAttribute("address", AccountStaff.getAddress());
-            session.setAttribute("email", AccountStaff.getEmail());
-            session.setAttribute("password", AccountStaff.getPassword());
-            session.setAttribute("fullname", AccountStaff.getFullName());
-            session.setAttribute("phoneNumber", AccountStaff.getPhoneNumber());
-            session.setAttribute("username", AccountStaff.getUsername());
-
-            response.sendRedirect("viewProfileStaff.jsp");
-
-        } catch (NumberFormatException e) {
-            session.setAttribute("error", "ID phải là số nguyên!");
-            response.sendRedirect("LoginOfDashboard.jsp");
-        }
-
+         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "View Profile Staff Controller";
+    }
 }

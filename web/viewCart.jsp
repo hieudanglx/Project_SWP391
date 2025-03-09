@@ -79,7 +79,7 @@
         <!-- Main Container -->
         <div class="container-lg cart-container">
             <c:choose>
-                <c:when test="${size!=0}">
+                <c:when test="${size>0}">
                     <div class="row g-5">
                         <!-- Product List Column -->
                         <div class="col-lg-8">
@@ -90,55 +90,58 @@
 
                             <c:forEach items="${list}" var="product">
                                 <c:if test="${product.quantityProduct>0}">
-                                <div class="card mb-3 shadow-sm">
-                                    <div class="card-body">
-                                        <div class="d-flex gap-4 align-items-center">
-                                            <img src="${product.imageURL}" 
-                                                 alt="${product.productName}" 
-                                                 class="cart-item-image">
+                                    <div class="card mb-3 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="d-flex gap-4 align-items-center">
+                                                <img src="${product.imageURL}" 
+                                                     alt="${product.productName}" 
+                                                     class="cart-item-image">
 
-                                            <!-- Product Info -->
-                                            <div class="flex-grow-1">
-                                                <h5 class="mb-2">${product.productName}</h5>
+                                                <!-- Product Info -->
+                                                <div class="flex-grow-1">
+                                                    <h5 class="mb-2">${product.productName}</h5>
 
-                                                <!-- Color-->
-                                                <div class="d-flex gap-3 mb-3">
-                                                    <c:if test="${not empty product.color}">
-                                                        <div class="d-flex align-items-center gap-1">
-                                                            <span class="text-muted small">${product.color}</span>
-                                                        </div>
-                                                    </c:if>
-                                                </div>
-
-                                                <!-- Price & Quantity -->
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <div class="text-danger fw-bold h5">
-                                                        <fmt:formatNumber value="${product.price}" 
-                                                                          type="currency" 
-                                                                          currencySymbol="đ"/>
+                                                    <!-- Color-->
+                                                    <div class="d-flex gap-3 mb-3">
+                                                        <c:if test="${not empty product.color}">
+                                                            <div class="d-flex align-items-center gap-1">
+                                                                <span class="text-muted small">${product.color}</span>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
 
-                                                    <div class="d-flex align-items-center gap-3">
-                                                        <div class="input-group quantity-input-group">
-                                                            <a href="UpdateCartController?id=${product.productID}&type=-" 
-                                                               class="btn btn-outline-secondary px-3">-</a>
-                                                            <input type="text" 
-                                                                   class="form-control text-center border-secondary"
-                                                                   value="${product.quantityProduct}" 
-                                                                   disabled>
-                                                            <a href="UpdateCartController?id=${product.productID}&type=%2B" 
-                                                               class="btn btn-outline-secondary px-3">+</a>
+                                                    <!-- Price & Quantity -->
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div class="text-danger fw-bold h5">
+                                                            <fmt:formatNumber value="${product.price}" 
+                                                                              type="currency" 
+                                                                              currencySymbol="đ"/>
                                                         </div>
-                                                        <a href="UpdateCartController?id=${product.productID}&type=R" 
-                                                           class="btn btn-link text-danger">
-                                                            <i class="fas fa-trash fa-lg"></i>
-                                                        </a>
+
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="input-group quantity-input-group">
+                                                                <a href="UpdateCartController?id=${product.productID}&type=-" 
+                                                                   class="btn btn-outline-secondary px-3" 
+                                                                   onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct});">-</a>
+                                                                <input type="text" 
+                                                                       class="form-control text-center border-secondary"
+                                                                       value="${product.quantityProduct}" 
+                                                                       disabled>
+                                                                <a href="UpdateCartController?id=${product.productID}&type=%2B" 
+                                                                   class="btn btn-outline-secondary px-3" 
+                                                                   onclick="return increaseQuantity(${product.productID}, ${product.quantityProduct});">+</a>
+                                                            </div>
+                                                            <a href="UpdateCartController?id=${product.productID}&type=R" 
+                                                               class="btn btn-link text-danger" 
+                                                               onclick="return confirmRemove(${product.productID});">
+                                                                <i class="fas fa-trash fa-lg"></i>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -260,10 +263,10 @@
                                     </div>
 
                                     <!-- Checkout Button -->
-                                    <button class="btn btn-danger w-100 py-3 fw-bold">
+                                    <a href="payment.jsp" class="btn btn-danger w-100 py-3 fw-bold">
                                         <i class="fas fa-wallet me-2"></i>
                                         Thanh toán ngay
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -286,52 +289,74 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script>
-            // Xử lý fixed width
-            function enforceCartWidth() {
-                const container = document.querySelector('.cart-container');
-                if (window.innerWidth < 1200) {
-                    container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
-                } else {
-                    container.style.transform = 'none';
-                }
-            }
+                                                               // Xử lý fixed width
+                                                               function enforceCartWidth() {
+                                                                   const container = document.querySelector('.cart-container');
+                                                                   if (window.innerWidth < 1200) {
+                                                                       container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+                                                                   } else {
+                                                                       container.style.transform = 'none';
+                                                                   }
+                                                               }
 
-            window.addEventListener('resize', enforceCartWidth);
-            enforceCartWidth(); // Khởi chạy lần đầu
+                                                               window.addEventListener('resize', enforceCartWidth);
+                                                               enforceCartWidth(); // Khởi chạy lần đầu
 
-            // Xử lý API địa chỉ
-            const citis = document.getElementById("city");
-            const districts = document.getElementById("district");
+                                                               // Xử lý API địa chỉ
+                                                               const citis = document.getElementById("city");
+                                                               const districts = document.getElementById("district");
 
-            const fetchData = async () => {
-                try {
-                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                    renderCity(response.data);
-                } catch (error) {
-                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                }
-            };
+                                                               const fetchData = async () => {
+                                                                   try {
+                                                                       const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                                                                       renderCity(response.data);
+                                                                   } catch (error) {
+                                                                       console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                                                                   }
+                                                               };
 
-            const renderCity = (data) => {
-                citis.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                                                               const renderCity = (data) => {
+                                                                   citis.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                                                                   districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
 
-                data.forEach(province => {
-                    citis.options.add(new Option(province.Name, province.Id));
-                });
+                                                                   data.forEach(province => {
+                                                                       citis.options.add(new Option(province.Name, province.Id));
+                                                                   });
 
-                citis.onchange = function () {
-                    districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                    if (this.value) {
-                        const selectedProvince = data.find(p => p.Id === this.value);
-                        selectedProvince.Districts.forEach(district => {
-                            districts.options.add(new Option(district.Name, district.Id));
-                        });
-                    }
-                };
-            };
+                                                                   citis.onchange = function () {
+                                                                       districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                                                                       if (this.value) {
+                                                                           const selectedProvince = data.find(p => p.Id === this.value);
+                                                                           selectedProvince.Districts.forEach(district => {
+                                                                               districts.options.add(new Option(district.Name, district.Id));
+                                                                           });
+                                                                       }
+                                                                   };
+                                                               };
 
-            fetchData();
+                                                               fetchData();
+
+
+                                                               function increaseQuantity(productId, quantity) {
+                                                                   if (quantity >= 5) {
+                                                                       alert('Số lượng sản phẩm không thể vượt quá 5.');
+                                                                       return false;
+                                                                   }
+                                                                   window.location.href = `UpdateCartController?id=${productId}&type=%2B`;
+                                                                   return true;
+                                                               }
+
+                                                               function decreaseQuantity(productId, quantity) {
+                                                                   if (quantity <= 1) {
+                                                                       return confirm('Số lượng chỉ còn 1. Bạn có chắc muốn giảm không?');
+                                                                   }
+                                                                   window.location.href = `UpdateCartController?id=${productId}&type=-`;
+                                                                   return true;
+                                                               }
+
+                                                               function confirmRemove(productId) {
+                                                                   return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
+                                                               }
         </script>
     </body>
 </html>

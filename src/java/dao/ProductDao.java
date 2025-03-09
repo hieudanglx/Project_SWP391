@@ -390,7 +390,6 @@ private boolean isEmpty(String str) {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Loi1");
             System.out.println(e.getMessage());
         }
         return productList;
@@ -409,11 +408,24 @@ private boolean isEmpty(String str) {
         params.add(id);
         return executeProductQuery(sql, params);
     }
+    public List<Product> getTopProductByCategoryID(int id) {
+        String sql = "SELECT TOP 8 * FROM Product where CategoryID = ? ORDER BY Quantity_Sell DESC;";
+        List<Object> params = new ArrayList<>();
+        params.add(id);
+        return executeProductQuery(sql, params);
+    }
 
     public List<Product> searchProductsByName(String name) {
         String sql = "SELECT * FROM Product WHERE ProductName LIKE ?";
         List<Object> params = new ArrayList<>();
         params.add("%" + name + "%");
+        return executeProductQuery(sql, params);
+    }
+    public List<Product> searchProductsByName(String name, int CategoryID) {
+        String sql = "SELECT * FROM Product WHERE ProductName LIKE ? and CategoryID = ?";
+        List<Object> params = new ArrayList<>();
+        params.add("%" + name + "%");
+        params.add(CategoryID);
         return executeProductQuery(sql, params);
     }
 
