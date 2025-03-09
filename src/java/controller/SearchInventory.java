@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.OrderDAO;
+import dao.InventoryDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,14 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.DecimalFormat;
+import java.util.List;
+import model.Inventory;
 
 /**
  *
  * @author Tran Phong Hai - CE180803
  */
-@WebServlet("/RevenueTotal")
-public class RevenueTotal extends HttpServlet {
+@WebServlet(name = "SearchInventory", urlPatterns = {"/SearchInventory"})
+public class SearchInventory extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +39,10 @@ public class RevenueTotal extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RevenueTotal</title>");
+            out.println("<title>Servlet SearchInventory</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RevenueTotal at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet SearchInventory at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,21 +60,35 @@ public class RevenueTotal extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        OrderDAO dao = new OrderDAO();
+        InventoryDAO inventoryDAO = new InventoryDAO();
+        String filter = request.getParameter("filter");
+        String searchKeyword = request.getParameter("keyword");
+        String category = request.getParameter("category");
 
-        // Lấy tổng doanh thu
-        double totalSales = dao.getTotalSales();
-        System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);
+        List<Inventory> importList;
 
-        // Format số với dấu phẩy
-        DecimalFormat df = new DecimalFormat("#,###");
-        String formattedSales = df.format(totalSales);
+        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
+            // Tìm kiếm theo tên sản phẩm hoặc nhà cung cấp
+            importList = inventoryDAO.searchInventory(searchKeyword);
+            request.setAttribute("importList", importList);
+            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
+        } else {
+            if ("laptop".equalsIgnoreCase(filter)) {
+                importList = inventoryDAO.getInventoryListByCategory("laptop");
+            } else if ("SmartPhone".equalsIgnoreCase(filter)) {
+                importList = inventoryDAO.getInventoryListByCategory("SmartPhone");
+            } else if ("Tablet".equalsIgnoreCase(filter)) {
+                importList = inventoryDAO.getInventoryListByCategory("Tablet");
+            } else {
+                importList = inventoryDAO.getAllInventorys();
+            }
 
-        System.out.println("[DEBUG] Tổng doanh thu sau khi format: " + formattedSales);
+            request.setAttribute("importList", importList);
+            request.setAttribute("searchKeyword", searchKeyword);
+            request.setAttribute("selectedCategory", category);
 
-// Gửi dữ liệu sang JSP
-        request.setAttribute("totalSales", formattedSales);
-        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
+            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -100,22 +115,4 @@ public class RevenueTotal extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    public static void main(String[] args) {
-        // Khởi tạo DAO
-        OrderDAO dao = new OrderDAO();
-        
-        // Gọi phương thức getTotalSales() để lấy tổng doanh thu
-        double totalSales = dao.getTotalSales();
-        
-        // Kiểm tra giá trị lấy từ DB
-        System.out.println("[TEST] Tổng doanh thu lấy từ DB: " + totalSales);
-
-        // Format số theo dạng có dấu phẩy ngăn cách
-        DecimalFormat df = new DecimalFormat("#,###");
-        String formattedSales = df.format(totalSales);
-        
-        // In kết quả sau khi format
-        System.out.println("[TEST] Tổng doanh thu sau khi format: " + formattedSales);
-    }
 }

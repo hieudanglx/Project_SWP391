@@ -176,12 +176,14 @@ public class AccountDao extends dao.DBContext {
         return false;
     }
 
-    public List<AccountCustomer> searchCustomerByUsername(String username) {
+    public List<AccountCustomer> searchCustomerByUsername(String keyword) {
         List<AccountCustomer> customers = new ArrayList<>();
-        String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username = ?";
+        String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username LIKE ? OR fullname LIKE ?";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, username);
+           String searchKey = "%" + keyword + "%"; // Tìm kiếm tương đối
+            pstmt.setString(1, searchKey);
+            pstmt.setString(2, searchKey);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
