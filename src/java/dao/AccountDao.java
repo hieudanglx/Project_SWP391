@@ -265,17 +265,17 @@ public class AccountDao extends dao.DBContext {
 
     public boolean updateAccountStaff(AccountStaff staff) {
         String query = "UPDATE Staff SET address = ?, email = ?, password = ?, fullName = ?, phoneNumber = ?, username = ?, status = ? WHERE staffID = ?";
-        try ( PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, staff.getAddress());
-            stmt.setString(2, staff.getEmail());
-            stmt.setString(3, staff.getPassword());
-            stmt.setString(4, staff.getFullName());
-            stmt.setString(5, staff.getPhoneNumber());
-            stmt.setString(6, staff.getUsername());
-            stmt.setInt(7, staff.getStatus());
-            stmt.setInt(8, staff.getStaffID());
+        try ( PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, staff.getAddress());
+            ps.setString(2, staff.getEmail());
+            ps.setString(3, staff.getPassword());
+            ps.setString(4, staff.getFullName());
+            ps.setString(5, staff.getPhoneNumber());
+            ps.setString(6, staff.getUsername());
+            ps.setInt(7, staff.getStatus());
+            ps.setInt(8, staff.getStaffID());
 
-            int rowsUpdated = stmt.executeUpdate();
+            int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0; // Trả về true nếu có ít nhất một hàng được cập nhật
         } catch (SQLException e) {
             e.printStackTrace();
