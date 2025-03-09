@@ -135,7 +135,7 @@
             $("#frmCreateOrder").submit(function () {
                 var postData = $("#frmCreateOrder").serialize();
                 var submitUrl = $("#frmCreateOrder").attr("action");
-                $.ajax({
+                $.ajaxServlet({
                     type: "POST",
                     url: submitUrl,
                     data: postData,
