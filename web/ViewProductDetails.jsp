@@ -331,47 +331,47 @@
                 </div>
             </div>
         </div>
-        <!-- Popup container -->
-        <div class="popup-overlay" id="popupOverlay">
-            <div class="popup-content">
-                <span class="close-btn" onclick="closePopup()">&times;</span>
-                <div id="popupIcon" class="popup-icon"></div>
-                <h3 id="popupMessage"></h3>
-                <div class="popup-buttons" id="popupButtons"></div>
-            </div>
-        </div>
         <%@include file="footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="js/popup.js"></script>
         <script>
-                    function selectOption(type, value) {
-                        const productID = ${product.productID};
-                        const currentRom = "${product.rom}";
-                        const currentColor = "${product.color}";
+                                                        function selectOption(type, value) {
+                                                            const productID = ${product.productID};
+                                                            const currentRom = "${product.rom}";
+                                                            const currentColor = "${product.color}";
 
-                        // Tạo URL mới với tham số mới
-                        let url = "ViewProductDetailsController?id=" + productID;
+                                                            // Tạo URL mới với tham số mới
+                                                            let url = "ViewProductDetailsController?id=" + productID;
 
-                        if (type === 'rom') {
-                            url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
-                        } else if (type === 'color') {
-                            url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
-                        }
+                                                            if (type === 'rom') {
+                                                                url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
+                                                            } else if (type === 'color') {
+                                                                url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
+                                                            }
 
-                        // Load lại trang với tham số mới
-                        window.location.href = url;
-                    }
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const tabLinks = document.querySelectorAll('#nav-tab button');
+                                                            // Load lại trang với tham số mới
+                                                            window.location.href = url;
+                                                        }
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            const tabLinks = document.querySelectorAll('#nav-tab button');
 
-                        tabLinks.forEach(button => {
-                            button.addEventListener('shown.bs.tab', function (event) {
-                                const targetTab = document.querySelector(event.target.dataset.bsTarget);
-                                targetTab.classList.add("fade");
-                            });
-                        });
-                    });
+                                                            tabLinks.forEach(button => {
+                                                                button.addEventListener('shown.bs.tab', function (event) {
+                                                                    const targetTab = document.querySelector(event.target.dataset.bsTarget);
+                                                                    targetTab.classList.add("fade");
+                                                                });
+                                                            });
+                                                        });
         </script>
 
     </body>
+    <!-- Popup container -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <div id="popupIcon" class="popup-icon"></div>
+            <h3 id="popupMessage"></h3>
+            <div class="popup-buttons" id="popupButtons"></div>
+        </div>
+    </div>
 </html>

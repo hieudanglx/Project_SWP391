@@ -24,8 +24,8 @@ function showPopup(type, message, buttons = []) {
     // Hiển thị popup
     overlay.style.display = 'flex';
 
-    // Tự động đóng popup sau 2 giây
-    setTimeout(closePopup, 2000);
+    // Tự động đóng popup sau 1.5 giây
+    setTimeout(closePopup, 1500);
 }
 
 // Đóng popup
