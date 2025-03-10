@@ -20,6 +20,10 @@
         <servlet-name>homeController</servlet-name>
         <servlet-class>controller.homeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>productDetailForAF</servlet-name>
+        <servlet-class>controller.productDetailForAF</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>homeController</servlet-name>
         <url-pattern>/homeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>productDetailForAF</servlet-name>
+        <url-pattern>/productDetailForAF</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

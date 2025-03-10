@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Enter Phone Information</title>
+        <title>Enter Tablet Information</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -36,7 +36,6 @@
                 font-weight: bold;
                 transition: background-color 0.3s ease;
             }
-
             .btn-back:hover {
                 background-color: #5a6268;
             }
@@ -100,8 +99,8 @@
                 function formatInputWithUnit(inputId, unit) {
                     var input = document.getElementById(inputId);
                     input.addEventListener("input", function () {
-                        let value = this.value.replace(/\D/g, ''); // Ch? gi? l?i s?
-                        this.value = value ? value + unit : ""; // Thêm ??n v? ngay sau s?, không có kho?ng tr?ng
+                        let value = this.value.replace(/\D/g, '');
+                        this.value = value ? value + unit : "";
                     });
                 }
 
@@ -113,15 +112,19 @@
     </head>
     <body>
         <div class="container">
-
             <h2>Enter Tablet Information</h2>
             <c:if test="${not empty error}">
                 <div style="color: red; text-align: center; margin-bottom: 15px;">
                     ${error}
                 </div>
             </c:if>
+            <% String error = request.getParameter("error"); %>
+            <% if (error != null) { %>
+            <p style="color: red;"><%= error %></p>
+            <% } %>
+
             <form action="createProduct" method="post">
-                <input type="hidden" name="category" value="2">
+                <input type="hidden" name="category" value="3">
                 <input type="hidden" name="ramType" value="">
                 <input type="hidden" name="supportsUpgradingRAM" value="">
                 <input type="hidden" name="supportsUpgradingROM" value="">
@@ -130,7 +133,7 @@
                 <input type="text" id="productName" name="productName" value="${product.productName}" required>
 
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="price" value="${product.price}"min="0" required>
+                <input type="number" id="price" name="price" value="${product.price}" min="0" required>
 
                 <label for="brand">Brand:</label>
                 <select id="brand" name="brand" onchange="toggleInput('brand', 'brandInputContainer', 'brandInput')">
@@ -147,10 +150,10 @@
                 </div>
 
                 <label for="frontCamera">Front Camera:</label>
-                <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}"required>
+                <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}" required>
 
                 <label for="rearCamera">Rear Camera:</label>
-                <input type="text" id="rearCamera" name="rearCamera"value="${product.cameraBehind}" required>
+                <input type="text" id="rearCamera" name="rearCamera" value="${product.cameraBehind}" required>
 
                 <label for="ram">RAM:</label>
                 <select id="ram" name="ram" onchange="toggleInput('ram', 'ramInputContainer', 'ramInput')">
@@ -165,7 +168,6 @@
                 <div id="ramInputContainer" class="${ram_custom != null ? '' : 'hidden'}">
                     <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM" value="${ram_custom}">
                 </div>
-
 
                 <label for="storage">Storage Capacity:</label>
                 <select id="storage" name="storage" onchange="toggleInput('storage', 'storageInputContainer', 'storageInput')">
@@ -197,7 +199,7 @@
 
                 <input type="number" name="version" placeholder="OS Version" value="${product.operatingSystemVersion}" required>
 
-                <label for="size">Screen Size(inch):</label>
+                <label for="size">Screen Size (inch):</label>
                 <input type="number" id="size" name="size" value="${screenSize}" required>
 
                 <label for="refreshRate">Refresh Rate:</label>
@@ -213,10 +215,8 @@
                     <input type="text" id="refreshRateInput" name="refreshRate_custom" placeholder="Enter refresh rate" value="${refreshRate_custom}">
                 </div>
 
-
                 <label for="screenResolution">Screen Resolution:</label>
                 <div style="display: flex; align-items: center; gap: 10px;">
-
                     <select id="screenResolution" name="screenResolution" onchange="toggleInput('screenResolution', 'screenResolutionInputContainer', 'screenResolutionInput')">
                         <option value="HD+" ${screenResolution == 'HD+' ? 'selected' : ''}>HD+</option>
                         <option value="Full HD+" ${screenResolution == 'Full HD+' ? 'selected' : ''}>Full HD+</option>
@@ -234,8 +234,7 @@
                 </div>
 
                 <label for="chip">Chip type:</label>
-                <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" required>       
-
+                <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" required>
 
                 <label for="chip">Chip Name:</label>
                 <input type="text" id="chip" name="chip" value="${product.chipName}" required>
@@ -244,10 +243,11 @@
                 <input type="text" id="gpuType" name="gpuType" value="${product.gpuType}" required>
 
                 <label for="gpuName">GPU Name:</label>
-                <input type="text" id="gpuName" name="gpuName"  value="${product.gpuName}"required>
+                <input type="text" id="gpuName" name="gpuName" value="${product.gpuName}" required>
 
                 <label for="imageURL">Image URL:</label>
                 <input type="url" id="imageURL" name="imageURL" value="${product.imageURL}" required>
+
                 <button type="submit">Save</button>
                 <a href="listProductsForAdmin" class="btn-back">Back to List</a>
             </form>

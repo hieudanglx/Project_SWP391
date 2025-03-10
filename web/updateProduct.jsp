@@ -13,8 +13,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Edit Product</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            input[readonly] {
+                background-color: rgb(233, 236, 239) !important; /* Màu nâu */
+                color: #000; /* Màu chữ đen để dễ đọc */
+            }
+        </style>
 
         <script>
+
             function toggleFields() {
                 var category = document.getElementById("category").value;
 
@@ -22,16 +29,28 @@
                 if (category == "1") {
                     document.querySelectorAll('.category-1').forEach(el => el.style.display = "block");
                     document.querySelectorAll('.category-23').forEach(el => el.style.display = "none");
+
+                    chipName.readOnly = true;
+                    gpuName.readOnly = true;
+                    chipName.removeAttribute("required");
+                    gpuName.removeAttribute("required");
                 }
                 // Nếu category = 2 hoặc 3 (Dien Thoai/Tablet) -> Ẩn RAM Type & Upgrading, Hiện Camera
                 else {
                     document.querySelectorAll('.category-1').forEach(el => el.style.display = "none");
                     document.querySelectorAll('.category-23').forEach(el => el.style.display = "block");
+
+                    chipName.readOnly = false;
+                    gpuName.readOnly = false;
+                    chipName.setAttribute("required", "required");
+                    gpuName.setAttribute("required", "required");
                 }
             }
 
             // Gọi hàm khi trang tải xong để áp dụng ngay
-            window.onload = toggleFields;
+            document.addEventListener("DOMContentLoaded", function () {
+                toggleFields(); // Gọi khi trang tải xong
+            });
         </script>
 
     </head>
@@ -45,19 +64,19 @@
                 <c:if test="${not empty requestScope.error}">
                     <div class="alert alert-danger">${requestScope.error}</div>
                 </c:if>
-                    
-                    
+
+
 
                 <!-- Product ID (readonly) -->
                 <div class="mb-3">
                     <label for="productID" class="form-label">Product ID</label>
-                    <input type="text" class="form-control" id="productID" name="productID" value="${product.productID}" readonly />
+                    <input type="number" class="form-control" id="productID" name="productID" value="${product.productID}" readonly />
                 </div>
-                
+
                 <!-- Product Name -->
                 <div class="mb-3">
                     <label for="productName" class="form-label">Product Name</label>
-                    <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" required />
+                    <input type="text" class="form-control" id="productName" name="productName" value="${product.productName}" readonly />
                 </div>
 
                 <!-- Price -->
@@ -69,11 +88,14 @@
                 <!-- Category -->
                 <div class="mb-3">
                     <label for="category" class="form-label">Category</label>
-                    <select class="form-control" id="category" name="categoryID" required onchange="toggleFields()">
+                    <select class="form-control" id="category" disabled>
                         <option value="1" ${product.categoryID == 1 ? 'selected' : ''}>Laptop</option>
                         <option value="2" ${product.categoryID == 2 ? 'selected' : ''}>Dien Thoai</option>
                         <option value="3" ${product.categoryID == 3 ? 'selected' : ''}>Tablet</option>
                     </select>
+
+                    <!-- Input ẩn để giữ giá trị khi submit form -->
+                    <input type="hidden" name="categoryID" value="${product.categoryID}">
                 </div>
 
                 <!-- Brand -->
@@ -96,7 +118,7 @@
                 <!-- RAM -->
                 <div class="mb-3">
                     <label for="ram" class="form-label">RAM</label>
-                    <input type="text" class="form-control" id="ram" name="ram" value="${product.ram}" required />
+                    <input type="text" class="form-control" id="ram" name="ram" value="${product.ram}" readonly />
                 </div>
 
                 <div class="mb-3 category-1">
@@ -115,7 +137,7 @@
                 <!-- ROM -->
                 <div class="mb-3">
                     <label for="rom" class="form-label">ROM</label>
-                    <input type="text" class="form-control" id="rom" name="rom" value="${product.rom}" required />
+                    <input type="text" class="form-control" id="rom" name="rom" value="${product.rom}" readonly />
                 </div>
 
                 <div class="mb-3 category-1">
@@ -129,7 +151,7 @@
                 <!-- Color -->
                 <div class="mb-3">
                     <label for="color" class="form-label">Color</label>
-                    <input type="text" class="form-control" id="color" name="color" value="${product.color}" required />
+                    <input type="text" class="form-control" id="color" name="color" value="${product.color}" readonly />
                 </div>
 
                 <!-- Operating System -->

@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Enter Phone Information</title>
+
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -79,6 +80,7 @@
                 background-color: #218838;
             }
         </style>
+
         <script>
             function toggleInput(selectId, inputContainerId, inputId) {
                 var select = document.getElementById(selectId);
@@ -121,6 +123,11 @@
                     ${error}
                 </div>
             </c:if>
+            <% String error = request.getParameter("error"); %>
+            <% if (error != null) { %>
+            <p style="color: red;"><%= error %></p>
+            <% } %>
+
             <form action="createProduct" method="post">
                 <input type="hidden" name="category" value="2">
                 <input type="hidden" name="ramType" value="">
@@ -131,7 +138,7 @@
                 <input type="text" id="productName" name="productName" value="${product.productName}" required>
 
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="price" value="${product.price}"min="0" required>
+                <input type="number" id="price" name="price" value="${product.price}" min="0" required>
 
                 <label for="brand">Brand:</label>
                 <select id="brand" name="brand" onchange="toggleInput('brand', 'brandInputContainer', 'brandInput')">
@@ -144,14 +151,14 @@
                 </select>
 
                 <div id="brandInputContainer" class="${brand_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="brandInput" name="brand_custom" placeholder="Enter brand" value="${brand_custom}">
+                    <input type="text" id="brandInput" name="brand_custom" placeholder="Enter brand" value="${brand_custom != null ? brand_custom : ""}">
                 </div>
 
                 <label for="frontCamera">Front Camera:</label>
-                <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}"required>
+                <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}" required>
 
                 <label for="rearCamera">Rear Camera:</label>
-                <input type="text" id="rearCamera" name="rearCamera"value="${product.cameraBehind}" required>
+                <input type="text" id="rearCamera" name="rearCamera" value="${product.cameraBehind}" required>
 
                 <label for="ram">RAM:</label>
                 <select id="ram" name="ram" onchange="toggleInput('ram', 'ramInputContainer', 'ramInput')">
@@ -160,13 +167,13 @@
                     <option value="6GB" ${ram == '6GB' ? 'selected' : ''}>6GB</option>
                     <option value="8GB" ${ram == '8GB' ? 'selected' : ''}>8GB</option>
                     <option value="12GB" ${ram == '12GB' ? 'selected' : ''}>12GB</option>
+                    <option value="16GB" ${ram == '16GB' ? 'selected' : ''}>16GB</option>
                     <option value="other" ${ram_custom != null ? 'selected' : ''}>Other</option>
                 </select>
 
                 <div id="ramInputContainer" class="${ram_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM" value="${ram_custom}">
+                    <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM" value="${ram_custom != null ? ram_custom : ""}">
                 </div>
-
 
                 <label for="storage">Storage Capacity:</label>
                 <select id="storage" name="storage" onchange="toggleInput('storage', 'storageInputContainer', 'storageInput')">
@@ -179,7 +186,7 @@
                 </select>
 
                 <div id="storageInputContainer" class="${storage_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="storageInput" name="storage_custom" placeholder="Enter storage capacity" value="${storage_custom}">
+                    <input type="text" id="storageInput" name="storage_custom" placeholder="Enter storage capacity" value="${storage_custom != null ? storage_custom : ""}">
                 </div>
 
                 <label for="color">Color:</label>
@@ -193,7 +200,7 @@
                 </select>
 
                 <div id="osInputContainer" class="${os_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="osInput" name="os_custom" placeholder="Enter operating system" value="${os_custom}">
+                    <input type="text" id="osInput" name="os_custom" placeholder="Enter operating system" value="${os_custom != null ? os_custom : ""}">
                 </div>
 
                 <input type="number" name="version" placeholder="OS Version" value="${product.operatingSystemVersion}" required>
@@ -211,9 +218,8 @@
                 </select>
 
                 <div id="refreshRateInputContainer" class="${refreshRate_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="refreshRateInput" name="refreshRate_custom" placeholder="Enter refresh rate" value="${refreshRate_custom}">
+                    <input type="text" id="refreshRateInput" name="refreshRate_custom" placeholder="Enter refresh rate" value="${refreshRate_custom != null ? refreshRate_custom : ""}">
                 </div>
-
 
                 <label for="screenResolution">Screen Resolution:</label>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -231,12 +237,11 @@
                     <input type="number" id="resolutionHeight" name="resolutionHeight" min="1" required placeholder="Height" value="${height}" style="width: 80px;">
                 </div>
                 <div id="screenResolutionInputContainer" class="${screenResolution_custom != null ? '' : 'hidden'}">
-                    <input type="text" id="screenResolutionInput" name="screenResolution_custom" placeholder="Enter screen resolution" value="${screenResolution_custom}">
+                    <input type="text" id="screenResolutionInput" name="screenResolution_custom" placeholder="Enter screen resolution" value="${screenResolution_custom != null ? screenResolution_custom : ""}">
                 </div>
 
                 <label for="chip">Chip type:</label>
                 <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" required>       
-
 
                 <label for="chip">Chip Name:</label>
                 <input type="text" id="chip" name="chip" value="${product.chipName}" required>
@@ -245,12 +250,12 @@
                 <input type="text" id="gpuType" name="gpuType" value="${product.gpuType}" required>
 
                 <label for="gpuName">GPU Name:</label>
-                <input type="text" id="gpuName" name="gpuName"  value="${product.gpuName}"required>
+                <input type="text" id="gpuName" name="gpuName" value="${product.gpuName}" required>
 
                 <label for="imageURL">Image URL:</label>
                 <input type="url" id="imageURL" name="imageURL" value="${product.imageURL}" required>
                 <button type="submit">Save</button>
-               <a href="listProductsForAdmin" class="btn-back">Back to List</a>
+                <a href="listProductsForAdmin" class="btn-back">Back to List</a>
             </form>
         </div>
     </body>

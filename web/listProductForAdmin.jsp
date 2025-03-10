@@ -80,6 +80,7 @@
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
             <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
+            <a href="#"><i class="fas fa-cog"></i> Manager Order</a>
         </div>
 
         <!-- Main Content -->
@@ -91,8 +92,7 @@
                     <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
                     <a href="javascript:void(0);" class="logout-link" onclick="logout()">Logout</a>
                 </div>
-            </nav>
-
+            </nav>            
             <!-- Button to Create Product -->
             <div class="d-flex justify-content-end mb-3">
                 <div class="dropdown">
@@ -133,7 +133,7 @@
                                     <td>${p.importPrice}</td>
                                     <td>${p.quantityProduct}</td>
                                     <td>
-                                        <a href="updateProduct?productID=${p.productID}" class="btn btn-warning btn-sm">Cập nhật</a>
+                                        <a href="productDetailForAF?productID=${p.productID}" class="btn btn-warning btn-sm">Detail</a>
                                         <a href="deleteProduct?productID=${p.productID}" 
                                            onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
                                            class="btn btn-danger btn-sm">Xóa</a>
