@@ -7,6 +7,12 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+<%
+    HttpSession sessionObj = request.getSession();
+    String avatarPath = (String) sessionObj.getAttribute("avatarPath");
+    String defaultAvatar = "images/default-avatar.png";
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -119,6 +125,32 @@
             .save-btn:hover {
                 background: #ff9900;
             }
+
+            .user-info img {
+                width: 80px; /* Nhỏ hơn */
+                height: 80px;
+                border-radius: 50%; /* Bo tròn */
+                border: 2px solid #ffcc00;
+                object-fit: cover; /* Hiển thị đẹp hơn */
+            }
+
+            .avatar-upload {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .avatar-upload img {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #ddd;
+            }
+
+            .avatar-upload input {
+                display: block;
+                margin: 10px auto;
+            }
         </style>
     </head>
     <body>
@@ -128,7 +160,7 @@
             <div class="profile-container">
                 <aside class="sidebar">
                     <div class="user-info">
-                        <i class="fas fa-user-circle fa-3x"></i>
+                        <img id="sidebarAvatar" src="<%= avatarPath != null ? request.getContextPath() + "/" + avatarPath : request.getContextPath() + "/" + defaultAvatar %>" alt="Avatar">
                         <p>${sessionScope.customer.username}</p>
                     </div>
                     <nav class="profile-nav">
@@ -147,37 +179,57 @@
                         <p>Manage profile information to keep your account secure</p>
 
                         <form action="UpdateProfile" method="POST">
-                            <div class="profile-details">
-                                <label>Username</label>
-                                <input type="text" name="username" value="${sessionScope.customer.username}" readonly>
+                            <label>Username</label>
+                            <input type="text" name="username" value="${sessionScope.customer.username}" readonly>
 
-                                <label>Full Name</label>
-                                <input type="text" name="fullName" value="${sessionScope.customer.fullName}" required>
+                            <label>Full Name</label>
+                            <input type="text" name="fullName" value="${sessionScope.customer.fullName}" required>
 
-                                <label>Email</label>
-                                <input type="email" name="email" value="${sessionScope.customer.email}" required>
+                            <label>Email</label>
+                            <input type="email" name="email" value="${sessionScope.customer.email}" required>
 
-                                <label>Phone number</label>
-                                <input type="text" name="phoneNumber" value="${sessionScope.customer.phoneNumber}" required>
+                            <label>Phone number</label>
+                            <input type="text" name="phoneNumber" value="${sessionScope.customer.phoneNumber}" required>
 
-                                <label>Address</label>
-                                <input type="text" name="address" value="${sessionScope.customer.address}" required>
+                            <label>Address</label>
+                            <input type="text" name="address" value="${sessionScope.customer.address}" required>
 
-                                <label>BirthDay</label>
-                                <input type="date" name="dob" value="${sessionScope.customer.dob}" required>
+                            <label>BirthDay</label>
+                            <input type="date" name="dob" value="${sessionScope.customer.dob}" required>
 
-                                <label>Gender</label>
-                                <select name="sex" required>
-                                    <option value="Male" ${sessionScope.customer.sex == 'Male' ? 'selected' : ''}>Male</option>
-                                    <option value="Female" ${sessionScope.customer.sex == 'Female' ? 'selected' : ''}>Female</option>
-                                    <option value="Other" ${sessionScope.customer.sex == 'Other' ? 'selected' : ''}>Other</option>
-                                </select>
+                            <label>Gender</label>
+                            <select name="sex" required>
+                                <option value="Male" ${sessionScope.customer.sex == 'Male' ? 'selected' : ''}>Male</option>
+                                <option value="Female" ${sessionScope.customer.sex == 'Female' ? 'selected' : ''}>Female</option>
+                                <option value="Other" ${sessionScope.customer.sex == 'Other' ? 'selected' : ''}>Other</option>
+                            </select>
 
-
-                                <button type="submit" class="save-btn">Save Changes</button>
-                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
                         </form>
+
+                        <div class="avatar-upload">
+                            <form action="${pageContext.request.contextPath}/UploadAvatarController" method="post" enctype="multipart/form-data">
+                                <img id="avatarPreview" src="<%= avatarPath != null ? request.getContextPath() + "/" + avatarPath : request.getContextPath() + "/images/user-placeholder.png" %>" 
+                                     alt="Avatar">
+                                <input type="file" name="avatar" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
+                                <button type="submit">Upload</button>
+                            </form>
+                        </div>
                     </section>
+
+
+                    <script>
+                        function previewAvatar(event) {
+                            var reader = new FileReader();
+                            reader.onload = function () {
+                                var output = document.getElementById('avatarPreview');
+                                output.src = reader.result;
+                            };
+                            reader.readAsDataURL(event.target.files[0]);
+                        }
+                    </script>
+
+
 
                     <section id="changePassword" class="content-section">
                         <h2><strong>Change Password</strong></h2>
