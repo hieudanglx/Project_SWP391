@@ -46,7 +46,7 @@ public class ReviewController extends HttpServlet {
         request.setAttribute("productID", productID);
         
         // Forward tới JSP để hiển thị
-        RequestDispatcher dispatcher = request.getRequestDispatcher("ViewProductDetails.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("choiceLogin.jsp");
         dispatcher.forward(request, response);
     }
 }

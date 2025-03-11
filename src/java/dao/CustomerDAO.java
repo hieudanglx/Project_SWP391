@@ -18,6 +18,25 @@ import java.sql.SQLException;
 
 public class CustomerDAO extends DBContext {
 
+    public boolean updateAvatar(int customerId, String avatarPath) {
+        String sql = "UPDATE Customer SET imgcustomer = ? WHERE CustomerID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, avatarPath);
+            ps.setInt(2, customerId);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Avatar updated successfully for customer ID: " + customerId);
+                return true;
+            } else {
+                System.out.println("No customer found with ID: " + customerId);
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to update avatar: " + e.getMessage());
+        }
+        return false;
+    }
+
     public boolean isPhoneExisted(String phone) {
         String sql = "SELECT * FROM Customer WHERE phoneNumber = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -41,49 +60,46 @@ public class CustomerDAO extends DBContext {
         }
         return false;
     }
-    
-    public boolean isUsernameExisted(String username) {
-    String sql = "SELECT * FROM Customer WHERE LOWER(username) = LOWER(?)";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, username);
-        ResultSet rs = ps.executeQuery();
-        return rs.next(); // Nếu có kết quả, username đã tồn tại
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return false;
-}
 
-   
+    public boolean isUsernameExisted(String username) {
+        String sql = "SELECT * FROM Customer WHERE LOWER(username) = LOWER(?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            return rs.next(); // Nếu có kết quả, username đã tồn tại
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public Integer ValidateStatusCustomer(String username, String password) {
-    if (connection == null) {
-        System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-        return null; 
-    }
-
-    String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, username);
-        ps.setString(2, password);
-        System.out.println("Đang kiểm tra tài khoản: " + username); // Log kiểm tra
-
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                int status = rs.getInt("status");
-                System.out.println("Trạng thái tài khoản: " + status); // Log trạng thái
-                return status;
-            } else {
-                System.out.println("Không tìm thấy tài khoản với username và password cung cấp.");
-            }
+        if (connection == null) {
+            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+            return null;
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+
+        String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+            System.out.println("Đang kiểm tra tài khoản: " + username); // Log kiểm tra
+
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int status = rs.getInt("status");
+                    System.out.println("Trạng thái tài khoản: " + status); // Log trạng thái
+                    return status;
+                } else {
+                    System.out.println("Không tìm thấy tài khoản với username và password cung cấp.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
-    return null; 
-}
-    
-    
+
     public Customer getCustomer(String username, String password) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
@@ -115,8 +131,6 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    
-
     public Customer getCustomerByEmail(String email) {
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
@@ -147,6 +161,20 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
+    public boolean updatePhoneNumber(String email, String newPhoneNumber) {
+        String sql = "UPDATE Customer SET phoneNumber = ? WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPhoneNumber);
+            stmt.setString(2, email);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất 1 hàng bị ảnh hưởng
+        } catch (SQLException e) {
+            e.printStackTrace(); // In lỗi SQL ra console để debug
+        }
+        return false;
+    }
+
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE Customer SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -165,7 +193,7 @@ public class CustomerDAO extends DBContext {
         String sql = "INSERT INTO Customer (username, fullname, email, password, address, phoneNumber,sex , dob, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
-            ps.setString(2,customer.getFullName());
+            ps.setString(2, customer.getFullName());
             ps.setString(3, customer.getEmail());
             ps.setString(4, customer.getPassword());
             ps.setString(5, customer.getAddress());
@@ -184,7 +212,7 @@ public class CustomerDAO extends DBContext {
         String sql = "UPDATE Customer SET username=?,fullname=?, email=?, password=?, address=?, phoneNumber=?,sex=?, dob=?, Status=?, imgcustomer=? WHERE CustomerID=?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, customer.getUsername());
-            ps.setString(2,customer.getFullName());
+            ps.setString(2, customer.getFullName());
             ps.setString(3, customer.getEmail());
             ps.setString(4, customer.getPassword());
             ps.setString(5, customer.getAddress());
@@ -237,7 +265,7 @@ public class CustomerDAO extends DBContext {
     }
 
     public void add(Customer customer) throws SQLException {
-         String sql = "INSERT INTO Customer (username, fullname, email, password, address, phoneNumber, sex, dob, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Customer (username, fullname, email, password, address, phoneNumber, sex, dob, Status, imgcustomer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) { // Sửa conn thành connection
             stmt.setString(1, customer.getUsername());
             stmt.setString(2, customer.getFullName());
@@ -245,8 +273,8 @@ public class CustomerDAO extends DBContext {
             stmt.setString(4, customer.getPassword());
             stmt.setString(5, customer.getAddress());
             stmt.setString(6, customer.getPhoneNumber());
-            stmt.setString(7,customer.getSex());
-            stmt.setString(8,customer.getDob());
+            stmt.setString(7, customer.getSex());
+            stmt.setString(8, customer.getDob());
             stmt.setString(9, "0");
             stmt.setString(10, customer.getImgCustomer());
 
@@ -290,8 +318,6 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-
-
     public void removeResetToken(String email) {
         String sql = "UPDATE Customer SET reset_token = NULL WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -318,7 +344,7 @@ public class CustomerDAO extends DBContext {
             if (updatePassword) {
                 ps.setString(4, customer.getPassword());
                 ps.setString(5, customer.getAddress());
-                ps.setString(6, customer.getPhoneNumber()); 
+                ps.setString(6, customer.getPhoneNumber());
                 ps.setString(7, customer.getSex());
                 ps.setString(8, customer.getDob());
                 ps.setString(9, customer.getStatus());
@@ -364,6 +390,5 @@ public class CustomerDAO extends DBContext {
         }
         return null;
     }
-
 
 }

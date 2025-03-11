@@ -43,9 +43,11 @@ public class ViewProfileOfCustomerController extends HttpServlet {
 
         // Lấy thông tin khách hàng từ database
         Customer customer = customerDAO.getCustomerById(customerId);
-        System.out.println(customer.getFullName()+" "+customer.getCustomerID());
+        System.out.println(customer.getFullName() + " " + customer.getCustomerID());
         if (customer != null) {
             session.setAttribute("customer", customer);
+            session.setAttribute("avatarPath", customer.getImgCustomer());
+
         }
 
         // Chuyển hướng đến trang ViewProfileOfCustomer.jsp
