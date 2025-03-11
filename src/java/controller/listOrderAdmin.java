@@ -9,6 +9,7 @@ import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import model.Order_list;
  *
  * @author Dinh Van Do - CE182224
  */
+@WebServlet(name="listOrderAdmin", urlPatterns={"/listOrderAdmin"})
 public class listOrderAdmin extends HttpServlet {
    
     /** 

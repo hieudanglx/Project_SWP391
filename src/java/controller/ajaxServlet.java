@@ -5,8 +5,6 @@
  */
 package controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

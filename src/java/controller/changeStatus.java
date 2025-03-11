@@ -9,6 +9,7 @@ import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Dinh Van Do - CE182224
  */
+@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
 public class changeStatus extends HttpServlet {
    
     /** 

@@ -17,12 +17,15 @@ public class AccountStaff {
     private String phoneNumber;
     private String username;
     private String cccd;
+    private String sex;
+    private String dob;
+    private String province_city;
     private int status;
 
     public AccountStaff() {
     }
 
-    public AccountStaff(int staffID, String address, String email, String password, String fullName, String phoneNumber, String username, String cccd, int status) {
+    public AccountStaff(int staffID, String address, String email, String password, String fullName, String phoneNumber, String username, String cccd, String sex, String dob, String province_city, int status) {
         this.staffID = staffID;
         this.address = address;
         this.email = email;
@@ -31,6 +34,9 @@ public class AccountStaff {
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.cccd = cccd;
+        this.sex = sex;
+        this.dob = dob;
+        this.province_city = province_city;
         this.status = status;
     }
 
@@ -98,6 +104,30 @@ public class AccountStaff {
         this.cccd = cccd;
     }
 
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getProvince_city() {
+        return province_city;
+    }
+
+    public void setProvince_city(String province_city) {
+        this.province_city = province_city;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -105,7 +135,6 @@ public class AccountStaff {
     public void setStatus(int status) {
         this.status = status;
     }
-    
 
     
 }

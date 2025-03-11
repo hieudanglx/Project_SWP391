@@ -21,20 +21,8 @@
         <servlet-class>controller.homeController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>productDetailForAF</servlet-name>
-        <servlet-class>controller.productDetailForAF</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>listOrderAdmin</servlet-name>
-        <servlet-class>controller.listOrderAdmin</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>changeStatus</servlet-name>
-        <servlet-class>controller.changeStatus</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>filterStatus</servlet-name>
-        <servlet-class>controller.filterStatus</servlet-class>
+        <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
+        <servlet-class>controller.EditAccountStaff_ForAdmin</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
@@ -69,20 +57,8 @@
         <url-pattern>/SearchInventory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>productDetailForAF</servlet-name>
-        <url-pattern>/productDetailForAF</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>listOrderAdmin</servlet-name>
-        <url-pattern>/listOrderAdmin</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>changeStatus</servlet-name>
-        <url-pattern>/changeStatus</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>filterStatus</servlet-name>
-        <url-pattern>/filterStatus</url-pattern>
+        <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
+        <url-pattern>/EditAccountStaff_ForAdmin</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
