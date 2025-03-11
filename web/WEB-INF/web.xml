@@ -20,6 +20,10 @@
         <servlet-name>homeController</servlet-name>
         <servlet-class>controller.homeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
+        <servlet-class>controller.EditAccountStaff_ForAdmin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>SearchInventory</servlet-name>
         <url-pattern>/SearchInventory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
+        <url-pattern>/EditAccountStaff_ForAdmin</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

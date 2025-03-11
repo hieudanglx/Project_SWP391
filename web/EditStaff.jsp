@@ -31,12 +31,22 @@
     <body>
         <div class="form-container">
             <h1>Edit Staff</h1>
-            <form action="EditAccount_Staff" method="POST">
+            <form action="EditAccountStaff_ForAdmin" method="POST">
                 <input type="hidden" name="staffID" value="${staff.staffID}" />
+
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name:</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="${staff.fullName}" required>
+                </div>
 
                 <div class="mb-3">
                     <label for="address" class="form-label">Address:</label>
                     <input type="text" class="form-control" id="address" name="address" value="${staff.address}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="province" class="form-label">Province/City:</label>
+                    <input type="text" class="form-control" id="province_city" name="province_city" value="${staff.province_city}" required>
                 </div>
 
                 <div class="mb-3">
@@ -49,10 +59,6 @@
                     <input type="password" class="form-control" id="password" name="password" value="${staff.password}" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="fullName" class="form-label">Full Name:</label>
-                    <input type="text" class="form-control" id="fullName" name="fullName" value="${staff.fullName}" required>
-                </div>
 
                 <div class="mb-3">
                     <label for="phoneNumber" class="form-label">Phone Number:</label>
@@ -68,6 +74,19 @@
                     <input type="text" class="form-control bg-light" id="cccd" name="cccd" value="${staff.cccd}" readonly>
                 </div>
 
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth:</label>
+                    <input type="date" class="form-control" id="dob" name="dob" value="${staff.dob}" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="sex" class="form-label">Sex:</label>
+                    <select class="form-select" id="sex" name="sex">
+                        <option value="Male" ${staff.sex == 'Male' ? 'selected' : ''}>Male</option>
+                        <option value="Female" ${staff.sex == 'Female' ? 'selected' : ''}>Female</option>
+                        <option value="Other" ${staff.sex == 'Other' ? 'selected' : ''}>Other</option>
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status:</label>
                     <select class="form-select" id="status" name="status">

@@ -67,14 +67,10 @@
         <div class="content">
             <div class="navbar-custom">
                 <h3>Staff Account List</h3>
-                <div class="navbar-custom">
-                    <form action="SearchAccountStaff" method="get" class="d-flex">
-                        <input type="text" name="fullname" placeholder="Search by Full Name" class="form-control me-2">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </form>
-                </div>
-
-                <!-- Thông báo -->
+                <form action="SearchAccountStaff" method="get" class="d-flex">
+                    <input type="text" name="fullname" placeholder="Search by Full Name" class="form-control me-2">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
                 <% String message = (String) session.getAttribute("message"); %>
                 <% if (message != null) { %>
                 <div id="alert-box" class="alert alert-warning text-center">
@@ -94,29 +90,43 @@
                 <table class="table table-striped text-center">
                     <thead class="table-dark">
                         <tr>
-                            <th>ID</th><th>Full Name</th><th>Email</th><th>Phone</th>
-                            <th>Address</th><th>Username</th><th>CCCD</th><th>Status</th>><th>Actions</th>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Username</th>
+                            <th>CCCD</th>
+                            <th>Gender</th>
+                            <th>BirthDay</th>
+                            <th>Address</th>
+                            <th>Province/City</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${list}" var="s">
-                            <tr>
-                                <td>${s.staffID}</td>
-                                <td>${s.fullName}</td>
-                                <td>${s.email}</td>
-                                <td>${s.phoneNumber}</td>
-                                <td>${s.address}</td>
-                                <td>${s.username}</td>
-                                <<td>${s.cccd}</td>
-                                <td>${s.status == 0 ? "Active" : "Inactive"}</td>
-                                
-                                <td>
-                                    <a href="EditAccount_Staff?staffID=${s.staffID}" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="DeleteAccount_Staff?staffID=${s.staffID}" 
-                                       onclick="return confirm('Are you sure you want to delete this staff member?');"
-                                       class="btn btn-danger btn-sm">Delete</a>
-                                </td>
-                            </tr>
+                            <c:if test="${s.username ne 'admin'}">
+                                <tr>
+                                    <td>${s.staffID}</td>
+                                    <td>${s.fullName}</td>
+                                    <td>${s.username}</td>
+                                    <td>${s.cccd}</td>
+                                    <td>${s.sex}</td>
+                                    <td>${s.dob}</td>
+                                    <td>${s.address}</td>
+                                    <td>${s.province_city}</td>
+                                    <td>${s.email}</td>
+                                    <td>${s.phoneNumber}</td>          
+                                    <td>${s.status == 0 ? "Active" : "Inactive"}</td>
+                                    <td>
+                                        <a href="EditAccountStaff_ForAdmin?staffID=${s.staffID}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="DeleteAccount_Staff?staffID=${s.staffID}"
+                                           onclick="return confirm('Are you sure you want to delete this staff member?');"
+                                           class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            </c:if>
                         </c:forEach>
                     </tbody>
                 </table>
