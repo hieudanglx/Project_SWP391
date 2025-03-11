@@ -161,6 +161,20 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
+    public boolean updatePhoneNumber(String email, String newPhoneNumber) {
+        String sql = "UPDATE Customer SET phoneNumber = ? WHERE email = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, newPhoneNumber);
+            stmt.setString(2, email);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất 1 hàng bị ảnh hưởng
+        } catch (SQLException e) {
+            e.printStackTrace(); // In lỗi SQL ra console để debug
+        }
+        return false;
+    }
+
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE Customer SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {

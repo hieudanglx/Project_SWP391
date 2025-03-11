@@ -167,7 +167,7 @@
                         <ul>
                             <li><a onclick="showSection('profile')">Profile</a></li>
                             <li><a onclick="showSection('changePassword')">Change Password</a></li>
-                            <li><a onclick="showSection('privacySettings')">Privacy Settings</a></li>
+                            <li><a onclick="showSection('changePhoneNumber')">Change Phone Number</a></li>
                             <li><a onclick="showSection('orderHistory')">Order History</a></li>
                         </ul>
                     </nav>
@@ -186,10 +186,10 @@
                             <input type="text" name="fullName" value="${sessionScope.customer.fullName}" required>
 
                             <label>Email</label>
-                            <input type="email" name="email" value="${sessionScope.customer.email}" required>
+                            <input type="email" name="email" value="${sessionScope.customer.email}" readonly>
 
                             <label>Phone number</label>
-                            <input type="text" name="phoneNumber" value="${sessionScope.customer.phoneNumber}" required>
+                            <input type="text" name="phoneNumber" value="${sessionScope.customer.phoneNumber}" readonly>
 
                             <label>Address</label>
                             <input type="text" name="address" value="${sessionScope.customer.address}" required>
@@ -256,9 +256,31 @@
                     </section>
 
 
-                    <section id="privacySettings" class="content-section">
-                        <h2><strong>Privacy Settings</strong></h2>
-                        <p>Manage your privacy preferences.</p>
+                    <section id="changePhoneNumber" class="content-section">
+                        <h2><strong>Change Phone Number</strong></h2>
+
+                        <!-- Hiển thị thông báo thành công -->
+                        <c:if test="${not empty successMessage}">
+                            <p style="color: green;">${successMessage}</p>
+                        </c:if>
+
+                        <!-- Hiển thị thông báo lỗi nếu có -->
+                        <c:if test="${not empty errorMessage}">
+                            <p style="color: red;">${errorMessage}</p>
+                        </c:if>
+
+                        <form action="ChangePhoneNumberOfCustomer" method="POST" onsubmit="return validatePhoneNumber()">
+                            <input type="hidden" name="email" value="${sessionScope.customer.email}" required>
+
+                            <label>Current Phone Number</label>
+                            <input type="text" name="currentPhoneNumber" value="${sessionScope.customer.phoneNumber}" readonly>
+
+
+                            <label>New Phone Number</label>
+                            <input type="text" name="newPhoneNumber" required>
+
+                            <button type="submit" class="save-btn">Update Phone Number</button>
+                        </form>
                     </section>
 
                     <section id="orderHistory" class="content-section">
@@ -267,6 +289,40 @@
                     </section>
                 </main>
             </div>
+
+            <script>
+                function validatePhoneNumber() {
+                    let currentPhoneNumber = document.querySelector("input[name='currentPhoneNumber']").value;
+                    let newPhoneNumber = document.querySelector("input[name='newPhoneNumber']").value;
+
+                    // Biểu thức chính quy: Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số
+                    let phoneRegex = /^0\d{9}$/;
+
+                    if (!phoneRegex.test(newPhoneNumber)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Invalid Phone Number",
+                            text: "Số điện thoại phải bắt đầu bằng số 0 và có đúng 10 chữ số!"
+                        });
+                        return false;
+                    }
+
+                    if (newPhoneNumber === currentPhoneNumber) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Invalid Phone Number",
+                            text: "Số điện thoại mới không được trùng với số cũ!"
+                        });
+                        return false;
+                    }
+
+                    return true;
+                }
+            </script>
+
+
+
+
 
             <script>
                 function validatePassword() {
