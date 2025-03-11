@@ -19,8 +19,9 @@ public class Order_list {
     private String Address;
     private Date Date;
     private String Status;
-    private double Total;
     private String PhoneNumber;
+    private double Total;
+    
 
     private int year;
     private int period; // Tháng hoặc quý
@@ -35,6 +36,21 @@ public class Order_list {
         this.period = period;
         this.revenue = revenue;
     }
+
+    public Order_list(int OrderID, int CustomerID, int StaffID, String Address, Date Date, String Status, String PhoneNumber, double Total) {
+        this.OrderID = OrderID;
+        this.CustomerID = CustomerID;
+        this.StaffID = StaffID;
+        this.Address = Address;
+        this.Date = Date;
+        this.Status = Status;
+        this.PhoneNumber = PhoneNumber;
+        this.Total = Total;
+        
+    }
+
+    
+    
 
     public Order_list(int OrderID, Date Date, double Total) {
         this.OrderID = OrderID;

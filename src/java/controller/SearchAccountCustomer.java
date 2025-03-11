@@ -76,13 +76,21 @@ public class SearchAccountCustomer extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Lấy từ khóa tìm kiếm từ request
-       String username = request.getParameter("username"); // Lấy username từ request
+        String keyword = request.getParameter("keyword"); // Lấy keyword từ request
 
         AccountDao dao = new AccountDao();
-        List<AccountCustomer> searchResults = dao.searchCustomerByUsername(username); // Gọi phương thức tìm kiếm
-        request.setAttribute("list", searchResults);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("manageAccountCustomer.jsp");
-        dispatcher.forward(request, response);
+        List<AccountCustomer> searchResults = dao.searchCustomerByUsername(keyword); // Gọi phương thức tìm kiếm
+
+        if (searchResults.isEmpty()) {
+            request.getSession().setAttribute("message", "Không tìm thấy tài khoản nào với tên '" + keyword + "'");
+            response.sendRedirect("listAccountCustomer");
+        } else {
+
+            request.setAttribute("list", searchResults);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("manageAccountCustomer.jsp");
+            dispatcher.forward(request, response);
+
+        }
     }
 
     /**

@@ -24,6 +24,18 @@
         <servlet-name>productDetailForAF</servlet-name>
         <servlet-class>controller.productDetailForAF</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>listOrderAdmin</servlet-name>
+        <servlet-class>controller.listOrderAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>changeStatus</servlet-name>
+        <servlet-class>controller.changeStatus</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>filterStatus</servlet-name>
+        <servlet-class>controller.filterStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -32,14 +44,14 @@
         <servlet-name>CreateAccountStaff</servlet-name>
         <url-pattern>/CreateAccountStaff</url-pattern>
     </servlet-mapping>
-    <servlet>
+    <!--    <servlet>
         <servlet-name>RevenueTotal</servlet-name>
         <servlet-class>controller.RevenueTotal</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>RevenueTotal</servlet-name>
         <url-pattern>/RevenueTotal</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
     <servlet-mapping>
         <servlet-name>SearchAccountStaff</servlet-name>
         <url-pattern>/SearchAccountStaff</url-pattern>
@@ -49,12 +61,28 @@
         <url-pattern>/EmailSenderCustomer</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>homeController</servlet-name>
-        <url-pattern>/homeController</url-pattern>
+        <servlet-name>ListInventory</servlet-name>
+        <url-pattern>/ListInventory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchInventory</servlet-name>
+        <url-pattern>/SearchInventory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>productDetailForAF</servlet-name>
         <url-pattern>/productDetailForAF</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>listOrderAdmin</servlet-name>
+        <url-pattern>/listOrderAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>changeStatus</servlet-name>
+        <url-pattern>/changeStatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>filterStatus</servlet-name>
+        <url-pattern>/filterStatus</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

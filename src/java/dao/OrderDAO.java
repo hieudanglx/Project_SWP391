@@ -18,7 +18,7 @@ import model.Order_list;
  */
 public class OrderDAO extends dao.DBContext {
 
-      public List<Order_list> getAllOrders() {
+    public List<Order_list> getAllOrders() {
         String sql = "SELECT OrderID, Date, Total FROM Order_List";
         List<Order_list> orderList = new ArrayList<>();
 
@@ -40,7 +40,74 @@ public class OrderDAO extends dao.DBContext {
         }
         return orderList;
     }
-     
+
+    public List<Order_list> getAllOrder() {
+        List<Order_list> orderList = new ArrayList<>();
+        String query = "SELECT * FROM Order_List"; // Giả sử bảng đơn hàng có tên là "Orders"
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query);  ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Order_list order = new Order_list(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getInt("StaffID"),
+                        rs.getString("Address"),
+                        rs.getDate("Date"), // Hoặc rs.getTimestamp("Date") nếu là kiểu datetime
+                        rs.getString("Status"),
+                        rs.getString("PhoneNumber"),
+                        rs.getDouble("Total")
+                );
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderList;
+    }
+
+    public boolean updateOrderStatus(int orderID, String newStatus) {
+        String query = "UPDATE Order_List SET Status = ? WHERE OrderID = ?";
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, newStatus);
+            pstmt.setInt(2, orderID);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có ít nhất một hàng được cập nhật
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<Order_list> getOrdersByStatus(String status) {
+        List<Order_list> orderList = new ArrayList<>();
+        String query = "SELECT * FROM Order_List WHERE Status = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, status);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Order_list order = new Order_list(
+                        rs.getInt("OrderID"),
+                        rs.getInt("CustomerID"),
+                        rs.getInt("StaffID"),
+                        rs.getString("Address"),
+                        rs.getDate("Date"), // Hoặc rs.getTimestamp("Date") nếu là kiểu datetime
+                        rs.getString("Status"),
+                        rs.getString("PhoneNumber"),
+                        rs.getDouble("Total")
+                );
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderList;
+    }
+
     public List<Order_list> getRevenueByMonth() {
         String sql = "SELECT YEAR(ol.Date) AS Nam, MONTH(ol.Date) AS Thang, "
                 + "SUM(od.Quantity * p.Price) AS DoanhThu "

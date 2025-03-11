@@ -17,6 +17,7 @@
         <title>${product.productName}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/popup.css">
         <style>
             .details{
                 .tab-pane {
@@ -84,7 +85,7 @@
 
 
     </head>
-    <body>
+    <body data-status="${status}">
         <%@include file="header.jsp" %>
 
         <div class="container py-5 details">
@@ -266,108 +267,111 @@
                                 <p>Chưa có đánh giá nào cho sản phẩm này.</p>
                                 <% } %>
                             </div>
-
-
                         </div>
-
-
-
                     </div>
-                </div
-            </div>
-
-
-            <!-- Right Column -->
-            <div class="col-lg-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <!-- Storage Options -->
-                        <div class="mb-4">
-                            <h5 class="mb-3">Bộ nhớ</h5>
-                            <div class="d-flex flex-wrap gap-2">
-                                <c:set var="shownROMs" value="" />
-                                <c:forEach items="${list}" var="p">
-                                    <c:if test="${not fn:contains(shownROMs, p.rom)}">
-                                        <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
-                                        <button type="button" 
-                                                class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
-                                                onclick="selectOption('rom', '${p.rom}')">
-                                            ${p.rom}
-                                        </button>
-                                    </c:if>
-                                </c:forEach>
+                </div>
+                <!-- Right Column -->
+                <div class="col-lg-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <!-- Storage Options -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Bộ nhớ</h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <c:set var="shownROMs" value="" />
+                                    <c:forEach items="${list}" var="p">
+                                        <c:if test="${not fn:contains(shownROMs, p.rom)}">
+                                            <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
+                                            <button type="button" 
+                                                    class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
+                                                    onclick="selectOption('rom', '${p.rom}')">
+                                                ${p.rom}
+                                            </button>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- Color Options -->
-                        <div class="mb-4">
-                            <h5 class="mb-3">Màu sắc</h5>
-                            <div class="d-flex flex-wrap gap-3">
-                                <c:set var="shownColors" value="" />
-                                <c:forEach items="${list}" var="p">
-                                    <c:if test="${not fn:contains(shownColors, p.color)}">
-                                        <c:set var="shownColors" value="${shownColors}${p.color};" />
-                                        <button type="button" 
-                                                class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
-                                                onclick="selectOption('color', '${p.color}')">
-                                            ${p.color}
-                                        </button>
-                                    </c:if>
-                                </c:forEach>
+                            <!-- Price -->
+                            <div class="mb-4">
+                                <h3 class="text-danger fw-bold">
+                                    <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ" />
+                                </h3>
                             </div>
-                        </div>
+                            <!-- Color Options -->
+                            <div class="mb-4">
+                                <h5 class="mb-3">Màu sắc</h5>
+                                <div class="d-flex flex-wrap gap-3">
+                                    <c:set var="shownColors" value="" />
+                                    <c:forEach items="${list}" var="p">
+                                        <c:if test="${not fn:contains(shownColors, p.color)}">
+                                            <c:set var="shownColors" value="${shownColors}${p.color};" />
+                                            <button type="button" 
+                                                    class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
+                                                    onclick="selectOption('color', '${p.color}')">
+                                                ${p.color}
+                                            </button>
+                                        </c:if>
+                                    </c:forEach>
+                                </div>
+                            </div>
 
-                        <!-- Action Buttons -->
-                        <div class="d-grid gap-2">
-                            <a href="UpdateCartController?id=${product.productID}&type=add&page=detail" class="btn btn-lg btn-dark py-3">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                Thêm vào giỏ hàng
-                            </a>
-                            <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
-                                <i class="fas fa-bolt me-2"></i>
-                                Mua ngay
-                            </a>
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2">
+                                <a href="UpdateCartController?id=${product.productID}&CategoryID=${product.categoryID}&type=add&page=detail" class="btn btn-lg btn-dark py-3">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    Thêm vào giỏ hàng
+                                </a>
+                                <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
+                                    <i class="fas fa-bolt me-2"></i>
+                                    Mua ngay
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <%@include file="footer.jsp" %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/popup.js"></script>
+        <script>
+                                                        function selectOption(type, value) {
+                                                            const productID = ${product.productID};
+                                                            const currentRom = "${product.rom}";
+                                                            const currentColor = "${product.color}";
+
+                                                            // Tạo URL mới với tham số mới
+                                                            let url = "ViewProductDetailsController?id=" + productID;
+
+                                                            if (type === 'rom') {
+                                                                url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
+                                                            } else if (type === 'color') {
+                                                                url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
+                                                            }
+
+                                                            // Load lại trang với tham số mới
+                                                            window.location.href = url;
+                                                        }
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            const tabLinks = document.querySelectorAll('#nav-tab button');
+
+                                                            tabLinks.forEach(button => {
+                                                                button.addEventListener('shown.bs.tab', function (event) {
+                                                                    const targetTab = document.querySelector(event.target.dataset.bsTarget);
+                                                                    targetTab.classList.add("fade");
+                                                                });
+                                                            });
+                                                        });
+        </script>
+
+    </body>
+    <!-- Popup container -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <div id="popupIcon" class="popup-icon"></div>
+            <h3 id="popupMessage"></h3>
+            <div class="popup-buttons" id="popupButtons"></div>
+        </div>
     </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-                                                function selectOption(type, value) {
-                                                    const productID = ${product.productID};
-                                                    const currentRom = "${product.rom}";
-                                                    const currentColor = "${product.color}";
-
-                                                    // Tạo URL mới với tham số mới
-                                                    let url = "ViewProductDetailsController?id=" + productID;
-
-                                                    if (type === 'rom') {
-                                                        url += "&selectedRom=" + encodeURIComponent(value) + "&selectedColor=" + encodeURIComponent(currentColor);
-                                                    } else if (type === 'color') {
-                                                        url += "&selectedColor=" + encodeURIComponent(value) + "&selectedRom=" + encodeURIComponent(currentRom);
-                                                    }
-
-                                                    // Load lại trang với tham số mới
-                                                    window.location.href = url;
-                                                }
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabLinks = document.querySelectorAll('#nav-tab button');
-
-        tabLinks.forEach(button => {
-            button.addEventListener('shown.bs.tab', function (event) {
-                const targetTab = document.querySelector(event.target.dataset.bsTarget);
-                targetTab.classList.add("fade");
-            });
-        });
-    });
-</script>
-
-</body>
 </html>

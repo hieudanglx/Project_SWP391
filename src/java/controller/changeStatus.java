@@ -5,24 +5,19 @@
 
 package controller;
 
-import dao.ProductDao;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Product;
-import model.ProductForAdmin;
 
 /**
  *
  * @author Dinh Van Do - CE182224
  */
-@WebServlet(name="listProductsController", urlPatterns={"/listProductsForAdmin"})
-public class listProductsForAdmin extends HttpServlet {
+public class changeStatus extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -35,15 +30,17 @@ public class listProductsForAdmin extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            ProductDao l = new ProductDao();
-       List<Product> list = l.getAllProductsForAdmin();
-       if (list.isEmpty()){
+            int orderID = Integer.parseInt(request.getParameter("orderID"));
+        String newStatus = request.getParameter("status");
+            OrderDAO l = new OrderDAO();
+            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
+            if (isUpdated) {
+                      
+           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
+        } else {
+            request.setAttribute("error","loi");          
            request.getRequestDispatcher("error.jsp").forward(request, response);
-       }
-           request.setAttribute("list", list);          
-           request.getRequestDispatcher("listProductForAdmin.jsp").forward(request, response);
-            
+        }
         }
     } 
 
@@ -71,8 +68,7 @@ public class listProductsForAdmin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         processRequest(request, response);
-        
+        processRequest(request, response);
     }
 
     /** 

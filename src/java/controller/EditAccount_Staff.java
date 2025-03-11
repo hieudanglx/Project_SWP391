@@ -37,7 +37,7 @@ public class EditAccount_Staff extends HttpServlet {
         }
 
         session.setAttribute("staff", staff); // Cập nhật session với thông tin mới
-        request.getRequestDispatcher("ViewProfileStaff.jsp").forward(request, response);
+        request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
     }
 
     @Override
@@ -58,13 +58,13 @@ public class EditAccount_Staff extends HttpServlet {
         String address = request.getParameter("address");
         String cccd = request.getParameter("cccd");
 
-        // Kiểm tra dữ liệu hợp lệ
-//        if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null ||
-//            fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
-//            request.setAttribute("errorMessage", "All fields are required!");
-//            request.getRequestDispatcher("/viewProfileStaffController").forward(request, response);
-//            return;
-//        }
+         //Kiểm tra dữ liệu hợp lệ
+        if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null ||
+            fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
+            request.setAttribute("errorMessage", "All fields are required!");
+            request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
+            return;
+        }
 
         // Lấy thông tin nhân viên hiện tại
         AccountStaff existingStaff = (AccountStaff) session.getAttribute("staff");
@@ -85,10 +85,10 @@ public class EditAccount_Staff extends HttpServlet {
         if (isUpdated) {
             session.setAttribute("staff", existingStaff); // Cập nhật session
             session.setAttribute("updateSuccess", "Profile updated successfully!");
-            response.sendRedirect("/viewProfileStaffController"); // Quay lại trang hồ sơ
+            response.sendRedirect("viewProfileStaff.jsp"); // Quay lại trang hồ sơ
         } else {
             request.setAttribute("errorMessage", "Failed to update profile.");
-            request.getRequestDispatcher("/viewProfileStaffController").forward(request, response);
+            request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
         }
     }
 

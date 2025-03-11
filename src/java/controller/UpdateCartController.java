@@ -51,18 +51,20 @@ public class UpdateCartController extends HttpServlet {
                 link.removeProductFromCart(c.getCustomerID(), id);
                 break;
             case "add":
-                if (!link.AddProductToCart(c.getCustomerID(), id)){
+                request.setAttribute("status", true);
+                if (!link.AddProductToCart(c.getCustomerID(), id)) {
                     System.out.println("controller.UpdateCartController.processRequest() add sai r");
+                    request.setAttribute("status", false);
                 }
-                if (page.contains("list")){
-                     url = "ViewListProductGC?CategoryID=1";
+                if (page.contains("list")) {
+                    url = "ViewListProductGC?CategoryID="+Integer.parseInt(request.getParameter("CategoryID"));
                 } else {
-                     url = "ViewProductDetailsController?id="+id;
+                    url = "ViewProductDetailsController?id=" + id;
                 }
-                System.out.println("link: "+url);
+                System.out.println("link: " + url);
                 break;
             case "buy":
-                if (!link.AddProductToCart(c.getCustomerID(), id)){
+                if (!link.AddProductToCart(c.getCustomerID(), id)) {
                     System.out.println("controller.UpdateCartController.processRequest() buy sai r");
                 }
                 break;

@@ -81,6 +81,7 @@
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
             <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
             <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
+            <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
         </div>
 
         <!-- Main Content -->

@@ -129,8 +129,8 @@
                 </div>
                 <nav class="profile-nav">
                     <ul>
-                        <li><a onclick="showSection('profile')">Profile</a></li>
-                        <li><a onclick="showSection('changePassword')">Change Password</a></li>
+                        <li><a onclick="showSection('profile')">Hồ sơ</a></li>
+                        <li><a onclick="showSection('changePassword')">Ðổi mật khẩu</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -138,8 +138,8 @@
             <main class="profile-content">
                 <!-- Profile Section -->
                 <section id="profile" class="content-section active">
-                    <h2><strong>My Profile</strong></h2>
-                    <p>Manage your profile information.</p>
+                    <h2><strong>Hồ sơ của tôi</strong></h2>
+                    <p>Quản lý thông tin hồ sơ của bạn.</p>
                     <c:if test="${not empty sessionScope.updateSuccess}">
                         <script>
                             Swal.fire({
@@ -169,24 +169,24 @@
                             <label>Staff ID</label>
                             <input type="text" name="staffID" value="${sessionScope.staff.staffID}" readonly>
 
-                            <label>Username</label>
+                            <label>Tên người dùng</label>
                             <input type="text" name="username" value="${sessionScope.staff.username}" readonly>
 
-                            <label>Full Name</label>
-                            <input type="text" name="fullName" value="${sessionScope.staff.fullName}" readonly>
+                            <label>Họ và tên</label>
+                            <input type="text" name="fullName" value="${sessionScope.staff.fullName}" required>
 
                             <label>Email</label>
-                            <input type="email" name="email" value="${sessionScope.staff.email}" readonly>
+                            <input type="email" name="email" value="${sessionScope.staff.email}" required>
 
-                            <label>Phone Number</label>
-                            <input type="text" name="phoneNumber" value="${sessionScope.staff.phoneNumber}" readonly>
+                            <label>Số điện thoại</label>
+                            <input type="text" name="phoneNumber" value="${sessionScope.staff.phoneNumber}" required>
 
-                            <label>Address</label>
-                            <input type="text" name="address" value="${sessionScope.staff.address}" readonly>
+                            <label>Địa chỉ</label>
+                            <input type="text" name="address" value="${sessionScope.staff.address}" required>
 
                             <label>CCCD</label>
                             <input type="text" name="cccd" value="${sessionScope.staff.cccd}" readonly>
-
+                            <button type="submit" class="save-btn">Lưu thay đổi</button>
                         </div>
                     </form>
                 </section>

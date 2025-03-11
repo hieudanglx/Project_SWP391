@@ -18,21 +18,12 @@ import model.ProductForAdmin;
  */
 public class ProductDao extends DBContext {
 
-    public List<ProductForAdmin> getAllProductsForAdmin() {
-        List<ProductForAdmin> list = new ArrayList<>();
-        String query = "SELECT p.ProductID, p.ProductName, p.Price, "
-                + "p.CategoryID, p.Brand, p.Camera_Behind, p.Camera_Front, p.Ram, p.RAM_type, "
-                + "p.Supports_upgrading_RAM, p.Rom, p.Supports_upgrading_ROM, p.Color, "
-                + "p.Operating_System_name, p.Operating_system_version, p.Size_screeen, "
-                + "p.Refresh_rate, p.Screen_resolution, p.Chip_type, p.Chip_name, "
-                + "p.GPU_type, p.GPU_name, p.Quantity_Sell, p.Quantity_Product, p.ImageURL, p.IsDelete, "
-                + "COALESCE(ii.Import_price, 0) AS Import_price "
-                + "FROM Product p "
-                + "LEFT JOIN Import_Inventory ii ON p.ProductID = ii.ProductID";  // JOIN để lấy Import_price
-
+    public List<Product> getAllProductsForAdmin() {
+        List<Product> list = new ArrayList<>();
+        String query = "SELECT * FROM Product ";
         try ( PreparedStatement pstmt = connection.prepareStatement(query);  ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                list.add(new ProductForAdmin(
+                list.add(new Product(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
                         rs.getInt("Price"),
@@ -58,9 +49,9 @@ public class ProductDao extends DBContext {
                         rs.getInt("Quantity_Sell"),
                         rs.getInt("Quantity_Product"),
                         rs.getString("ImageURL"),
-                        rs.getInt("IsDelete"),
-                        rs.getInt("Import_price") // Sửa đúng kiểu dữ liệu
+                        rs.getInt("IsDelete")
                 ));
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,11 +60,21 @@ public class ProductDao extends DBContext {
     }
 
     public boolean deleteProduct(String productID) {
-        String query = "UPDATE [dbo].[Product] SET isDelete = 1 WHERE ProductID = ?";
-        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, productID);
-            int rs = pstmt.executeUpdate();
-            return rs > 0;
+        String updateProductQuery = "UPDATE [dbo].[Product] SET isDelete = 1 WHERE ProductID = ?";
+        String deleteInventoryQuery = "DELETE FROM [dbo].[Import_Inventory] WHERE ProductID = ?";
+
+        try ( PreparedStatement pstmt1 = connection.prepareStatement(updateProductQuery);  PreparedStatement pstmt2 = connection.prepareStatement(deleteInventoryQuery)) {
+
+            // Cập nhật bảng Product
+            pstmt1.setString(1, productID);
+            int updateResult = pstmt1.executeUpdate();
+
+            // Xóa khỏi bảng Import_Inventory
+            pstmt2.setString(1, productID);
+            int deleteResult = pstmt2.executeUpdate();
+
+            return updateResult > 0 && deleteResult >= 0; // Đảm bảo cập nhật thành công và xóa (nếu có)
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -131,18 +132,13 @@ public class ProductDao extends DBContext {
     }
 
     public boolean addProduct(Product product) {
-        String query = "DECLARE @InsertedProductID INT; "
-                + "INSERT INTO [dbo].[Product] "
+        String query = "INSERT INTO [dbo].[Product] "
                 + "([ProductName], [Price], [CategoryID], [Brand], [Camera_Front], [Camera_Behind], "
                 + "[Ram], [RAM_type], [Supports_upgrading_RAM], [Rom], [Supports_upgrading_ROM], "
                 + "[Color], [Operating_System_name], [Operating_system_version], [Size_screeen], "
                 + "[Refresh_rate], [Screen_resolution], [Chip_type], [Chip_name], [GPU_type], [GPU_name], "
                 + "[Quantity_Sell], [Quantity_Product], [ImageURL], [IsDelete]) "
-                + "VALUES (?, ?, ?, ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); "
-                + "SET @InsertedProductID = SCOPE_IDENTITY(); "
-                + "INSERT INTO [dbo].[Import_Inventory] "
-                + "([ProductID], [Import_price], [Date], [Import_quantity], [Supplier]) "
-                + "VALUES (@InsertedProductID, ?, GETDATE(), ?, ?);";
+                + "VALUES (?, ?, ?, ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), NULLIF(?, ''), ?, NULLIF(?, ''), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             // Set values for Product table
@@ -171,11 +167,6 @@ public class ProductDao extends DBContext {
             pstmt.setInt(23, product.getQuantityProduct());
             pstmt.setString(24, product.getImageURL());
             pstmt.setInt(25, product.getIsDelete());
-
-            // Set values for Import_Inventory table
-            pstmt.setInt(26, 0); // Giá nhập hàng (giả sử mặc định 0)
-            pstmt.setInt(27, 0); // Số lượng nhập hàng (giả sử mặc định 0)
-            pstmt.setString(28, "Unknown"); // Nhà cung cấp mặc định
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;

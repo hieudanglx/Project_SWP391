@@ -1,3 +1,9 @@
+<%-- 
+    Document   : listOrder
+    Created on : Mar 11, 2025, 3:49:24 PM
+    Author     : Dinh Van Do - CE182224
+--%>
+
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -5,7 +11,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Dashboard - List Products</title>
+        <title>Admin Dashboard - List Orders</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -87,59 +93,65 @@
         <div class="content">
             <!-- Navbar -->
             <nav class="navbar-custom">
-                <h4>Admin Dashboard - List Products</h4>
+                <h4>Admin Dashboard - List Orders</h4>
                 <div>
                     <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
                     <a href="javascript:void(0);" class="logout-link" onclick="logout()">Logout</a>
                 </div>
             </nav>            
-            <!-- Button to Create Product -->
-            <div class="d-flex justify-content-end mb-3">
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Create Product
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="createProduct.jsp?category=2">Phone </a></li>
-                        <li><a class="dropdown-item" href="createTablet.jsp?category=3">Tablet </a></li>
-                        <li><a class="dropdown-item" href="createLaptop.jsp?category=1">Laptop</a></li>
-                        
-                    </ul>
-                </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="filterStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Lọc theo trạng thái
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="filterStatusDropdown">
+                    <li><a class="dropdown-item" href="filterStatus">Tất cả</a></li>
+                    <li><a class="dropdown-item" href="filterStatus?status=Chờ xử lý">Chờ xử lý</a></li>
+                    <li><a class="dropdown-item" href="filterStatus?status=Giao Hàng">Giao Hàng</a></li>
+                    <li><a class="dropdown-item" href="filterStatus?status=Đã Hủy">Đã Hủy</a></li>
+                    <li><a class="dropdown-item" href="filterStatus?status=Thành công">Thành công</a></li>
+                </ul>
             </div>
 
-
-            <!-- Products Table -->
+            <!-- Orders Table -->
             <div class="table-responsive">
                 <table class="table table-striped table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Sold</th>
-                            <th>Quantity</th>
+                            <th>OrderID</th>
+                            <th>CustomerID</th>
+                            <th>StaffID</th>
+                            <th>Address</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>PhoneNumber</th>
+                            <th>Total</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Duyệt qua danh sách sản phẩm -->
-                        <c:forEach items="${list}" var="p">
-                            <c:if test="${p.isDelete == 0}">
-                                <tr>
-                                    <td>${p.productID}</td>
-                                    <td>${p.productName}</td>
-                                    <td>${p.price}</td>
-                                    <td>${p.quantitySell}</td>
-                                    <td>${p.quantityProduct}</td>
-                                    <td>
-                                        <a href="productDetailForAF?productID=${p.productID}" class="btn btn-warning btn-sm">Detail</a>
-                                        <a href="deleteProduct?productID=${p.productID}" 
-                                           onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
-                                           class="btn btn-danger btn-sm">Xóa</a>
-                                    </td>
-                                </tr>
-                            </c:if>
+                        <!-- Loop through the list of orders -->
+                        <c:forEach items="${list}" var="order">
+                            <tr>
+                                <td>${order.orderID}</td>
+                                <td>${order.customerID}</td>
+                                <td>${order.staffID}</td>
+                                <td>${order.address}</td>
+                                <td>${order.date}</td>
+                                <td>${order.status}</td>
+                                <td>${order.phoneNumber}</td>
+                                <td>${order.total}</td>
+                                <td>
+                                    <a href="orderDetail?orderID=${order.orderID}" class="btn btn-warning btn-sm">Detail</a>
+                                    <c:if test="${order.status == 'Chờ xử lý'}">
+                                        <a href="changeStatus?orderID=${order.orderID}&status=Giao Hàng" class="btn btn-success btn-sm">Xác nhận đơn hàng</a>
+                                    </c:if>
+
+
+                                    <c:if test="${order.status == 'Giao Hàng'}">
+                                        <a href="changeStatus?orderID=${order.orderID}&status=Đã Hủy" class="btn btn-danger btn-sm">Hủy đơn hàng</a>
+                                    </c:if>
+                                </td>
+                            </tr>
                         </c:forEach>
                     </tbody>
                 </table>

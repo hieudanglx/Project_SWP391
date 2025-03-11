@@ -8,18 +8,17 @@ import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.DecimalFormat;
+import java.util.List;
+import model.Order_list;
 
 /**
  *
- * @author Tran Phong Hai - CE180803
+ * @author Dinh Van Do - CE182224
  */
-@WebServlet("/RevenueTotal")
-public class RevenueTotal extends HttpServlet {
+public class filterStatus extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,16 +33,21 @@ public class RevenueTotal extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RevenueTotal</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RevenueTotal at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            String status = request.getParameter("status");
+            OrderDAO o = new OrderDAO();
+
+            if (status != null && !status.isEmpty()) {
+                // Lọc đơn hàng theo trạng thái
+                List<Order_list> ol = o.getOrdersByStatus(status);
+                request.setAttribute("list", ol);
+                request.getRequestDispatcher("listOrder.jsp").forward(request, response);
+            } else {
+                // Lấy tất cả đơn hàng nếu không có trạng thái được chọn
+                List<Order_list> ol = o.getAllOrder();
+                request.setAttribute("list", ol);
+                request.getRequestDispatcher("listOrder.jsp").forward(request, response);
+            }
+
         }
     }
 
@@ -59,21 +63,7 @@ public class RevenueTotal extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        OrderDAO dao = new OrderDAO();
-
-        // Lấy tổng doanh thu
-        double totalSales = dao.getTotalSales();
-        System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);
-
-        // Format số với dấu phẩy
-        DecimalFormat df = new DecimalFormat("#,###");
-        String formattedSales = df.format(totalSales);
-
-        System.out.println("[DEBUG] Tổng doanh thu sau khi format: " + formattedSales);
-
-// Gửi dữ liệu sang JSP
-        request.setAttribute("totalSales", formattedSales);
-        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -100,22 +90,4 @@ public class RevenueTotal extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
-    public static void main(String[] args) {
-        // Khởi tạo DAO
-        OrderDAO dao = new OrderDAO();
-        
-        // Gọi phương thức getTotalSales() để lấy tổng doanh thu
-        double totalSales = dao.getTotalSales();
-        
-        // Kiểm tra giá trị lấy từ DB
-        System.out.println("[TEST] Tổng doanh thu lấy từ DB: " + totalSales);
-
-        // Format số theo dạng có dấu phẩy ngăn cách
-        DecimalFormat df = new DecimalFormat("#,###");
-        String formattedSales = df.format(totalSales);
-        
-        // In kết quả sau khi format
-        System.out.println("[TEST] Tổng doanh thu sau khi format: " + formattedSales);
-    }
 }
