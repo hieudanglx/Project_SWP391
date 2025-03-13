@@ -5,6 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -78,6 +79,14 @@
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     <c:if test="${not empty sessionScope.customer}">
                                         <span class="cart-count">${sessionScope.size}</span>
+                                    </c:if>
+                                </div>
+                                <div class="info-cart">
+                                    <c:if test="${not empty sessionScope.customer}">
+                                        <p>Giỏ hàng</p>
+                                        <span class="cart-count">
+                                        <fmt:formatNumber value="${sessionScope.total}" type="currency" currencySymbol="đ" />
+                                        </span>
                                     </c:if>
                                 </div>
                                 <span class="clear"></span>

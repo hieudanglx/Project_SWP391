@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import model.Customer;
 import model.Product;
@@ -82,9 +83,13 @@ public class UpdateCartController extends HttpServlet {
                 }
                 break;
         }
+        int total = 0, size= 0;
         // Cập nhật session
-        List<Product> list = link.getCartByCustomerID(c.getCustomerID()); // Sửa lại phương thức
-        session.setAttribute("size", list != null ? list.size() : 0);
+        List<Product> list = new ArrayList<>();
+        total = link.getTotalCart(list, c.getCustomerID());
+        size = link.getTotalItems(list, c.getCustomerID()); // Sửa lại phương thức
+        session.setAttribute("size", size);
+        session.setAttribute("total", total);
         request.getRequestDispatcher(url).forward(request, response);
 
     }

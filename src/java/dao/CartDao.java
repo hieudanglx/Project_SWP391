@@ -88,6 +88,17 @@ public class CartDao extends DBContext {
         }
         return size;
     }
+    public int getTotalCart(List<Product> list, int CustomerID) {
+        int total = 0;
+        if (list.isEmpty()) {
+            list = getCartByCustomerID(CustomerID);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            total += list.get(i).getQuantityProduct()*list.get(i).getPrice();
+        }
+        return total;
+    }
 
     public Boolean AddProductToCart(int customerID, int productID) {
         String sql = "INSERT INTO Cart (CustomerID, ProductID, Quantity) VALUES (?, ?, 1)";

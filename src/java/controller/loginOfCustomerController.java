@@ -100,6 +100,7 @@ public class loginOfCustomerController extends HttpServlet {
                     Customer customer = cusDAO.getCustomer(username, password);
                     List<Product> list = new ArrayList<>();
                     session.setAttribute("size", link.getTotalItems(list, customer.getCustomerID()));
+                    session.setAttribute("total", link.getTotalCart(list, customer.getCustomerID()));
                     session.setAttribute("customer", customer);
                     session.setAttribute("customerID", customer.getCustomerID());
 
