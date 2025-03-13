@@ -15,6 +15,7 @@ import java.util.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FeedbackDAO extends DBContext {
@@ -40,6 +41,39 @@ public class FeedbackDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+     
+    
+    public Map<Integer, String> getCustomerNames() {
+        Map<Integer, String> customerNames = new HashMap<>();
+        String sql = "SELECT customerID, username FROM Customer";
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("customerID");
+                String username = rs.getString("username"); // Lấy username
+                customerNames.put(id, username); // Lưu vào Map
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customerNames;
+    }
+
+    public void replyToFeedback(int feedbackID, int customerID, int staffID, String contentReply) {
+        String sql = "INSERT INTO Reply_Feedback (feedbackID, customerID, staffID, contentReply) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, feedbackID);
+            ps.setInt(2, customerID);
+            ps.setInt(3, staffID);
+            ps.setString(4, contentReply);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Lấy feedback theo ID
@@ -132,26 +166,27 @@ public class FeedbackDAO extends DBContext {
         }
         return list;
     }
-     public List<Feedback> getFeedbackByProductID(int productID, Map<Integer, String> customerNames) {
+
+    public List<Feedback> getFeedbackByProductID(int productID, Map<Integer, String> customerNames) {
         List<Feedback> feedbackList = new ArrayList<>();
-        String query = "SELECT f.feedbackID, f.customerID, f.content, f.ratePoint, f.productID, c.fullname " +
-                       "FROM Feedback f " +
-                       "JOIN Customer c ON f.customerID = c.customerID " +
-                       "WHERE f.productID = ?";
+        String query = "SELECT f.feedbackID, f.customerID, f.content, f.ratePoint, f.productID, c.fullname "
+                + "FROM Feedback f "
+                + "JOIN Customer c ON f.customerID = c.customerID "
+                + "WHERE f.productID = ?";
 
         try (
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-             
+                 PreparedStatement stmt = connection.prepareStatement(query)) {
+
             stmt.setInt(1, productID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 Feedback feedback = new Feedback(
-                    rs.getInt("feedbackID"),
-                    rs.getInt("customerID"),
-                    rs.getString("content"),
-                    rs.getInt("ratePoint"),
-                    rs.getString("productID")
+                        rs.getInt("feedbackID"),
+                        rs.getInt("customerID"),
+                        rs.getString("content"),
+                        rs.getInt("ratePoint"),
+                        rs.getString("productID")
                 );
                 feedbackList.add(feedback);
 
@@ -163,4 +198,5 @@ public class FeedbackDAO extends DBContext {
         }
         return feedbackList;
     }
+
 }
