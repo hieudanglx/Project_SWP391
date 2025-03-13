@@ -56,9 +56,30 @@ function checkCartStatus(status) {
     }
 }
 
+function increaseQuantity(productId, quantity) {
+    if (quantity >= 5) {
+        alert('Số lượng sản phẩm không thể vượt quá 5.');
+        return false;
+    }
+    return true;
+}
+
+function decreaseQuantity(productId, quantity) {
+    if (quantity <= 1) {
+        return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
+    }
+    return true;
+}
+
+function confirmRemove(productId) {
+    return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
+}
+
+
 // Gọi hàm kiểm tra khi trang được load
 window.onload = function () {
     const status = document.body.getAttribute('data-status');
+    const m = document.body.getAttribute('Message');
     if (status === 'true') {
         showPopup('success', 'Thêm giỏ hàng thành công!');
     } else if (status === 'false') {

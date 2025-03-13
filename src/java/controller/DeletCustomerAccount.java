@@ -68,8 +68,9 @@ public class DeletCustomerAccount extends HttpServlet {
             if (isDeleted) {
                 response.sendRedirect("listAccountCustomer?message=success"); // Chuyển hướng với thông báo thành công
             } else {
+                
                 request.setAttribute("error", "Xóa khách hàng thất bại!");
-                request.getRequestDispatcher("listAccountCustomer.jsp").forward(request, response);
+                request.getRequestDispatcher("error.jsp").forward(request, response);
             }
         } catch (NumberFormatException e) {
             request.setAttribute("error", "ID khách hàng không hợp lệ!");

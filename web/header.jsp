@@ -5,6 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -18,6 +19,7 @@
         <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
+    
     <body>
         <header class="header">
             <div class="top">
@@ -32,7 +34,7 @@
                                     <li>
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
-                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.username}</a>!
+                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
                                                 <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                             </c:when>
                                             <c:otherwise>
@@ -51,7 +53,7 @@
                     <div class="row">
                         <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3 order-md-0 order-0">
                             <div class="logo">
-                                <a href="homeController?CatogoryID=2"><img src="images/logo.png" alt=""></a>
+                                <a href="homeController?CatogoryID=2"><img src="images/logo.png" alt="" style="width: 100px; height: 300px;"></a>
                                 <h1>Website bán hàng</h1>
                             </div>
                         </div>
@@ -78,6 +80,14 @@
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     <c:if test="${not empty sessionScope.customer}">
                                         <span class="cart-count">${sessionScope.size}</span>
+                                    </c:if>
+                                </div>
+                                <div class="info-cart">
+                                    <c:if test="${not empty sessionScope.customer}">
+                                        <p>Giỏ hàng</p>
+                                        <span class="cart-count">
+                                        <fmt:formatNumber value="${sessionScope.total}" type="currency" currencySymbol="đ" />
+                                        </span>
                                     </c:if>
                                 </div>
                                 <span class="clear"></span>

@@ -27,30 +27,30 @@
                                 <div class="content-contact">
                                     <p>Website chuyên cung cấp thiết bị điện tử hàng đầu Việt Nam</p>
                                     <p>
-                                        <strong>Địa chỉ:</strong> Buon Ma Thuot, Daklak
+                                        <strong>Địa chỉ:</strong> Nink Kieu, Can Tho, VietNam
                                     </p>
                                     <p>
-                                        <strong>Email: </strong> baophanquoc.1995@gmail.com
+                                        <strong>Email: </strong> HieuDKCE180465@fpt.edu.vn
                                     </p>
                                     <p>
-                                        <strong>Điện thoại: </strong> 0358949xxx
+                                        <strong>Điện thoại: </strong> 032646xxxx
                                     </p>
-                                    <p>
-                                        <strong>Website: </strong> https:quocbao.net
-                                    </p>
+                                
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="box-footer info-contact">
-                                <h3>Thông tin khác</h3>
+                                <h3>Thông tin thành viên</h3>
                                 <div class="content-list">
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-angle-double-right"></i> Chính sách bảo mật</a></li>
-                                        <li><a href="#"><i class="fa fa-angle-double-right"></i> Chính sách đổi trả</a></li>
-                                        <li><a href="#"><i class="fa fa-angle-double-right"></i> Phí vẫn chuyển</a></li>
-                                        <li><a href="#"><i class="fa fa-angle-double-right"></i> Hướng dẫn thanh toán</a></li>
-                                        <li><a href="#"><i class="fa fa-angle-double-right"></i> Chương trình khuyến mãi</a></li>
+                                        <li> Đặng Khắc Hiếu  - CE180465</li>
+                                        <li> Đinh Văn Độ  - CE182224</li>
+                                        <li> Trần Phong Hải  - CE180803</li>
+                                        <li> Phan Quốc Duy - CE180594</li>
+                                        <li> Trần Như Ý - CE182032</li>
+                                        <li> Nguyễn Quốc Huy - CE170583</li>
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="copyright">
-                    <p>Copyright © 2020 HKSHOP All Rights Reserved - Design by QuocBaos</p>
+                    <p>Copyright © 2025 Electronic Store System</p>
                 </div>
             </footer>
     </body>

@@ -31,11 +31,13 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 order-lg-0 order-1">
-                                <jsp:include page="filter.jsp"></jsp:include>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 order-lg-1 order-0">
-                                    <div class="product-section">
-                                        <h2 class="title-product">
+                                <c:if test="${empty search}">
+                                    <jsp:include page="filter.jsp"></jsp:include>
+                                </c:if>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 order-lg-1 order-0">
+                                <div class="product-section">
+                                    <h2 class="title-product">
                                         <c:if test="${ empty list}">
                                             <h1>
                                                 Hiện cửa hàng chưa có sản phẩm phù hợp
@@ -67,8 +69,8 @@
                                                                 <img src="${p.imageURL}" alt="${p.productName}">
                                                             </a>
                                                             <div class="action">
-                                                                <a href="UpdateCartController?id=${p.productID}&type=buy" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
-                                                                <a href="UpdateCartController?id=${p.productID}&CategoryID=${p.categoryID}&type=add&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
+                                                                <a href="UpdateCartController?id=${p.productID}&type=%2B" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
+                                                                <a href="UpdateCartController?id=${p.productID}&CategoryID=${p.categoryID}&type=%2B&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
                                                                 <div class="clear"></div>
                                                             </div>
                                                         </div>
@@ -84,8 +86,6 @@
                                                                 </span>
                                                             </div>
                                                             <a href="ViewProductDetailsController?id=${p.productID}" class="view-more">Xem chi tiết</a>
-
-
                                                         </div>
                                                     </div>
                                                 </div>

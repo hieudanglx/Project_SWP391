@@ -18,31 +18,34 @@ import model.Inventory;
 public class InventoryDAO extends dao.DBContext {
 
     public List<Inventory> getAllInventorys() {
-        List<Inventory> list = new ArrayList<>();
-        String query = "SELECT P.ProductID, P.ProductName, I.Date, I.Import_price, "
-                + "P.Price, P.Quantity_Product, P.Quantity_Sell, I.Supplier "
-                + "FROM Product P "
-                + "LEFT JOIN Import_Inventory I ON P.ProductID = I.ProductID";
-        try (
-                 PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                Inventory inventory = new Inventory(
-                        rs.getInt("ProductID"),
-                        rs.getString("ProductName"),
-                        rs.getDate("Date"),
-                        rs.getInt("Import_price"),
-                        rs.getInt("Price"),
-                        rs.getInt("Quantity_Product"),
-                        rs.getInt("Quantity_Sell"),
-                        rs.getString("Supplier"));
-                list.add(inventory);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
+    List<Inventory> list = new ArrayList<>();
+    String query = "SELECT P.ProductID, P.ProductName, I.Date, I.Import_price, "
+                 + "P.Price, P.Quantity_Product, P.Quantity_Sell, I.Supplier "
+                 + "FROM Product P "
+                 + "LEFT JOIN Import_Inventory I ON P.ProductID = I.ProductID "
+                 + "WHERE P.isDelete = 0"; // Chỉ lấy sản phẩm chưa bị xóa
 
+    try (PreparedStatement stmt = connection.prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            Inventory inventory = new Inventory(
+                rs.getInt("ProductID"),
+                rs.getString("ProductName"),
+                rs.getDate("Date"),
+                rs.getInt("Import_price"),
+                rs.getInt("Price"),
+                rs.getInt("Quantity_Product"),
+                rs.getInt("Quantity_Sell"),
+                rs.getString("Supplier")
+            );
+            list.add(inventory);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return list;
+}
+
 
     public List<Inventory> getInventoryListByCategory(String categoryType) {
         List<Inventory> inventoryList = new ArrayList<>();
@@ -110,6 +113,9 @@ public class InventoryDAO extends dao.DBContext {
     }
     return inventoryList;
 }
+    
+    
+    
 
     public static void main(String[] args) {
         InventoryDAO in = new InventoryDAO();

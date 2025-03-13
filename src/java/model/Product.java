@@ -82,12 +82,13 @@ public class Product {
         this.isDelete = isDelete;
     }
 
-    public Product(int productID, String productName, int price, String color, int quantityProduct, String imageURL, int isDelete) {
+    public Product(int productID, String productName, int price, String color, int quantityProduct, int quantitySell, String imageURL, int isDelete) {
         this.productID = productID;
         this.productName = productName;
         this.price = price;
         this.color = color;
         this.quantityProduct = quantityProduct;
+        this.quantitySell = quantitySell;
         this.imageURL = imageURL;
         this.isDelete = isDelete;
     }

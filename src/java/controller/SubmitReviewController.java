@@ -31,7 +31,7 @@ public class SubmitReviewController extends HttpServlet {
 
         if (customer == null) {
             session.setAttribute("errorMessage", "Bạn cần đăng nhập để gửi đánh giá!");
-            response.sendRedirect("Login.jsp");
+            response.sendRedirect("loginOfCustomer.jsp");
             return;
         }
 
