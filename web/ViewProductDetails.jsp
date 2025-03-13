@@ -282,8 +282,8 @@
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownROMs, p.rom)}">
                                             <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
-                                            <button type="button" 
-                                                    class="btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
+                                            <button type="button" style="margin: 0"
+                                                    class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
                                                     onclick="selectOption('rom', '${p.rom}')">
                                                 ${p.rom}
                                             </button>
@@ -305,8 +305,8 @@
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownColors, p.color)}">
                                             <c:set var="shownColors" value="${shownColors}${p.color};" />
-                                            <button type="button" 
-                                                    class="btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
+                                            <button type="button" style="margin: 0"
+                                                    class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
                                                     onclick="selectOption('color', '${p.color}')">
                                                 ${p.color}
                                             </button>
