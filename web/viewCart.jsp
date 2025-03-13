@@ -263,7 +263,7 @@
                                     </div>
 
                                     <!-- Checkout Button -->
-                                    <a href="payment.jsp" class="btn btn-danger w-100 py-3 fw-bold">
+                                    <a href="vnpay_pay.jsp" class="btn btn-danger w-100 py-3 fw-bold">
                                         <i class="fas fa-wallet me-2"></i>
                                         Thanh toán ngay
                                     </a>

@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.Product;
 import model.ProductForAdmin;
 
@@ -57,6 +59,22 @@ public class ProductDao extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+    
+    public Map<Integer, String> getProductNames() {
+        Map<Integer, String> productNames = new HashMap<>();
+        String sql = "SELECT productID, productName FROM Product"; // Đúng cột productName
+        try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("ProductID");
+                String name = rs.getString("ProductName"); // Đúng cột productName
+                productNames.put(id, name);
+                System.out.println("Lấy dữ liệu: " + id + " - " + name); // Debug
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productNames;
     }
 
     public boolean deleteProduct(String productID) {
