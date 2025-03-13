@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
+    
     <body>
         <header class="header">
             <div class="top">
@@ -51,7 +52,7 @@
                     <div class="row">
                         <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3 order-md-0 order-0">
                             <div class="logo">
-                                <a href="homeController?CatogoryID=2"><img src="images/logo.png" alt=""></a>
+                                <a href="homeController?CatogoryID=2"><img src="images/logo.png" alt="" style="width: 100px; height: 300px;"></a>
                                 <h1>Website bán hàng</h1>
                             </div>
                         </div>
