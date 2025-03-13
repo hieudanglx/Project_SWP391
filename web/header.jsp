@@ -32,7 +32,7 @@
                                     <li>
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
-                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.username}</a>!
+                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
                                                 <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                             </c:when>
                                             <c:otherwise>

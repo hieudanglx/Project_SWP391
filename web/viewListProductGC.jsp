@@ -67,8 +67,8 @@
                                                                 <img src="${p.imageURL}" alt="${p.productName}">
                                                             </a>
                                                             <div class="action">
-                                                                <a href="UpdateCartController?id=${p.productID}&type=buy" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
-                                                                <a href="UpdateCartController?id=${p.productID}&CategoryID=${p.categoryID}&type=add&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
+                                                                <a href="UpdateCartController?id=${p.productID}&type=%2B" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
+                                                                <a href="UpdateCartController?id=${p.productID}&CategoryID=${p.categoryID}&type=%2B&page=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
                                                                 <div class="clear"></div>
                                                             </div>
                                                         </div>
@@ -84,8 +84,6 @@
                                                                 </span>
                                                             </div>
                                                             <a href="ViewProductDetailsController?id=${p.productID}" class="view-more">Xem chi tiết</a>
-
-
                                                         </div>
                                                     </div>
                                                 </div>

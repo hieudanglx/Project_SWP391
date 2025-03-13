@@ -15,6 +15,7 @@
         <title>Giỏ hàng</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/popup.css">
         <style>
             /* Fix cứng kích thước cho trang giỏ hàng */
             .cart-container {
@@ -53,7 +54,6 @@
             .quantity-input-group {
                 width: 140px;
             }
-
             .payment-icon {
                 width: 40px !important;
                 height: 40px !important;
@@ -73,7 +73,7 @@
             }
         </style>
     </head>
-    <body>
+    <body data-status="${status} data-status="${Message}>
         <%@include file="header.jsp" %>
 
         <!-- Main Container -->
@@ -103,11 +103,15 @@
 
                                                     <!-- Color-->
                                                     <div class="d-flex gap-3 mb-3">
-                                                        <c:if test="${not empty product.color}">
-                                                            <div class="d-flex align-items-center gap-1">
-                                                                <span class="text-muted small">${product.color}</span>
-                                                            </div>
-                                                        </c:if>
+                                                        <div class="d-flex align-items-center gap-1">
+                                                            <span class="text-muted small">${product.color}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <span class="text-muted small">${product.ram}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <span class="text-muted small">${product.rom}</span>
+                                                        </div>
                                                     </div>
 
                                                     <!-- Price & Quantity -->
@@ -120,23 +124,26 @@
 
                                                         <div class="d-flex align-items-center gap-3">
                                                             <div class="input-group quantity-input-group">
-                                                                <a href="UpdateCartController?id=${product.productID}&type=-" 
-                                                                   class="btn btn-outline-secondary px-3" 
+                                                                <a href="UpdateCartController?id=${product.productID}&type=-"
+                                                                   class="btn btn-outline-secondary px-3"
+                                                                   style="margin: 0;"
                                                                    onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct});">-</a>
-                                                                <input type="text" 
-                                                                       class="form-control text-center border-secondary"
-                                                                       value="${product.quantityProduct}" 
+                                                                <input type="text"
+                                                                       class="form-control text-center border-secondary" style="width: 100px"
+                                                                       value="${product.quantityProduct}"
                                                                        disabled>
-                                                                <a href="UpdateCartController?id=${product.productID}&type=%2B" 
-                                                                   class="btn btn-outline-secondary px-3" 
+                                                                <a href="UpdateCartController?id=${product.productID}&type=%2B"
+                                                                   class="btn btn-outline-secondary px-3"
+                                                                   style="margin: 0; pointer-events: ${product.quantitySell == product.quantityProduct + 1 ? 'none' : 'auto'}; opacity: ${product.quantitySell == product.quantityProduct + 1 ? '0.5' : '1'};"
                                                                    onclick="return increaseQuantity(${product.productID}, ${product.quantityProduct});">+</a>
                                                             </div>
-                                                            <a href="UpdateCartController?id=${product.productID}&type=R" 
-                                                               class="btn btn-link text-danger" 
+                                                            <a href="UpdateCartController?id=${product.productID}&type=R"
+                                                               class="btn btn-link text-danger"
                                                                onclick="return confirmRemove(${product.productID});">
                                                                 <i class="fas fa-trash fa-lg"></i>
                                                             </a>
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -160,7 +167,7 @@
                                         <label class="form-label">Họ và tên</label>
                                         <input type="text" 
                                                name="fullname"
-                                               value="${sessionScope.customer.username}"
+                                               value="${sessionScope.customer.fullName}"
                                                class="form-control"
                                                required>
                                     </div>
@@ -174,6 +181,7 @@
                                                pattern="[0-9]{10}"
                                                required>
                                     </div>
+
                                     <!-- Địa chỉ giao hàng -->
                                     <div class="mb-4">
                                         <label class="form-label">Địa chỉ nhận hàng</label>
@@ -191,7 +199,6 @@
                                                    required>
                                         </div>
                                     </div>
-
 
                                     <!-- Dynamic Total Calculation -->
                                     <c:set var="total" value="${0}"/>
@@ -232,7 +239,7 @@
                                             <input class="form-check-input" 
                                                    type="radio" 
                                                    name="paymentMethod" 
-                                                   id="cod" 
+                                                   id="cod" value="COD"
                                                    checked>
                                             <label class="form-check-label d-flex align-items-center gap-2" 
                                                    for="cod">
@@ -248,7 +255,7 @@
                                         <div class="form-check">
                                             <input class="form-check-input" 
                                                    type="radio" 
-                                                   name="paymentMethod" 
+                                                   name="paymentMethod" value="VNPAY"
                                                    id="vnpay">
                                             <label class="form-check-label d-flex align-items-center gap-2" 
                                                    for="vnpay">
@@ -263,7 +270,7 @@
                                     </div>
 
                                     <!-- Checkout Button -->
-                                    <a href="vnpay_pay.jsp" class="btn btn-danger w-100 py-3 fw-bold">
+                                    <a href="payment.jsp" class="btn btn-danger w-100 py-3 fw-bold">
                                         <i class="fas fa-wallet me-2"></i>
                                         Thanh toán ngay
                                     </a>
@@ -285,78 +292,66 @@
                 </c:otherwise>
             </c:choose>
         </div>
-        <!-- Scripts -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-        <script>
-                                                               // Xử lý fixed width
-                                                               function enforceCartWidth() {
-                                                                   const container = document.querySelector('.cart-container');
-                                                                   if (window.innerWidth < 1200) {
-                                                                       container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
-                                                                   } else {
-                                                                       container.style.transform = 'none';
-                                                                   }
-                                                               }
-
-                                                               window.addEventListener('resize', enforceCartWidth);
-                                                               enforceCartWidth(); // Khởi chạy lần đầu
-
-                                                               // Xử lý API địa chỉ
-                                                               const citis = document.getElementById("city");
-                                                               const districts = document.getElementById("district");
-
-                                                               const fetchData = async () => {
-                                                                   try {
-                                                                       const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                                                                       renderCity(response.data);
-                                                                   } catch (error) {
-                                                                       console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                                                                   }
-                                                               };
-
-                                                               const renderCity = (data) => {
-                                                                   citis.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                                                                   districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
-
-                                                                   data.forEach(province => {
-                                                                       citis.options.add(new Option(province.Name, province.Id));
-                                                                   });
-
-                                                                   citis.onchange = function () {
-                                                                       districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                                                                       if (this.value) {
-                                                                           const selectedProvince = data.find(p => p.Id === this.value);
-                                                                           selectedProvince.Districts.forEach(district => {
-                                                                               districts.options.add(new Option(district.Name, district.Id));
-                                                                           });
-                                                                       }
-                                                                   };
-                                                               };
-
-                                                               fetchData();
-
-
-                                                               function increaseQuantity(productId, quantity) {
-                                                                   if (quantity >= 5) {
-                                                                       alert('Số lượng sản phẩm không thể vượt quá 5.');
-                                                                       return false;
-                                                                   }
-                                                                   window.location.href = `UpdateCartController?id=${productId}&type=%2B`;
-                                                                   return true;
-                                                               }
-
-                                                               function decreaseQuantity(productId, quantity) {
-                                                                   if (quantity <= 1) {
-                                                                       return confirm('Số lượng chỉ còn 1. Bạn có chắc muốn giảm không?');
-                                                                   }
-                                                                   window.location.href = `UpdateCartController?id=${productId}&type=-`;
-                                                                   return true;
-                                                               }
-
-                                                               function confirmRemove(productId) {
-                                                                   return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
-                                                               }
-        </script>
     </body>
+    <!-- Popup container -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <span class="close-btn" onclick="closePopup()">&times;</span>
+            <div id="popupIcon" class="popup-icon"></div>
+            <h3 id="popupMessage"></h3>
+            <div class="popup-buttons" id="popupButtons"></div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+                // Xử lý fixed width
+                function enforceCartWidth() {
+                    const container = document.querySelector('.cart-container');
+                    if (window.innerWidth < 1200) {
+                        container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+                    } else {
+                        container.style.transform = 'none';
+                    }
+                }
+
+                window.addEventListener('resize', enforceCartWidth);
+                enforceCartWidth(); // Khởi chạy lần đầu
+
+                // Xử lý API địa chỉ
+                const citis = document.getElementById("city");
+                const districts = document.getElementById("district");
+
+                const fetchData = async () => {
+                    try {
+                        const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                        renderCity(response.data);
+                    } catch (error) {
+                        console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                    }
+                };
+
+                const renderCity = (data) => {
+                    citis.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                    districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+
+                    data.forEach(province => {
+                        citis.options.add(new Option(province.Name, province.Id));
+                    });
+
+                    citis.onchange = function () {
+                        districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                        if (this.value) {
+                            const selectedProvince = data.find(p => p.Id === this.value);
+                            selectedProvince.Districts.forEach(district => {
+                                districts.options.add(new Option(district.Name, district.Id));
+                            });
+                        }
+                    };
+                };
+
+                fetchData();
+    </script>
+    <script src="js/popup.js"></script>
 </html>
