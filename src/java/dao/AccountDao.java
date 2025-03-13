@@ -207,33 +207,44 @@ public class AccountDao extends dao.DBContext {
     }
 
     public boolean deleteAccountCustomer(int customerID) {
+    String[] queries = {
+        "UPDATE Order_List SET CustomerID = 0 WHERE CustomerID = ?",
+        "DELETE FROM Reply_Feedback WHERE CustomerID = ?",
+        "DELETE FROM Feedback WHERE CustomerID = ?",
+        "DELETE FROM Cart WHERE CustomerID = ?",
+        "DELETE FROM Customer WHERE CustomerID = ?"
+    };
 
-        String deleteCartQuery = "DELETE FROM Cart WHERE CustomerID = ?";
-        String deleteCustomerQuery = "DELETE FROM Customer WHERE CustomerID = ?";
+    try {
+        connection.setAutoCommit(false); // 🔴 Bắt đầu transaction
 
-        try ( PreparedStatement pstmtCart = connection.prepareStatement(deleteCartQuery);  PreparedStatement pstmtCustomer = connection.prepareStatement(deleteCustomerQuery)) {
-
-            // Xóa giỏ hàng trước
-            pstmtCart.setInt(1, customerID);
-            pstmtCart.executeUpdate();
-
-            // Xóa tài khoản khách hàng
-            pstmtCustomer.setInt(1, customerID);
-            int rowAffected = pstmtCustomer.executeUpdate();
-
-            return rowAffected > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        for (String query : queries) {
+            try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+                pstmt.setInt(1, customerID);
+                pstmt.executeUpdate();
+            }
         }
-        return false;
-    }
 
+        connection.commit(); // ✅ Commit nếu không có lỗi
+        System.out.println("🗑️ Xóa khách hàng thành công!");
+        return true;
+
+    } catch (SQLException e) {
+        try {
+            connection.rollback(); // 🔄 Hoàn tác nếu có lỗi
+        } catch (SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        e.printStackTrace();
+    }
+    return false;
+}
     public List<AccountCustomer> searchCustomerByUsername(String keyword) {
         List<AccountCustomer> customers = new ArrayList<>();
         String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username LIKE ? OR fullname LIKE ?";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
-           String searchKey = "%" + keyword + "%"; // Tìm kiếm tương đối
+            String searchKey = "%" + keyword + "%"; // Tìm kiếm tương đối
             pstmt.setString(1, searchKey);
             pstmt.setString(2, searchKey);
             ResultSet rs = pstmt.executeQuery();
@@ -433,31 +444,31 @@ public class AccountDao extends dao.DBContext {
     }
 
     public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, String cccd, String provinceCity, String dob, String sex, boolean status) {
-    // Kiểm tra trùng lặp trước khi thêm
-    if (isUsernameStaffExists(username) || isEmailStaffExists(email) || isPhoneNumberStaffExists(phoneNumber) || isCCCDExists(cccd)) {
-        return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
-    }
+        // Kiểm tra trùng lặp trước khi thêm
+        if (isUsernameStaffExists(username) || isEmailStaffExists(email) || isPhoneNumberStaffExists(phoneNumber) || isCCCDExists(cccd)) {
+            return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
+        }
 
-    String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Province_City, DOB, Sex, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, fullName);
-        ps.setString(2, username);
-        ps.setString(3, password); // Cân nhắc mã hóa nếu cần bảo mật
-        ps.setString(4, email);
-        ps.setString(5, phoneNumber);
-        ps.setString(6, address);
-        ps.setString(7, cccd);
-        ps.setString(8, provinceCity);  // Thêm tỉnh/thành phố
-        ps.setDate(9, java.sql.Date.valueOf(dob)); // Chuyển đổi từ String sang SQL Date
-        ps.setString(10, sex); // Giới tính
-        ps.setBoolean(11, status); // SQL Server hiểu 0 = Active, 1 = Inactive
+        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Province_City, DOB, Sex, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, fullName);
+            ps.setString(2, username);
+            ps.setString(3, password); // Cân nhắc mã hóa nếu cần bảo mật
+            ps.setString(4, email);
+            ps.setString(5, phoneNumber);
+            ps.setString(6, address);
+            ps.setString(7, cccd);
+            ps.setString(8, provinceCity);  // Thêm tỉnh/thành phố
+            ps.setDate(9, java.sql.Date.valueOf(dob)); // Chuyển đổi từ String sang SQL Date
+            ps.setString(10, sex); // Giới tính
+            ps.setBoolean(11, status); // SQL Server hiểu 0 = Active, 1 = Inactive
 
-        return ps.executeUpdate() > 0; // Trả về true nếu thêm thành công
-    } catch (SQLException e) {
-        e.printStackTrace();
+            return ps.executeUpdate() > 0; // Trả về true nếu thêm thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
 
     public List<AccountStaff> searchStaffByFullName(String fullName) {
         List<AccountStaff> staffList = new ArrayList<>();
@@ -541,27 +552,41 @@ public class AccountDao extends dao.DBContext {
         }
         return null; // Trả về null nếu không tìm thấy nhân viên
     }
+
     public boolean updateAccountStaff_ForAdmin(AccountStaff staff) {
-    String query = "UPDATE Staff SET address = ?, email = ?, password = ?, fullName = ?, phoneNumber = ?, " +
-                 "status = ?, province_city = ?, dob = ?, sex = ? WHERE staffID = ?";
-    try (PreparedStatement ps = connection.prepareStatement(query)) {
+        String query = "UPDATE Staff SET address = ?, email = ?, password = ?, fullName = ?, phoneNumber = ?, "
+                + "status = ?, province_city = ?, dob = ?, sex = ? WHERE staffID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(query)) {
 
-        ps.setString(1, staff.getAddress());
-        ps.setString(2, staff.getEmail());
-        ps.setString(3, staff.getPassword());
-        ps.setString(4, staff.getFullName());
-        ps.setString(5, staff.getPhoneNumber());
-        ps.setInt(6, staff.getStatus());
-        ps.setString(7, staff.getProvince_city());
-        ps.setString(8, staff.getDob());
-        ps.setString(9, staff.getSex());
-        ps.setInt(10, staff.getStaffID());
+            ps.setString(1, staff.getAddress());
+            ps.setString(2, staff.getEmail());
+            ps.setString(3, staff.getPassword());
+            ps.setString(4, staff.getFullName());
+            ps.setString(5, staff.getPhoneNumber());
+            ps.setInt(6, staff.getStatus());
+            ps.setString(7, staff.getProvince_city());
+            ps.setString(8, staff.getDob());
+            ps.setString(9, staff.getSex());
+            ps.setInt(10, staff.getStaffID());
 
-        return ps.executeUpdate() > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
-    return false;
-}
+
+    public static void main(String[] args) {
+        int customerID = 1;
+        AccountDao accountDao = new AccountDao();
+        // Gọi phương thức xóa
+        boolean isDeleted = accountDao.deleteAccountCustomer(customerID);
+
+        if (isDeleted) {
+            System.out.println("🗑️ Xóa khách hàng thành công!");
+        } else {
+            System.out.println("❌ Xóa khách hàng thất bại!");
+        }
+    }
 
 }

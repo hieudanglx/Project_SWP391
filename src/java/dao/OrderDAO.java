@@ -109,21 +109,19 @@ public class OrderDAO extends dao.DBContext {
     }
 
     public List<Order_list> getRevenueByMonth() {
-        String sql = "SELECT YEAR(ol.Date) AS Nam, MONTH(ol.Date) AS Thang, "
-                + "SUM(od.Quantity * p.Price) AS DoanhThu "
-                + "FROM Order_List ol "
-                + "JOIN Order_Details od ON ol.OrderID = od.OrderID "
-                + "JOIN Product p ON od.ProductID = p.ProductID "
-                + "WHERE ol.Status IN ('Completed', 'Paid') "
-                + "GROUP BY YEAR(ol.Date), MONTH(ol.Date) "
-                + "ORDER BY Nam, Thang";
-        return getRevenueData(sql, "month");
+         String sql = "SELECT YEAR(Date) AS Nam, MONTH(Date) AS Thang, "
+               + "SUM(Total) AS DoanhThu "
+               + "FROM Order_List "
+               + "WHERE Status = 'Thành Công' "
+               + "GROUP BY YEAR(Date), MONTH(Date) "
+               + "ORDER BY Nam, Thang";
+    return getRevenueData(sql, "month");
     }
 
     public List<Order_list> getRevenueByYear() {
         String sql = "SELECT YEAR(Date) AS Nam, SUM(Total) AS DoanhThu "
                 + "FROM Order_List "
-                + "WHERE Status IN ('Completed', 'Paid') "
+                + "WHERE Status IN ('Thành Công') "
                 + "GROUP BY YEAR(Date) "
                 + "ORDER BY Nam";
         return getRevenueData(sql, "year");
@@ -139,7 +137,7 @@ public class OrderDAO extends dao.DBContext {
                 + "END AS Quy, "
                 + "SUM(Total) AS DoanhThu "
                 + "FROM Order_List "
-                + "WHERE Status IN ('Completed', 'Paid') "
+                + "WHERE Status IN ('Thành Công') "
                 + "GROUP BY YEAR(Date), "
                 + "CASE "
                 + "  WHEN MONTH(Date) BETWEEN 1 AND 3 THEN 1 "
@@ -169,7 +167,7 @@ public class OrderDAO extends dao.DBContext {
 
     public double getTotalSales() {
         double totalSales = 0;
-        String sql = "SELECT SUM(Total) FROM Order_List WHERE Status IN ('Completed', 'Paid')";
+        String sql = "SELECT SUM(Total) FROM Order_List WHERE Status IN ('Thành Công')";
         try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 totalSales = rs.getDouble(1);
