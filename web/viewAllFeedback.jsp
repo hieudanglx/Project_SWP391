@@ -165,5 +165,18 @@
                     errorMsg.style.display = "none";
             }, 3000);
         </script>
+        <script>
+            function logout() {
+                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/LoginOfDashboard.jsp';
+                            } else {
+                                alert('Logout Fail!');
+                            }
+                        })
+                        .catch(error => console.error('Logout Error:', error));
+            }
+        </script>
     </body>
 </html>

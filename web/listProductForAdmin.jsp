@@ -79,7 +79,7 @@
             <a href="ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
+            <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
             <a href="#"><i class="fas fa-cog"></i> Manager Order</a>
         </div>
 
