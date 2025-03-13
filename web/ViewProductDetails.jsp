@@ -282,7 +282,7 @@
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownROMs, p.rom)}">
                                             <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
-                                            <button type="button" 
+                                            <button type="button" style="margin: 0"
                                                     class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
                                                     onclick="selectOption('rom', '${p.rom}')">
                                                 ${p.rom}
@@ -305,7 +305,7 @@
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownColors, p.color)}">
                                             <c:set var="shownColors" value="${shownColors}${p.color};" />
-                                            <button type="button" 
+                                            <button type="button" style="margin: 0"
                                                     class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
                                                     onclick="selectOption('color', '${p.color}')">
                                                 ${p.color}
@@ -317,11 +317,11 @@
 
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&CategoryID=${product.categoryID}&type=add&page=detail" class="btn btn-lg btn-dark py-3">
+                                <a href="UpdateCartController?id=${product.productID}&type=%2B&page=detail" class="btn btn-lg btn-dark py-3">
                                     <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
                                 </a>
-                                <a href="UpdateCartController?id=${product.productID}&type=buy" class="btn btn-lg btn-primary py-3">
+                                <a href="UpdateCartController?id=${product.productID}&type=%2B" class="btn btn-lg btn-primary py-3">
                                     <i class="fas fa-bolt me-2"></i>
                                     Mua ngay
                                 </a>

@@ -25,7 +25,8 @@ public class CartDao extends DBContext {
 
     public List<Product> getCartByCustomerID(int customerId) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, p.Price, p.Color, c.Quantity,p.ImageURL,p.isDelete "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Price, p.Color, p.Ram, p.ROM"
+                + ", p.Quantity_Product, c.Quantity, p.ImageURL, p.isDelete "
                 + "FROM Cart c JOIN Product p ON c.ProductID = p.ProductID "
                 + "WHERE c.CustomerID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -37,6 +38,9 @@ public class CartDao extends DBContext {
                     product.setProductName(rs.getString("ProductName"));
                     product.setPrice(rs.getInt("Price"));
                     product.setColor(rs.getString("Color"));
+                    product.setRam(rs.getString("Ram"));
+                    product.setRom(rs.getString("ROM"));
+                    product.setQuantitySell(rs.getInt("Quantity_Product"));
                     product.setQuantityProduct(rs.getInt("Quantity"));
                     product.setImageURL(rs.getString("ImageURL"));
                     product.setIsDelete(rs.getInt("isDelete"));
@@ -84,11 +88,19 @@ public class CartDao extends DBContext {
         }
         return size;
     }
+    public int getTotalCart(List<Product> list, int CustomerID) {
+        int total = 0;
+        if (list.isEmpty()) {
+            list = getCartByCustomerID(CustomerID);
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            total += list.get(i).getQuantityProduct()*list.get(i).getPrice();
+        }
+        return total;
+    }
 
     public Boolean AddProductToCart(int customerID, int productID) {
-        if (ProductExistsInCart(customerID, productID)) {
-            return updateCartProduct(customerID, productID, "+");
-        }
         String sql = "INSERT INTO Cart (CustomerID, ProductID, Quantity) VALUES (?, ?, 1)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);

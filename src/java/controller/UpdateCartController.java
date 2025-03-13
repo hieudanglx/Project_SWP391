@@ -35,45 +35,61 @@ public class UpdateCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CartDao link = new CartDao();
+
         HttpSession session = request.getSession();
-        String type = request.getParameter("type");
-        String page = request.getParameter("page");
-        int id = Integer.parseInt(request.getParameter("id"));
         Customer c = (Customer) session.getAttribute("customer");
         if (c == null) {
-            response.sendRedirect("choiceLogin.jsp"); // hoặc trang thông báo
+            response.sendRedirect("choiceLogin.jsp");
             return;
         }
-        String url = "ViewCartController";
+
+        // Kiểm tra tham số bắt buộc
+        String type = request.getParameter("type");
+        String page = (request.getParameter("page") == null
+                || request.getParameter("page").isEmpty()) ? "" : request.getParameter("page");
+        String idParam = request.getParameter("id");
+        String categoryIDParam = (request.getParameter("CategoryID") == null
+                || request.getParameter("CategoryID").isEmpty()) ? "" : request.getParameter("CategoryID");
+
+        int id = Integer.parseInt(idParam);
+        CartDao link = new CartDao();
+        String url = "ViewCartController"; // Mặc định
+
+        // Xử lý URL redirect
+        if (page.contains("list") && categoryIDParam != null) {
+            url = "ViewListProductGC?CategoryID=" + Integer.parseInt(categoryIDParam);
+        } else if (page.contains("detail")) {
+            url = "ViewProductDetailsController?id=" + id;
+        }
+        System.out.println(url);
+        // Xử lý logic
         switch (type) {
             case "R":
                 link.removeProductFromCart(c.getCustomerID(), id);
                 break;
-            case "add":
-                request.setAttribute("status", true);
-                if (!link.AddProductToCart(c.getCustomerID(), id)) {
-                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                    request.setAttribute("status", false);
-                }
-                if (page.contains("list")) {
-                    url = "ViewListProductGC?CategoryID="+Integer.parseInt(request.getParameter("CategoryID"));
-                } else {
-                    url = "ViewProductDetailsController?id=" + id;
-                }
-                System.out.println("link: " + url);
-                break;
-            case "buy":
-                if (!link.AddProductToCart(c.getCustomerID(), id)) {
-                    System.out.println("controller.UpdateCartController.processRequest() buy sai r");
-                }
-                break;
             default:
-                link.updateCartProduct(c.getCustomerID(), id, type);
+                request.setAttribute("status", true);
+                if (link.ProductExistsInCart(c.getCustomerID(), id)) {
+                    System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
+                    if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
+                        System.out.println("controller.UpdateCartController.processRequest() add sai r");
+                        request.setAttribute("status", false);
+                    }
+                } else {
+                    if (!link.AddProductToCart(c.getCustomerID(), id)) {
+                        System.out.println("controller.AddProductToCart.processRequest() add sai r");
+                        request.setAttribute("status", false);
+                    }
+                }
                 break;
         }
+        int total = 0, size= 0;
+        // Cập nhật session
         List<Product> list = new ArrayList<>();
-        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
+        total = link.getTotalCart(list, c.getCustomerID());
+        size = link.getTotalItems(list, c.getCustomerID()); // Sửa lại phương thức
+        session.setAttribute("size", size);
+        session.setAttribute("total", total);
         request.getRequestDispatcher(url).forward(request, response);
 
     }
