@@ -19,7 +19,7 @@ import model.Product;
  *
  * @author Dinh Van Do - CE182224
  */
-@WebServlet(name="listProductsController", urlPatterns={"/productDetailForAF"})
+@WebServlet(name="productDetailForAF", urlPatterns={"/productDetailForAF"})
 public class productDetailForAF extends HttpServlet {
    
     /** 
