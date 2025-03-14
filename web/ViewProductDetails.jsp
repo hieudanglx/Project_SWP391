@@ -44,6 +44,36 @@
                     padding-bottom: 1rem;
                 }
 
+                .product-title {
+                    font-size: 24px;
+                    font-weight: 700;
+                    color: #1a1a1a;
+                    margin-bottom: 8px;
+                    line-height: 1.3;
+                }
+
+                /* Định dạng thông tin đã bán */
+                .sales-info {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .sold-quantity {
+                    font-size: 14px;
+                    color: #666;
+                    position: relative;
+                    padding-left: 24px;
+                }
+
+                .sold-quantity::before {
+                    content: "•";
+                    position: absolute;
+                    left: 10px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    color: #ccc;
+                }
                 .product-main-image {
                     width: 50%;
                     height: auto;
@@ -82,8 +112,6 @@
                 }
             }
         </style>
-
-
     </head>
     <body data-status="${status}">
         <%@include file="header.jsp" %>
@@ -93,7 +121,25 @@
                 <!-- Left Column -->
                 <div class="col-lg-8">
                     <div class="product-header mb-4">
-                        <h1 class="display-4 fw-bold">${product.productName}</h1>
+                        <h1 class="product-title">
+                            Điện thoại ${product.productName} ${product.rom} 
+                            <c:if test="${product.rom != null && !product.rom.isEmpty()}">
+                                ${product.rom} <!-- Thêm dung lượng nếu có -->
+                            </c:if>
+                        </h1>
+                        <div class="sales-info">
+                            <span class="sold-quantity">
+                                Đã bán 
+                                <c:choose>
+                                    <c:when test="${product.quantitySell >= 1000}">
+                                        <fmt:formatNumber value="${product.quantitySell / 1000}" maxFractionDigits="1"/>k
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${product.quantitySell}
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
+                        </div>
                     </div>
 
                     <img src="${product.imageURL}" 
@@ -224,18 +270,16 @@
                             </div>
                             <% if (session.getAttribute("successMessage") != null) { %>
                             <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
-                            <% session.removeAttribute("successMessage"); %>
-                            <% } %>
+                            <% session.removeAttribute("successMessage"); }%>
 
                             <% if (session.getAttribute("errorMessage") != null) { %>
                             <div class="alert alert-danger"><%= session.getAttribute("errorMessage") %></div>
-                            <% session.removeAttribute("errorMessage"); %>
-                            <% }
+                            <% session.removeAttribute("errorMessage"); }%>
 
-     List<Feedback> feedbackList = (List<Feedback>) request.getAttribute("feedbackList");
-     Map<Integer, String> customerNames = (Map<Integer, String>) request.getAttribute("customerNames");
+                            <% 
+                                 List<Feedback> feedbackList = (List<Feedback>) request.getAttribute("feedbackList");
+                                 Map<Integer, String> customerNames = (Map<Integer, String>) request.getAttribute("customerNames");
                             %>
-
                             <div class="mt-4">
                                 <h4>Đánh giá sản phẩm</h4>
 
