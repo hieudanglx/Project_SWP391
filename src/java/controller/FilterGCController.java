@@ -40,26 +40,8 @@ public class FilterGCController extends HttpServlet {
         ProductDao link = new ProductDao();
         int min = Integer.parseInt(request.getParameter("minPrice") == null || request.getParameter("minPrice").isEmpty() ? "0" : request.getParameter("minPrice")) ;
         int max = Integer.parseInt(request.getParameter("maxPrice") == null || request.getParameter("maxPrice").isEmpty() ? "0" : request.getParameter("maxPrice")) ;
+        int CategoryID = Integer.parseInt(request.getParameter("CategoryID") == null || request.getParameter("CategoryID").isEmpty() ? "1" : request.getParameter("CategoryID")) ;
 
-        int CategoryID = 0;
-        String categoryIdParam = request.getParameter("CategoryID");
-        if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
-            try {
-                CategoryID = Integer.parseInt(categoryIdParam);
-            } catch (NumberFormatException e) {
-                // Xử lý trường hợp giá trị không phải số
-                request.setAttribute("error", "ID danh mục không hợp lệ");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-                return;
-            }
-        } else {
-            // Xử lý trường hợp không có CategoryID
-            request.setAttribute("error", "Thiếu tham số CategoryID");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-            return;
-        }
-
-        // Rest of your code
         Product filter = new Product(CategoryID,
                 request.getParameter("brand"),
                 request.getParameter("ram"),
@@ -79,7 +61,6 @@ public class FilterGCController extends HttpServlet {
                 filter.setChipType(type);
                 filter.setChipName(request.getParameter(type));
             }
-
         }
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
         List<Product> list = link.filterProducts(filter, null, min, max);

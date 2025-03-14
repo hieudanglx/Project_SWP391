@@ -132,7 +132,7 @@
                                         <li class="filter-attribute-item filter-item">
                                             <input class="filter-attribute-checkbox ib-m" type="radio" name="rom" value="512gb"> 512 GB
                                         </li>
-                                        <c:if test="${CategoryID==2}">
+                                        <c:if test="${CategoryID!=3}">
                                             <li class="filter-attribute-item filter-item">
                                                 <input class="filter-attribute-checkbox ib-m" type="radio" name="rom" value="1tb"> 1 TB
                                             </li>
