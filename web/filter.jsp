@@ -199,7 +199,7 @@
                             <li class="filter-item">
                                 <section class="filter-item-inner">
                                     <h1 class="filter-item-inner-heading plus">
-                                        Độ phân giải
+                                        Kích cỡ màn hình
                                     </h1>
                                     <ul class="filter-attribute-list ul-reset filter-section">
                                         <div class="filter-attribute-list-inner" name="size">
@@ -272,8 +272,8 @@
                             </section>
                         </li>
                     </ul>
-                    <div class="filter-action mt-4">
-                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                    <div class="filter-action mt-3">
+                        <button type="submit" class="btn btn-primary w-100" style="margin: 0">Lọc</button>
                     </div>
                 </aside>
             </form>

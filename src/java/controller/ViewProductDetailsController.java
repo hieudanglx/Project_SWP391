@@ -22,9 +22,9 @@ public class ViewProductDetailsController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        
-         System.out.println("🔍 Bắt đầu xử lý request...");
-        
+
+        System.out.println("🔍 Bắt đầu xử lý request...");
+
         ProductDao productDao = new ProductDao();
         FeedbackDAO feedbackDao = new FeedbackDAO();
 
@@ -45,11 +45,12 @@ public class ViewProductDetailsController extends HttpServlet {
             request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
-
-        String selectedRom = request.getParameter("selectedRom");
-        String selectedColor = request.getParameter("selectedColor");
-
         Product currentProduct = productDao.getProductById(productID);
+        
+        String selectedRom = (request.getParameter("selectedRom") == null
+                || request.getParameter("selectedRom").isEmpty()) ? currentProduct.getRom() : request.getParameter("selectedRom");
+        String selectedColor = (request.getParameter("selectedColor") == null
+                || request.getParameter("selectedColor").isEmpty()) ? currentProduct.getColor(): request.getParameter("selectedColor");
 
         // ✅ Kiểm tra nếu sản phẩm không tồn tại
         if (currentProduct == null) {

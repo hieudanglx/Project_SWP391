@@ -13,13 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.OrderDetailForAdmin;
 
 /**
  *
  * @author Dinh Van Do - CE182224
  */
-@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
-public class changeStatus extends HttpServlet {
+@WebServlet(name="orderDetailForAdmin", urlPatterns={"/orderDetailForAdmin"})
+public class orderDetailForAdmin extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,18 +35,17 @@ public class changeStatus extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
-        String newStatus = request.getParameter("status");
-            OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
-            if (isUpdated) {
-             if(newStatus.equals("Đã Hủy")){
-                 l.restoreProductQuantity(orderID);
-             }        
-           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
-        } else {
-            request.setAttribute("error","loi");          
-           request.getRequestDispatcher("error.jsp").forward(request, response);
+        OrderDAO orderDAO = new OrderDAO();
+        
+        List<OrderDetailForAdmin> orderDetails = orderDAO.getOrderDetails(orderID);
+        if(orderDetails.isEmpty()){
+         request.setAttribute("error", "rong");
+        request.getRequestDispatcher("error.jsp").forward(request, response);
         }
+            
+        request.setAttribute("orderDetails", orderDetails);
+        request.getRequestDispatcher("orderDetailForAdmin.jsp").forward(request, response);
+        
         }
     } 
 

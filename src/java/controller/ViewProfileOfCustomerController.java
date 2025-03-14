@@ -51,6 +51,6 @@ public class ViewProfileOfCustomerController extends HttpServlet {
         }
 
         // Chuyển hướng đến trang ViewProfileOfCustomer.jsp
-        request.getRequestDispatcher("ViewProfileOfCustomer.jsp").forward(request, response);
+        request.getRequestDispatcher("ViewProfieOfCustomer.jsp").forward(request, response);
     }
 }

@@ -10,6 +10,7 @@ import java.sql.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import model.OrderDetailForAdmin;
 import model.Order_list;
 
 /**
@@ -79,6 +80,30 @@ public class OrderDAO extends dao.DBContext {
             return false;
         }
     }
+    
+    public void restoreProductQuantity(int orderID) {
+    String selectQuery = "SELECT ProductID, Quantity FROM Order_Details WHERE OrderID = ?";
+    String updateQuery = "UPDATE Product SET Quantity_Product = Quantity_Product + ? WHERE ProductID = ?";
+    
+    try (PreparedStatement pstmtSelect = connection.prepareStatement(selectQuery);
+         PreparedStatement pstmtUpdate = connection.prepareStatement(updateQuery)) {
+        
+        pstmtSelect.setInt(1, orderID);
+        ResultSet rs = pstmtSelect.executeQuery();
+        
+        while (rs.next()) {
+            int productID = rs.getInt("ProductID");
+            int quantity = rs.getInt("Quantity");
+            
+            pstmtUpdate.setInt(1, quantity);
+            pstmtUpdate.setInt(2, productID);
+            pstmtUpdate.executeUpdate();
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
 
     public List<Order_list> getOrdersByStatus(String status) {
         List<Order_list> orderList = new ArrayList<>();
@@ -107,6 +132,44 @@ public class OrderDAO extends dao.DBContext {
 
         return orderList;
     }
+    public List<OrderDetailForAdmin> getOrderDetails(int orderID) {
+    List<OrderDetailForAdmin> orderDetailsList = new ArrayList<>();
+    String query = "SELECT o.OrderID, o.Address, o.Date, o.Status, o.Total, o.PhoneNumber, " +
+                   "c.FullName , s.FullName, " +
+                   "od.Quantity, p.ProductName, p.Price, p.Color " +
+                   "FROM Order_List o " +
+                   "JOIN Customer c ON o.CustomerID = c.CustomerID " +
+                   "JOIN Order_Details od ON o.OrderID = od.OrderID " +
+                   "JOIN Product p ON od.ProductID = p.ProductID " +
+                   "JOIN Staff s ON o.StaffID = s.StaffID " +
+                   "WHERE o.OrderID = ?";
+
+    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        pstmt.setInt(1, orderID);
+        ResultSet rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            orderDetailsList.add(new OrderDetailForAdmin(
+                rs.getInt("OrderID"),
+                rs.getString("Address"),
+                rs.getDate("Date"),
+                rs.getString("Status"),
+                rs.getDouble("Total"),
+                rs.getString("PhoneNumber"),
+                rs.getString("FullName"),
+                rs.getString("FullName"),
+                rs.getInt("Quantity"),
+                rs.getString("ProductName"),
+                rs.getInt("Price"),
+                rs.getString("Color")
+            ));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return orderDetailsList;
+}
+
 
     public List<Order_list> getRevenueByMonth() {
          String sql = "SELECT YEAR(Date) AS Nam, MONTH(Date) AS Thang, "

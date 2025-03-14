@@ -24,6 +24,10 @@
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
         <servlet-class>controller.EditAccountStaff_ForAdmin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>orderDetailForAdmin</servlet-name>
+        <servlet-class>controller.orderDetailForAdmin</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -59,6 +63,10 @@
     <servlet-mapping>
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
         <url-pattern>/EditAccountStaff_ForAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>orderDetailForAdmin</servlet-name>
+        <url-pattern>/orderDetailForAdmin</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
