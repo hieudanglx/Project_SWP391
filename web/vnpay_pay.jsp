@@ -41,7 +41,7 @@
             text-align: left;
         }
 
-        
+
 
         /* Tiêu đề nhỏ */
         .order-container2 h3,
@@ -51,7 +51,7 @@
             margin-bottom: 10px;
         }
 
-       
+
 
         /* Nút thanh toán */
         .order-btn {
@@ -78,7 +78,7 @@
             color: gray;
         }
         .sotien-form-group{
-            
+
         }
 
     </style>

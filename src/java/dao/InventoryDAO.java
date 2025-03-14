@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Inventory;
+import model.Product;
 
 /**
  *
@@ -114,9 +115,6 @@ public class InventoryDAO extends dao.DBContext {
     return inventoryList;
 }
     
-    
-    
-
     public static void main(String[] args) {
         InventoryDAO in = new InventoryDAO();
 //        List<Inventory> list = in.getAllInventorys();

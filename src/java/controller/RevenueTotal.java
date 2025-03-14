@@ -100,21 +100,20 @@ public class RevenueTotal extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
     public static void main(String[] args) {
         // Khởi tạo DAO
         OrderDAO dao = new OrderDAO();
-        
+
         // Gọi phương thức getTotalSales() để lấy tổng doanh thu
         double totalSales = dao.getTotalSales();
-        
+
         // Kiểm tra giá trị lấy từ DB
         System.out.println("[TEST] Tổng doanh thu lấy từ DB: " + totalSales);
 
         // Format số theo dạng có dấu phẩy ngăn cách
         DecimalFormat df = new DecimalFormat("#,###");
         String formattedSales = df.format(totalSales);
-        
+
         // In kết quả sau khi format
         System.out.println("[TEST] Tổng doanh thu sau khi format: " + formattedSales);
     }

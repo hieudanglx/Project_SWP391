@@ -103,7 +103,7 @@
                         <li><a class="dropdown-item" href="createProduct.jsp?category=2">Phone </a></li>
                         <li><a class="dropdown-item" href="createTablet.jsp?category=3">Tablet </a></li>
                         <li><a class="dropdown-item" href="createLaptop.jsp?category=1">Laptop</a></li>
-                        
+
                     </ul>
                 </div>
             </div>

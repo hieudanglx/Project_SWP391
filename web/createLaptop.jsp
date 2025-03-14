@@ -253,27 +253,27 @@
                 </div>
 
                 <label for="chipName">Chip Name:</label>
-              
-                    <select id="chipName" name="chip" onchange="toggleInput('chipName', 'chipNameInputContainer', 'chipNameInput')" >
-                                <option value="Core i3" ${chipName == 'Core i3' ? 'selected' : ''}>Core i3</option>
-                        <option value="Core i5" ${chipName == 'Core i5' ? 'selected' : ''}>Core i5</option>
-                        <option value="Core i7" ${chipName == 'Core i7' ? 'selected' : ''}>Core i7</option>
-                        <option value="Core i9" ${chipName == 'Core i9' ? 'selected' : ''}>Core i9</option>
-                        <option value="Ryzen 3" ${chipName == 'Ryzen 3' ? 'selected' : ''}>Ryzen 3</option>
-                        <option value="Ryzen 5" ${chipName == 'Ryzen 5' ? 'selected' : ''}>Ryzen 5</option>
-                        <option value="Ryzen 7" ${chipName == 'Ryzen 7' ? 'selected' : ''}>Ryzen 7</option>
-                        <option value="Ryzen 9" ${chipName == 'Ryzen 9' ? 'selected' : ''}>Ryzen 9</option>
-                        <option value="M1" ${chipName == 'M1' ? 'selected' : ''}>M1</option>
-                        <option value="M2" ${chipName == 'M2' ? 'selected' : ''}>M2</option>
-                        <option value="M3" ${chipName == 'M3' ? 'selected' : ''}>M3</option>
-                        <option value="other" ${chipName_custom != null ? 'selected' : ''}>Other</option>
-                    </select>
-                    <div id="chipNameInputContainer" class="${chipName_custom != null ? '' : 'hidden'}">
+
+                <select id="chipName" name="chip" onchange="toggleInput('chipName', 'chipNameInputContainer', 'chipNameInput')" >
+                    <option value="Core i3" ${chipName == 'Core i3' ? 'selected' : ''}>Core i3</option>
+                    <option value="Core i5" ${chipName == 'Core i5' ? 'selected' : ''}>Core i5</option>
+                    <option value="Core i7" ${chipName == 'Core i7' ? 'selected' : ''}>Core i7</option>
+                    <option value="Core i9" ${chipName == 'Core i9' ? 'selected' : ''}>Core i9</option>
+                    <option value="Ryzen 3" ${chipName == 'Ryzen 3' ? 'selected' : ''}>Ryzen 3</option>
+                    <option value="Ryzen 5" ${chipName == 'Ryzen 5' ? 'selected' : ''}>Ryzen 5</option>
+                    <option value="Ryzen 7" ${chipName == 'Ryzen 7' ? 'selected' : ''}>Ryzen 7</option>
+                    <option value="Ryzen 9" ${chipName == 'Ryzen 9' ? 'selected' : ''}>Ryzen 9</option>
+                    <option value="M1" ${chipName == 'M1' ? 'selected' : ''}>M1</option>
+                    <option value="M2" ${chipName == 'M2' ? 'selected' : ''}>M2</option>
+                    <option value="M3" ${chipName == 'M3' ? 'selected' : ''}>M3</option>
+                    <option value="other" ${chipName_custom != null ? 'selected' : ''}>Other</option>
+                </select>
+                <div id="chipNameInputContainer" class="${chipName_custom != null ? '' : 'hidden'}">
                     <input type="text" id="chipNameInput" name="chipName_custom" placeholder="Enter Chip Name" value="${chipName_custom}">
                 </div>
-                    <input type="text" id="chipGeneration" name="chipGeneration" placeholder="Enter Generation " value="${chipGeneration}" required>
-                
-                
+                <input type="text" id="chipGeneration" name="chipGeneration" placeholder="Enter Generation " value="${chipGeneration}" required>
+
+
 
                 <label for="gpu">GPU Brand:</label>
                 <select id="gputype" name="gpuType" onchange="toggleInput('gputype', 'gputypeInputContainer', 'gputypeInput')">

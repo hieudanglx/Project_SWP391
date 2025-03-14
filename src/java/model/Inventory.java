@@ -21,9 +21,8 @@ public class Inventory {
     private int quantityProduct;
     private int quantitySell;
     private String Supplier;
-
-    public Inventory() {
-    }
+    private int totalImport;
+    private int totalSellCalculated;
 
     public Inventory(int ProductID, String productName, int Import_price, int price, int Import_quantity, int quantityProduct, int quantitySell, String Supplier) {
         this.ProductID = ProductID;
@@ -36,17 +35,47 @@ public class Inventory {
         this.Supplier = Supplier;
     }
 
-    
-    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price,  int quantityProduct, int quantitySell, String Supplier) {
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, String Supplier, int totalImport, int totalSellCalculated) {
         this.ProductID = ProductID;
         this.productName = productName;
         this.DATE = DATE;
         this.Import_price = Import_price;
         this.price = price;
+        this.Supplier = Supplier;
+        this.totalImport = totalImport;
+        this.totalSellCalculated = totalSellCalculated;
+    }
+
     
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int quantityProduct, int quantitySell, String Supplier) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.DATE = DATE;
+        this.Import_price = Import_price;
+        this.price = price;
+
         this.quantityProduct = quantityProduct;
         this.quantitySell = quantitySell;
         this.Supplier = Supplier;
+    }
+
+    public int getTotalImport() {
+        return totalImport;
+    }
+
+    public void setTotalImport(int totalImport) {
+        this.totalImport = totalImport;
+    }
+
+    public int getTotalSellCalculated() {
+        return totalSellCalculated;
+    }
+
+    public void setTotalSellCalculated(int totalSellCalculated) {
+        this.totalSellCalculated = totalSellCalculated;
+    }
+
+    public Inventory() {
     }
 
     public int getProductID() {
@@ -125,7 +154,5 @@ public class Inventory {
     public String toString() {
         return "Inventory{" + "ProductID=" + ProductID + ", productName=" + productName + ", DATE=" + DATE + ", Import_price=" + Import_price + ", price=" + price + ", Import_quantity=" + Import_quantity + ", quantityProduct=" + quantityProduct + ", quantitySell=" + quantitySell + ", Supplier=" + Supplier + '}';
     }
-    
-    
 
 }

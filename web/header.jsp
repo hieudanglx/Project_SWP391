@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
-    
+
     <body>
         <header class="header">
             <div class="top">
@@ -86,7 +86,7 @@
                                     <c:if test="${not empty sessionScope.customer}">
                                         <p>Giỏ hàng</p>
                                         <span class="cart-count">
-                                        <fmt:formatNumber value="${sessionScope.total}" type="currency" currencySymbol="đ" />
+                                            <fmt:formatNumber value="${sessionScope.total}" type="currency" currencySymbol="đ" />
                                         </span>
                                     </c:if>
                                 </div>

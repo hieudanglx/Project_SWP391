@@ -28,7 +28,7 @@
                 position: fixed;
             }
             .sidebar a {
-                 padding: 10px 15px;
+                padding: 10px 15px;
                 text-decoration: none;
                 font-size: 18px;
                 color: white;

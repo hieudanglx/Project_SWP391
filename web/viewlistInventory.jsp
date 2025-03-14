@@ -107,18 +107,18 @@
                     <a href="javascript:void(0);" class="logout-link text-danger fw-bold" onclick="logout()">Logout</a>
                 </div>
             </div>
-            
+
             <div class="filter-buttons">
-                    <form method="GET" action="ListInventory" style="display:inline;">
-                        <button type="submit" name="filter" value="laptop" class="btn btn-primary">laptop</button>
-                    </form>
-                    <form method="GET" action="ListInventory" style="display:inline;">
-                        <button type="submit" name="filter" value="SmartPhone" class="btn btn-primary">SmartPhone</button>
-                    </form>
-                    <form method="GET" action="ListInventory" style="display:inline;">
-                        <button type="submit" name="filter" value="Tablet" class="btn btn-primary">Tablet</button>
-                    </form>
-                </div>
+                <form method="GET" action="ListInventory" style="display:inline;">
+                    <button type="submit" name="filter" value="laptop" class="btn btn-primary">laptop</button>
+                </form>
+                <form method="GET" action="ListInventory" style="display:inline;">
+                    <button type="submit" name="filter" value="SmartPhone" class="btn btn-primary">SmartPhone</button>
+                </form>
+                <form method="GET" action="ListInventory" style="display:inline;">
+                    <button type="submit" name="filter" value="Tablet" class="btn btn-primary">Tablet</button>
+                </form>
+            </div>
 
             <table class="table table-bordered table-hover text-center mt-3">
                 <thead class="table-dark">
