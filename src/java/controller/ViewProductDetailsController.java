@@ -23,58 +23,34 @@ public class ViewProductDetailsController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
 
-        System.out.println("🔍 Bắt đầu xử lý request...");
-
         ProductDao productDao = new ProductDao();
         FeedbackDAO feedbackDao = new FeedbackDAO();
 
-        // ✅ Kiểm tra id trước khi chuyển đổi
-        String idParam = request.getParameter("id");
-        int productID = 0;
-
-        try {
-            if (idParam != null) {
-                productID = Integer.parseInt(idParam);
-            } else {
-                request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "ID sản phẩm không hợp lệ!");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-            return;
-        }
+        String idParam = (request.getParameter("id") == null
+                || request.getParameter("id").isEmpty()) ? "0" : request.getParameter("id");
+        int productID = Integer.parseInt(idParam);
         Product currentProduct = productDao.getProductById(productID);
-        
+
         String selectedRom = (request.getParameter("selectedRom") == null
                 || request.getParameter("selectedRom").isEmpty()) ? currentProduct.getRom() : request.getParameter("selectedRom");
         String selectedColor = (request.getParameter("selectedColor") == null
-                || request.getParameter("selectedColor").isEmpty()) ? currentProduct.getColor(): request.getParameter("selectedColor");
-
-        // ✅ Kiểm tra nếu sản phẩm không tồn tại
-        if (currentProduct == null) {
-            request.setAttribute("errorMessage", "Sản phẩm không tồn tại!");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
-            return;
-        }
+                || request.getParameter("selectedColor").isEmpty()) ? currentProduct.getColor() : request.getParameter("selectedColor");
 
         List<Product> list = productDao.searchProductsByName(currentProduct.getProductName());
 
         Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
         if (selectedProduct == null) {
             selectedProduct = currentProduct;
+        } else if (list.size() > 3) {
+            request.setAttribute("list", list);
         }
 
-        // ✅ Tạo Map lưu tên khách hàng
         Map<Integer, String> customerNames = new HashMap<>();
         List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(productID, customerNames);
 
         request.setAttribute("product", selectedProduct);
-        request.setAttribute("list", list);
         request.setAttribute("feedbackList", feedbackList);
-        request.setAttribute("customerNames", customerNames); // ✅ Gửi Map sang JSP
-
+        request.setAttribute("customerNames", customerNames);
         request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
     }
 

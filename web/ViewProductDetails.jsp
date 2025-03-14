@@ -28,22 +28,17 @@
                 .tab-pane.active {
                     opacity: 1;
                 }
-
-
                 .container {
-                    max-width: 1200px !important; /* Thêm !important để override Bootstrap */
-                    width: 100% !important;       /* Sử dụng width 100% để responsive */
+                    max-width: 1200px !important;
+                    width: 100% !important;
                     padding: 20px;
                     margin: 0 auto;
-                    box-sizing: border-box;       /* Quan trọng: Tính toán kích thước bao gồm padding */
+                    box-sizing: border-box;
                 }
-
-                /* Giữ nguyên các style khác */
                 .product-header {
                     border-bottom: 3px solid #0d6efd;
                     padding-bottom: 1rem;
                 }
-
                 .product-title {
                     font-size: 24px;
                     font-weight: 700;
@@ -51,21 +46,17 @@
                     margin-bottom: 8px;
                     line-height: 1.3;
                 }
-
-                /* Định dạng thông tin đã bán */
                 .sales-info {
                     display: flex;
                     align-items: center;
                     gap: 10px;
                 }
-
                 .sold-quantity {
                     font-size: 14px;
                     color: #666;
                     position: relative;
                     padding-left: 24px;
                 }
-
                 .sold-quantity::before {
                     content: "•";
                     position: absolute;
@@ -81,22 +72,18 @@
                     display: block;
                     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                 }
-
                 .specs-table td {
                     padding: 1rem;
                     border-bottom: 1px solid #dee2e6;
                     text-align: left;
                 }
-
                 .storage-option {
                     min-width: 90px;
                 }
-
                 .color-option {
                     min-width: 90px;
                     position: relative;
                 }
-                /* Avatar cơ bản (chỉ màu nền + chữ) */
                 .avatar-basic {
                     width: 50px;
                     height: 50px;
@@ -107,7 +94,7 @@
                     font-weight: bold;
                     font-size: 20px;
                     color: white;
-                    background-color: #6c757d; /* Xám mặc định */
+                    background-color: #6c757d;
                     text-transform: uppercase;
                 }
             }
@@ -322,6 +309,12 @@
                             <div class="mb-4">
                                 <h5 class="mb-3">Bộ nhớ</h5>
                                 <div class="d-flex flex-wrap gap-2">
+                                    <c:if test="${empty list}">
+                                        <button type="button" style="margin: 0"
+                                                class="btn btn-outline-dark color-option active fw-bold">
+                                            ${product.rom}
+                                        </button>
+                                    </c:if>
                                     <c:set var="shownROMs" value="" />
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownROMs, p.rom)}">
@@ -346,6 +339,12 @@
                                 <h5 class="mb-3">Màu sắc</h5>
                                 <div class="d-flex flex-wrap gap-3">
                                     <c:set var="shownColors" value="" />
+                                    <c:if test="${empty list}">
+                                        <button type="button" style="margin: 0"
+                                                class="btn btn-outline-dark color-option active fw-bold">
+                                            ${product.color}
+                                        </button>
+                                    </c:if>
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownColors, p.color)}">
                                             <c:set var="shownColors" value="${shownColors}${p.color};" />
@@ -407,7 +406,6 @@
                                                             });
                                                         });
         </script>
-
     </body>
     <!-- Popup container -->
     <div class="popup-overlay" id="popupOverlay">
