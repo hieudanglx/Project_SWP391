@@ -5,6 +5,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -15,6 +16,7 @@
         <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" type="text/css" >
         <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css" type="text/css" >
         <link rel="stylesheet" href="css/header.css"  type="text/css" >
+        <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
     <body>
@@ -31,7 +33,7 @@
                                     <li>
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
-                                                Chào, <a href="ViewProfileOfCustomer.jsp" class="username-link">${sessionScope.customer.username}</a>!
+                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
                                                 <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                             </c:when>
                                             <c:otherwise>
@@ -56,15 +58,15 @@
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 order-md-1 order-2">
                             <div class="form-seach-product">
-                                <form action="/" method="GET" role="form">
-                                    <select id="input" class="form-control" required="required">
+                                <form action="SearchController" method="post" role="form">
+                                    <select name="CategoryID" class="form-control" required="required" style="text-align: center">
                                         <option value="">Chọn danh mục</option>
-                                        <option value="1">Điện thoại</option>
-                                        <option value="2">Máy tính bản</option>
-                                        <option value="3">Lap top</option>
+                                        <option value="2">Điện thoại</option>
+                                        <option value="3">Máy tính bản</option>
+                                        <option value="1">Lap top</option>
                                     </select>
                                     <div class="input-seach">
-                                        <input type="text" name="s" id="" class="form-control">
+                                        <input type="text" name="keyword" id="" class="form-control">
                                         <button type="submit" class="btn-search-pro"><i class="fa fa-search"></i></button>
                                     </div>
                                     <div class="clear"></div>
@@ -76,7 +78,15 @@
                                 <div class="icon">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     <c:if test="${not empty sessionScope.customer}">
-                                        <span class="cart-count">${cart.totalItems}</span>
+                                        <span class="cart-count">${sessionScope.size}</span>
+                                    </c:if>
+                                </div>
+                                <div class="info-cart">
+                                    <c:if test="${not empty sessionScope.customer}">
+                                        <p>Giỏ hàng</p>
+                                        <span class="cart-count">
+                                        <fmt:formatNumber value="${sessionScope.total}" type="currency" currencySymbol="đ" />
+                                        </span>
                                     </c:if>
                                 </div>
                                 <span class="clear"></span>
@@ -89,7 +99,7 @@
                 <div class="container">
                     <div id="nav-menu">
                         <ul>
-                            <li class="current-menu-item"><a href="#">Trang chủ</a></li>
+                            <li class="current-menu-item"><a href="homeController?CatogoryID=2">Trang chủ</a></li>
                             <li>
                                 <a href="ViewListProductGC?CategoryID=${1}">Sản phẩm</a>
                                 <ul>
@@ -116,6 +126,7 @@
         </script>
         <script src="libs/jquery-3.4.1.min.js"></script>
         <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+        <script src="js/popup.js"></script>
 
     </body>
 </html>

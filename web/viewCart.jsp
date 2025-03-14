@@ -165,7 +165,7 @@
                                     <!-- Các phần thông tin khách hàng -->
                                     <div class="mb-4">
                                         <label class="form-label">Họ và tên</label>
-                                        <input type="text" 
+                                        <input type="text" disabled
                                                name="fullname"
                                                value="${sessionScope.customer.fullName}"
                                                class="form-control"
@@ -174,7 +174,7 @@
 
                                     <div class="mb-4">
                                         <label class="form-label">Số điện thoại</label>
-                                        <input type="tel" 
+                                        <input type="tel"  disabled
                                                name="phone"
                                                value="${sessionScope.customer.phoneNumber}"
                                                class="form-control"
