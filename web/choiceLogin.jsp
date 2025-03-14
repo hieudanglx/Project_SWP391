@@ -24,8 +24,8 @@
     </style>
 </head>
 <body>
-    <%@include file="header.jsp" %>
-        <div class="container">
+    
+    <div class="container">
         <div class="row">
             <!-- Đăng nhập staff_Admin -->
             <div class="col-md-5 border p-4">

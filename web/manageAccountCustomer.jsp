@@ -104,7 +104,7 @@
             <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customers</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="#"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
+            <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
         </div>
 
         <!-- Main Content -->
