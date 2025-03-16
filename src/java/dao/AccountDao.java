@@ -65,6 +65,24 @@ public class AccountDao extends dao.DBContext {
 
         return null; // Trả về null nếu không tìm thấy
     }
+    public Integer getAdminIdByUsername(String username) {
+        String query = "SELECT staffID FROM Staff WHERE username = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, username);
+
+            try ( ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("staffID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Trả về null nếu không tìm thấy
+    }
+    
 
     public AccountStaff getStaffByEmail(String email) {
         if (connection == null) {

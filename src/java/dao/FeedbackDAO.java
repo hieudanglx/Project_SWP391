@@ -33,7 +33,7 @@ public class FeedbackDAO extends DBContext {
                         rs.getInt("CustomerID"),
                         rs.getString("Content"),
                         rs.getInt("RatePoint"),
-                        rs.getString("ProductID")
+                        rs.getInt("ProductID")
                 );
                 list.add(fb);
             }
@@ -86,7 +86,7 @@ public class FeedbackDAO extends DBContext {
                             rs.getInt("CustomerID"),
                             rs.getString("Content"),
                             rs.getInt("RatePoint"),
-                            rs.getString("ProductID")
+                            rs.getInt("ProductID")
                     );
                 }
             }
@@ -103,7 +103,7 @@ public class FeedbackDAO extends DBContext {
             stmt.setInt(1, feedback.getCustomerID());
             stmt.setString(2, feedback.getContent());
             stmt.setInt(3, feedback.getRatePoint());
-            stmt.setString(4, feedback.getProductID());
+            stmt.setInt(4, feedback.getProductID());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -119,7 +119,7 @@ public class FeedbackDAO extends DBContext {
             stmt.setInt(1, feedback.getCustomerID());
             stmt.setString(2, feedback.getContent());
             stmt.setInt(3, feedback.getRatePoint());
-            stmt.setString(4, feedback.getProductID());
+            stmt.setInt(4, feedback.getProductID());
             stmt.setInt(5, feedback.getFeedbackID());
 
             return stmt.executeUpdate() > 0;
@@ -186,7 +186,7 @@ public class FeedbackDAO extends DBContext {
                             rs.getInt("CustomerID"),
                             rs.getString("Content"),
                             rs.getInt("RatePoint"),
-                            rs.getString("ProductID")
+                            rs.getInt("ProductID")
                     );
                     list.add(fb);
                 }
@@ -216,7 +216,7 @@ public class FeedbackDAO extends DBContext {
                         rs.getInt("customerID"),
                         rs.getString("content"),
                         rs.getInt("ratePoint"),
-                        rs.getString("productID")
+                        rs.getInt("productID")
                 );
                 feedbackList.add(feedback);
 

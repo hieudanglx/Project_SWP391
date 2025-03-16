@@ -89,7 +89,7 @@
             <nav class="navbar-custom">
                 <h4>Admin Dashboard - List Products</h4>
                 <div>
-                    <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
+                    <a href="ManagerProfile.jsp" class="profile-link">${sessionScope.Username}</a>
                     <a href="javascript:void(0);" class="logout-link" onclick="logout()">Logout</a>
                 </div>
             </nav>            

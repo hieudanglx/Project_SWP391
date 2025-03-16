@@ -74,9 +74,9 @@
             <!-- Navbar -->
             <nav class="navbar-custom">
                 <h4>Admin Dashboard - View All Feedback</h4>
-                <div>
-                    <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
-                    <a href="javascript:void(0);" class="logout-link" onclick="logout()">Logout</a>
+                <div class="ms-auto">
+                    <a href="/viewProfileStaff" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
+                    <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
                 </div>
             </nav>  
 
@@ -103,7 +103,7 @@
                             <th>Nội dung</th>
                             <th>Điểm đánh giá</th>
                             <th>Product ID</th>
-                            <th>Hành động</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -111,10 +111,8 @@
                             <c:when test="${not empty feedbackList}">
                                 <c:forEach var="feedback" items="${feedbackList}">
                                     <tr>
-
                                         <td>${feedback.feedbackID}</td>
                                         <td>${customerNames[feedback.customerID] != null ? customerNames[feedback.customerID] : 'Không xác định'}</td>
-
                                         <td>${feedback.content}
                                             <div id="reply_${feedback.feedbackID}">
                                                 <c:if test="${not empty feedbackReplies[feedback.feedbackID]}">
@@ -122,23 +120,50 @@
                                                 </c:if>
                                             </div>
                                         </td>
-
-
                                         <td>${feedback.ratePoint}</td>
-                                        <td>${productNames[feedback.productID.toString()] != null ? productNames[feedback.productID.toString()] : 'Không xác định'}</td>
+                                        <td>${productNames[feedback.productID] != null ? productNames[feedback.productID] : 'Không xác định'}</td>
 
                                         <td>
-                                            <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" class="btn btn-danger"
-                                               onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
-                                            <form action="feedback" method="post" style="display:inline">
-                                                <input type="hidden" name="action" value="reply">
-                                                <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
-                                                <input type="hidden" name="customerID" value="${feedback.customerID}">
-                                                <label for="staffID">Nhập Staff ID:</label>
-                                                <input type="text" name="staffID" id="staffID_${feedback.feedbackID}" required>
-                                                <textarea name="replyContent" placeholder="Nhập phản hồi..." required></textarea>
-                                                <button type="submit" class="btn btn-primary">Gửi phản hồi</button>
-                                            </form>
+                                            <div class="card p-3 mb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" class="btn btn-danger"
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
+                                                    <form action="feedback" method="post" class="w-100 ms-3">
+                                                        <input type="hidden" name="action" value="reply">
+                                                        <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
+                                                        <input type="hidden" name="customerID" value="${feedback.customerID}">
+
+                                                        <c:choose>
+                                                            <c:when test="${sessionScope.username eq 'admin'}">
+                                                                <div class="mb-2">
+                                                                    <label for="staffID">Admin:</label>
+                                                                    <input type="hidden" name="staffID" value="${sessionScope.adminID}">
+                                                                    <span class="fw-bold">${sessionScope.adminID}</span>
+                                                                </div>
+                                                                <div class="mb-2">
+                                                                    <label for="replyContent_${feedback.feedbackID}" class="form-label">Nhập phản hồi:</label>
+                                                                    <textarea name="replyContent" id="replyContent_${feedback.feedbackID}" 
+                                                                              class="form-control" placeholder="Nhập phản hồi..." required></textarea>
+                                                                </div>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <div class="mb-2">
+                                                                    <label for="staffID">Staff ID:</label>
+                                                                    <input type="hidden" name="staffID" value="${sessionScope.staffId}">
+                                                                    <span class="fw-bold">${sessionScope.staffId}</span>
+                                                                </div>
+
+                                                                <div class="mb-2">
+                                                                    <label for="replyContent_${feedback.feedbackID}" class="form-label">Nhập phản hồi:</label>
+                                                                    <textarea name="replyContent" id="replyContent_${feedback.feedbackID}" 
+                                                                              class="form-control" placeholder="Nhập phản hồi..." required></textarea>
+                                                                </div>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                        <button type="submit" class="btn btn-primary w-100">Gửi phản hồi</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -180,3 +205,4 @@
         </script>
     </body>
 </html>
+

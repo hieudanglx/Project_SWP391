@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import model.Customer;
 import java.io.IOException;
 
-@WebServlet("/ViewProfileOfCustomer")
+@WebServlet(name = "ViewProfileOfCustomer", urlPatterns = {"/ViewProfileOfCustomer"})
 public class ViewProfileOfCustomerController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
