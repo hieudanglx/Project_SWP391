@@ -23,7 +23,7 @@
         <style>
             .profilex {
                 body {
-                    margin-top: 200px; 
+                    margin-top: 200px;
                     padding-top: 60px;
                     font-family: 'Poppins', sans-serif;
                     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -145,18 +145,18 @@
                 }
             }
             @keyframes fadeIn {
-                    from {
-                        opacity: 0;
-                        transform: translateY(-10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
                 }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         </style>
     </head>
-    
+
     <body>
         <%@include file="header.jsp" %>
         <div id="wallpaper" class="profilex">
@@ -287,8 +287,7 @@
                     </section>
 
                     <section id="orderHistory" class="content-section">
-                        <h2><strong>Order History</strong></h2>
-                        <p>View your past purchases.</p>
+                        <a href="Order_History" class="btn btn-primary">View Order History</a>
                     </section>
                 </main>
             </div>

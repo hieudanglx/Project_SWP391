@@ -49,6 +49,12 @@ public class Order_list {
         
     }
 
+    public Order_list(int OrderID, String Status, double Total) {
+        this.OrderID = OrderID;
+        this.Status = Status;
+        this.Total = Total;
+    }
+    
     
     
 
