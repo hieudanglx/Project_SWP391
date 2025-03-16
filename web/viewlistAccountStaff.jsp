@@ -62,7 +62,7 @@
             <a href="/ListAccountStaff">Manage Staff</a>
             <a href="listAccountCustomer">Manage Customer</a>
             <a href="listProductsForAdmin">Manage Products</a>
-            <a href="#">Manage Feedback</a>
+            <a href="feedback">Manage Feedback</a>
         </div>
         <div class="content">
             <div class="navbar-custom">

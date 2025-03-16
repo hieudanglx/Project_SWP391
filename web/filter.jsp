@@ -132,7 +132,7 @@
                                         <li class="filter-attribute-item filter-item">
                                             <input class="filter-attribute-checkbox ib-m" type="radio" name="rom" value="512gb"> 512 GB
                                         </li>
-                                        <c:if test="${CategoryID==2}">
+                                        <c:if test="${CategoryID!=3}">
                                             <li class="filter-attribute-item filter-item">
                                                 <input class="filter-attribute-checkbox ib-m" type="radio" name="rom" value="1tb"> 1 TB
                                             </li>
@@ -199,7 +199,7 @@
                             <li class="filter-item">
                                 <section class="filter-item-inner">
                                     <h1 class="filter-item-inner-heading plus">
-                                        Độ phân giải
+                                        Kích cỡ màn hình
                                     </h1>
                                     <ul class="filter-attribute-list ul-reset filter-section">
                                         <div class="filter-attribute-list-inner" name="size">
@@ -272,8 +272,8 @@
                             </section>
                         </li>
                     </ul>
-                    <div class="filter-action mt-4">
-                        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+                    <div class="filter-action mt-3">
+                        <button type="submit" class="btn btn-primary w-100" style="margin: 0">Lọc</button>
                     </div>
                 </aside>
             </form>

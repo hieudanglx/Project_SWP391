@@ -7,6 +7,7 @@ package controller;
 
 import dao.FeedbackDAO;
 import dao.ProductDao;
+import dao.Reply_FeedbackDAO;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.function.Function;
 import model.Customer;
 import model.Feedback;
+import model.Reply_Feedback;
 
 /**
  *
@@ -31,57 +33,77 @@ public class feedback extends HttpServlet {
 
     private FeedbackDAO feedbackDAO;
     private ProductDao productDao;
+    private Reply_FeedbackDAO reply_feedbackDAO;
 
     @Override
     public void init() {
         feedbackDAO = new FeedbackDAO();
         productDao = new ProductDao();
-
+        reply_feedbackDAO = new Reply_FeedbackDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy danh sách feedback
+        String action = request.getParameter("action");
+
+        if ("delete".equals(action)) {
+            HttpSession session = request.getSession();
+            try {
+                int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
+                boolean isDeleted = feedbackDAO.deleteFeedback(feedbackID);
+
+                if (isDeleted) {
+                    session.setAttribute("repSuccess", "Xóa feedback thành công!");
+                } else {
+                    session.setAttribute("errorMessage", "Không thể xóa feedback. ID không tồn tại hoặc bị ràng buộc.");
+                }
+            } catch (Exception e) {
+                session.setAttribute("errorMessage", "Lỗi xử lý xóa: " + e.getMessage());
+                e.printStackTrace();
+            }
+            response.sendRedirect("feedback");
+            return;
+        }
+
+        // Load danh sách feedback
         List<Feedback> feedbackList = feedbackDAO.getAllFeedback();
         request.setAttribute("feedbackList", feedbackList);
 
-        // Lấy danh sách CustomerName và lưu vào Map
         Map<Integer, String> customerNames = feedbackDAO.getCustomerNames();
-        request.setAttribute("customerNames", customerNames); // Truyền map vào JSP
+        request.setAttribute("customerNames", customerNames);
 
-        Map<Integer, String> productNames = productDao.getProductNames(); // Lấy danh sách sản phẩm
-        
-        System.out.println("Danh sách productNames trong Servlet: " + productNames);
-     
-        request.setAttribute("productNames", productNames); // Đẩy lên JSP
+        Map<Integer, String> productNames = productDao.getProductNames();
+        request.setAttribute("productNames", productNames);
 
-        // Chuyển hướng đến trang JSP
+        Map<Integer, String> feedbackReplies = reply_feedbackDAO.getAllReplies();
+        request.setAttribute("feedbackReplies", feedbackReplies);
+
         request.getRequestDispatcher("viewAllFeedback.jsp").forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String action = request.getParameter("action");
-    if ("reply".equals(action)) {
-        int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
-        int customerID = Integer.parseInt(request.getParameter("customerID"));
-        String replyContent = request.getParameter("replyContent");
-
-        // Lấy session
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role"); // "staff" hoặc "admin"
-        
-        int staffID = 0; // Mặc định admin sẽ có staffID = 0
-        if ("staff".equals(role)) {
-            staffID = (int) session.getAttribute("staffID");
+        String action = request.getParameter("action");
+
+        if ("reply".equals(action)) {
+            int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
+            int customerID = Integer.parseInt(request.getParameter("customerID"));
+            int staffID = Integer.parseInt(request.getParameter("staffID"));
+            String content_Reply = request.getParameter("replyContent");
+
+            boolean repSuccess = reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
+            
+            if (repSuccess) {
+                session.setAttribute("repSuccess", "Phản hồi đã được gửi thành công!");
+            } else {
+                session.setAttribute("errorMessage", "Lỗi! Không thể gửi phản hồi.");
+            }
+            reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
+            response.sendRedirect("feedback");
         }
-
-        // Gọi DAO để lưu phản hồi
-        FeedbackDAO feedbackDAO = new FeedbackDAO();
-        feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, replyContent);
-
-        // Chuyển hướng sau khi gửi phản hồi thành công
-        response.sendRedirect("feedback");
     }
-}
+
 }

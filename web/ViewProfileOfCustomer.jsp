@@ -21,142 +21,145 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
-            body {
-                padding-top: 60px;
-                font-family: 'Poppins', sans-serif;
-                background: linear-gradient(135deg, #667eea, #764ba2);
-                margin: 0;
-                padding: 0;
-                color: #333;
-            }
-            .profile-container {
-                display: flex;
-                max-width: 1200px;
-                margin: 40px auto;
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-                overflow: hidden;
-            }
-            .sidebar {
-                width: 250px;
-                background: #333;
-                color: white;
-                padding: 30px 20px;
-            }
-            .sidebar .user-info {
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            .sidebar .user-info i {
-                font-size: 60px;
-                color: #ffcc00;
-            }
-            .sidebar .profile-nav ul {
-                list-style: none;
-                padding: 0;
-            }
-            .sidebar .profile-nav ul li {
-                margin: 15px 0;
-                text-align: left;
-            }
-            .sidebar .profile-nav ul li a {
-                text-decoration: none;
-                color: white;
-                font-weight: bold;
-                display: block;
-                padding: 10px 15px;
-                border-radius: 5px;
-                transition: 0.3s;
-            }
-            .sidebar .profile-nav ul li a:hover {
-                background: #ffcc00;
-                color: black;
-            }
-            .profile-content {
-                flex: 1;
-                padding: 40px;
-                background: #f8f9fa;
-            }
-            .content-section {
-                display: none;
-                animation: fadeIn 0.5s ease-in-out;
-            }
-            .content-section.active {
-                display: block;
+            .profilex {
+                body {
+                    margin-top: 200px; 
+                    padding-top: 60px;
+                    font-family: 'Poppins', sans-serif;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    margin: 0;
+                    padding: 0;
+                    color: #333;
+                }
+                .profile-container {
+                    display: flex;
+                    max-width: 1200px;
+                    margin: 40px auto;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                    overflow: hidden;
+                }
+                .sidebar {
+                    width: 250px;
+                    background: #333;
+                    color: white;
+                    padding: 30px 20px;
+                }
+                .sidebar .user-info {
+                    text-align: center;
+                    margin-bottom: 30px;
+                }
+                .sidebar .user-info i {
+                    font-size: 60px;
+                    color: #ffcc00;
+                }
+                .sidebar .profile-nav ul {
+                    list-style: none;
+                    padding: 0;
+                }
+                .sidebar .profile-nav ul li {
+                    margin: 15px 0;
+                    text-align: left;
+                }
+                .sidebar .profile-nav ul li a {
+                    text-decoration: none;
+                    color: white;
+                    font-weight: bold;
+                    display: block;
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    transition: 0.3s;
+                }
+                .sidebar .profile-nav ul li a:hover {
+                    background: #ffcc00;
+                    color: black;
+                }
+                .profile-content {
+                    flex: 1;
+                    padding: 40px;
+                    background: #f8f9fa;
+                }
+                .content-section {
+                    display: none;
+                    animation: fadeIn 0.5s ease-in-out;
+                }
+                .content-section.active {
+                    display: block;
+                }
+                h2 {
+                    border-left: 5px solid #ffcc00;
+                    padding-left: 10px;
+                    font-size: 22px;
+                }
+                form {
+                    display: flex;
+                    flex-direction: column;
+                }
+                input, select {
+                    width: 100%;
+                    padding: 10px;
+                    margin-top: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+                .save-btn {
+                    margin-top: 20px;
+                    padding: 12px;
+                    background: #ffcc00;
+                    color: black;
+                    border: none;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    transition: 0.3s;
+                }
+                .save-btn:hover {
+                    background: #ff9900;
+                }
+
+                .user-info img {
+                    width: 80px; /* Nhỏ hơn */
+                    height: 80px;
+                    border-radius: 50%; /* Bo tròn */
+                    border: 2px solid #ffcc00;
+                    object-fit: cover; /* Hiển thị đẹp hơn */
+                }
+
+                .avatar-upload {
+                    text-align: center;
+                    margin-top: 20px;
+                }
+
+                .avatar-upload img {
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    border: 2px solid #ddd;
+                }
+
+                .avatar-upload input {
+                    display: block;
+                    margin: 10px auto;
+                }
             }
             @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(-10px);
+                    from {
+                        opacity: 0;
+                        transform: translateY(-10px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            h2 {
-                border-left: 5px solid #ffcc00;
-                padding-left: 10px;
-                font-size: 22px;
-            }
-            form {
-                display: flex;
-                flex-direction: column;
-            }
-            input, select {
-                width: 100%;
-                padding: 10px;
-                margin-top: 10px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
-            }
-            .save-btn {
-                margin-top: 20px;
-                padding: 12px;
-                background: #ffcc00;
-                color: black;
-                border: none;
-                cursor: pointer;
-                border-radius: 5px;
-                font-size: 16px;
-                transition: 0.3s;
-            }
-            .save-btn:hover {
-                background: #ff9900;
-            }
-
-            .user-info img {
-                width: 80px; /* Nhỏ hơn */
-                height: 80px;
-                border-radius: 50%; /* Bo tròn */
-                border: 2px solid #ffcc00;
-                object-fit: cover; /* Hiển thị đẹp hơn */
-            }
-
-            .avatar-upload {
-                text-align: center;
-                margin-top: 20px;
-            }
-
-            .avatar-upload img {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                object-fit: cover;
-                border: 2px solid #ddd;
-            }
-
-            .avatar-upload input {
-                display: block;
-                margin: 10px auto;
-            }
         </style>
     </head>
+    
     <body>
-        <div id="wallpaper">
-            <%@include file="header.jsp" %>
-
+        <%@include file="header.jsp" %>
+        <div id="wallpaper" class="profilex">
             <div class="profile-container">
                 <aside class="sidebar">
                     <div class="user-info">

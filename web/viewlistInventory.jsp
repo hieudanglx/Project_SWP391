@@ -5,14 +5,15 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List, model.Inventory" %>
-<%
-    List<Inventory> importList = (List<Inventory>) request.getAttribute("importList");
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<jsp:useBean id="importList" scope="request" type="java.util.List<model.Inventory>" />
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Inventory List</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -44,19 +45,6 @@
                 padding: 20px;
                 width: 100%;
             }
-            .navbar {
-                background: #f8f9fa;
-                padding: 10px;
-            }
-            .status-active {
-                color: green;
-                font-weight: bold;
-            }
-            .status-inactive {
-                color: red;
-                font-weight: bold;
-            }
-            /* Navbar */
             .navbar-custom {
                 background: white;
                 box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -77,18 +65,20 @@
         </style>
     </head>
     <body>
+        <!-- Sidebar -->
         <div class="sidebar">
             <h4 class="text-center">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
+            <a href="/ListAccountStaff"><i class="fas fa-users"></i> Manager Staff</a>
+            <a href="listAccountCustomer"><i class="fas fa-user"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="#"><i class="fas fa-cog"></i> Manager feedback</a>
-            <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
-            <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
+            <a href="#"><i class="fas fa-comments"></i> Manager Feedback</a>
+            <a href="Revenue"><i class="fas fa-chart-line"></i> Manager Revenue</a>
+            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manager Inventory</a>
         </div>
 
+        <!-- Main Content -->
         <div class="content">
             <!-- Navbar -->
             <div class="navbar-custom">
@@ -96,21 +86,21 @@
                 <div class="search-container">
                     <form action="SearchInventory" method="GET" class="d-flex">
                         <div class="input-group">
-                            <input type="text" name="keyword" class="form-control" placeholder="Search username">
+                            <input type="text" name="keyword" class="form-control" placeholder="Search product">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
                 </div>
-
                 <div>
                     <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
                     <a href="javascript:void(0);" class="logout-link text-danger fw-bold" onclick="logout()">Logout</a>
                 </div>
             </div>
 
-            <div class="filter-buttons">
+            <!-- Filter Buttons -->
+            <div class="filter-buttons mb-3">
                 <form method="GET" action="ListInventory" style="display:inline;">
-                    <button type="submit" name="filter" value="laptop" class="btn btn-primary">laptop</button>
+                    <button type="submit" name="filter" value="laptop" class="btn btn-primary">Laptop</button>
                 </form>
                 <form method="GET" action="ListInventory" style="display:inline;">
                     <button type="submit" name="filter" value="SmartPhone" class="btn btn-primary">SmartPhone</button>
@@ -120,45 +110,49 @@
                 </form>
             </div>
 
+            <!-- Inventory Table -->
             <table class="table table-bordered table-hover text-center mt-3">
                 <thead class="table-dark">
                     <tr>
                         <th>Product ID</th>
                         <th>Product Name</th>
                         <th>Import Date</th>
-                        <th>Import Price</th>
                         <th>Sale Price</th>
-                        <th>Stock Quantity</th>
-                        <th>Sold</th>
-                        <th>Supplier</th>
-                        <th> Action </th>
+                        <th>Import Quantity</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="inventoryTable">
-                    <% if (importList == null || importList.isEmpty()) { %>
-                    <tr><td colspan="8">No inventory data available.</td></tr>
-                    <% } else { %>
-                    <% for (Inventory inventory : importList) { %>
-                    <tr>
-                        <td><%= inventory.getProductID() %></td>
-                        <td><%= inventory.getProductName() %></td>
-                        <td><%= inventory.getDATE() %></td>
-                        <td><%= inventory.getImport_price() %></td>
-                        <td><%= inventory.getPrice() %></td>
-                        <td><%= inventory.getQuantityProduct() %></td>
-                        <td><%= inventory.getQuantitySell() %></td>
-                        <td><%= inventory.getSupplier() %></td>
-                        <td>
-                            <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
-                    </tr>
-                    <% } %>
-                    <% } %>
+                <tbody>
+                    <c:choose>
+                        <c:when test="${empty importList}">
+                            <tr>
+                                <td colspan="10">No inventory data available.</td>
+                            </tr>
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach var="inventory" items="${importList}">
+                                <tr>
+                                    <td>${inventory.productID}</td>
+                                    <td>${inventory.productName}</td>
+                                    <td>${inventory.DATE}</td>
+                                    <td>${inventory.price}</td>
+                                    <td>${inventory.quantityProduct}</td>   
+
+                                    <td>
+                                        <a href="ImportInventory?productID=${inventory.productID}" class="btn btn-warning btn-sm">
+                                            Import Product
+                                        </a>
+                                        <a href="ImportHistory?productID=${inventory.productID}" class="btn btn-primary btn-sm">Xem chi tiết</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </c:otherwise>
+                    </c:choose>
                 </tbody>
             </table>
         </div>
 
+        <!-- Logout Script -->
         <script>
             function logout() {
                 fetch('/LogOutStaffAndAdminController', {method: 'POST'})

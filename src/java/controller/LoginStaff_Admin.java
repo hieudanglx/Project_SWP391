@@ -70,49 +70,53 @@ public class LoginStaff_Admin extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+   @Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
 
-        AccountDao accountDAO = new AccountDao();
-        String username = request.getParameter("Username");
-        String password = request.getParameter("Password");
+    AccountDao accountDAO = new AccountDao();
+    String username = request.getParameter("Username");
+    String password = request.getParameter("Password");
 
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            request.setAttribute("error", "Username and Password cannot be empty");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+    // Kiểm tra nếu username hoặc password rỗng
+    if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+        request.setAttribute("error", "Username and Password cannot be empty");
+        request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        return;
+    }
+
+    try {
+        Boolean status = accountDAO.ValidateStaff_Admin(username, password); // Sửa kiểu dữ liệu thành Boolean
+
+        if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
+            HttpSession session = request.getSession();
+            session.setAttribute("Username", username);
+            session.setAttribute("fullname", accountDAO.getFullname(username));
+
+            final String destinationPage = "admin".equalsIgnoreCase(username)
+                    ? "HomeDashBoard_Admin.jsp"
+                    : "HomeDashBoard_Staff.jsp";
+
+            if (!"admin".equalsIgnoreCase(username)) {
+                session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
+            }
+
+            response.sendRedirect(destinationPage);
             return;
         }
 
-        try {
-            boolean status = accountDAO.ValidateStaff_Admin(username, password);
+        // Nếu status = false => Tài khoản bị chặn
+        request.setAttribute("error", "Your account is blocked. Please contact admin.");
 
-            if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
-                HttpSession session = request.getSession();
-                session.setAttribute("Username", username);
-                session.setAttribute("fullname", accountDAO.getFullname(username));
-
-                if ("admin".equalsIgnoreCase(username)) {
-                    response.sendRedirect("HomeDashBoard_Admin.jsp");
-                } else {
-                    session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
-                    response.sendRedirect("HomeDashBoard_Staff.jsp");
-                }
-            } else if (Boolean.FALSE.equals(status)) { // Tài khoản bị chặn
-                request.setAttribute("error", "Your account is blocked. Please contact admin.");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            } else { // Không tìm thấy tài khoản
-                request.setAttribute("error", "Invalid username or password");
-                request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Internal Server Error. Please try again later.");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-        }
-
+    } catch (Exception e) {
+        e.printStackTrace();
+        request.setAttribute("error", "An error occurred while processing your request. Please try again.");
     }
+
+    // Điều hướng về trang login nếu có lỗi
+    request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+}
 
     /**
      * Returns a short description of the servlet.

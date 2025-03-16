@@ -80,7 +80,7 @@ public class SearchInventory extends HttpServlet {
             } else if ("Tablet".equalsIgnoreCase(filter)) {
                 importList = inventoryDAO.getInventoryListByCategory("Tablet");
             } else {
-                importList = inventoryDAO.getAllInventorys();
+                importList = inventoryDAO.getAllInventories();
             }
 
             request.setAttribute("importList", importList);

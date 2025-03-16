@@ -19,7 +19,6 @@
         <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
-
     <body>
         <header class="header">
             <div class="top">
@@ -53,14 +52,14 @@
                     <div class="row">
                         <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3 order-md-0 order-0">
                             <div class="logo">
-                                <a href="homeController?CatogoryID=2"><img src="images/logo.png" alt="" style="width: 100px; height: 300px;"></a>
+                                <a href="homeController?CatogoryID=2"><img src="images/logo1.png" alt=""></a>
                                 <h1>Website bán hàng</h1>
                             </div>
                         </div>
                         <div class="col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 order-md-1 order-2">
                             <div class="form-seach-product">
                                 <form action="SearchController" method="post" role="form">
-                                    <select name="CategoryID" class="form-control" required="required">
+                                    <select name="CategoryID" class="form-control" required="required" style="text-align: center">
                                         <option value="">Chọn danh mục</option>
                                         <option value="2">Điện thoại</option>
                                         <option value="3">Máy tính bản</option>

@@ -24,6 +24,14 @@
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
         <servlet-class>controller.EditAccountStaff_ForAdmin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImportInventory</servlet-name>
+        <servlet-class>controller.ImportInventory</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ImportHistory</servlet-name>
+        <servlet-class>controller.ImportHistory</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -59,6 +67,14 @@
     <servlet-mapping>
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
         <url-pattern>/EditAccountStaff_ForAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportInventory</servlet-name>
+        <url-pattern>/ImportInventory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportHistory</servlet-name>
+        <url-pattern>/ImportHistory</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

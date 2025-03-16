@@ -56,14 +56,33 @@ public class updateProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String id = request.getParameter("productID");
-        ProductDao productDao = new ProductDao();
-        Product product = productDao.getProductById(Integer.parseInt(id));
-        if (product.getColor().isEmpty()) {
-            request.setAttribute("error", "Failed to create product");
+
+        // Kiểm tra nếu id bị null hoặc rỗng
+        if (id == null || id.trim().isEmpty()) {
+            request.setAttribute("error", "❌ Mã sản phẩm không hợp lệ.");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            int productId = Integer.parseInt(id);
+            ProductDao productDao = new ProductDao();
+            Product product = productDao.getProductById(productId);
+
+            // Kiểm tra nếu sản phẩm không tồn tại
+            if (product == null) {
+                request.setAttribute("error", "❌ Không tìm thấy sản phẩm.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+                return;
+            }
+
+            // Truyền dữ liệu sản phẩm sang trang updateProduct.jsp
+            request.setAttribute("product", product);
+            request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "❌ Mã sản phẩm phải là số hợp lệ.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
-        request.setAttribute("product", product);
-        request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
     }
 
     /**
@@ -129,16 +148,16 @@ public class updateProduct extends HttpServlet {
 //                request.setAttribute("product", product);
 //                request.getRequestDispatcher("updateProduct.jsp").forward(request, response);
 //            } else {
-                boolean isUpdated = productDAO.updateProduct(product);
+            boolean isUpdated = productDAO.updateProduct(product);
 
-                if (isUpdated) {                    
-                    request.setAttribute("error", "Update sucessful");
-                    request.setAttribute("product", product);
-                    request.getRequestDispatcher("productDetailForAF.jsp").forward(request, response);
-                } else {
-                    request.setAttribute("error", "Failed to update product");
-                    request.getRequestDispatcher("error.jsp").forward(request, response);
-                }
+            if (isUpdated) {
+                request.setAttribute("error", "Update sucessful");
+                request.setAttribute("product", product);
+                request.getRequestDispatcher("productDetailForAF.jsp").forward(request, response);
+            } else {
+                request.setAttribute("error", "Failed to update product");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
             //}
 
         } catch (NumberFormatException e) {
