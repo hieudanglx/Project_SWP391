@@ -13,14 +13,18 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import model.Order_Details;
+
 
 /**
  *
- * @author Dinh Van Do - CE182224
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
-public class changeStatus extends HttpServlet {
-   
+@WebServlet(name = "OrderDetail", urlPatterns = {"/OrderDetail"})
+public class OrderDetail extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+    private OrderDAO orderDAO = new OrderDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -32,19 +36,16 @@ public class changeStatus extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            int orderID = Integer.parseInt(request.getParameter("orderID"));
-        String newStatus = request.getParameter("status");
-            OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
-            if (isUpdated) {
-             if(newStatus.equals("Đã Hủy")){
-                 l.restoreProductQuantity(orderID);
-             }        
-           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
-        } else {
-            request.setAttribute("error","loi");          
-           request.getRequestDispatcher("error.jsp").forward(request, response);
-        }
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet OrderDetail</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet OrderDetail at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     } 
 
@@ -57,11 +58,21 @@ public class changeStatus extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    } 
+   protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    int orderID = Integer.parseInt(request.getParameter("orderID"));
 
+    // Lấy danh sách chi tiết đơn hàng
+    List<Order_Details> orderDetailsList = orderDAO.getOrderDetailsByOrderID(orderID);
+
+    if (!orderDetailsList.isEmpty()) {
+        request.setAttribute("orderDetails", orderDetailsList);
+    }else{
+        request.setAttribute("error", "trong");
+        request.getRequestDispatcher("error.jsp").forward(request, response);
+    }
+    request.getRequestDispatcher("OrderDetails.jsp").forward(request, response);
+}
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request

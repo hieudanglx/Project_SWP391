@@ -141,7 +141,7 @@
                                 <td>${order.phoneNumber}</td>
                                 <td>${order.total}</td>
                                 <td>
-                                    <a href="orderDetail?orderID=${order.orderID}" class="btn btn-warning btn-sm">Detail</a>
+                                    <a href="orderDetailForAdmin?orderID=${order.orderID}" class="btn btn-warning btn-sm">Detail</a>
                                     <c:if test="${order.status == 'Chờ xử lý'}">
                                         <a href="changeStatus?orderID=${order.orderID}&status=Giao Hàng" class="btn btn-success btn-sm">Xác nhận đơn hàng</a>
                                     </c:if>

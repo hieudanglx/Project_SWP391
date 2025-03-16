@@ -16,10 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Dinh Van Do - CE182224
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
-public class changeStatus extends HttpServlet {
+        @WebServlet(name = "Confirm_order", urlPatterns = {"/Confirm_order"})
+public class Confirm_order extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,20 +32,22 @@ public class changeStatus extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
             int orderID = Integer.parseInt(request.getParameter("orderID"));
-        String newStatus = request.getParameter("status");
+        
             OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
+            boolean isUpdated = l.updateOrderStatus(orderID,"Thành Công");
             if (isUpdated) {
-             if(newStatus.equals("Đã Hủy")){
-                 l.restoreProductQuantity(orderID);
-             }        
-           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
+             
+                 l.updateOrderStatus(orderID, "Thành Công");
+                 
+           request.getRequestDispatcher("Filter_Order_For_Customer").forward(request, response);
         } else {
             request.setAttribute("error","loi");          
            request.getRequestDispatcher("error.jsp").forward(request, response);
         }
         }
+        
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

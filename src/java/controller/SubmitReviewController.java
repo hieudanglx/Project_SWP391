@@ -39,7 +39,7 @@ public class SubmitReviewController extends HttpServlet {
         int rating = Integer.parseInt(request.getParameter("rating"));
         String comment = request.getParameter("comment");
 
-        Feedback feedback = new Feedback(customer.getCustomerID(),comment,rating, productID+"");
+        Feedback feedback = new Feedback(customer.getCustomerID(),comment,rating, productID);
         FeedbackDAO feedbackDAO = new FeedbackDAO();
 
         if (feedbackDAO.addFeedback(feedback)) {

@@ -164,6 +164,7 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${list}" var="customer">
+                            <c:if test="${customer.customerID != 0}">
                             <tr>
                                 <td>${customer.customerID}</td>
                                 <td>${customer.username}</td>
@@ -204,6 +205,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            </c:if>
                         </c:forEach>
                     </tbody>
                 </table>

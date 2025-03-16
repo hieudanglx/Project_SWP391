@@ -13,12 +13,12 @@ public class Feedback {
     private int customerID;
     private String content;
     private int ratePoint;
-    private String productID;
+    private int productID;
 
     public Feedback() {
     }
 
-    public Feedback(int feedbackID, int customerID, String content, int ratePoint, String productID) {
+    public Feedback(int feedbackID, int customerID, String content, int ratePoint, int productID) {
         this.feedbackID = feedbackID;
         this.customerID = customerID;
         this.content = content;
@@ -26,7 +26,7 @@ public class Feedback {
         this.productID = productID;
     }
 
-    public Feedback(int customerID, String content, int ratePoint, String productID) {
+    public Feedback(int customerID, String content, int ratePoint, int productID) {
         this.customerID = customerID;
         this.content = content;
         this.ratePoint = ratePoint;
@@ -67,11 +67,11 @@ public class Feedback {
         this.ratePoint = ratePoint;
     }
 
-    public String getProductID() {
+    public int getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public void setProductID(int productID) {
         this.productID = productID;
     }
 

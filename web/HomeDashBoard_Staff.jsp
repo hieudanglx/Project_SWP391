@@ -61,7 +61,8 @@
             <a href="#"><i class="fas fa-chart-bar"></i> Analytics</a>
             <a href="#"><i class="fas fa-users"></i> Users</a>
             <a href="#"><i class="fas fa-box"></i> Products</a>
-            <a href="#"><i class="fas fa-cog"></i> Settings</a>         
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>        
+            <a href="feedback"><i class="fas fa-cog"></i> Feedback</a>        
         </div>
 
         <!-- Main Content -->

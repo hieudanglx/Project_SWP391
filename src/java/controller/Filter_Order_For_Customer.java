@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.OrderDAO;
@@ -13,57 +12,59 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Order_Details;
+import model.Order_list;
 
 /**
  *
- * @author Dinh Van Do - CE182224
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
-public class changeStatus extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+@WebServlet(name = "Filter_Order_For_Customer", urlPatterns = {"/Filter_Order_For_Customer"})
+public class Filter_Order_For_Customer extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            int orderID = Integer.parseInt(request.getParameter("orderID"));
-        String newStatus = request.getParameter("status");
-            OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
-            if (isUpdated) {
-             if(newStatus.equals("Đã Hủy")){
-                 l.restoreProductQuantity(orderID);
-             }        
-           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
-        } else {
-            request.setAttribute("error","loi");          
-           request.getRequestDispatcher("error.jsp").forward(request, response);
+        try ( PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            HttpSession session = request.getSession();
+            Integer customerID = (Integer) session.getAttribute("customerID"); // Lấy ID từ session
+            String status = request.getParameter("status");
+            OrderDAO o = new OrderDAO();
+            List<Order_Details> ol = o.getOrdersByStatusCustomer(customerID, status);
+            request.setAttribute("orderDetails", ol);
+            request.getRequestDispatcher("OrderHistory.jsp").forward(request, response);
         }
-        }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -71,12 +72,13 @@ public class changeStatus extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

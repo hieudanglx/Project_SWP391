@@ -25,12 +25,20 @@
         <servlet-class>controller.EditAccountStaff_ForAdmin</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ImportInventory</servlet-name>
-        <servlet-class>controller.ImportInventory</servlet-class>
+        <servlet-name>orderDetailForAdmin</servlet-name>
+        <servlet-class>controller.orderDetailForAdmin</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ImportHistory</servlet-name>
-        <servlet-class>controller.ImportHistory</servlet-class>
+        <servlet-name>Filter_Order_For_Customer</servlet-name>
+        <servlet-class>controller.Filter_Order_For_Customer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Cancel_order</servlet-name>
+        <servlet-class>controller.Cancel_order</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Confirm_order</servlet-name>
+        <servlet-class>controller.Confirm_order</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
@@ -62,19 +70,27 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SearchInventory</servlet-name>
-        <url-pattern>/SearchInventory</url-pattern>
+<url-pattern>/SearchInventory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
         <url-pattern>/EditAccountStaff_ForAdmin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ImportInventory</servlet-name>
-        <url-pattern>/ImportInventory</url-pattern>
+        <servlet-name>orderDetailForAdmin</servlet-name>
+        <url-pattern>/orderDetailForAdmin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ImportHistory</servlet-name>
-        <url-pattern>/ImportHistory</url-pattern>
+        <servlet-name>Filter_Order_For_Customer</servlet-name>
+        <url-pattern>/Filter_Order_For_Customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cancel_order</servlet-name>
+        <url-pattern>/Cancel_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Confirm_order</servlet-name>
+        <url-pattern>/Confirm_order</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

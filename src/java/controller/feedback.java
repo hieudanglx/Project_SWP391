@@ -45,10 +45,11 @@ public class feedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        Integer staffId = (Integer) session.getAttribute("staffId");
 
+        String action = request.getParameter("action");
         if ("delete".equals(action)) {
-            HttpSession session = request.getSession();
             try {
                 int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
                 boolean isDeleted = feedbackDAO.deleteFeedback(feedbackID);
@@ -75,7 +76,7 @@ public class feedback extends HttpServlet {
 
         Map<Integer, String> productNames = productDao.getProductNames();
         request.setAttribute("productNames", productNames);
-
+     
         Map<Integer, String> feedbackReplies = reply_feedbackDAO.getAllReplies();
         request.setAttribute("feedbackReplies", feedbackReplies);
 
@@ -91,19 +92,29 @@ public class feedback extends HttpServlet {
         if ("reply".equals(action)) {
             int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
             int customerID = Integer.parseInt(request.getParameter("customerID"));
-            int staffID = Integer.parseInt(request.getParameter("staffID"));
+            String staffIDStr = request.getParameter("staffID");
+
+            if (staffIDStr == null || staffIDStr.trim().isEmpty()) {
+                session.setAttribute("errorMessage", "Lỗi! StaffID không hợp lệ.");
+                response.sendRedirect("feedback");
+                return;
+            }
+
+            int staffID = Integer.parseInt(staffIDStr);
+
             String content_Reply = request.getParameter("replyContent");
 
             boolean repSuccess = reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
-            
+            System.out.println("Reply result: " + repSuccess);
+
             if (repSuccess) {
                 session.setAttribute("repSuccess", "Phản hồi đã được gửi thành công!");
             } else {
                 session.setAttribute("errorMessage", "Lỗi! Không thể gửi phản hồi.");
             }
-            reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
+
             response.sendRedirect("feedback");
         }
     }
-
 }
+

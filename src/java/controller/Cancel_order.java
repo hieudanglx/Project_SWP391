@@ -16,10 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Dinh Van Do - CE182224
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name="changeStatus", urlPatterns={"/changeStatus"})
-public class changeStatus extends HttpServlet {
+@WebServlet(name = "Cancel_order", urlPatterns = {"/Cancel_order"})
+public class Cancel_order extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,14 +33,14 @@ public class changeStatus extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
-        String newStatus = request.getParameter("status");
+        
             OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
+            boolean isUpdated = l.updateOrderStatus(orderID,"Đã Hủy");
             if (isUpdated) {
-             if(newStatus.equals("Đã Hủy")){
+             
                  l.restoreProductQuantity(orderID);
-             }        
-           request.getRequestDispatcher("listOrderAdmin").forward(request, response);
+                 
+           request.getRequestDispatcher("Filter_Order_For_Customer").forward(request, response);
         } else {
             request.setAttribute("error","loi");          
            request.getRequestDispatcher("error.jsp").forward(request, response);
@@ -70,10 +70,13 @@ public class changeStatus extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  
         processRequest(request, response);
-    }
+
+        
+}
+    
 
     /** 
      * Returns a short description of the servlet.

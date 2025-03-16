@@ -7,7 +7,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ page import="java.util.List, java.util.Map, model.Feedback" %>
+<%@ page import="java.util.List, java.util.Map, model.Feedback, model.Reply_Feedback" %>
 
 <!DOCTYPE html>
 <html>
@@ -263,41 +263,56 @@
                             <div class="alert alert-danger"><%= session.getAttribute("errorMessage") %></div>
                             <% session.removeAttribute("errorMessage"); }%>
 
-                            <% 
-                                 List<Feedback> feedbackList = (List<Feedback>) request.getAttribute("feedbackList");
-                                 Map<Integer, String> customerNames = (Map<Integer, String>) request.getAttribute("customerNames");
-                            %>
                             <div class="mt-4">
                                 <h4>Đánh giá sản phẩm</h4>
+                                <c:choose>
+                                    <c:when test="${not empty feedbackList}">
+                                        <c:forEach var="feedback" items="${feedbackList}">
+                                            <c:set var="customerName" value="${customerNames[feedback.customerID] ne null ? customerNames[feedback.customerID] : 'Khách hàng Ẩn danh'}"/>
+                                            <c:set var="initials" value="${fn:toUpperCase(fn:substring(customerName, 0, 1))}" />
 
-                                <% if (feedbackList != null && !feedbackList.isEmpty()) { %>
-                                <% for (Feedback feedback : feedbackList) { 
-                                    String customerName = customerNames.getOrDefault(feedback.getCustomerID(), "Khách hàng Ẩn danh"); 
-                                    String initials = customerName.substring(0, 1).toUpperCase(); // ✅ Lấy chữ cái đầu tiên
-                                %>
-                                <div class="card shadow-sm mb-3">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <!-- Avatar basic (hình tròn có chữ viết tắt) -->
-                                            <div class="avatar-basic me-3"><%= initials %></div>
+                                            <div class="card shadow-sm mb-3">
+                                                <div class="card-body">
+                                                    <div class="d-flex align-items-center mb-2">
+                                                        <!-- Avatar basic (hình tròn có chữ viết tắt) -->
+                                                        <div class="avatar-basic me-3">${initials}</div>
 
-                                            <div>
-                                                <h6 class="mb-0"><%= customerName %></h6>
-                                                <small class="text-muted">Mã phản hồi: <%= feedback.getFeedbackID() %></small>
+                                                        <div>
+                                                            <h6 class="mb-0">${customerName}</h6>
+                                                            <small class="text-muted">Mã phản hồi: ${feedback.feedbackID}</small>
+                                                        </div>
+                                                    </div>
+                                                    <p class="mb-1">${feedback.content}</p>
+                                                    <div class="text-warning">
+                                                        <c:forEach begin="1" end="${feedback.ratePoint}">⭐</c:forEach>
+                                                        (${feedback.ratePoint}/5)
+                                                    </div>
+                                                </div>
+                                                   <!-- Hiển thị phản hồi nếu có -->  
+                                                <c:set var="hasReply" value="false" />
+                                                <c:forEach var="item" items="${replyFeedbackList}">
+                                                    <c:if test="${item.feedbackID == feedback.feedbackID}">
+                                                        <c:set var="hasReply" value="true" />
+                                                        <div class="mt-2 p-2 border rounded bg-light">
+                                                            <strong>Phản hồi từ admin:</strong>
+                                                            <p class="mb-1">${item.contentReply}</p>
+                                                        </div>
+                                                    </c:if>
+                                                </c:forEach>
+
+                                                <c:if test="${not hasReply}">
+                                                    <p class="text-muted">Chưa có phản hồi từ admin.</p>
+                                                </c:if>
+
                                             </div>
-                                        </div>
-                                        <p class="mb-1"><%= feedback.getContent() %></p>
-                                        <div class="text-warning">
-                                            <% for (int i = 0; i < feedback.getRatePoint(); i++) { %> ⭐ <% } %> 
-                                            (<%= feedback.getRatePoint() %>/5)
-                                        </div>
-                                    </div>
-                                </div>
-                                <% } %>
-                                <% } else { %>
-                                <p>Chưa có đánh giá nào cho sản phẩm này.</p>
-                                <% } %>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <p>Chưa có đánh giá nào cho sản phẩm này.</p>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
+
                         </div>
                     </div>
                 </div>
