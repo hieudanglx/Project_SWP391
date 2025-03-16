@@ -2,6 +2,7 @@ package controller;
 
 import dao.FeedbackDAO;
 import dao.ProductDao;
+import dao.Reply_FeedbackDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Feedback;
 import model.Product;
+import model.Reply_Feedback;
 
 @WebServlet(name = "ViewProductDetailsController", urlPatterns = {"/ViewProductDetailsController"})
 public class ViewProductDetailsController extends HttpServlet {
@@ -25,6 +27,7 @@ public class ViewProductDetailsController extends HttpServlet {
 
         ProductDao productDao = new ProductDao();
         FeedbackDAO feedbackDao = new FeedbackDAO();
+        Reply_FeedbackDAO reply_feedbackDAO = new Reply_FeedbackDAO();
 
         String idParam = (request.getParameter("id") == null
                 || request.getParameter("id").isEmpty()) ? "0" : request.getParameter("id");
@@ -45,9 +48,12 @@ public class ViewProductDetailsController extends HttpServlet {
             request.setAttribute("list", list);
         }
 
-        Map<Integer, String> customerNames = new HashMap<>();
+        Map<Integer, String> customerNames = feedbackDao.getCustomerNames();
         List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(productID, customerNames);
 
+        List<Reply_Feedback> replyFeedbackList = reply_feedbackDAO.getAllReplyFeedback();
+
+        request.setAttribute("replyFeedbackList", replyFeedbackList);
         request.setAttribute("product", selectedProduct);
         request.setAttribute("feedbackList", feedbackList);
         request.setAttribute("customerNames", customerNames);

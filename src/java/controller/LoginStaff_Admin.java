@@ -90,10 +90,12 @@ public class LoginStaff_Admin extends HttpServlet {
 
             if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
                 HttpSession session = request.getSession();
-                session.setAttribute("Username", username);
+                session.setAttribute("username", username);
                 session.setAttribute("fullname", accountDAO.getFullname(username));
 
                 if ("admin".equalsIgnoreCase(username)) {
+                    session.setAttribute(username, username);
+                    session.setAttribute("adminID", accountDAO.getAdminIdByUsername(username));
                     response.sendRedirect("HomeDashBoard_Admin.jsp");
                 } else {
                     session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));

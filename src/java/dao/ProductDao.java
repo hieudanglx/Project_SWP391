@@ -66,11 +66,11 @@ public class ProductDao extends DBContext {
         String sql = "SELECT productID, productName FROM Product"; // Đúng cột productName
         try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                int id = rs.getInt("ProductID");
-                String name = rs.getString("ProductName"); // Đúng cột productName
-                productNames.put(id, name);
-                System.out.println("Lấy dữ liệu: " + id + " - " + name); // Debug
+                int id = rs.getInt("productID");
+                String name = rs.getString("productName"); // Đúng cột productName
+                productNames.put(id, name);               
             }
+             System.out.println("Product Names: " + productNames); // Debug
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -8,8 +8,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import model.Feedback;
 import model.Reply_Feedback;
 
 /**
@@ -39,8 +42,7 @@ public class Reply_FeedbackDAO extends DBContext {
         Map<Integer, String> replies = new HashMap<>();
         String sql = "SELECT feedbackID, content_Reply FROM Reply_Feedback";
 
-        try ( PreparedStatement ps = connection.prepareStatement(sql);  
-                ResultSet rs = ps.executeQuery())  {
+        try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 replies.put(rs.getInt("feedbackID"), rs.getString("content_Reply"));
             }
@@ -48,6 +50,28 @@ public class Reply_FeedbackDAO extends DBContext {
             e.printStackTrace();
         }
         return replies;
+    }
+
+    public List<Reply_Feedback> getAllReplyFeedback() {
+        List<Reply_Feedback> list = new ArrayList<>();
+        String sql = "SELECT reply_FeedbackID, FeedbackID, CustomerID, StaffID, Content_Reply FROM Reply_Feedback";
+
+        try ( PreparedStatement stmt = connection.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Reply_Feedback fb = new Reply_Feedback(
+                        rs.getInt("reply_FeedbackID"),
+                        rs.getInt("FeedbackID"),
+                        rs.getInt("CustomerID"),
+                        rs.getInt("StaffID"),
+                        rs.getString("Content_Reply")
+                );
+                list.add(fb);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 }
