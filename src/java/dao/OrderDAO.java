@@ -44,7 +44,7 @@ public class OrderDAO extends dao.DBContext {
 
     public List<Order_list> getAllOrder() {
         List<Order_list> orderList = new ArrayList<>();
-        String query = "SELECT * FROM Order_List"; // Giả sử bảng đơn hàng có tên là "Orders"
+        String query = "SELECT * FROM Order_List"; 
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query);  ResultSet rs = pstmt.executeQuery()) {
 
@@ -54,7 +54,7 @@ public class OrderDAO extends dao.DBContext {
                         rs.getInt("CustomerID"),
                         rs.getInt("StaffID"),
                         rs.getString("Address"),
-                        rs.getDate("Date"), // Hoặc rs.getTimestamp("Date") nếu là kiểu datetime
+                        rs.getDate("Date"), // 
                         rs.getString("Status"),
                         rs.getString("PhoneNumber"),
                         rs.getDouble("Total")
