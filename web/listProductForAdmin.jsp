@@ -76,11 +76,13 @@
             <h4 class="text-center">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
-            <a href="ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
+            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+            <a href="listOrderAdmin"><i class="fas fa-box"></i> Manage Orders</a>
             <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
-            <a href="#"><i class="fas fa-cog"></i> Manager Order</a>
+            <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
+            <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
         </div>
 
         <!-- Main Content -->
@@ -89,7 +91,7 @@
             <nav class="navbar-custom">
                 <h4>Admin Dashboard - List Products</h4>
                 <div>
-                    <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
+                    <a href="ManagerProfile.jsp" class="profile-link">${sessionScope.Username}</a>
                     <a href="javascript:void(0);" class="logout-link" onclick="logout()">Logout</a>
                 </div>
             </nav>            
@@ -103,7 +105,7 @@
                         <li><a class="dropdown-item" href="createProduct.jsp?category=2">Phone </a></li>
                         <li><a class="dropdown-item" href="createTablet.jsp?category=3">Tablet </a></li>
                         <li><a class="dropdown-item" href="createLaptop.jsp?category=1">Laptop</a></li>
-                        
+
                     </ul>
                 </div>
             </div>

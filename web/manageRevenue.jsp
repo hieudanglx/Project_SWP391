@@ -28,7 +28,7 @@
                 position: fixed;
             }
             .sidebar a {
-                 padding: 10px 15px;
+                padding: 10px 15px;
                 text-decoration: none;
                 font-size: 18px;
                 color: white;
@@ -119,8 +119,10 @@
             <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+            <a href="listOrderAdmin"><i class="fas fa-box"></i> Manage Orders</a>
             <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
             <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
+            <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
         </div>
         <div class="content">
             <div class="header">

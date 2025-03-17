@@ -225,38 +225,39 @@ public class AccountDao extends dao.DBContext {
     }
 
     public boolean deleteAccountCustomer(int customerID) {
-    String[] queries = {
-        "UPDATE Order_List SET CustomerID = 0 WHERE CustomerID = ?",
-        "DELETE FROM Reply_Feedback WHERE CustomerID = ?",
-        "DELETE FROM Feedback WHERE CustomerID = ?",
-        "DELETE FROM Cart WHERE CustomerID = ?",
-        "DELETE FROM Customer WHERE CustomerID = ?"
-    };
+        String[] queries = {
+            "UPDATE Order_List SET CustomerID = 0 WHERE CustomerID = ?",
+            "DELETE FROM Reply_Feedback WHERE CustomerID = ?",
+            "DELETE FROM Feedback WHERE CustomerID = ?",
+            "DELETE FROM Cart WHERE CustomerID = ?",
+            "DELETE FROM Customer WHERE CustomerID = ?"
+        };
 
-    try {
-        connection.setAutoCommit(false); // 🔴 Bắt đầu transaction
-
-        for (String query : queries) {
-            try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-                pstmt.setInt(1, customerID);
-                pstmt.executeUpdate();
-            }
-        }
-
-        connection.commit(); // ✅ Commit nếu không có lỗi
-        System.out.println("🗑️ Xóa khách hàng thành công!");
-        return true;
-
-    } catch (SQLException e) {
         try {
-            connection.rollback(); // 🔄 Hoàn tác nếu có lỗi
-        } catch (SQLException rollbackEx) {
-            rollbackEx.printStackTrace();
+            connection.setAutoCommit(false); // 🔴 Bắt đầu transaction
+
+            for (String query : queries) {
+                try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+                    pstmt.setInt(1, customerID);
+                    pstmt.executeUpdate();
+                }
+            }
+
+            connection.commit(); // ✅ Commit nếu không có lỗi
+            System.out.println("🗑️ Xóa khách hàng thành công!");
+            return true;
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); // 🔄 Hoàn tác nếu có lỗi
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            e.printStackTrace();
         }
-        e.printStackTrace();
+        return false;
     }
-    return false;
-}
+    
     public List<AccountCustomer> searchCustomerByUsername(String keyword) {
         List<AccountCustomer> customers = new ArrayList<>();
         String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username LIKE ? OR fullname LIKE ?";
@@ -595,7 +596,7 @@ public class AccountDao extends dao.DBContext {
     }
 
     public static void main(String[] args) {
-        int customerID = 1;
+        int customerID = 0;
         AccountDao accountDao = new AccountDao();
         // Gọi phương thức xóa
         boolean isDeleted = accountDao.deleteAccountCustomer(customerID);

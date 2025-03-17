@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.InventoryDAO;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,15 +12,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Inventory;
+import model.Order_Details;
+import model.Order_list;
 
 /**
  *
- * @author Tran Phong Hai - CE180803
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name = "SearchInventory", urlPatterns = {"/SearchInventory"})
-public class SearchInventory extends HttpServlet {
+@WebServlet(name = "Filter_Order_For_Customer", urlPatterns = {"/Filter_Order_For_Customer"})
+public class Filter_Order_For_Customer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,15 +38,13 @@ public class SearchInventory extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try ( PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SearchInventory</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SearchInventory at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            HttpSession session = request.getSession();
+            Integer customerID = (Integer) session.getAttribute("customerID"); // Lấy ID từ session
+            String status = request.getParameter("status");
+            OrderDAO o = new OrderDAO();
+            List<Order_Details> ol = o.getOrdersByStatusCustomer(customerID, status);
+            request.setAttribute("orderDetails", ol);
+            request.getRequestDispatcher("OrderHistory.jsp").forward(request, response);
         }
     }
 
@@ -58,37 +58,8 @@ public class SearchInventory extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        InventoryDAO inventoryDAO = new InventoryDAO();
-        String filter = request.getParameter("filter");
-        String searchKeyword = request.getParameter("keyword");
-        String category = request.getParameter("category");
-
-        List<Inventory> importList;
-
-        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-            // Tìm kiếm theo tên sản phẩm hoặc nhà cung cấp
-            importList = inventoryDAO.searchInventory(searchKeyword);
-            request.setAttribute("importList", importList);
-            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
-        } else {
-            if ("laptop".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("laptop");
-            } else if ("SmartPhone".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("SmartPhone");
-            } else if ("Tablet".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("Tablet");
-            } else {
-                importList = inventoryDAO.getAllInventories();
-            }
-
-            request.setAttribute("importList", importList);
-            request.setAttribute("searchKeyword", searchKeyword);
-            request.setAttribute("selectedCategory", category);
-
-            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
     }
 
     /**

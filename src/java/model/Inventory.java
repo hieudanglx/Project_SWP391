@@ -20,10 +20,53 @@ public class Inventory {
     private int Import_quantity;
     private int quantityProduct;
     private int quantitySell;
+    private int total_QuantityStock;
+    private int total_QuantitySell;
     private String Supplier;
+    private String Brand;
 
-    public Inventory() {
+    public Inventory(int total_QuantityStock, int total_QuantitySell) {
+        this.total_QuantityStock = total_QuantityStock;
+        this.total_QuantitySell = total_QuantitySell;
     }
+
+    public Inventory(int ProductID, String productName, int price) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.price = price;
+    }
+
+    public String getBrand() {
+        return Brand;
+    }
+
+    public void setBrand(String Brand) {
+        this.Brand = Brand;
+    }
+
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int quantityProduct , String Supplier) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.DATE = DATE;
+        this.Import_price = Import_price;
+        this.price = price;
+        this.quantityProduct = quantityProduct;
+        this.Supplier = Supplier;
+    }
+
+    public Inventory(int ProductID, String productName, String Brand, int Import_price, int Import_quantity, Date DATE, String Supplier) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.DATE = DATE;
+        this.Import_price = Import_price;
+        this.Import_quantity = Import_quantity;
+        this.Supplier = Supplier;
+        this.Brand = Brand;
+    }
+
+    
+ 
+    
 
     public Inventory(int ProductID, String productName, int Import_price, int price, int Import_quantity, int quantityProduct, int quantitySell, String Supplier) {
         this.ProductID = ProductID;
@@ -36,17 +79,46 @@ public class Inventory {
         this.Supplier = Supplier;
     }
 
-    
-    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price,  int quantityProduct, int quantitySell, String Supplier) {
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int Import_quantity, int total_QuantityStock, int total_QuantitySell, String Supplier) {
         this.ProductID = ProductID;
         this.productName = productName;
         this.DATE = DATE;
         this.Import_price = Import_price;
         this.price = price;
-    
+        this.Import_quantity = Import_quantity;
+        this.total_QuantityStock = total_QuantityStock;
+        this.total_QuantitySell = total_QuantitySell;
+        this.Supplier = Supplier;
+    }
+
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int quantityProduct, int quantitySell, String Supplier) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.DATE = DATE;
+        this.Import_price = Import_price;
+        this.price = price;
         this.quantityProduct = quantityProduct;
         this.quantitySell = quantitySell;
         this.Supplier = Supplier;
+    }
+
+    public Inventory() {
+    }
+
+    public int getTotal_QuantityStock() {
+        return total_QuantityStock;
+    }
+
+    public void setTotal_QuantityStock(int total_QuantityStock) {
+        this.total_QuantityStock = total_QuantityStock;
+    }
+
+    public int getTotal_QuantitySell() {
+        return total_QuantitySell;
+    }
+
+    public void setTotal_QuantitySell(int total_QuantitySell) {
+        this.total_QuantitySell = total_QuantitySell;
     }
 
     public int getProductID() {
@@ -123,9 +195,10 @@ public class Inventory {
 
     @Override
     public String toString() {
-        return "Inventory{" + "ProductID=" + ProductID + ", productName=" + productName + ", DATE=" + DATE + ", Import_price=" + Import_price + ", price=" + price + ", Import_quantity=" + Import_quantity + ", quantityProduct=" + quantityProduct + ", quantitySell=" + quantitySell + ", Supplier=" + Supplier + '}';
+        return "Inventory{" + "ProductID=" + ProductID + ", productName=" + productName
+                + ", DATE=" + DATE + ", Import_price=" + Import_price + ", price=" + price
+                + ", Import_quantity=" + Import_quantity + ", quantitySell=" + quantitySell
+                + ", quantityProduct=" + quantityProduct + ", Supplier=" + Supplier + '}';
     }
-    
-    
 
 }

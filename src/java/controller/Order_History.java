@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.InventoryDAO;
+import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,15 +12,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Inventory;
+import model.Order_Details;
+import model.Order_list;
 
 /**
  *
- * @author Tran Phong Hai - CE180803
+ * @author Dang Khac Hieu_CE180465
  */
-@WebServlet(name = "SearchInventory", urlPatterns = {"/SearchInventory"})
-public class SearchInventory extends HttpServlet {
+@WebServlet(name = "Order_History", urlPatterns = {"/Order_History"})
+public class Order_History extends HttpServlet {
+
+    private static final long serialVersionUID = 1L;
+    private OrderDAO orderDAO;
+
+    public Order_History() {
+        super();
+        orderDAO = new OrderDAO();
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +49,10 @@ public class SearchInventory extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchInventory</title>");
+            out.println("<title>Servlet Order_History</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchInventory at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Order_History at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,37 +69,31 @@ public class SearchInventory extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        InventoryDAO inventoryDAO = new InventoryDAO();
-        String filter = request.getParameter("filter");
-        String searchKeyword = request.getParameter("keyword");
-        String category = request.getParameter("category");
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    
+    // Lấy customerID từ session
+    Integer customerID = (Integer) session.getAttribute("customerID");
 
-        List<Inventory> importList;
+  
+    
 
-        if (searchKeyword != null && !searchKeyword.trim().isEmpty()) {
-            // Tìm kiếm theo tên sản phẩm hoặc nhà cung cấp
-            importList = inventoryDAO.searchInventory(searchKeyword);
-            request.setAttribute("importList", importList);
-            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
-        } else {
-            if ("laptop".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("laptop");
-            } else if ("SmartPhone".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("SmartPhone");
-            } else if ("Tablet".equalsIgnoreCase(filter)) {
-                importList = inventoryDAO.getInventoryListByCategory("Tablet");
-            } else {
-                importList = inventoryDAO.getAllInventories();
-            }
-
-            request.setAttribute("importList", importList);
-            request.setAttribute("searchKeyword", searchKeyword);
-            request.setAttribute("selectedCategory", category);
-
-            request.getRequestDispatcher("viewlistInventory.jsp").forward(request, response);
-        }
+    // Gọi hàm lấy danh sách đơn hàng của khách hàng
+    List<Order_Details> orderDetails = orderDAO.getOrdersByCustomer(customerID);
+    if (orderDetails.isEmpty()) {
+        request.setAttribute("error.","rong" );
+        request.getRequestDispatcher("error.jsp").forward(request, response);
     }
+
+    
+
+    
+    // Đưa danh sách đơn hàng vào request attribute
+    request.setAttribute("orderDetails", orderDetails);
+
+    // Chuyển hướng đến trang lịch sử đơn hàng
+    request.getRequestDispatcher("OrderHistory.jsp").forward(request, response);
+}
 
     /**
      * Handles the HTTP <code>POST</code> method.

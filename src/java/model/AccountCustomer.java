@@ -9,6 +9,7 @@ package model;
  * @author Dang Khac Hieu_CE180465
  */
 public class AccountCustomer {
+
     private int customerID;
     private String username;
     private String fullName;
@@ -126,7 +127,4 @@ public class AccountCustomer {
         this.imgCustomer = imgCustomer;
     }
 
-    
-    
-     
 }

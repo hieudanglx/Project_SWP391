@@ -61,8 +61,7 @@ public class PaymentController extends HttpServlet {
             Date Date = new Date(System.currentTimeMillis()); // Lấy ngày hiện tại
            
              String phoneNumber = request.getParameter("phone");
-            // String paymentMethod = request.getParameter("paymentMethod");
-           
+            
 
             double total = Double.parseDouble(request.getParameter("total"));
 
@@ -70,11 +69,10 @@ public class PaymentController extends HttpServlet {
             OrderDAO orderDAO = new OrderDAO();
             
             Order_list order = new Order_list(0, customerID, 1, address, Date, status, phoneNumber, total);
-                       int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
-            
+            int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
+            session.setAttribute("orderID", orderID);
             if (orderID > 0) {
                 // Thêm sản phẩm vào Order_Details
-
                 for (Product item : list) {
                     Order_Details orderDetail = new Order_Details(0, item.getQuantityProduct(), item.getProductID(), orderID);
                     orderDAO.insertOrderDetail(orderDetail);
@@ -88,17 +86,12 @@ public class PaymentController extends HttpServlet {
                 // Xóa session giỏ hàng
                 session.removeAttribute("list");
 
-                // Chuyển hướng sang trang xác nhận
-                //response.sendRedirect("orderSuccess.jsp?orderID=" + orderID);
-                //request.setAttribute("error", "Failed to delete product");
-                request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
-                
-            } else {
-                
+                // Chuyển hướng sang trang xác nhận                
+                request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);                
+            } else {                
                 request.setAttribute("error", "Failed to delete product");
                 request.getRequestDispatcher("error.jsp").forward(request, response);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect("error.jsp?error=Lỗi hệ thống");
