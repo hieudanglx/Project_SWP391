@@ -221,12 +221,12 @@
                 const imageUrlInput = document.getElementById('imageURL');
                 imageUrlInput.addEventListener('input', function (e) {
                     const url = e.target.value;
-                    // Regex đơn giản để kiểm tra URL hình ảnh
-                    const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\.(jpg|jpeg|png|gif|bmp|webp)$/i;
+                    // Regex đơn giản để kiểm tra URL
+                    const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
                     const isValidUrl = urlPattern.test(url);
 
                     if (!isValidUrl) {
-                        document.getElementById('imageUrlError').textContent = 'URL hình ảnh không hợp lệ. Ví dụ: https://example.com/image.jpg';
+                        document.getElementById('imageUrlError').textContent = 'URL không hợp lệ. Ví dụ: https://example.com';
                         document.getElementById('imageUrlError').style.display = 'block';
                         imageUrlInput.classList.add('is-invalid');
                     } else {
@@ -272,19 +272,14 @@
 
                     // Kiểm tra giá trị Image URL
                     const imageUrl = imageUrlInput.value;
-                    const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\.(jpg|jpeg|png|gif|bmp|webp)$/i;
+                    const urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
                     const isValidUrl = urlPattern.test(imageUrl);
                     if (!isValidUrl) {
                         const errorMsg = document.getElementById('imageUrlError');
-                        errorMsg.textContent = 'URL hình ảnh không hợp lệ. Ví dụ: https://example.com/image.jpg';
+                        errorMsg.textContent = 'URL không hợp lệ. Ví dụ: https://example.com';
                         errorMsg.style.display = 'block';
                         imageUrlInput.classList.add('is-invalid');
                         isValid = false;
-                    }
-
-                    // Ngăn form submit nếu có lỗi
-                    if (!isValid) {
-                        e.preventDefault();
                     }
                 });
 
@@ -533,7 +528,7 @@
                                         <i class="fas fa-image input-icon"></i>
                                         <input type="text" class="form-control icon-input" id="imageURL" name="imageURL" value="${product.imageURL}" required />
                                         <div id="imageUrlError" class="invalid-feedback" style="display: none;"></div>
-<!--                                        <small class="form-text text-muted">Ví dụ: https://example.com/image.jpg</small>-->
+<!--                                        <small class="form-text text-muted">Ví dụ: https://example.com</small>-->
                                     </div>
                                 </div>
                             </div>

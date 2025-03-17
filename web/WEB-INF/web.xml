@@ -28,6 +28,18 @@
         <servlet-name>orderDetailForAdmin</servlet-name>
         <servlet-class>controller.orderDetailForAdmin</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Filter_Order_For_Customer</servlet-name>
+        <servlet-class>controller.Filter_Order_For_Customer</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Cancel_order</servlet-name>
+        <servlet-class>controller.Cancel_order</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Confirm_order</servlet-name>
+        <servlet-class>controller.Confirm_order</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -58,7 +70,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SearchInventory</servlet-name>
-        <url-pattern>/SearchInventory</url-pattern>
+<url-pattern>/SearchInventory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
@@ -67,6 +79,18 @@
     <servlet-mapping>
         <servlet-name>orderDetailForAdmin</servlet-name>
         <url-pattern>/orderDetailForAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Filter_Order_For_Customer</servlet-name>
+        <url-pattern>/Filter_Order_For_Customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cancel_order</servlet-name>
+        <url-pattern>/Cancel_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Confirm_order</servlet-name>
+        <url-pattern>/Confirm_order</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -31,7 +31,7 @@
                 background-color: #E5E1DA;
                 border-radius: 10px;
                 color: #547488;
-                font-weight: 500;   
+                font-weight: 500;
                 border: none;
             }
             .submit:hover{

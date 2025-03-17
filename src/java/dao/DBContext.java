@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 public class DBContext {
 
     public Connection connection;
@@ -21,8 +20,8 @@ public class DBContext {
             System.out.println(ex);
         }
     }
-    
-      public static void main(String[] args) {
+
+    public static void main(String[] args) {
         DBContext dbContext = new DBContext();
         if (dbContext.connection != null) {
             System.out.println("Kết nối thành công!");

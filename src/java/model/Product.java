@@ -52,7 +52,7 @@ public class Product {
         this.imageURL = imageURL;
         this.isDelete = isDelete;
     }
-
+    
     public Product(int productID, String productName, int price, int categoryID, String brand, String cameraFront, String cameraBehind, String ram, String ramType, String supportsUpgradingRAM, String rom, String supportsUpgradingROM, String color, String operatingSystemName, String operatingSystemVersion, String screenSize, String refreshRate, String screenResolution, String chipType, String chipName, String gpuType, String gpuName, int quantitySell, int quantityProduct, String imageURL, int isDelete) {
         this.productID = productID;
         this.productName = productName;
