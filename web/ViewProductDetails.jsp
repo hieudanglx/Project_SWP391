@@ -294,14 +294,14 @@
                                                     <c:if test="${item.feedbackID == feedback.feedbackID}">
                                                         <c:set var="hasReply" value="true" />
                                                         <div class="mt-2 p-2 border rounded bg-light">
-                                                            <strong>Phản hồi từ admin:</strong>
+                                                            <strong>Phản hồi:</strong>
                                                             <p class="mb-1">${item.contentReply}</p>
                                                         </div>
                                                     </c:if>
                                                 </c:forEach>
 
                                                 <c:if test="${not hasReply}">
-                                                    <p class="text-muted">Chưa có phản hồi từ admin.</p>
+                                                    <p class="text-muted">Chưa có phản hồi.</p>
                                                 </c:if>
 
                                             </div>

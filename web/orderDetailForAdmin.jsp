@@ -10,90 +10,223 @@
 <html>
     <head>
         <title>Chi tiết đơn hàng</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
             body {
-                font-family: Arial, sans-serif;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                min-height: 100vh;
-                margin: 0;
             }
+            
             .container {
                 background: #fff;
-                padding: 20px;
-                width: 80%;
+                padding: 25px;
+                width: 85%;
                 max-width: 900px;
-                border-radius: 8px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                text-align: center;
+                border-radius: 12px;
+                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+                margin: 30px 0;
             }
+            
             h2 {
-                color: #333;
+                color: #2c3e50;
+                text-align: center;
+                margin-bottom: 25px;
+                font-size: 28px;
+                position: relative;
+                padding-bottom: 10px;
             }
+            
+            h2:after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(to right, #3498db, #2ecc71);
+                border-radius: 2px;
+            }
+            
             .section {
                 text-align: left;
-                margin-bottom: 15px;
-                padding: 15px;
-                border-radius: 5px;
+                margin-bottom: 20px;
+                padding: 20px;
+                border-radius: 8px;
                 background: #f9f9f9;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                border-left: 5px solid #3498db;
             }
+            
+            .section h3 {
+                color: #3498db;
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+            }
+            
+            .section h3:before {
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                margin-right: 10px;
+                font-size: 18px;
+            }
+            
+            .section:nth-child(2) h3:before {
+                content: "\f007"; /* user icon */
+                color: #3498db;
+            }
+            
+            .section:nth-child(3) h3:before {
+                content: "\f2bb"; /* id card icon */
+                color: #9b59b6;
+            }
+            
+            .section p {
+                margin: 8px 0;
+                line-height: 1.6;
+            }
+            
+            .section p strong {
+                display: inline-block;
+                width: 150px;
+                color: #555;
+            }
+            
             .order-status {
                 font-size: 18px;
                 font-weight: bold;
-                padding: 10px;
-                border-radius: 5px;
+                padding: 8px 15px;
+                border-radius: 30px;
+                display: inline-block;
             }
+            
             .pending {
-                color: #ff9800;
-            } /* Chờ xử lý - Màu cam */
-            .shipping {
-                color: #2196F3;
-            } /* Giao Hàng - Màu xanh dương */
-            .canceled {
-                color: #f44336;
-            } /* Đã Hủy - Màu đỏ */
-            .success {
-                color: #4CAF50;
-            } /* Thành công - Màu xanh lá */
-            .total-price {
-                font-size: 20px;
-                font-weight: bold;
-                color: #d32f2f;
+                background-color: #fff3cd;
+                color: #856404;
             }
+            
+            .shipping {
+                background-color: #cce5ff;
+                color: #004085;
+            }
+            
+            .canceled {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+            
+            .success {
+                background-color: #d4edda;
+                color: #155724;
+            }
+            
+            .total-price {
+                font-size: 22px;
+                font-weight: bold;
+                color: #e74c3c;
+                margin-top: 15px;
+                text-align: right;
+                padding: 10px 15px;
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                display: inline-flex;
+                align-items: center;
+            }
+            
+            .total-price:before {
+                font-family: "Font Awesome 5 Free";
+                content: "\f3d1"; /* money bill icon */
+                margin-right: 10px;
+                font-weight: 900;
+            }
+            
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 15px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+                border-radius: 8px;
             }
+            
             th, td {
-                border: 1px solid #ddd;
-                padding: 10px;
-                text-align: center;
+                padding: 12px 15px;
+                text-align: left;
             }
+            
             th {
-                background: #2196F3;
+                background: linear-gradient(to right, #3498db, #2980b9);
                 color: white;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 14px;
+                letter-spacing: 0.5px;
             }
-
+            
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            
+            tr:hover {
+                background-color: #f5f5f5;
+            }
+            
             .order-info {
                 text-align: center;
-                background: #ffeeba; /* Màu nền nhẹ */
+                background: #f9f9f9;
                 padding: 20px;
                 border-radius: 8px;
                 margin-top: 20px;
-                font-size: 18px;
-                font-weight: bold;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                border-left: 5px solid #e74c3c;
             }
-
-            .total-price {
-                font-size: 22px;
-                font-weight: bold;
-                color: #d32f2f;
-                margin-top: 10px;
+            
+            .order-info h3 {
+                color: #e74c3c;
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
-
+            
+            .order-info h3:before {
+                font-family: "Font Awesome 5 Free";
+                content: "\f05a"; /* info icon */
+                margin-right: 10px;
+                font-weight: 900;
+            }
+            
+            @media (max-width: 768px) {
+                .container {
+                    width: 95%;
+                    padding: 15px;
+                }
+                
+                .section {
+                    padding: 15px;
+                }
+                
+                .section p strong {
+                    display: block;
+                    margin-bottom: 5px;
+                }
+                
+                table {
+                    display: block;
+                    overflow-x: auto;
+                }
+            }
         </style>
     </head>
     <body>
@@ -135,7 +268,19 @@
                 <c:forEach var="orderDetail" items="${orderDetails}">
                     <tr>
                         <td>${orderDetail.productName}</td>
-                        <td>${orderDetail.color}</td>
+                        <td>
+                            <span style="
+                                display: inline-block;
+                                width: 12px;
+                                height: 12px;
+                                border-radius: 50%;
+                                background-color: ${orderDetail.color};
+                                margin-right: 5px;
+                                vertical-align: middle;
+                                border: 1px solid #ddd;
+                            "></span>
+                            ${orderDetail.color}
+                        </td>
                         <td>${orderDetail.price}</td>
                         <td>${orderDetail.quantity}</td>
                     </tr>
@@ -153,12 +298,19 @@
                               <c:when test='${orderDetails[0].status == "Đã Hủy"}'>canceled</c:when>
                               <c:when test='${orderDetails[0].status == "Thành công"}'>success</c:when>
                           </c:choose>">
+                        <c:choose>
+                            <c:when test='${orderDetails[0].status == "Chờ xử lý"}'><i class="fas fa-clock"></i> </c:when>
+                            <c:when test='${orderDetails[0].status == "Giao Hàng"}'><i class="fas fa-shipping-fast"></i> </c:when>
+                            <c:when test='${orderDetails[0].status == "Đã Hủy"}'><i class="fas fa-times-circle"></i> </c:when>
+                            <c:when test='${orderDetails[0].status == "Thành công"}'><i class="fas fa-check-circle"></i> </c:when>
+                        </c:choose>
                         ${orderDetails[0].status}
                     </span>
                 </p>
                 <p class="total-price">Tổng tiền: ${orderDetails[0].total} VNĐ</p>
             </div>
-
         </div>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     </body>
 </html>

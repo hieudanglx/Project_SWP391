@@ -43,7 +43,6 @@ public class ViewCartController extends HttpServlet {
             return;
         }
         List<Product> list = link.getCartByCustomerID(c.getCustomerID());
-
         request.setAttribute("list", list);
         if (list.isEmpty()) {
             request.getRequestDispatcher("viewCart.jsp").forward(request, response);

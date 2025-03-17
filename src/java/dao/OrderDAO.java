@@ -353,39 +353,76 @@ public class OrderDAO extends dao.DBContext {
         return totalSales;
     }
 
-    public static void main(String[] args) {
-        OrderDAO orderDAO = new OrderDAO();
-        DecimalFormat df = new DecimalFormat("#,###.##");
+//    public static void main(String[] args) {
+//        OrderDAO orderDAO = new OrderDAO();
+//        DecimalFormat df = new DecimalFormat("#,###.##");
+//
+//        List<Order_list> orderList = orderDAO.getAllOrders();
+//
+//        // Kiểm tra nếu danh sách rỗng
+//        if (orderList == null || orderList.isEmpty()) {
+//            System.out.println("Không có dữ liệu đơn hàng nào được tìm thấy!");
+//        } else {
+//            System.out.println("Danh sách đơn hàng:");
+//            for (Order_list order : orderList) {
+//                System.out.println("Order ID: " + order.getOrderID()
+//                        + ", Date: " + order.getDate()
+//                        + ", Total: " + order.getRevenue() + " VND");
+//            }
+//        }
+//
+//        System.out.println("Doanh thu theo tháng:");
+//        for (Order_list order : orderDAO.getRevenueByMonth()) {
+//            System.out.println("Năm: " + order.getYear() + ", Tháng: " + order.getPeriod()
+//                    + ", Doanh thu: " + df.format(order.getRevenue()));
+//        }
+//
+//        System.out.println("\nDoanh thu theo quý:");
+//        for (Order_list order : orderDAO.getRevenueByQuarter()) {
+//            System.out.println("Năm: " + order.getYear() + ", Quý: " + order.getPeriod()
+//                    + ", Doanh thu: " + df.format(order.getRevenue()));
+//        }
+//
+//        System.out.println("\nDoanh thu theo năm:");
+//        for (Order_list order : orderDAO.getRevenueByYear()) {
+//            System.out.println("Năm: " + order.getYear() + ", Doanh thu: " + df.format(order.getRevenue()));
+//        }
+//    }
+    // Thêm đơn hàng vào bảng Order_list
+    public int insertOrder(Order_list order) {
+        int orderID = -1;
+        String sql = "INSERT INTO Order_List (CustomerID, StaffID, Address, Date, Status, PhoneNumber, Total) "
+                + "OUTPUT INSERTED.OrderID VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql);) {
+            ps.setInt(1, order.getCustomerID());
+            ps.setInt(2, order.getStaffID());
+            ps.setString(3, order.getAddress());
+            ps.setDate(4, order.getDate());
+            ps.setString(5, order.getStatus());
+            ps.setString(6, order.getPhoneNumber());
+            ps.setDouble(7, order.getTotal());
 
-        List<Order_list> orderList = orderDAO.getAllOrders();
-
-        // Kiểm tra nếu danh sách rỗng
-        if (orderList == null || orderList.isEmpty()) {
-            System.out.println("Không có dữ liệu đơn hàng nào được tìm thấy!");
-        } else {
-            System.out.println("Danh sách đơn hàng:");
-            for (Order_list order : orderList) {
-                System.out.println("Order ID: " + order.getOrderID()
-                        + ", Date: " + order.getDate()
-                        + ", Total: " + order.getRevenue() + " VND");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                orderID = rs.getInt(1);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return orderID;
+    }
 
-        System.out.println("Doanh thu theo tháng:");
-        for (Order_list order : orderDAO.getRevenueByMonth()) {
-            System.out.println("Năm: " + order.getYear() + ", Tháng: " + order.getPeriod()
-                    + ", Doanh thu: " + df.format(order.getRevenue()));
-        }
+    // Thêm chi tiết đơn hàng vào bảng Order_Details
+    public void insertOrderDetail(Order_Details orderDetail) {
+        String sql = "INSERT INTO Order_Details (Quantity, ProductID, OrderID) VALUES ( ?, ?, ?)";
+        try ( PreparedStatement ps = connection.prepareStatement(sql);) {
+            ps.setInt(1, orderDetail.getQuantity());
+            ps.setInt(2, orderDetail.getProductID());
+            ps.setInt(3, orderDetail.getOrderID());
 
-        System.out.println("\nDoanh thu theo quý:");
-        for (Order_list order : orderDAO.getRevenueByQuarter()) {
-            System.out.println("Năm: " + order.getYear() + ", Quý: " + order.getPeriod()
-                    + ", Doanh thu: " + df.format(order.getRevenue()));
-        }
-
-        System.out.println("\nDoanh thu theo năm:");
-        for (Order_list order : orderDAO.getRevenueByYear()) {
-            System.out.println("Năm: " + order.getYear() + ", Doanh thu: " + df.format(order.getRevenue()));
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

@@ -11,6 +11,7 @@ import java.sql.Date;
  * @author Tran Phong Hai - CE180803
  */
 public class Order_Details {
+
     private int OrderDetaiID;
     private int Quantity;
     private int ProductID;
@@ -25,9 +26,14 @@ public class Order_Details {
     private String PhoneNumber;
     private double Total;
 
-   
-
     public Order_Details() {
+    }
+
+    public Order_Details(int OrderDetaiID, int Quantity, int ProductID, int OrderID) {
+        this.OrderDetaiID = OrderDetaiID;
+        this.Quantity = Quantity;
+        this.ProductID = ProductID;
+        this.OrderID = OrderID;
     }
 
     public Order_Details(int OrderDetaiID, int Quantity, int ProductID, int OrderID, String ProductName, int Price, String ImageURL, Date Date, String Status, String CustomerName, String Address, String PhoneNumber) {
@@ -60,7 +66,6 @@ public class Order_Details {
         this.PhoneNumber = PhoneNumber;
         this.Total = Total;
     }
-    
 
     public Order_Details(int OrderDetaiID, int Quantity, int ProductID, int OrderID, String ProductName, int Price, String ImageURL, Date Date, String Status, String Address, String PhoneNumber) {
         this.OrderDetaiID = OrderDetaiID;
@@ -87,10 +92,8 @@ public class Order_Details {
         this.Date = Date;
         this.Status = Status;
     }
-    
-    
-    
-    
+
+   
     public int getOrderDetaiID() {
         return OrderDetaiID;
     }
@@ -186,14 +189,13 @@ public class Order_Details {
     public void setPhoneNumber(String PhoneNumber) {
         this.PhoneNumber = PhoneNumber;
     }
-    
-     public double getTotal() {
+
+    public double getTotal() {
         return Total;
     }
 
     public void setTotal(double Total) {
         this.Total = Total;
     }
-       
-    
+
 }
