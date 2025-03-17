@@ -138,7 +138,7 @@
                 <input type="text" id="productName" name="productName" value="${product.productName}" required>
 
                 <label for="price">Price:</label>
-                <input type="number" id="price" name="price" value="${product.price}" min="0" required>
+                <input type="number" id="price" name="price" value="${product.price}" min="0" max ="1000000000" required>
 
                 <label for="brand">Brand:</label>
                 <select id="brand" name="brand" onchange="toggleInput('brand', 'brandInputContainer', 'brandInput')">
