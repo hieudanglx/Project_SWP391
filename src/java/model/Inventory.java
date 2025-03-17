@@ -64,6 +64,16 @@ public class Inventory {
         this.Brand = Brand;
     }
 
+    public Inventory(int ProductID, String productName, Date DATE, int price, int quantityProduct) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.DATE = DATE;
+        this.price = price;
+        this.quantityProduct = quantityProduct;
+    }
+    
+    
+
     
  
     

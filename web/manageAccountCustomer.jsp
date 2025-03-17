@@ -19,48 +19,55 @@
 
         <style>
             body {
-                font-family: 'Arial', sans-serif;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: #f8f9fa;
             }
 
             /* Sidebar */
             .sidebar {
-                width: 250px;
                 height: 100vh;
-                background: #343a40;
+                width: 250px;
+                background: linear-gradient(to bottom, #343a40, #212529);
                 color: white;
                 position: fixed;
                 padding-top: 20px;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             }
             .sidebar a {
-                color: white;
-                text-decoration: none;
-                display: block;
                 padding: 12px 20px;
-                font-weight: bold;
+                text-decoration: none;
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.8);
+                display: block;
                 transition: all 0.3s;
+                border-left: 4px solid transparent;
             }
             .sidebar a:hover {
-                background: #495057;
-                padding-left: 25px;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-left: 4px solid #0d6efd;
+            }
+            .sidebar a i {
+                margin-right: 10px;
+                width: 20px;
+                text-align: center;
             }
 
             /* Main Content */
             .content {
                 margin-left: 250px;
-                width: calc(100% - 250px);
                 padding: 20px;
             }
 
             /* Navbar */
             .navbar-custom {
-                background: white;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                padding: 10px 20px;
+                background-color: white;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                margin-bottom: 20px;
             }
             .search-container {
                 display: flex;
@@ -74,13 +81,16 @@
             /* Table */
             .table-responsive {
                 background: white;
-                padding: 15px;
-                border-radius: 8px;
-                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.05);
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
-            .table th, .table td {
-                text-align: center;
-                vertical-align: middle;
+            .table thead {
+                background-color: #343a40;
+                color: white;
+            }
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
             }
             .table img {
                 border-radius: 50%;
@@ -91,6 +101,46 @@
                 padding: 5px 10px;
                 border-radius: 5px;
             }
+            .btn-primary {
+                background-color: #0d6efd;
+                border-color: #0d6efd;
+                padding: 8px 16px;
+                font-weight: 600;
+            }
+            .btn-primary:hover {
+                background-color: #0b5ed7;
+                border-color: #0a58ca;
+            }
+            .btn-danger {
+                background-color: #dc3545;
+                border-color: #dc3545;
+                padding: 8px 16px;
+                font-weight: 600;
+            }
+            .btn-danger:hover {
+                background-color: #bb2d3b;
+                border-color: #b02a37;
+            }
+            .btn-success {
+                background-color: #198754;
+                border-color: #198754;
+                padding: 8px 16px;
+                font-weight: 600;
+            }
+            .btn-success:hover {
+                background-color: #157347;
+                border-color: #146c43;
+            }
+            .badge {
+                padding: 8px 12px;
+                border-radius: 5px;
+            }
+            .bg-success {
+                background-color: #198754 !important;
+            }
+            .bg-danger {
+                background-color: #dc3545 !important;
+            }
         </style>
     </head>
 
@@ -98,13 +148,16 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <h4 class="text-center">
+            <h4 class="text-center mb-4">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
             <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
             <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customers</a>
             <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
             <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
+            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
+            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
         </div>
 
         <!-- Main Content -->
@@ -123,8 +176,8 @@
                 </div>
 
                 <div>
-                    <a href="ManagerProfile.jsp" class="profile-link">Admin</a>
-                    <a href="javascript:void(0);" class="logout-link text-danger fw-bold" onclick="logout()">Logout</a>
+                    <a href="ManagerProfile.jsp" class="btn btn-outline-secondary me-2">Admin</a>
+                    <a href="javascript:void(0);" class="btn btn-danger" onclick="logout()">Logout</a>
                 </div>
             </div>
 

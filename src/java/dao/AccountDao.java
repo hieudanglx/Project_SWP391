@@ -24,11 +24,11 @@ import model.EmailSenderStaff;
  */
 public class AccountDao extends dao.DBContext {
 
-    public boolean ValidateStaff_Admin(String username, String password) {
+    public Integer ValidateStaff_Admin(String username, String password) {
 
         if (connection == null) {
             System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-            return false;
+            return null;
         }
 
         String query = "Select username, password, status from Staff where username = ? and password = ?";
@@ -39,13 +39,13 @@ public class AccountDao extends dao.DBContext {
             try ( ResultSet rs = pstmt.executeQuery()) {
 
                 if (rs.next()) {
-                    return rs.getInt("status") == 0;
+                    return rs.getInt("status") ;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 
     public Integer getStaffIdByUsername(String username) {
@@ -380,7 +380,7 @@ public class AccountDao extends dao.DBContext {
         return AccountStaff;
     }
 
-    private void updateCustomerStatus(int customerID, int status) {
+    public void updateCustomerStatus(int customerID, int status) {
         String query = "UPDATE customer SET Status = ? WHERE customerID = ?";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -392,15 +392,15 @@ public class AccountDao extends dao.DBContext {
         }
     }
 
-    // Chặn tài khoản khách hàng
-    public void blockCustomer(int customerID) {
-        updateCustomerStatus(customerID, 1); // 1 = Blocked
-    }
-
-    // Mở khóa tài khoản khách hàng
-    public void unblockCustomer(int customerID) {
-        updateCustomerStatus(customerID, 0); // 0 = Active
-    }
+//    // Chặn tài khoản khách hàng
+//    public void blockCustomer(int customerID) {
+//        updateCustomerStatus(customerID, 1); // 1 = Blocked
+//    }
+//
+//    // Mở khóa tài khoản khách hàng
+//    public void unblockCustomer(int customerID) {
+//        updateCustomerStatus(customerID, 0); // 0 = Active
+//    }
 
     public boolean isUsernameStaffExists(String username) {
         String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";

@@ -112,8 +112,8 @@
                             <input type="password" id="Password" name="Password" class="form-control"
                                    placeholder="Password" required>
                         </div>
-                        <c:if test="${not empty error}">
-                            <div class="text-danger text-center fw-bold mt-2">${error}</div>
+                        <c:if test="${not empty errorMessage}">
+                            <div class="text-danger text-center fw-bold mt-2">${errorMessage}</div>
                         </c:if>
                         <c:if test="${not empty blockedMessage}">
                             <div class="text-danger text-center fw-bold mt-2">${blockedMessage}</div>

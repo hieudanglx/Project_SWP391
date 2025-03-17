@@ -21,37 +21,38 @@ public class InventoryDAO extends dao.DBContext {
 
     public List<Inventory> getAllInventories() {
         List<Inventory> inventories = new ArrayList<>();
-        String query = "WITH LatestImport AS (\n"
-                + "    SELECT \n"
-                + "        i.ProductID, \n"
-                + "        i.Date, \n"
-                + "        i.Import_price, \n"
-                + "        i.Supplier,\n"
-                + "        ROW_NUMBER() OVER (PARTITION BY i.ProductID ORDER BY i.Date DESC, i.Import_price DESC) AS rn\n"
-                + "    FROM Import_Inventory i\n"
-                + ")\n"
-                + "SELECT \n"
-                + "    p.ProductID, \n"
-                + "    p.ProductName, \n"
-                + "    li.Date, \n"
-                + "    li.Import_price, \n"
-                + "    p.Price, \n"
-                + "    p.Quantity_Product, \n"
-                + "    li.Supplier\n"
-                + "FROM Product p\n"
-                + "LEFT JOIN LatestImport li ON p.ProductID = li.ProductID AND li.rn = 1;\n"
-                + "";
+        String query = "WITH LatestImport AS ( "
+                + "    SELECT "
+                + "        i.ProductID, "
+                + "        i.Date, "
+                + "        i.Import_price, "
+                + "        i.Supplier, "
+                + "        ROW_NUMBER() OVER (PARTITION BY i.ProductID ORDER BY i.Date DESC, i.Import_price DESC) AS rn "
+                + "    FROM Import_Inventory i "
+                + ") "
+                + "SELECT "
+                + "    p.ProductID, "
+                + "    p.ProductName, "
+                + "    li.Date AS Latest_Import_Date, "
+                + "    li.Import_price, "
+                + "    p.Price, "
+                + "    p.Quantity_Product, "
+                + "    li.Supplier "
+                + "FROM Product p "
+                + "LEFT JOIN LatestImport li "
+                + "    ON p.ProductID = li.ProductID "
+                + "    AND li.rn = 1 "
+                + "WHERE p.IsDelete = 0;";  // Chỉ lấy sản phẩm chưa bị xóa
 
-        try (
-                 PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
+        try ( PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Inventory inventory = new Inventory(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
-                        rs.getDate("Date"),
+                        rs.getDate("Latest_Import_Date"),
                         rs.getInt("Import_price"),
-                        rs.getInt("price"),
+                        rs.getInt("Price"),
                         rs.getInt("Quantity_Product"),
                         rs.getString("Supplier")
                 );
@@ -141,32 +142,16 @@ public class InventoryDAO extends dao.DBContext {
 
     public List<Inventory> searchInventory(String keyword) {
         List<Inventory> inventories = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, i.Latest_Import_Date, "
-                + "p.Price AS Selling_Price, COALESCE(i.Import_price, 0) AS Import_Price, "
-                + "COALESCE(i.Total_Import, 0) AS Total_Import, "
-                + "p.Quantity_Sell + COALESCE(o.Total_Sell, 0) AS Total_Sell_Calculated, "
-                + "COALESCE(i.Total_Import, 0) - (COALESCE(o.Total_Sell, 0) + p.Quantity_Sell) AS Quantity_Product, "
-                + "i.Supplier "
+        String sql = "SELECT p.ProductID, p.ProductName, i.Date AS Latest_Import_Date, "
+                + "p.Price, p.Quantity_Product "
                 + "FROM Product p "
-                + "LEFT JOIN ( "
-                + "    SELECT im.ProductID, SUM(im.Import_quantity) AS Total_Import, MAX(im.Date) AS Latest_Import_Date, "
-                + "    (SELECT TOP 1 im2.Supplier FROM Import_Inventory im2 WHERE im2.ProductID = im.ProductID ORDER BY im2.Date DESC) AS Supplier, "
-                + "    (SELECT TOP 1 im3.Import_price FROM Import_Inventory im3 WHERE im3.ProductID = im.ProductID ORDER BY im3.Date DESC) AS Import_price "
-                + "    FROM Import_Inventory im "
-                + "    GROUP BY im.ProductID "
-                + ") i ON p.ProductID = i.ProductID "
-                + "LEFT JOIN ( "
-                + "    SELECT od.ProductID, SUM(od.Quantity) AS Total_Sell "
-                + "    FROM Order_Details od "
-                + "    JOIN Order_List ol ON od.OrderID = ol.OrderID "
-                + "    WHERE ol.Status = 'Thành Công' "
-                + "    GROUP BY od.ProductID "
-                + ") o ON p.ProductID = o.ProductID "
+                + "LEFT JOIN Import_Inventory i "
+                + "ON p.ProductID = i.ProductID "
+                + "AND i.Date = (SELECT MAX(Date) FROM Import_Inventory WHERE ProductID = p.ProductID) "
                 + "WHERE p.ProductName LIKE ?;";
 
-        try (
-                 PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, "%" + keyword + "%"); // Tìm kiếm theo từ khóa
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, "%" + keyword + "%");  // Thêm ký tự % để tìm kiếm gần đúng
 
             try ( ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
@@ -174,12 +159,8 @@ public class InventoryDAO extends dao.DBContext {
                             rs.getInt("ProductID"),
                             rs.getString("ProductName"),
                             rs.getDate("Latest_Import_Date"),
-                            rs.getInt("Import_Price"),
-                            rs.getInt("Selling_Price"),
-                            rs.getInt("Total_Import"),
-                            rs.getInt("Total_Sell_Calculated"),
-                            rs.getInt("Quantity_Product"),
-                            rs.getString("Supplier")
+                            rs.getInt("Price"),
+                            rs.getInt("Quantity_Product")
                     );
                     inventories.add(inventory);
                 }

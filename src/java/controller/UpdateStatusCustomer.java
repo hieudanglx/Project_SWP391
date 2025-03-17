@@ -81,10 +81,11 @@ public class UpdateStatusCustomer extends HttpServlet {
         int customerID = Integer.parseInt(request.getParameter("customerID"));
         int status = Integer.parseInt(request.getParameter("status"));
         if(status == 0){
-            accountDao.blockCustomer(customerID);
+           status = 1;
         }else{
-            accountDao.unblockCustomer(customerID);
+           status = 0;
         }
+        accountDao.updateCustomerStatus(customerID, status);
         response.sendRedirect("listAccountCustomer");
     }
 

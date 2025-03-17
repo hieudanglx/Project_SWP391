@@ -70,53 +70,54 @@ public class LoginStaff_Admin extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
 
-    AccountDao accountDAO = new AccountDao();
-    String username = request.getParameter("Username");
-    String password = request.getParameter("Password");
+        AccountDao accountDAO = new AccountDao();
+        String username = request.getParameter("Username").trim();
+        String password = request.getParameter("Password").trim();
 
-    // Kiểm tra nếu username hoặc password rỗng
-    if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-        request.setAttribute("error", "Username and Password cannot be empty");
-        request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-        return;
-    }
-
-    try {
-        Boolean status = accountDAO.ValidateStaff_Admin(username, password); // Sửa kiểu dữ liệu thành Boolean
-
-        if (Boolean.TRUE.equals(status)) { // Tài khoản hợp lệ & không bị chặn
-            HttpSession session = request.getSession();
-            session.setAttribute("Username", username);
-            session.setAttribute("fullname", accountDAO.getFullname(username));
-
-            final String destinationPage = "admin".equalsIgnoreCase(username)
-                    ? "HomeDashBoard_Admin.jsp"
-                    : "HomeDashBoard_Staff.jsp";
-
-            if (!"admin".equalsIgnoreCase(username)) {
-                session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
-            }
-
-            response.sendRedirect(destinationPage);
+        if (username.isEmpty() || password.isEmpty()) {
+            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
+            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
             return;
         }
 
-        // Nếu status = false => Tài khoản bị chặn
-        request.setAttribute("error", "Your account is blocked. Please contact admin.");
+        try {
+            Integer status = accountDAO.ValidateStaff_Admin(username, password); // Đổi tên cho rõ ràng
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        request.setAttribute("error", "An error occurred while processing your request. Please try again.");
+            if (status != null) {
+                if (status == 0) { // Tài khoản hoạt động
+                    HttpSession session = request.getSession();
+                    session.setAttribute("Username", username);
+                    session.setAttribute("fullname", accountDAO.getFullname(username));
+
+                    if (!"admin".equalsIgnoreCase(username)) {
+                        session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
+                    }
+
+                    final String destinationPage = "admin".equalsIgnoreCase(username)
+                            ? "HomeDashBoard_Admin.jsp"
+                            : "HomeDashBoard_Staff.jsp";
+
+                    response.sendRedirect(destinationPage);
+                    return;
+                } else if (status == 1) { // Tài khoản bị chặn
+                    request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");
+                }
+            } else {
+                request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu không hợp lệ!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
+        }
+
+        // Trả lỗi về JSP
+        request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
     }
-
-    // Điều hướng về trang login nếu có lỗi
-    request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-}
 
     /**
      * Returns a short description of the servlet.
