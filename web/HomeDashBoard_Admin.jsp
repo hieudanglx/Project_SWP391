@@ -132,21 +132,20 @@
                     <div class="card p-3 bg-success text-white">
                         <h5>Total Sales</h5>
                         <%
-       // Lấy giá trị totalSales từ request
-       Object totalSalesObj = request.getAttribute("totalSales");
-       String totalSalesStr = "0"; // Giá trị mặc định nếu không có dữ liệu
+      // Get totalSales from request
+      Object totalSalesObj = request.getAttribute("totalSales");
+      double totalSales = 0.0;
 
-       // Kiểm tra và chuyển đổi giá trị totalSales
-       if (totalSalesObj != null) {
-           totalSalesStr = totalSalesObj.toString();
-       }
+      if (totalSalesObj != null) {
+          totalSales = (double) totalSalesObj; // Safe casting
+      }
 
-       // Định dạng số tiền (ví dụ: 1,000,000 VND)
-       double totalSales = Double.parseDouble(totalSalesStr);
-       java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
-       String formattedTotalSales = formatter.format(totalSales);
+      // Format the number properly
+      java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
+      String formattedTotalSales = formatter.format(totalSales);
                         %>
-                        <p class="fs-4"><b><%= totalSalesStr %> VND</b></p>
+
+                        <p class="fs-4"><b><%= formattedTotalSales %> VND</b></p>
                     </div>
                 </div>
                 <div class="col-md-4">

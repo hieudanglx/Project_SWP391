@@ -72,7 +72,7 @@ public class RevenueTotal extends HttpServlet {
         System.out.println("[DEBUG] Tổng doanh thu sau khi format: " + formattedSales);
 
 // Gửi dữ liệu sang JSP
-        request.setAttribute("totalSales", formattedSales);
+        request.setAttribute("totalSales", totalSales);
         request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
     }
 
