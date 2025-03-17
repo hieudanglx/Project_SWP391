@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.InventoryDAO;
@@ -22,7 +21,8 @@ import model.Inventory;
  */
 @WebServlet("/importHistory")
 public class ImportHistory extends HttpServlet {
-   private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     private InventoryDAO inventoryDAO;
 
     @Override
@@ -34,26 +34,29 @@ public class ImportHistory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productIDStr = request.getParameter("productID");
+        Integer productID = null;
 
-        if (productIDStr != null) { // Lấy lịch sử nhập của một sản phẩm cụ thể
+        if (productIDStr != null) {
             try {
-                int productID = Integer.parseInt(productIDStr);
-                List<Inventory> importHistory = inventoryDAO.getImportHistoryByProductID(productID);
-                request.setAttribute("importHistory", importHistory);
-                request.getRequestDispatcher("view_import_detail.jsp").forward(request, response);
+                productID = Integer.parseInt(productIDStr);
             } catch (NumberFormatException e) {
                 response.sendRedirect("ImportHistory"); // Nếu productID không hợp lệ, quay lại trang danh sách
+                return;
             }
-        } else { // Hiển thị toàn bộ lịch sử nhập hàng
-            List<Inventory> importHistory = inventoryDAO.getAllImportHistory();
-            request.setAttribute("importHistory", importHistory);
-            request.getRequestDispatcher("view_import_history.jsp").forward(request, response);
         }
+
+        // Gọi hàm gộp
+        List<Inventory> importHistory = inventoryDAO.getImportHistory(productID);
+        request.setAttribute("importHistory", importHistory);
+
+        // Chọn trang JSP phù hợp
+        String targetPage = (productID != null) ? "view_import_detail.jsp" : "view_import_history.jsp";
+        request.getRequestDispatcher(targetPage).forward(request, response);
     }
 
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -61,12 +64,13 @@ public class ImportHistory extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-       
+            throws ServletException, IOException {
+
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

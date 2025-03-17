@@ -183,20 +183,25 @@ public class InventoryDAO extends dao.DBContext {
         return -1; // Trả về -1 nếu không tìm thấy sản phẩm
     }
 
-    public List<Inventory> getImportHistoryByProductID(int productID) {
+    public List<Inventory> getImportHistory(Integer productID) {
         List<Inventory> importList = new ArrayList<>();
         String sql = "SELECT i.ProductID, p.ProductName, p.Brand, "
                 + "i.Import_price, i.Import_quantity, i.Date AS Import_Date, i.Supplier "
                 + "FROM Import_Inventory i "
-                + "JOIN Product p ON i.ProductID = p.ProductID "
-                + "WHERE i.ProductID = ? "
-                + "ORDER BY i.Date DESC, i.Import_InventoryID ASC";
-        try (
-                 PreparedStatement ps = connection.prepareStatement(sql)) {
+                + "JOIN Product p ON i.ProductID = p.ProductID ";
 
-            ps.setInt(1, productID);
+        if (productID != null) {
+            sql += "WHERE i.ProductID = ? ";
+        }
+
+        sql += "ORDER BY i.Date DESC, i.Import_InventoryID ASC";
+
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            if (productID != null) {
+                ps.setInt(1, productID);
+            }
+
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 Inventory inventory = new Inventory(
                         rs.getInt("ProductID"),
@@ -215,32 +220,6 @@ public class InventoryDAO extends dao.DBContext {
         return importList;
     }
 
-    public List<Inventory> getAllImportHistory() {
-        List<Inventory> importList = new ArrayList<>();
-        String sql = "SELECT i.ProductID, p.ProductName, p.Brand, "
-                + "i.Import_price, i.Import_quantity, i.Date AS Import_Date, i.Supplier "
-                + "FROM Import_Inventory i "
-                + "JOIN Product p ON i.ProductID = p.ProductID "
-                + "ORDER BY i.Date DESC, i.Import_InventoryID ASC";
-        try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                Inventory inventory = new Inventory(
-                        rs.getInt("ProductID"),
-                        rs.getString("ProductName"),
-                        rs.getString("Brand"),
-                        rs.getInt("Import_price"),
-                        rs.getInt("Import_quantity"),
-                        rs.getDate("Import_Date"),
-                        rs.getString("Supplier")
-                );
-                importList.add(inventory);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return importList;
-    }
 }
 
 //    public static void main(String[] args) {
