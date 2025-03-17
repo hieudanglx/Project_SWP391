@@ -17,6 +17,14 @@ public class Order_Details {
     public Order_Details() {
     }
 
+    public Order_Details(int OrderDetaiID, int Quantity, int ProductID, int OrderID) {
+        this.OrderDetaiID = OrderDetaiID;
+        this.Quantity = Quantity;
+        this.ProductID = ProductID;
+        this.OrderID = OrderID;
+    }
+    
+
     public int getOrderDetaiID() {
         return OrderDetaiID;
     }

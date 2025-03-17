@@ -88,6 +88,7 @@ public class CartDao extends DBContext {
         }
         return size;
     }
+
     public int getTotalCart(List<Product> list, int CustomerID) {
         int total = 0;
         if (list.isEmpty()) {
@@ -95,7 +96,7 @@ public class CartDao extends DBContext {
         }
 
         for (int i = 0; i < list.size(); i++) {
-            total += list.get(i).getQuantityProduct()*list.get(i).getPrice();
+            total += list.get(i).getQuantityProduct() * list.get(i).getPrice();
         }
         return total;
     }
@@ -140,6 +141,16 @@ public class CartDao extends DBContext {
             System.out.println("dao.CartDao.removeProductFromCart(): " + e.getMessage());
         }
         return false;
+    }
+
+    public void clearCart(int customerID) {
+        String sql = "DELETE FROM Cart WHERE CustomerID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

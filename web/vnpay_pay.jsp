@@ -9,11 +9,9 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <title>Tạo mới đơn hàng</title>
-        <!-- Bootstrap core CSS -->
-        <link href="/vnpay_jsp/assets/bootstrap.min.css" rel="stylesheet"/>
-        <!-- Custom styles for this template -->
-        <link href="/vnpay_jsp/assets/jumbotron-narrow.css" rel="stylesheet">      
-        <script src="/vnpay_jsp/assets/jquery-1.11.3.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="css/popup.css">  
     </head>
     <style>
         /* Định dạng chung cho container */
@@ -39,9 +37,10 @@
         .order-form-group {
             margin-bottom: 20px;
             text-align: left;
+            margin-left: 240px;
         }
 
-        
+
 
         /* Tiêu đề nhỏ */
         .order-container2 h3,
@@ -51,7 +50,7 @@
             margin-bottom: 10px;
         }
 
-       
+
 
         /* Nút thanh toán */
         .order-btn {
@@ -78,7 +77,7 @@
             color: gray;
         }
         .sotien-form-group{
-            
+
         }
 
     </style>
@@ -86,33 +85,20 @@
     <body>
         <%@include file="header.jsp" %>
         <div class="order-container2">
-            <div class="order-texth1">
-                <h1>VNPAY DEMO</h1>
-            </div>
-            <h3>Tạo mới đơn hàng</h3>
+           
+            <h3>Thanh toán qua thẻ ATM/Tài khoản nội địa</h3>
             <div class="table-responsive">
                 <form action="ajaxServlet" id="frmCreateOrder" method="post">        
                     <div class="sotien-form-group">
-                        <label for="amount">Số tiền</label>
-                        <input class="order-input" data-val="true" data-val-number="The field Amount must be a number." 
-                               data-val-required="The Amount field is required." id="amount" max="100000000" min="1" 
-                               name="amount" type="number" value="10000" />
+                        <h5 for="amount">Số tiền: </h5> 
+                        <input class="order-input" data-val="true" id="amount" name="amount" 
+                               type="hidden" value="${(sessionScope.total )}" />
+
+                        <span class="text-danger fw-bold"> <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ</span>
                     </div>
-                    <h4>Chọn phương thức thanh toán</h4>
-                    <div class="order-form-group">
-                        <h5>Cách 1: Chuyển hướng sang Cổng VNPAY chọn phương thức thanh toán</h5>
-                        <input type="radio" checked="true" id="bankCode1" name="bankCode" value="">
-                        <label for="bankCode1">Cổng thanh toán VNPAYQR</label><br>
-
-                        <h5>Cách 2: Tách phương thức tại site của đơn vị kết nối</h5>
-                        <input type="radio" id="bankCode2" name="bankCode" value="VNPAYQR">
-                        <label for="bankCode2">Thanh toán bằng ứng dụng hỗ trợ VNPAYQR</label><br>
-
-                        <input type="radio" id="bankCode3" name="bankCode" value="VNBANK">
-                        <label for="bankCode3">Thanh toán qua thẻ ATM/Tài khoản nội địa</label><br>
-
-                        <input type="radio" id="bankCode4" name="bankCode" value="INTCARD">
-                        <label for="bankCode4">Thanh toán qua thẻ quốc tế</label><br>
+                   
+                    <div class="order-form-group">                        
+                        <input type="hidden" id="bankCode3" name="bankCode" value="VNBANK">                       
                     </div>
                     <div class="order-form-group">
                         <h5>Chọn ngôn ngữ giao diện thanh toán:</h5>

@@ -77,221 +77,218 @@
         <%@include file="header.jsp" %>
 
         <!-- Main Container -->
-        <div class="container-lg cart-container">
-            <c:choose>
-                <c:when test="${size>0}">
-                    <div class="row g-5">
-                        <!-- Product List Column -->
-                        <div class="col-lg-8">
-                            <div class="d-flex align-items-center mb-4">
-                                <h3 class="mb-0 me-3">Giỏ hàng</h3>
-                                <span class="badge bg-primary rounded-pill">${size} sản phẩm</span>
-                            </div>
+        <form action="PaymentController" method="post">
+            <div class="container-lg cart-container">
+                <c:choose>
+                    <c:when test="${size>0}">
+                        <div class="row g-5">
+                            <!-- Product List Column -->
+                            <div class="col-lg-8">
+                                <div class="d-flex align-items-center mb-4">
+                                    <h3 class="mb-0 me-3">Giỏ hàng</h3>
+                                    <span class="badge bg-primary rounded-pill">${size} sản phẩm</span>
+                                </div>
 
-                            <c:forEach items="${list}" var="product">
-                                <c:if test="${product.quantityProduct>0}">
-                                    <div class="card mb-3 shadow-sm">
-                                        <div class="card-body">
-                                            <div class="d-flex gap-4 align-items-center">
-                                                <img src="${product.imageURL}" 
-                                                     alt="${product.productName}" 
-                                                     class="cart-item-image">
+                                <c:forEach items="${list}" var="product">
+                                    <c:if test="${product.quantityProduct>0}">
+                                        <div class="card mb-3 shadow-sm">
+                                            <div class="card-body">
+                                                <div class="d-flex gap-4 align-items-center">
+                                                    <img src="${product.imageURL}" 
+                                                         alt="${product.productName}" 
+                                                         class="cart-item-image">
 
-                                                <!-- Product Info -->
-                                                <div class="flex-grow-1">
-                                                    <h5 class="mb-2">${product.productName}</h5>
+                                                    <!-- Product Info -->
+                                                    <div class="flex-grow-1">
+                                                        <h5 class="mb-2">${product.productName}</h5>
 
-                                                    <!-- Color-->
-                                                    <div class="d-flex gap-3 mb-3">
-                                                        <div class="d-flex align-items-center gap-1">
-                                                            <span class="text-muted small">${product.color}</span>
-                                                        </div>
-                                                        <div class="d-flex align-items-center gap-2">
-                                                            <span class="text-muted small">${product.ram}</span>
-                                                        </div>
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <span class="text-muted small">${product.rom}</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Price & Quantity -->
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <div class="text-danger fw-bold h5">
-                                                            <fmt:formatNumber value="${product.price}" 
-                                                                              type="currency" 
-                                                                              currencySymbol="đ"/>
-                                                        </div>
-
-                                                        <div class="d-flex align-items-center gap-3">
-                                                            <div class="input-group quantity-input-group">
-                                                                <a href="UpdateCartController?id=${product.productID}&type=-"
-                                                                   class="btn btn-outline-secondary px-3"
-                                                                   style="margin: 0;"
-                                                                   onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct});">-</a>
-                                                                <input type="text"
-                                                                       class="form-control text-center border-secondary" style="width: 100px"
-                                                                       value="${product.quantityProduct}"
-                                                                       disabled>
-                                                                <a href="UpdateCartController?id=${product.productID}&type=%2B"
-                                                                   class="btn btn-outline-secondary px-3"
-                                                                   style="margin: 0; pointer-events: ${product.quantitySell == product.quantityProduct + 1 ? 'none' : 'auto'}; opacity: ${product.quantitySell == product.quantityProduct + 1 ? '0.5' : '1'};"
-                                                                   onclick="return increaseQuantity(${product.productID}, ${product.quantityProduct});">+</a>
+                                                        <!-- Color-->
+                                                        <div class="d-flex gap-3 mb-3">
+                                                            <div class="d-flex align-items-center gap-1">
+                                                                <span class="text-muted small">${product.color}</span>
                                                             </div>
-                                                            <a href="UpdateCartController?id=${product.productID}&type=R"
-                                                               class="btn btn-link text-danger"
-                                                               onclick="return confirmRemove(${product.productID});">
-                                                                <i class="fas fa-trash fa-lg"></i>
-                                                            </a>
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <span class="text-muted small">${product.ram}</span>
+                                                            </div>
+                                                            <div class="d-flex align-items-center gap-3">
+                                                                <span class="text-muted small">${product.rom}</span>
+                                                            </div>
                                                         </div>
 
+                                                        <!-- Price & Quantity -->
+                                                        <div class="d-flex justify-content-between align-items-center">
+                                                            <div class="text-danger fw-bold h5">
+                                                                <fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                                            </div>
+
+                                                            <div class="d-flex align-items-center gap-3">
+                                                                <div class="input-group quantity-input-group">
+                                                                    <a href="UpdateCartController?id=${product.productID}&type=-"
+                                                                       class="btn btn-outline-secondary px-3"
+                                                                       style="margin: 0;"
+                                                                       onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct});">-</a>
+                                                                    <input type="text"
+                                                                           class="form-control text-center border-secondary" style="width: 100px"
+                                                                           value="${product.quantityProduct}"
+                                                                           disabled>
+                                                                    <a href="UpdateCartController?id=${product.productID}&type=%2B"
+                                                                       class="btn btn-outline-secondary px-3"
+                                                                       style="margin: 0; pointer-events: ${product.quantitySell == product.quantityProduct + 1 ? 'none' : 'auto'}; opacity: ${product.quantitySell == product.quantityProduct + 1 ? '0.5' : '1'};"
+                                                                       onclick="return increaseQuantity(${product.productID}, ${product.quantityProduct});">+</a>
+                                                                </div>
+                                                                <a href="UpdateCartController?id=${product.productID}&type=R"
+                                                                   class="btn btn-link text-danger"
+                                                                   onclick="return confirmRemove(${product.productID});">
+                                                                    <i class="fas fa-trash fa-lg"></i>
+                                                                </a>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </c:if>
-                            </c:forEach>
-                        </div>
+                                    </c:if>
+                                </c:forEach>
+                            </div>
 
-                        <!-- Checkout Column -->
-                        <div class="col-lg-4">
+                            <!-- Checkout Column -->
+                            <div class="col-lg-4">
 
-                            <div class="card border-primary shadow-lg">
-                                <div class="card-header bg-primary text-white">
-                                    <h4 class="mb-0">Thông tin thanh toán</h4>
-                                </div>
-
-                                <div class="card-body">
-                                    <!-- Các phần thông tin khách hàng -->
-                                    <div class="mb-4">
-                                        <label class="form-label">Họ và tên</label>
-                                        <input type="text" disabled
-                                               name="fullname"
-                                               value="${sessionScope.customer.fullName}"
-                                               class="form-control"
-                                               required>
+                                <div class="card border-primary shadow-lg">
+                                    <div class="card-header bg-primary text-white">
+                                        <h4 class="mb-0">Thông tin thanh toán</h4>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <label class="form-label">Số điện thoại</label>
-                                        <input type="tel"  disabled
-                                               name="phone"
-                                               value="${sessionScope.customer.phoneNumber}"
-                                               class="form-control"
-                                               pattern="[0-9]{10}"
-                                               required>
-                                    </div>
-
-                                    <!-- Địa chỉ giao hàng -->
-                                    <div class="mb-4">
-                                        <label class="form-label">Địa chỉ nhận hàng</label>
-                                        <div class="address-selector">
-                                            <select class="form-select mb-2" id="city" name="city" required>
-                                                <option value="">Chọn tỉnh/thành phố</option>
-                                            </select>
-                                            <select class="form-select mb-2" id="district" name="district" required>
-                                                <option value="">Chọn quận/huyện</option>
-                                            </select>
-                                            <input type="text" 
+                                    <div class="card-body">
+                                        <!-- Các phần thông tin khách hàng -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Họ và tên</label>
+                                            <input type="text" disabled
+                                                   name="fullname"
+                                                   value="${sessionScope.customer.fullName}"
                                                    class="form-control"
-                                                   name="street"
-                                                   placeholder="Số nhà, tên đường..."
                                                    required>
                                         </div>
+
+                                        <div class="mb-4">
+                                            <label class="form-label">Số điện thoại</label>
+                                            <input type="tel"  
+                                                   name="phone"
+                                                   value="${sessionScope.customer.phoneNumber}"
+                                                   class="form-control"
+                                                   pattern="[0-9]{10}"
+                                                   required>
+                                        </div>
+
+                                        <!-- Địa chỉ giao hàng -->
+                                        <div class="mb-4">
+                                            <label class="form-label">Địa chỉ nhận hàng</label>
+                                            <div class="address-selector">
+                                                <select class="form-select mb-2" id="city" name="city" required>
+                                                    <option value="">Chọn tỉnh/thành phố</option>
+                                                </select>
+                                                <select class="form-select mb-2" id="district" name="district" required>
+                                                    <option value="">Chọn quận/huyện</option>
+                                                </select>
+                                                <input type="text" 
+                                                       class="form-control"
+                                                       name="street"
+                                                       placeholder="Số nhà, tên đường..."
+                                                       required>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Dynamic Total Calculation -->
+                                        <c:set var="total" value="${0}"/>
+                                        <c:forEach items="${list}" var="product">
+                                            <c:set var="total" value="${total + (product.price * product.quantityProduct)}"/>
+                                        </c:forEach>
+                                        <c:set var="sessionScope.total" value="${total}" />
+                                        
+
+                                        <!-- Order Summary -->
+                                        <div class="mb-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <span>Tạm tính:</span>
+                                                <span class="fw-bold" >
+                                                    <fmt:formatNumber value="${total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                                </span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span>Phí vận chuyển:</span>
+                                                <span class="text-success">Miễn phí</span>
+                                            </div>
+                                            <hr>
+                                            <div class="d-flex justify-content-between align-items-center h5">
+                                                <span>Tổng cộng:</span>
+                                                <span class="text-danger fw-bold">
+
+                                                    <fmt:formatNumber value="${total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                                </span>
+                                            </div>
+                                        </div>
+                                                <input type="hidden" name="total" value="${total}">
+                                        <!-- Payment Methods -->
+                                        <div class="mb-4">
+                                            <h5 class="mb-3">Hình thức thanh toán</h5>
+
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="radio" name="paymentMethod" id="cod" value="COD" checked>
+                                                <lab    el class="form-check-label d-flex align-items-center gap-2" for="cod">
+                                                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331966.png" 
+                                                         class="payment-icon">
+                                                    <div>
+                                                        <div class="fw-bold">COD</div>
+                                                        <small class="text-muted">Thanh toán khi nhận hàng</small>
+                                                    </div>
+                                                    </label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" 
+                                                       type="radio" 
+                                                       name="paymentMethod" value="VNPAY"
+                                                       id="vnpay">
+                                                <label class="form-check-label d-flex align-items-center gap-2" 
+                                                       for="vnpay">
+                                                    <img src="https://images.seeklogo.com/logo-png/42/1/vnpay-logo-png_seeklogo-428006.png" 
+                                                         class="payment-icon">
+                                                    <div>
+                                                        <div class="fw-bold">VNPAY QR</div>
+                                                        <small class="text-muted">Thanh toán qua ứng dụng</small>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                       
+
+                                        <!-- Checkout Button -->
+                                        <button type="submit" class="btn btn-danger w-100 py-3 fw-bold">
+                                            <i class="fas fa-wallet me-2"></i> Thanh toán ngay
+                                        </button>
+
                                     </div>
-
-                                    <!-- Dynamic Total Calculation -->
-                                    <c:set var="total" value="${0}"/>
-                                    <c:forEach items="${list}" var="product">
-                                        <c:set var="total" value="${total + (product.price * product.quantityProduct)}"/>
-                                    </c:forEach>
-
-                                    <!-- Order Summary -->
-                                    <div class="mb-4">
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <span>Tạm tính:</span>
-                                            <span class="fw-bold">
-                                                <fmt:formatNumber value="${total}" 
-                                                                  type="currency" 
-                                                                  currencySymbol="đ"/>
-                                            </span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span>Phí vận chuyển:</span>
-                                            <span class="text-success">Miễn phí</span>
-                                        </div>
-                                        <hr>
-                                        <div class="d-flex justify-content-between align-items-center h5">
-                                            <span>Tổng cộng:</span>
-                                            <span class="text-danger fw-bold">
-                                                <fmt:formatNumber value="${total}" 
-                                                                  type="currency" 
-                                                                  currencySymbol="đ"/>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Payment Methods -->
-                                    <div class="mb-4">
-                                        <h5 class="mb-3">Hình thức thanh toán</h5>
-
-                                        <div class="form-check mb-3">
-                                            <input class="form-check-input" 
-                                                   type="radio" 
-                                                   name="paymentMethod" 
-                                                   id="cod" value="COD"
-                                                   checked>
-                                            <label class="form-check-label d-flex align-items-center gap-2" 
-                                                   for="cod">
-                                                <img src="https://cdn-icons-png.flaticon.com/512/2331/2331966.png" 
-                                                     class="payment-icon">
-                                                <div>
-                                                    <div class="fw-bold">COD</div>
-                                                    <small class="text-muted">Thanh toán khi nhận hàng</small>
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div class="form-check">
-                                            <input class="form-check-input" 
-                                                   type="radio" 
-                                                   name="paymentMethod" value="VNPAY"
-                                                   id="vnpay">
-                                            <label class="form-check-label d-flex align-items-center gap-2" 
-                                                   for="vnpay">
-                                                <img src="https://images.seeklogo.com/logo-png/42/1/vnpay-logo-png_seeklogo-428006.png" 
-                                                     class="payment-icon">
-                                                <div>
-                                                    <div class="fw-bold">VNPAY QR</div>
-                                                    <small class="text-muted">Thanh toán qua ứng dụng</small>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Checkout Button -->
-                                    <a href="payment.jsp" class="btn btn-danger w-100 py-3 fw-bold">
-                                        <i class="fas fa-wallet me-2"></i>
-                                        Thanh toán ngay
-                                    </a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </c:when>
+                    </c:when>
 
-                <c:otherwise>
-                    <!-- Empty Cart -->
-                    <div class="empty-cart text-center py-5">
-                        <div class="empty-cart-icon mb-4">
-                            <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+                    <c:otherwise>
+                        <!-- Empty Cart -->
+                        <div class="empty-cart text-center py-5">
+                            <div class="empty-cart-icon mb-4">
+                                <i class="fas fa-shopping-cart fa-4x text-muted"></i>
+                            </div>
+                            <h2 class="mb-3">Giỏ hàng của bạn đang trống</h2>
+                            <p class="text-muted mb-4">Hãy khám phá các sản phẩm mới nhất của chúng tôi!</p>
                         </div>
-                        <h2 class="mb-3">Giỏ hàng của bạn đang trống</h2>
-                        <p class="text-muted mb-4">Hãy khám phá các sản phẩm mới nhất của chúng tôi!</p>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </form>
     </body>
     <!-- Popup container -->
     <div class="popup-overlay" id="popupOverlay">
@@ -354,4 +351,16 @@
                 fetchData();
     </script>
     <script src="js/popup.js"></script>
+    <script>
+                document.getElementById("checkoutBtn").addEventListener("click", function () {
+                    let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+                    if (paymentMethod === "COD") {
+                        window.location.href = "PaymentController";
+                    } else if (paymentMethod === "VNPAY") {
+                        window.location.href = "vnpay_pay.jsp";
+                    }
+                });
+    </script>
+
 </html>
