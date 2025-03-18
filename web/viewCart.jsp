@@ -185,19 +185,18 @@
                                         <div class="mb-4">
                                             <label class="form-label">Địa chỉ nhận hàng</label>
                                             <div class="address-selector">
-                                                <select class="form-select mb-2" id="city" name="city" required>
+                                                <select class="form-select mb-2" id="city" name="cityId" required>
                                                     <option value="">Chọn tỉnh/thành phố</option>
                                                 </select>
-                                                <select class="form-select mb-2" id="district" name="district" required>
+                                                <select class="form-select mb-2" id="district" name="districtId" required>
                                                     <option value="">Chọn quận/huyện</option>
                                                 </select>
-                                                <input type="text" 
-                                                       class="form-control"
-                                                       name="street"
-                                                       placeholder="Số nhà, tên đường..."
-                                                       required>
+                                                <input type="hidden" id="cityName" name="cityName">
+                                                <input type="hidden" id="districtName" name="districtName">
+                                                <input type="text" class="form-control" name="street" placeholder="Số nhà, tên đường..." required>
                                             </div>
                                         </div>
+
 
 
                                         <!-- Dynamic Total Calculation -->
@@ -206,7 +205,7 @@
                                             <c:set var="total" value="${total + (product.price * product.quantityProduct)}"/>
                                         </c:forEach>
                                         <c:set var="sessionScope.total" value="${total}" />
-                                        
+
 
                                         <!-- Order Summary -->
                                         <div class="mb-4">
@@ -229,7 +228,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                                <input type="hidden" name="total" value="${total}">
+                                        <input type="hidden" name="total" value="${total}">
                                         <!-- Payment Methods -->
                                         <div class="mb-4">
                                             <h5 class="mb-3">Hình thức thanh toán</h5>
@@ -263,7 +262,7 @@
                                             </div>
                                         </div>
 
-                                       
+
 
                                         <!-- Checkout Button -->
                                         <button type="submit" class="btn btn-danger w-100 py-3 fw-bold">
@@ -316,9 +315,10 @@
                 window.addEventListener('resize', enforceCartWidth);
                 enforceCartWidth(); // Khởi chạy lần đầu
 
-                // Xử lý API địa chỉ
                 const citis = document.getElementById("city");
                 const districts = document.getElementById("district");
+                const cityNameInput = document.getElementById("cityName");
+                const districtNameInput = document.getElementById("districtName");
 
                 const fetchData = async () => {
                     try {
@@ -334,21 +334,31 @@
                     districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
 
                     data.forEach(province => {
-                        citis.options.add(new Option(province.Name, province.Id));
+                        const option = new Option(province.Name, province.Id);
+                        citis.options.add(option);
                     });
 
                     citis.onchange = function () {
                         districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                        cityNameInput.value = this.options[this.selectedIndex].text; // Lưu tên thành phố
+
                         if (this.value) {
                             const selectedProvince = data.find(p => p.Id === this.value);
                             selectedProvince.Districts.forEach(district => {
-                                districts.options.add(new Option(district.Name, district.Id));
+                                const option = new Option(district.Name, district.Id);
+                                districts.options.add(option);
                             });
                         }
                     };
+
+                    districts.onchange = function () {
+                        districtNameInput.value = this.options[this.selectedIndex].text; // Lưu tên quận/huyện
+                    };
                 };
 
+// Gọi hàm fetchData khi trang tải xong
                 fetchData();
+
     </script>
     <script src="js/popup.js"></script>
     <script>
