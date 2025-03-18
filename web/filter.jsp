@@ -21,12 +21,10 @@
             <form action="FilterGCController?CategoryID=${CategoryID}" method="Post">
                 <aside class="sidebar">
                     <h1 class="sidebar-heading">
-                        Filter by
+                        Lọc bằng
                     </h1>
 
                     <ul class="filter ul-reset">
-
-
                         <li class="filter-item">
                             <section class="filter-item-inner">
                                 <h1 class="filter-item-inner-heading plus">
@@ -82,7 +80,7 @@
                         <li class="filter-item">
                             <section class="filter-item-inner">
                                 <h1 class="filter-item-inner-heading plus">
-                                    RAM
+                                    Ram
                                 </h1>
                                 <ul class="filter-attribute-list ul-reset filter-section">
                                     <div class="filter-attribute-list-inner">
@@ -92,21 +90,21 @@
                                             </li>
                                         </c:if>
                                         <li class="filter-attribute-item filter-item">
-                                            <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="8gb"> 8 GB
+                                            <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="8GB"> 8 GB
                                         </li>
                                         <c:if test="${CategoryID!=1}">
                                             <li class="filter-attribute-item filter-item">
-                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="12gb"> 12 GB
+                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="12GB"> 12 GB
                                             </li>
                                         </c:if>
                                         <c:if test="${CategoryID!=3}">
                                             <li class="filter-attribute-item filter-item">
-                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="16gb"> 16 GB
+                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="16GB"> 16 GB
                                             </li>
                                         </c:if>
                                         <c:if test="${CategoryID==1}">
                                             <li class="filter-attribute-item filter-item">
-                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="32gb"> 32 GB
+                                                <input class="filter-attribute-checkbox ib-m" type="radio" name="ram" value="32GB"> 32 GB
                                             </li>
                                         </c:if>
                                     </div>
@@ -243,7 +241,7 @@
                         <li class="filter-item">
                             <section class="filter-item-inner">
                                 <h1 class="filter-item-inner-heading">
-                                    Price Range
+                                    Phạm vi giá
                                 </h1>
                                 <ul class="filter-item ul-reset">
                                     <div class="price-input">

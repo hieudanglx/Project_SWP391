@@ -38,7 +38,7 @@ public class Reply_FeedbackDAO extends DBContext {
         }
     }
 
-    public Map<Integer, String> getAllReplies() {
+    public Map<Integer, String> getAllReplies() { 
         Map<Integer, String> replies = new HashMap<>();
         String sql = "SELECT feedbackID, content_Reply FROM Reply_Feedback";
 

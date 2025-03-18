@@ -6,6 +6,7 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Product;
@@ -77,28 +78,39 @@ public class CartDao extends DBContext {
         return false;
     }
 
-    public int getTotalItems(List<Product> list, int CustomerID) {
-        int size = 0;
-        if (list.isEmpty()) {
-            list = getCartByCustomerID(CustomerID);
+    public int getTotalItems(List<Product> list, int CustomerID) throws SQLException {
+        String sql = "SELECT COALESCE(SUM(c.Quantity), 0) AS Total_Items\n"
+                + "FROM Cart c\n"
+                + "WHERE c.CustomerID = ?;";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, CustomerID);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    return rs.getInt("Total_Items");
+                }
+            } catch (Exception e) {
+                System.out.println("dao.CartDao.getTotalItems(): " + e.getMessage());
+            }
         }
-
-        for (int i = 0; i < list.size(); i++) {
-            size += list.get(i).getQuantityProduct();
-        }
-        return size;
+        return 0;
     }
 
-    public int getTotalCart(List<Product> list, int CustomerID) {
-        int total = 0;
-        if (list.isEmpty()) {
-            list = getCartByCustomerID(CustomerID);
+    public int getTotalCart(List<Product> list, int CustomerID) throws SQLException {
+        String sql = "SELECT COALESCE(SUM(c.Quantity * p.Price), 0) AS Total_Cart_Value\n"
+                + "FROM Cart c\n"
+                + "JOIN Product p ON c.ProductID = p.ProductID\n"
+                + "WHERE c.CustomerID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, CustomerID);
+            try ( ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    return rs.getInt("Total_Cart_Value");
+                }
+            } catch (Exception e) {
+                System.out.println("dao.CartDao.getTotalCart(): " + e.getMessage());
+            }
         }
-
-        for (int i = 0; i < list.size(); i++) {
-            total += list.get(i).getQuantityProduct() * list.get(i).getPrice();
-        }
-        return total;
+        return 0;
     }
 
     public Boolean AddProductToCart(int customerID, int productID) {
@@ -142,7 +154,6 @@ public class CartDao extends DBContext {
         }
         return false;
     }
-
     public void clearCart(int customerID) {
         String sql = "DELETE FROM Cart WHERE CustomerID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {

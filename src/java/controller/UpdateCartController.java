@@ -12,8 +12,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Customer;
 import model.Product;
 
@@ -34,9 +37,11 @@ public class UpdateCartController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
 
         HttpSession session = request.getSession();
+        CartDao link = new CartDao();
+        
         Customer c = (Customer) session.getAttribute("customer");
         if (c == null) {
             response.sendRedirect("choiceLogin.jsp");
@@ -52,7 +57,6 @@ public class UpdateCartController extends HttpServlet {
                 || request.getParameter("CategoryID").isEmpty()) ? "" : request.getParameter("CategoryID");
 
         int id = Integer.parseInt(idParam);
-        CartDao link = new CartDao();
         String url = "ViewCartController"; // Mặc định
 
         // Xử lý URL redirect
@@ -106,7 +110,11 @@ public class UpdateCartController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateCartController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -120,7 +128,11 @@ public class UpdateCartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateCartController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

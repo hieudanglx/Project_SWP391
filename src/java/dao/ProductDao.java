@@ -307,28 +307,22 @@ public class ProductDao extends DBContext {
         return value == null || value.trim().isEmpty();
     }
 
-    public List<Product> filterProducts(Product filter, String name, int minPrice, int maxPrice) {
+    public List<Product> filterProducts(Product filter, int minPrice, int maxPrice) {
         StringBuilder sql = new StringBuilder("SELECT * FROM Product WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        if (minPrice > 0) {
-            sql.append(" AND Price >= ?");
+        if (maxPrice != minPrice) {
+            sql.append("AND Price between ? and ?");
             params.add(minPrice);
-        }
-        if (maxPrice > minPrice) {
-            sql.append(" AND Price <= ?");
             params.add(maxPrice);
         }
         if (filter.getCategoryID() > 0) {
             sql.append(" AND CategoryID = ?");
             params.add(filter.getCategoryID());
         }
-        if (filter.getRam() != null && !filter.getRam().isEmpty()) {
-            sql.append(" AND Ram like ?");
-            params.add(filter.getRam());
-        }
-        addFilter(sql, params, "ProductName", name);
+        addFilter(sql, params, "ProductName", filter.getProductName());
         addFilter(sql, params, "Brand", filter.getBrand());
+        addFilter(sql, params, "Ram", filter.getRam());
         addFilter(sql, params, "Rom", filter.getRom());
         addFilter(sql, params, "Operating_System_name", filter.getOperatingSystemName());
         addFilter(sql, params, "Size_screeen", filter.getScreenSize());

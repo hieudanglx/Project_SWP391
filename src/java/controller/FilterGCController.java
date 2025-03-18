@@ -41,17 +41,17 @@ public class FilterGCController extends HttpServlet {
         int min = Integer.parseInt(request.getParameter("minPrice") == null || request.getParameter("minPrice").isEmpty() ? "0" : request.getParameter("minPrice")) ;
         int max = Integer.parseInt(request.getParameter("maxPrice") == null || request.getParameter("maxPrice").isEmpty() ? "0" : request.getParameter("maxPrice")) ;
         int CategoryID = Integer.parseInt(request.getParameter("CategoryID") == null || request.getParameter("CategoryID").isEmpty() ? "1" : request.getParameter("CategoryID")) ;
-
-        Product filter = new Product(CategoryID,
-                request.getParameter("brand"),
-                request.getParameter("ram"),
-                request.getParameter("rom"),
-                request.getParameter("os"),
-                request.getParameter("size"),
-                request.getParameter("res"),
-                request.getParameter("rate"),
-                "",
-                "");
+        
+        Product filter = new Product();
+        filter.setCategoryID(CategoryID);
+        filter.setBrand(request.getParameter("brand"));
+        filter.setRefreshRate(request.getParameter("rate"));
+        filter.setRam(request.getParameter("ram"));
+        filter.setRom(request.getParameter("rom"));
+        filter.setOperatingSystemName(request.getParameter("os"));
+        filter.setScreenSize(request.getParameter("size"));
+        filter.setScreenResolution(request.getParameter("res"));
+      
         List<String> chiptype = link.getChipType();
         ArrayList<List<String>> Chip = link.getChipByChipType();
         for (String type : chiptype) {
@@ -63,7 +63,7 @@ public class FilterGCController extends HttpServlet {
             }
         }
         List<String> listbrand = link.getBrandbyCategoryID(CategoryID);
-        List<Product> list = link.filterProducts(filter, null, min, max);
+        List<Product> list = link.filterProducts(filter, min, max);
         request.setAttribute("CategoryID", CategoryID);
         request.setAttribute("listbrand", listbrand);
         request.setAttribute("Chiptype", chiptype);
