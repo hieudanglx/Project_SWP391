@@ -83,6 +83,7 @@ public class PaymentController extends HttpServlet {
                     // Xóa giỏ hàng sau khi đặt hàng thành công
                     CartDao cartDao = new CartDao();
                     cartDao.clearCart(c.getCustomerID());
+                     session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
 
                     // Xóa session giỏ hàng
                     session.removeAttribute("list");

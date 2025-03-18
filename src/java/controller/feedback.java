@@ -55,9 +55,9 @@ public class feedback extends HttpServlet {
                 boolean isDeleted = feedbackDAO.deleteFeedback(feedbackID);
 
                 if (isDeleted) {
-                    session.setAttribute("repSuccess", "Xóa feedback thành công!");
+                    session.setAttribute("repSuccess", "Xóa đánh giá thành công!");
                 } else {
-                    session.setAttribute("errorMessage", "Không thể xóa feedback. ID không tồn tại hoặc bị ràng buộc.");
+                    session.setAttribute("errorMessage", "Không thể xóa đánh giá. ID không tồn tại hoặc bị ràng buộc.");
                 }
             } catch (Exception e) {
                 session.setAttribute("errorMessage", "Lỗi xử lý xóa: " + e.getMessage());
