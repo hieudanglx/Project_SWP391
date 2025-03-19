@@ -122,34 +122,9 @@
                 <h3>KẾT QUẢ THANH TOÁN</h3>
             </div>
             <div class="payment-table">
-                <div class="payment-group">
-                    <label>Mã giao dịch thanh toán:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_TxnRef")%></span>
-                </div>    
-                <div class="payment-group">
-                    <label>Số tiền:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_Amount")%></span>
-                </div>  
-                <div class="payment-group">
-                    <label>Mô tả giao dịch:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_OrderInfo")%></span>
-                </div> 
-                <div class="payment-group">
-                    <label>Mã lỗi thanh toán:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_ResponseCode")%></span>
-                </div> 
-                <div class="payment-group">
-                    <label>Mã giao dịch tại CTT VNPAY-QR:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_TransactionNo")%></span>
-                </div> 
-                <div class="payment-group">
-                    <label>Mã ngân hàng thanh toán:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_BankCode")%></span>
-                </div> 
-                <div class="payment-group">
-                    <label>Thời gian thanh toán:</label>
-                    <span class="payment-value"><%=request.getParameter("vnp_PayDate")%></span>
-                </div> 
+
+
+
                 <div class="payment-group">
                     <label>Tình trạng giao dịch:</label>
                     <span class="payment-status
@@ -183,4 +158,17 @@
             </footer>
         </div>
     </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var transactionStatus = "<%= request.getParameter("vnp_TransactionStatus") %>";
+            var signValue = "<%= signValue %>";
+            var vnpSecureHash = "<%= vnp_SecureHash %>";
+
+            // Nếu giao dịch thành công, chuyển hướng sang PaymentController
+            if (signValue === vnpSecureHash && transactionStatus === "00") {
+                window.location.href = "VnpayPayment";
+            }
+        });
+    </script>
+
 </html>
