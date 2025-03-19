@@ -12,6 +12,7 @@ import java.io.IOException;
 
 @WebServlet(name = "EditAccount_Staff", urlPatterns = {"/EditAccount_Staff"})
 public class EditAccount_Staff extends HttpServlet {
+
     private AccountDao accountDao;
 
     @Override
@@ -31,8 +32,10 @@ public class EditAccount_Staff extends HttpServlet {
         }
 
         AccountStaff staff = accountDao.getAccountStaffByID(staffID);
+
         if (staff == null) {
-            response.sendRedirect("error.jsp"); // Chuyển hướng nếu không tìm thấy nhân viên
+            request.setAttribute("error", "Khong tim thay nhan vien");
+            request.getRequestDispatcher("error.jsp").forward(request, response);
             return;
         }
 
@@ -58,9 +61,9 @@ public class EditAccount_Staff extends HttpServlet {
         String address = request.getParameter("address");
         String cccd = request.getParameter("cccd");
 
-         //Kiểm tra dữ liệu hợp lệ
-        if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null ||
-            fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
+        //Kiểm tra dữ liệu hợp lệ
+        if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null
+                || fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
             request.setAttribute("errorMessage", "All fields are required!");
             request.getRequestDispatcher("viewProfileStaff.jsp").forward(request, response);
             return;
