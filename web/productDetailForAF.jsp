@@ -1,5 +1,7 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -147,7 +149,7 @@
                         <tbody>
                             <tr><th>Product ID</th><td>${product.productID}</td></tr>
                             <tr><th>Product Name</th><td>${product.productName}</td></tr>
-                            <tr><th>Price</th><td>${product.price} USD</td></tr>
+                            <tr><th>Price</th><td><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ</td></tr>
                             <tr>
                                 <th>Category</th>
                                 <td>

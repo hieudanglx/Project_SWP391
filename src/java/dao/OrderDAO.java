@@ -425,4 +425,25 @@ public class OrderDAO extends dao.DBContext {
             e.printStackTrace();
         }
     }
+    public void updateProductQuantity(int orderID) {
+        String selectQuery = "SELECT ProductID, Quantity FROM Order_Details WHERE OrderID = ?";
+        String updateQuery = "UPDATE Product SET Quantity_Product = Quantity_Product - ? WHERE ProductID = ?";
+
+        try ( PreparedStatement pstmtSelect = connection.prepareStatement(selectQuery);  PreparedStatement pstmtUpdate = connection.prepareStatement(updateQuery)) {
+
+            pstmtSelect.setInt(1, orderID);
+            ResultSet rs = pstmtSelect.executeQuery();
+
+            while (rs.next()) {
+                int productID = rs.getInt("ProductID");
+                int quantity = rs.getInt("Quantity");
+
+                pstmtUpdate.setInt(1, quantity);
+                pstmtUpdate.setInt(2, productID);
+                pstmtUpdate.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

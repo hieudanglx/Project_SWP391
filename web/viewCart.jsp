@@ -183,20 +183,24 @@
 
                                         <!-- Địa chỉ giao hàng -->
                                         <div class="mb-4">
-                                            <label class="form-label">Địa chỉ nhận hàng</label>
-                                            <div class="address-selector">
-                                                <select class="form-select mb-2" id="city" name="cityId" required>
-                                                    <option value="">Chọn tỉnh/thành phố</option>
-                                                </select>
-                                                <select class="form-select mb-2" id="district" name="districtId" required>
-                                                    <option value="">Chọn quận/huyện</option>
-                                                </select>
-                                                <input type="hidden" id="cityName" name="cityName">
-                                                <input type="hidden" id="districtName" name="districtName">
-                                                <input type="text" class="form-control" name="street" placeholder="Số nhà, tên đường..." required>
-                                            </div>
-                                        </div>
+                                            <!-- Chọn Tỉnh/Thành phố -->
+                                            <label class="form-label">Tỉnh/Thành phố</label>
+                                            <select class="form-select mb-2" id="city" name="city" required>
+                                                <option value="">Chọn tỉnh/thành phố</option>
+                                            </select>
+                                            <input type="hidden" id="cityName" name="cityName">
 
+                                            <!-- Chọn Quận/Huyện -->
+                                            <label class="form-label">Quận/Huyện</label>
+                                            <select class="form-select mb-2" id="district" name="district" required>
+                                                <option value="">Chọn quận/huyện</option>
+                                            </select>
+                                            <input type="hidden" id="districtName" name="districtName">
+
+                                            <!-- Địa chỉ chi tiết -->
+                                            <label class="form-label">Địa chỉ cụ thể</label>
+                                            <input type="text" class="form-control mb-4" name="street" placeholder="Số nhà, tên đường..." required>                                       
+                                        </div>
 
 
                                         <!-- Dynamic Total Calculation -->
@@ -302,63 +306,74 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-                // Xử lý fixed width
-                function enforceCartWidth() {
-                    const container = document.querySelector('.cart-container');
-                    if (window.innerWidth < 1200) {
-                        container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
-                    } else {
-                        container.style.transform = 'none';
-                    }
-                }
+                 // Xử lý fixed width
+                 function enforceCartWidth() {
+                     const container = document.querySelector('.cart-container');
+                     if (window.innerWidth < 1200) {
+                         container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+                     } else {
+                         container.style.transform = 'none';
+                     }
+                 }
 
-                window.addEventListener('resize', enforceCartWidth);
-                enforceCartWidth(); // Khởi chạy lần đầu
+                 // window.addEventListener('resize', enforceCartWidth);
+                 //enforceCartWidth(); // Khởi chạy lần đầu
 
-                const citis = document.getElementById("city");
-                const districts = document.getElementById("district");
-                const cityNameInput = document.getElementById("cityName");
-                const districtNameInput = document.getElementById("districtName");
+                 document.addEventListener("DOMContentLoaded", function () {
+                     const citySelect = document.getElementById("city");
+                     const districtSelect = document.getElementById("district");
 
-                const fetchData = async () => {
-                    try {
-                        const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                        renderCity(response.data);
-                    } catch (error) {
-                        console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                    }
-                };
+                     // Lấy dữ liệu tỉnh/thành phố từ GitHub
+                     const fetchData = async () => {
+                         try {
+                             const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                             const data = response.data;
+                             renderCities(data);
+                         } catch (error) {
+                             console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                         }
+                     };
 
-                const renderCity = (data) => {
-                    citis.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                    districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                     // Hiển thị danh sách tỉnh/thành phố
+                     const renderCities = (data) => {
+                         citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                         districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
 
-                    data.forEach(province => {
-                        const option = new Option(province.Name, province.Id);
-                        citis.options.add(option);
-                    });
+                         data.forEach(province => {
+                             let option = document.createElement("option");
+                             option.value = province.Id;
+                             option.setAttribute("data-name", province.Name);
+                             option.textContent = province.Name;
+                             citySelect.appendChild(option);
+                         });
 
-                    citis.onchange = function () {
-                        districts.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                        cityNameInput.value = this.options[this.selectedIndex].text; // Lưu tên thành phố
+                         // Khi chọn tỉnh, cập nhật danh sách quận/huyện
+                         citySelect.addEventListener("change", function () {
+                             const selectedCityId = this.value;
+                             const selectedCity = data.find(p => p.Id === selectedCityId);
+                             document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
 
-                        if (this.value) {
-                            const selectedProvince = data.find(p => p.Id === this.value);
-                            selectedProvince.Districts.forEach(district => {
-                                const option = new Option(district.Name, district.Id);
-                                districts.options.add(option);
-                            });
-                        }
-                    };
+                             districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                             if (selectedCity) {
+                                 selectedCity.Districts.forEach(district => {
+                                     let option = document.createElement("option");
+                                     option.value = district.Id;
+                                     option.setAttribute("data-name", district.Name);
+                                     option.textContent = district.Name;
+                                     districtSelect.appendChild(option);
+                                 });
+                             }
+                         });
 
-                    districts.onchange = function () {
-                        districtNameInput.value = this.options[this.selectedIndex].text; // Lưu tên quận/huyện
-                    };
-                };
+                         // Khi chọn quận/huyện, cập nhật giá trị ẩn
+                         districtSelect.addEventListener("change", function () {
+                             let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
+                             document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
+                         });
+                     };
 
-// Gọi hàm fetchData khi trang tải xong
-                fetchData();
-
+                     fetchData();
+                 });
     </script>
     <script src="js/popup.js"></script>
     <script>

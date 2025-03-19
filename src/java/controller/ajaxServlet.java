@@ -27,7 +27,7 @@ import vnpay.Config;
 
 /**
  *
- * @author CTT VNPAY
+ * @author CTT VNPAY 
  */
 @WebServlet(name = "ajaxServlet", urlPatterns = {"/ajaxServlet"})
 public class ajaxServlet extends HttpServlet {

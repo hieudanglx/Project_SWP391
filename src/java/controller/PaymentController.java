@@ -48,17 +48,15 @@ public class PaymentController extends HttpServlet {
                 Customer c = (Customer) session.getAttribute("customer"); // Lấy thông tin khách hàng
                 List<Product> list = link.getCartByCustomerID(c.getCustomerID());
 
-                // Lấy thông tin thanh toán từ form
-                String city = "";
-                city = request.getParameter("city");
+                String paymentMethod = request.getParameter("paymentMethod");
 
                 int customerID = c.getCustomerID();
-                int staffID = 1;
-                String cityName = request.getParameter("cityName"); // Tên của thành phố
-                String districtName = request.getParameter("districtName"); // Tên của quận/huyện
-                System.out.println(cityName);
-                System.out.println(districtName);
-                String address = cityName + ", " + districtName + ", " + city;
+                Integer staffID = null;
+                String city = request.getParameter("cityName"); // Lấy tên tỉnh
+                String district = request.getParameter("districtName"); // Lấy tên huyện
+                String street = request.getParameter("street");
+                String address = street + ", " + district + ", " + city;
+
                 String status = "Chờ xử lý";
                 Date Date = new Date(System.currentTimeMillis()); // Lấy ngày hiện tại
 
@@ -66,34 +64,48 @@ public class PaymentController extends HttpServlet {
 
                 double total = Double.parseDouble(request.getParameter("total"));
 
-                // Thêm đơn hàng vào Order_list
-                OrderDAO orderDAO = new OrderDAO();
+                if (paymentMethod.equals("COD")) {
+                    // Thêm đơn hàng vào Order_list
+                    OrderDAO orderDAO = new OrderDAO();
 
-                Order_list order = new Order_list(0, customerID, 1, address, Date, status, phoneNumber, total);
-                int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
-                session.setAttribute("orderID", orderID);
-                if (orderID > 0) {
-                    // Thêm sản phẩm vào Order_Details
-                    for (Product item : list) {
-                        Order_Details orderDetail = new Order_Details(0, item.getQuantityProduct(), item.getProductID(), orderID);
-                        orderDAO.insertOrderDetail(orderDetail);
+                    Order_list order = new Order_list(0, customerID, 1, address, Date, status, phoneNumber, total);
+                    int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
+                    session.setAttribute("orderID", orderID);
+                    if (orderID > 0) {
+                        // Thêm sản phẩm vào Order_Details
+                        for (Product item : list) {
+                            Order_Details orderDetail = new Order_Details(0, item.getQuantityProduct(), item.getProductID(), orderID);
+                            orderDAO.insertOrderDetail(orderDetail);
 
+                        }
+                        orderDAO.updateProductQuantity(orderID);
+
+                        // Xóa giỏ hàng sau khi đặt hàng thành công
+                        CartDao cartDao = new CartDao();
+                        cartDao.clearCart(c.getCustomerID());
+
+                        int size = link.getTotalItems(list, c.getCustomerID()); // Lưu giá trị vào biến size
+                        session.setAttribute("size", 0); // Đặt biến size vào session
+
+                        //  Double totals = (Double) session.getAttribute("total");
+                        session.setAttribute("total", 0);
+
+                        // Xóa session giỏ hàng
+                        session.removeAttribute("list");
+
+                        // Chuyển hướng sang trang xác nhận                
+                        request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("error", "Failed to delete product");
+                        request.getRequestDispatcher("error.jsp").forward(request, response);
                     }
-
-                    // Xóa giỏ hàng sau khi đặt hàng thành công
-                    CartDao cartDao = new CartDao();
-                    cartDao.clearCart(c.getCustomerID());
-                     session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
-
-                    // Xóa session giỏ hàng
-                    session.removeAttribute("list");
-
-                    // Chuyển hướng sang trang xác nhận                
-                    request.getRequestDispatcher("orderSuccess.jsp").forward(request, response);
                 } else {
-                    request.setAttribute("error", "Failed to delete product");
-                    request.getRequestDispatcher("error.jsp").forward(request, response);
+                    session.setAttribute("address", address);
+                    session.setAttribute("phoneNumber", phoneNumber);
+                    session.setAttribute("total", total);
+                    request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendRedirect("error.jsp?error=Lỗi hệ thống");

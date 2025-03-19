@@ -6,6 +6,9 @@
 
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -141,7 +144,7 @@
                                 <td>${order.date}</td>
                                 <td>${order.status}</td>
                                 <td>${order.phoneNumber}</td>
-                                <td>${order.total}</td>
+                                <td><fmt:formatNumber value="${order.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ</td>
                                 <td>
                                     <a href="orderDetailForAdmin?orderID=${order.orderID}" class="btn btn-warning btn-sm">Detail</a>
                                     <c:if test="${order.status == 'Chờ xử lý'}">
