@@ -51,7 +51,7 @@ public class PaymentController extends HttpServlet {
                 String paymentMethod = request.getParameter("paymentMethod");
 
                 int customerID = c.getCustomerID();
-                Integer staffID = null;
+                int staffID = 1;
                 String city = request.getParameter("cityName"); // Lấy tên tỉnh
                 String district = request.getParameter("districtName"); // Lấy tên huyện
                 String street = request.getParameter("street");
@@ -68,7 +68,7 @@ public class PaymentController extends HttpServlet {
                     // Thêm đơn hàng vào Order_list
                     OrderDAO orderDAO = new OrderDAO();
 
-                    Order_list order = new Order_list(0, customerID, 1, address, Date, status, phoneNumber, total);
+                    Order_list order = new Order_list(0, customerID, staffID, address, Date, status, phoneNumber, total);
                     int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
                     session.setAttribute("orderID", orderID);
                     if (orderID > 0) {

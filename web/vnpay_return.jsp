@@ -164,11 +164,14 @@
             var signValue = "<%= signValue %>";
             var vnpSecureHash = "<%= vnp_SecureHash %>";
 
-            // Nếu giao dịch thành công, chuyển hướng sang PaymentController
+            // Nếu giao dịch thành công, chuyển hướng sau 3 giây
             if (signValue === vnpSecureHash && transactionStatus === "00") {
-                window.location.href = "VnpayPayment";
+                setTimeout(function () {
+                    window.location.href = "VnpayPayment";
+                }, 3000); // Chuyển sau 3 giây (3000ms)
             }
         });
     </script>
+
 
 </html>
