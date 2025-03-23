@@ -52,12 +52,13 @@ function showAlertPopup(type, message) {
             icon.classList.add('warning-icon', 'fas', 'fa-exclamation-triangle');
             break;
     }
-
-    messageElement.textContent = message;
-    // Tự động ẩn sau 1s
-    setTimeout(() => {
-        popup.style.display = 'none';
-    }, 3000);
+    if (type != 'warning') {
+        messageElement.textContent = message;
+        // Tự động ẩn sau 1s
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 4000);
+    }
 }
 
 // ========== XỬ LÝ SỰ KIỆN ==========

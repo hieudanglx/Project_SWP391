@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,18 +37,40 @@ public class ViewCartController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException { 
+            throws ServletException, IOException, SQLException {
         CartDao link = new CartDao();
         HttpSession session = request.getSession();
-        Customer c = (Customer) session.getAttribute("customer");
+        Customer customer = (Customer) session.getAttribute("customer");
 
-        if (c == null) {
-            response.sendRedirect("choiceLogin.jsp"); // hoặc trang thông báo
+        if (customer == null) {
+            response.sendRedirect("choiceLogin.jsp");
             return;
         }
-        List<Product> list = link.getCartByCustomerID(c.getCustomerID());
 
-        request.setAttribute("list", list);
+        int check = 0;
+        List<Product> cartItems = link.getCartByCustomerID(customer.getCustomerID());
+        for (Product product : cartItems) {
+            int stockQuantity = link.getProductQuantity(product.getProductID());
+            if (stockQuantity == 0) {
+                // Nếu sản phẩm hết hàng, xóa khỏi giỏ
+                check++;
+                link.removeProductFromCart(customer.getCustomerID(), product.getProductID());
+            } else if (product.getQuantityProduct() > stockQuantity) {
+                // Nếu số lượng trong giỏ lớn hơn số lượng tồn kho, cập nhật lại số lượng trong giỏ
+                link.updateCartQuantity(customer.getCustomerID(), product.getProductID(), stockQuantity);
+                check++;
+            }
+        }
+        if (check != 0) {
+            String status = "waring";
+            String message = "Cart đã được cập nhật do " + check + " sản phẩm của bạn đã thay đổi số lượng";
+            session.setAttribute("status", status);
+            session.setAttribute("message", message);
+        }
+
+        request.setAttribute("list", cartItems);
+        session.setAttribute("size", link.getTotalItems(cartItems, customer.getCustomerID()));
+        session.setAttribute("total", link.getTotalCart(cartItems, customer.getCustomerID()));
         request.getRequestDispatcher("viewCart.jsp").forward(request, response);
     }
 

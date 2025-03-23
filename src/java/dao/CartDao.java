@@ -61,7 +61,7 @@ public class CartDao extends DBContext {
         String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 "
                 + "WHERE CustomerID = ? AND ProductID = ? ";
         if (type.contains("+")) {
-            sql += "AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity + 1)";
+            sql += "AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity)";
         }
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
@@ -154,6 +154,7 @@ public class CartDao extends DBContext {
         }
         return false;
     }
+
     public void clearCart(int customerID) {
         String sql = "DELETE FROM Cart WHERE CustomerID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -162,6 +163,34 @@ public class CartDao extends DBContext {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getProductQuantity(int productID) {
+        String sql = "SELECT Quantity_Product FROM Product WHERE ProductID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, productID);
+            try ( ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("Quantity_Product");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi lấy số lượng sản phẩm: " + e.getMessage());
+        }
+        return 0; // Mặc định là 0 nếu có lỗi
+    }
+
+    public boolean updateCartQuantity(int customerID, int productID, int newQuantity) {
+        String sql = "UPDATE Cart SET Quantity = ? WHERE CustomerID = ? AND ProductID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, newQuantity);
+            ps.setInt(2, customerID);
+            ps.setInt(3, productID);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi cập nhật số lượng giỏ hàng: " + e.getMessage());
+        }
+        return false;
     }
 
 }

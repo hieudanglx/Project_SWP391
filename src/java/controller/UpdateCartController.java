@@ -67,7 +67,7 @@ public class UpdateCartController extends HttpServlet {
             url = "ViewProductDetailsController?id=" + id;
         }
         System.out.println(url);
-        Boolean status = true;
+        String status = "success";
         String message = "Thêm thành công";
         // Xử lý logic
         switch (type) {
@@ -79,7 +79,7 @@ public class UpdateCartController extends HttpServlet {
                 message = "Cập nhật thành công";
                 if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
                     System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                    status = false;
+                    status = "error";
                     message = "Cập nhật thất bại";
                 }
                 break;
@@ -88,14 +88,14 @@ public class UpdateCartController extends HttpServlet {
                     System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
                     if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
                         System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                        status = false;
-                        message = "Sản phẩm đã đạt số lượng tối đa";
+                        status = "error";
+                        message = "Sản phẩm đã hết hàng";
                     }
                 } else {
                     if (!link.AddProductToCart(c.getCustomerID(), id)) {
                         System.out.println("controller.AddProductToCart.processRequest() add sai r");
-                        status = false;
-                        message = "Sản phẩm đã đạt số lượng tối đa";
+                        status = "error";
+                        message = "Sản phẩm đã hết hàng";
                     }
                 }
                 break;

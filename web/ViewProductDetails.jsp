@@ -395,7 +395,7 @@
         <!-- Popup Thông Báo (Dùng cho các trang khác) -->
         <div class="alert-popup-overlay" id="alertPopup">
             <div class="alert-popup-content">
-                <div class="alert-popup-icon" id="alertIcon" style="display: none"></div>
+                <div class="alert-popup-icon" id="alertIcon"></div>
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 <h5 class="alert-popup-message" id="alertMessage"></h5>
             </div>
