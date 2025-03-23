@@ -104,20 +104,20 @@
         </style>
     </head>
     <body>
-
+        <jsp:include page="sidebar.jsp" />
         <!-- Sidebar -->
-        <div class="sidebar">
-            <h4 class="text-center mb-4">
-                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-            </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
-            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>
+        <!--        <div class="sidebar">
+                    <h4 class="text-center mb-4">
+                        <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
+                    </h4>
+                    <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
+                    <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
+                    <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+                    <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+                    <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
+                    <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
+                    <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
+                </div>-->
 
         <!-- Main Content -->
         <div class="content">
@@ -130,90 +130,93 @@
             </div>
 
             <!-- Filter Buttons -->
-            <div class="filter-buttons">
-                <form method="GET" action="RevenueByMonth" style="display:inline;">
-                    <button type="submit" name="filter" value="month" class="btn">Lọc theo Tháng</button>
-                </form>
-                <form method="GET" action="RevenueByMonth" style="display:inline;">
-                    <button type="submit" name="filter" value="quarter" class="btn">Lọc theo Quý</button>
-                </form>
-                <form method="GET" action="RevenueByMonth" style="display:inline;">
-                    <button type="submit" name="filter" value="year" class="btn">Lọc theo Năm</button>
-                </form>
-            </div>
+
 
             <!-- Table -->
             <div class="table-container">
-                <%
-                    List<Order_list> revenueList = (List<Order_list>) request.getAttribute("revenuelist");
-                    String filter = request.getParameter("filter");
+                <div class="filter-buttons">
+                    <form method="GET" action="RevenueByMonth" style="display:inline;">
+                        <button type="submit" name="filter" value="month" class="btn">Lọc theo Tháng</button>
+                    </form>
+                    <form method="GET" action="RevenueByMonth" style="display:inline;">
+                        <button type="submit" name="filter" value="quarter" class="btn">Lọc theo Quý</button>
+                    </form>
+                    <form method="GET" action="RevenueByMonth" style="display:inline;">
+                        <button type="submit" name="filter" value="year" class="btn">Lọc theo Năm</button>
+                    </form>
+                </div>
+                <div>
+                    <%
+                        List<Order_list> revenueList = (List<Order_list>) request.getAttribute("revenuelist");
+                        String filter = request.getParameter("filter");
 
-                    if (revenueList != null && !revenueList.isEmpty()) {
-                %>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Năm</th>
-                                <% if ("month".equals(filter)) { %> <th>Tháng</th> <% } %>
-                                <% if ("quarter".equals(filter)) { %> <th>Quý</th> <% } %>
-                                <th>Doanh Thu</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                for (Order_list revenue : revenueList) {
-                            %>
-                            <tr>
-                                <td><%= revenue.getYear() %></td>
-                                <% if ("month".equals(filter) || "quarter".equals(filter)) { %>
-                                <td><%= revenue.getPeriod() %></td>
-                                <% } %>
-                                <td><%= String.format("%,.2f VND", revenue.getRevenue()) %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
-                    </table>
-                </div>
-                <%
-                    } else {
-                        List<Order_list> orders = (List<Order_list>) request.getAttribute("orders");
-                        if (orders != null && !orders.isEmpty()) {
-                %>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Mã đơn hàng</th>
-                                <th>Ngày đặt</th>
-                                <th>Tổng tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <%
-                                for (Order_list order : orders) {
-                            %>
-                            <tr>
-                                <td><%= order.getOrderID() %></td>
-                                <td><%= order.getDate() %></td>
-                                <td><%= String.format("%,.2f VNĐ", order.getTotal()) %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </tbody>
-                    </table>
-                </div>
-                <%
+                        if (revenueList != null && !revenueList.isEmpty()) {
+                    %>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Năm</th>
+                                    <% if ("month".equals(filter)) { %> <th>Tháng</th> <% } %>
+                                    <% if ("quarter".equals(filter)) { %> <th>Quý</th> <% } %>
+                                    <th>Doanh Thu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (Order_list revenue : revenueList) {
+                                %>
+                                <tr>
+                                    <td><%= revenue.getYear() %></td>
+                                    <% if ("month".equals(filter) || "quarter".equals(filter)) { %>
+                                    <td><%= revenue.getPeriod() %></td>
+                                    <% } %>
+                                    <td><%= String.format("%,.2f VND", revenue.getRevenue()) %></td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%
                         } else {
-                %>
-                <div class="no-data">Không có dữ liệu</div>
-                <%
+                            List<Order_list> orders = (List<Order_list>) request.getAttribute("orders");
+                            if (orders != null && !orders.isEmpty()) {
+                    %>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn hàng</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%
+                                    for (Order_list order : orders) {
+                                %>
+                                <tr>
+                                    <td><%= order.getOrderID() %></td>
+                                    <td><%= order.getDate() %></td>
+                                    <td><%= String.format("%,.2f VNĐ", order.getTotal()) %></td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <%
+                            } else {
+                    %>
+                    <div class="no-data">Không có dữ liệu</div>
+                    <%
+                            }
                         }
-                    }
-                %>
+                    %>
+                </div>
             </div>
         </div>
 

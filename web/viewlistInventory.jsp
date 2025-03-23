@@ -127,9 +127,9 @@
         </style>
     </head>
     <body>
-
+    <jsp:include page="sidebar.jsp" />
         <!-- Sidebar -->
-        <div class="sidebar">
+<!--        <div class="sidebar">
             <h4 class="text-center mb-4">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
@@ -140,7 +140,7 @@
             <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
             <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
             <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>
+        </div>-->
 
         <!-- Main Content -->
         <div class="content">

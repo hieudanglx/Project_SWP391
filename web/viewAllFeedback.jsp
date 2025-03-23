@@ -60,7 +60,8 @@
         </style>
     </head>
     <body>
-        <div class="sidebar">
+        <jsp:include page="sidebar.jsp" />
+<!--        <div class="sidebar">
             <h4 class="text-center">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
@@ -71,7 +72,7 @@
             <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
             <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
             <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
-        </div>
+        </div>-->
         <div class="content">
             <!-- Navbar -->
             <nav class="navbar-custom">

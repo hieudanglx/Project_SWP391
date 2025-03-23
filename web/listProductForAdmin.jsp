@@ -7,7 +7,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Dashboard - List Products</title>
+        <title>Admin Dashboard-List Products</title>
 
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -131,9 +131,9 @@
         </style>
     </head>
     <body>
-
-        <!-- Sidebar -->
-        <div class="sidebar">
+        
+ <jsp:include page="sidebar.jsp" />
+<!--       <div class="sidebar">
             <h4 class="text-center mb-4">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
@@ -144,7 +144,7 @@
             <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
             <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
             <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>
+        </div>-->
 
         <!-- Main Content -->
         <div class="content">

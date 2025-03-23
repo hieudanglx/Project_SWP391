@@ -80,8 +80,9 @@
         </style>
     </head>
     <body>
+         <%@include file="sidebar.jsp" %>
         <!-- Sidebar -->
-        <div class="sidebar">
+<!--        <div class="sidebar">
             <h4 class="text-center">
                 <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
             </h4>
@@ -92,7 +93,7 @@
             <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
             <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
             <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
-        </div>
+        </div>-->
 
         <!-- Main Content -->
         <div class="content">
