@@ -1,88 +1,96 @@
-// Hiển thị popup với icon, message và các nút tùy chọn
-function showPopup(type, message, buttons = []) {
-    const overlay = document.getElementById('popupOverlay');
-    const icon = document.getElementById('popupIcon');
-    const msg = document.getElementById('popupMessage');
-    const btnContainer = document.getElementById('popupButtons');
+// ========== POPUP GIỎ HÀNG ==========
+let currentAction = null;
+let currentProductId = null;
 
-    // Thay đổi icon theo loại thông báo
-    icon.innerHTML = type === 'success' ? '✔️' : type === 'error' ? '❌' : '⚠️';
+function showConfirmPopup(message, actionType, productId) {
+    currentProductId = productId;
+    currentAction = actionType;
 
-    // Thay đổi nội dung thông báo
-    msg.innerText = message;
+    const popup = document.getElementById('confirmPopup');
+    const messageElement = document.getElementById('confirmPopupMessage');
 
-    // Xóa nút cũ và thêm nút mới
-    btnContainer.innerHTML = '';
-    buttons.forEach(btn => {
-        const button = document.createElement('button');
-        button.innerText = btn.text;
-        button.className = btn.class;
-        button.onclick = btn.action;
-        btnContainer.appendChild(button);
+    messageElement.textContent = message;
+    popup.style.display = 'flex';
+}
+
+function hideConfirmPopup() {
+    document.getElementById('confirmPopup').style.display = 'none';
+    currentAction = null;
+    currentProductId = null;
+}
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('confirmActionBtn').addEventListener('click', function () {
+        if (currentAction && currentProductId) {
+// Sửa logic xác định type
+            const type = currentAction === 'delete' ? 'R' : '-';
+            let url = `UpdateCartController?id=${currentProductId}&type=${type}`;
+            // Thêm console log để debug
+            console.log("Redirecting to:", url);
+            window.location.href = url;
+        }
+        hideConfirmPopup();
     });
-
-    // Hiển thị popup
-    overlay.style.display = 'flex';
-
-    // Tự động đóng popup sau 1.5 giây
-    setTimeout(closePopup, 1500);
-}
-
-// Đóng popup
-function closePopup() {
-    document.getElementById('popupOverlay').style.display = 'none';
-}
-
-// Thêm thành công
-function addToCartSuccess() {
-    showPopup('success', 'Thêm vào giỏ hàng thành công!', [
-        {text: 'OK', class: 'btn btn-success', action: closePopup}
-    ]);
-}
-
-// Thêm thất bại
-function addToCartFail() {
-    showPopup('error', 'Thêm vào giỏ hàng thất bại. Vui lòng thử lại!', [
-        {text: 'Thử lại', class: 'btn btn-danger', action: closePopup}
-    ]);
-}
-
-// Kiểm tra trạng thái sau khi qua trang UpdateCartController
-function checkCartStatus(status) {
-    if (status === 'false') {
-        addToCartFail();
-    } else if (status === 'true') {
-        addToCartSuccess();
+});
+// ========== POPUP THÔNG BÁO ==========
+function showAlertPopup(type, message) {
+    const popup = document.getElementById('alertPopup');
+    const icon = document.getElementById('alertIcon');
+    const messageElement = document.getElementById('alertMessage');
+    // Reset classes
+    icon.className = 'alert-popup-icon';
+    popup.style.display = 'flex';
+    console.log("showAlertPopup");
+    // Set icon và màu sắc
+    switch (type) {
+        case 'success':
+            icon.classList.add('success-icon', 'fas', 'fa-check-circle');
+            break;
+        case 'error':
+            icon.classList.add('error-icon', 'fas', 'fa-times-circle');
+            break;
+        case 'warning':
+            icon.classList.add('warning-icon', 'fas', 'fa-exclamation-triangle');
+            break;
+    }
+    if (type != 'warning') {
+        messageElement.textContent = message;
+        // Tự động ẩn sau 1s
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 4000);
     }
 }
 
-function increaseQuantity(productId, quantity) {
-    if (quantity >= 5) {
-        alert('Số lượng sản phẩm không thể vượt quá 5.');
+// ========== XỬ LÝ SỰ KIỆN ==========
+function decreaseQuantity(productId, quantity) {
+    if (quantity <= 1) {
+        showConfirmPopup(
+                "Giảm số lượng về 0 sẽ xóa sản phẩm khỏi giỏ hàng!",
+                'delete',
+                productId
+                );
         return false;
     }
     return true;
 }
 
-function decreaseQuantity(productId, quantity) {
-    if (quantity <= 1) {
-        return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
-    }
-    return true;
-}
-
 function confirmRemove(productId) {
-    return confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?');
+    showConfirmPopup(
+            "Bạn chắc chắn muốn xóa sản phẩm này?",
+            'delete',
+            productId
+            );
+    return false;
 }
-
-
-// Gọi hàm kiểm tra khi trang được load
+// Gọi hàm khi trang tải xong
 window.onload = function () {
-    const status = document.body.getAttribute('data-status');
-    const m = document.body.getAttribute('Message');
-    if (status === 'true') {
-        showPopup('success', 'Thêm giỏ hàng thành công!');
-    } else if (status === 'false') {
-        showPopup('error', 'Thêm giỏ hàng thất bại!');
-    }
+    checkCartStatus();
 };
+function checkCartStatus() {
+    const status = document.body.getAttribute("data-status");
+    const message = document.body.getAttribute("data-message");
+    if (status && message && status !== "null" && message !== "null") {
+        console.log("Có status, hiển thị popup");
+        showAlertPopup(status, message);
+    }
+}

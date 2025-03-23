@@ -22,11 +22,21 @@
                 background-color: #f8f9fa;
                 color: #333;
                 line-height: 1.6;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
 
-            .container {
+            .main-content {
+                flex: 1;
+                width: 100%;
+                padding: 20px 0;
+                background-color: #f8f9fa;
+            }
+
+            .success-container {
                 max-width: 800px;
-                margin: 50px auto;
+                margin: 0 auto;
                 padding: 30px;
                 background-color: #fff;
                 border-radius: 10px;
@@ -80,7 +90,7 @@
                 color: #666;
             }
 
-            .btn {
+            .btns {
                 display: inline-block;
                 padding: 12px 30px;
                 background-color: #4CAF50;
@@ -92,21 +102,22 @@
                 margin-top: 20px;
             }
 
-            .btn:hover {
+            .btns:hover {
                 background-color: #45a049;
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                color: white;
             }
 
-            .footer {
+            .info-footer {
                 margin-top: 40px;
                 font-size: 14px;
                 color: #888;
             }
 
             @media (max-width: 600px) {
-                .container {
-                    margin: 20px;
+                .success-container {
+                    margin: 0 15px;
                     padding: 20px;
                 }
 
@@ -116,29 +127,35 @@
             }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <div class="success-icon">
-                <i>✓</i>
-            </div>
+    <body>    
+        <%@include file="header.jsp" %>
 
-            <h1>Đặt hàng thành công!</h1>
+        <div class="main-content">
+            <div class="success-container">
+                <div class="success-icon">
+                    <i>✓</i>
+                </div>
 
-            <p class="message">Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
+                <h1>Đặt hàng thành công!</h1>
 
-            <div class="order-details">
-                <p>Mã đơn hàng của bạn là:</p>
-                <div class="order-id">${orderID}</div>
-                <p>Vui lòng lưu lại mã đơn hàng để tiện theo dõi.</p>
-            </div>
+                <p class="message">Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
 
-            <p class="message">Chúng tôi sẽ liên hệ để xác nhận đơn hàng sớm nhất có thể.</p>
+                <div class="order-details">
+                    <p>Mã đơn hàng của bạn là:</p>
+                    <div class="order-id">${orderID}</div>
+                    <p>Vui lòng lưu lại mã đơn hàng để tiện theo dõi.</p>
+                </div>
 
-            <a href="index.jsp" class="btn">Tiếp tục mua sắm</a>
+                <p class="message">Chúng tôi sẽ liên hệ để xác nhận đơn hàng sớm nhất có thể.</p>
 
-            <div class="footer">
-                <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email hoặc hotline.</p>
+                <a href="index.jsp" class="btns">Tiếp tục mua sắm</a>
+
+                <div class="info-footer">
+                    <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi qua email hoặc hotline.</p>
+                </div>
             </div>
         </div>
+
+        <%@include file="footer.jsp" %>
     </body>
 </html>

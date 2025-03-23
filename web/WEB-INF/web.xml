@@ -40,6 +40,10 @@
         <servlet-name>Confirm_order</servlet-name>
         <servlet-class>controller.Confirm_order</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>VnpayPayment</servlet-name>
+        <servlet-class>controller.VnpayPayment</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -70,7 +74,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SearchInventory</servlet-name>
-<url-pattern>/SearchInventory</url-pattern>
+        <url-pattern>/SearchInventory</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditAccountStaff_ForAdmin</servlet-name>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>Confirm_order</servlet-name>
         <url-pattern>/Confirm_order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VnpayPayment</servlet-name>
+        <url-pattern>/VnpayPayment</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

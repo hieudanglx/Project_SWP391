@@ -35,13 +35,14 @@ public class UpdateCartController extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
 
         HttpSession session = request.getSession();
         CartDao link = new CartDao();
-        
+
         Customer c = (Customer) session.getAttribute("customer");
         if (c == null) {
             response.sendRedirect("choiceLogin.jsp");
@@ -66,36 +67,46 @@ public class UpdateCartController extends HttpServlet {
             url = "ViewProductDetailsController?id=" + id;
         }
         System.out.println(url);
+        String status = "success";
+        String message = "Thêm thành công";
         // Xử lý logic
         switch (type) {
             case "R":
+                message = "Xóa thành công";
                 link.removeProductFromCart(c.getCustomerID(), id);
                 break;
-            default:
-                request.setAttribute("status", true);
+            case "-":
+                message = "Cập nhật thành công";
+                if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
+                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
+                    status = "error";
+                    message = "Cập nhật thất bại";
+                }
+                break;
+            case "+":
                 if (link.ProductExistsInCart(c.getCustomerID(), id)) {
                     System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
                     if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
                         System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                        request.setAttribute("status", false);
+                        status = "error";
+                        message = "Sản phẩm đã hết hàng";
                     }
                 } else {
                     if (!link.AddProductToCart(c.getCustomerID(), id)) {
                         System.out.println("controller.AddProductToCart.processRequest() add sai r");
-                        request.setAttribute("status", false);
+                        status = "error";
+                        message = "Sản phẩm đã hết hàng";
                     }
                 }
                 break;
         }
-        int total = 0, size= 0;
         // Cập nhật session
         List<Product> list = new ArrayList<>();
-        total = link.getTotalCart(list, c.getCustomerID());
-        size = link.getTotalItems(list, c.getCustomerID()); // Sửa lại phương thức
-        session.setAttribute("size", size);
-        session.setAttribute("total", total);
+        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
+        session.setAttribute("status", status);
+        session.setAttribute("message", message);
         request.getRequestDispatcher(url).forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
