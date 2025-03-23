@@ -14,7 +14,7 @@
                 --secondary-hover: #5a6268;
                 --success: #2ecc71;
                 --success-hover: #27ae60;
-                --error: #3498db;
+                --error: #e74c3c;
                 --light-bg: #f8f9fa;
                 --border: #dee2e6;
                 --text: #343a40;
@@ -40,17 +40,20 @@
                 display: flex;
                 flex-direction: column;
             }
+            
             .content {
                 margin-left: 250px;
                 padding: 20px;
+                background-color: #f0f2f5;
             }
+            
             .page-wrapper {
                 display: flex;
                 flex: 1;
-                min-height: calc(100vh - 60px); /* Adjust if you have a header */
+                min-height: calc(100vh - 60px);
             }
             
-            /* Sidebar Styles */
+            /* Sidebar Styles - keeping as is */
             .sidebar {
                 width: var(--sidebar-width);
                 background-color: var(--white);
@@ -114,79 +117,132 @@
                 font-weight: 600;
             }
             
-            /* Main Content Styles */
+            /* Main Content Styles - ENHANCED */
             .main-content {
                 flex: 1;
-                padding: 40px 20px;
+                padding: 30px 20px;
                 display: flex;
                 justify-content: center;
             }
             
             .container {
                 background: var(--white);
-                border-radius: 12px;
-                box-shadow: 0 8px 30px var(--shadow);
+                border-radius: 16px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
                 width: 100%;
-                max-width: 800px;
-                padding: 30px;
+                max-width: 900px;
+                padding: 40px;
                 margin-bottom: 40px;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .container::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 8px;
+                background: linear-gradient(to right, var(--primary), #6366f1);
             }
             
             h2 {
-                color: var(--primary);
-                margin-bottom: 20px;
-                font-weight: 600;
+                color: var(--text);
+                margin-bottom: 30px;
+                font-weight: 700;
                 text-align: center;
                 font-size: 28px;
+                position: relative;
+                padding-bottom: 15px;
+            }
+            
+            h2:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 4px;
+                background: linear-gradient(to right, var(--primary), #6366f1);
+                border-radius: 2px;
+            }
+            
+            h2 i {
+                color: var(--primary);
+                margin-right: 10px;
             }
             
             .form-section {
-                margin-bottom: 30px;
-                border-bottom: 1px solid var(--border);
-                padding-bottom: 20px;
+                margin-bottom: 35px;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 30px;
+                transition: all 0.3s ease;
+            }
+            
+            .form-section:hover {
+                border-bottom-color: #d1d5db;
+            }
+            
+            .form-section:last-child {
+                border-bottom: none;
+                margin-bottom: 15px;
             }
             
             .form-section-title {
-                font-size: 18px;
+                font-size: 20px;
                 color: var(--primary);
-                margin-bottom: 15px;
+                margin-bottom: 20px;
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 10px;
+                font-weight: 600;
+                padding-left: 10px;
+                border-left: 4px solid var(--primary);
             }
             
             .form-row {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 20px;
-                margin-bottom: 15px;
+                gap: 24px;
+                margin-bottom: 20px;
             }
             
             .form-group {
-                flex: 1 1 calc(50% - 10px);
+                flex: 1 1 calc(50% - 12px);
                 min-width: 250px;
+                position: relative;
             }
             
             label {
                 font-weight: 500;
                 display: block;
-                margin-bottom: 8px;
+                margin-bottom: 10px;
                 color: var(--text);
+                font-size: 16px;
             }
             
             input, select {
                 width: 100%;
-                padding: 12px;
-                border: 1px solid var(--border);
-                border-radius: 8px;
+                padding: 14px;
+                border: 1px solid #e2e8f0;
+                border-radius: 10px;
                 font-size: 15px;
-                transition: var(--transition);
+                transition: all 0.3s ease;
+                background-color: #f9fafb;
+                color: var(--text);
             }
             
             input:focus, select:focus {
                 outline: none;
                 border-color: var(--primary);
                 box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+                background-color: #fff;
+            }
+            
+            input:hover, select:hover {
+                border-color: #cbd5e1;
             }
             
             .input-group {
@@ -215,14 +271,14 @@
             
             .button-group {
                 display: flex;
-                gap: 15px;
-                margin-top: 30px;
+                gap: 20px;
+                margin-top: 40px;
             }
             
             button, .btn-back {
                 flex: 1;
-                padding: 12px 20px;
-                border-radius: 8px;
+                padding: 15px 20px;
+                border-radius: 10px;
                 font-size: 16px;
                 font-weight: 600;
                 text-align: center;
@@ -234,15 +290,18 @@
                 align-items: center;
                 gap: 8px;
                 border: none;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
             
             button {
-                background-color: var(--success);
+                background: linear-gradient(to right, var(--success), #32d74b);
                 color: var(--white);
             }
             
             button:hover {
-                background-color: var(--success-hover);
+                background: linear-gradient(to right, var(--success-hover), #28bd40);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
             }
             
             .btn-back {
@@ -252,15 +311,34 @@
             
             .btn-back:hover {
                 background-color: var(--secondary-hover);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
             }
             
             .error-message {
-                color: var(--error);
+                color: #fff;
                 text-align: center;
-                margin-bottom: 20px;
-                padding: 10px;
-                background-color: rgba(231, 76, 60, 0.1);
-                border-radius: 8px;
+                margin-bottom: 25px;
+                padding: 15px;
+                background-color: var(--error);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                font-weight: 500;
+                box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
+            }
+            
+            /* Custom input elements */
+            .custom-input-container {
+                margin-top: 10px;
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-5px); }
+                to { opacity: 1; transform: translateY(0); }
             }
             
             /* Responsive Styles */
@@ -298,6 +376,14 @@
                 .sidebar-category {
                     display: none;
                 }
+                
+                .content {
+                    margin-left: 0;
+                }
+                
+                .container {
+                    padding: 30px 20px;
+                }
             }
             
             @media (max-width: 768px) {
@@ -326,9 +412,11 @@
 
                 if (select.value === "other") {
                     inputContainer.classList.remove("hidden");
+                    inputContainer.classList.add("custom-input-container");
                     input.required = true;
                 } else {
                     inputContainer.classList.add("hidden");
+                    inputContainer.classList.remove("custom-input-container");
                     input.required = false;
                     input.value = "";
                 }
@@ -346,6 +434,7 @@
                         
                         if (container && dropdown.value === 'other') {
                             container.classList.remove('hidden');
+                            container.classList.add("custom-input-container");
                             const input = document.getElementById(inputId);
                             if (input) input.required = true;
                         }
@@ -373,15 +462,23 @@
                 formatInputWithUnit("ramInput", "GB");
                 formatInputWithUnit("storageInput", "TB");
                 formatInputWithUnit("refreshRateInput", "Hz");
+                
+                // Add subtle animation on form section hover
+                const formSections = document.querySelectorAll('.form-section');
+                formSections.forEach(section => {
+                    section.addEventListener('mouseenter', function() {
+                        this.style.backgroundColor = '#fafbff';
+                    });
+                    section.addEventListener('mouseleave', function() {
+                        this.style.backgroundColor = '';
+                    });
+                });
             });
         </script>
     </head>
     <body>
         <jsp:include page="sidebar.jsp" />
         <div class="content">
-            <!-- Sidebar -->
-             
-            
             <!-- Main Content -->
             <div class="main-content">
                 <div class="container">
@@ -409,11 +506,11 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="productName">Phone Name</label>
-                                    <input type="text" id="productName" name="productName" value="${product.productName}" required>
+                                    <input type="text" id="productName" name="productName" value="${product.productName}" placeholder="Enter phone model name" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="price">Price</label>
-                                    <input type="number" id="price" name="price" min="0" max="1000000000" value="${product.price}" required>
+                                    <input type="number" id="price" name="price" min="0" max="1000000000" value="${product.price}" placeholder="Enter price" required>
                                 </div>
                             </div>
                             
@@ -428,21 +525,21 @@
                                         <option value="Vivo" ${brand == 'Vivo' ? 'selected' : ''}>Vivo</option>
                                         <option value="other" ${brand_custom != null ? 'selected' : ''}>Other</option>
                                     </select>
-                                    <div id="brandInputContainer" class="${brand_custom != null ? '' : 'hidden'}">
+                                    <div id="brandInputContainer" class="${brand_custom != null ? 'custom-input-container' : 'hidden'}">
                                         <input type="text" id="brandInput" name="brand_custom" placeholder="Enter brand" value="${brand_custom}">
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="color">Color</label>
-                                    <input type="text" id="color" name="color" value="${product.color}" required>
+                                    <input type="text" id="color" name="color" value="${product.color}" placeholder="Enter phone color" required>
                                 </div>
                             </div>
                             
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="imageUrl">Image URL</label>
-                                    <input type="url" id="imageURL" name="imageURL" value="${product.imageURL}" required>
+                                    <input type="url" id="imageURL" name="imageURL" value="${product.imageURL}" placeholder="Enter product image URL" required>
                                 </div>
                             </div>
                         </div>
@@ -452,12 +549,12 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="frontCamera">Front Camera</label>
-                                    <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}" required>
+                                    <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}" placeholder="e.g., 12MP" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="rearCamera">Rear Camera</label>
-                                    <input type="text" id="rearCamera" name="rearCamera" value="${product.cameraBehind}" required>
+                                    <input type="text" id="rearCamera" name="rearCamera" value="${product.cameraBehind}" placeholder="e.g., 48MP + 12MP + 5MP" required>
                                 </div>
                             </div>
                         </div>
@@ -468,24 +565,24 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="chiptype">Chip Brand</label>
-                                    <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" required>
+                                    <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" placeholder="e.g., Snapdragon, Apple, MediaTek" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="chip">Chip Name</label>
-                                    <input type="text" id="chip" name="chip" value="${product.chipName}" required>
+                                    <input type="text" id="chip" name="chip" value="${product.chipName}" placeholder="e.g., A15 Bionic, 8 Gen 2" required>
                                 </div>
                             </div>
                             
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="gpuType">GPU Brand</label>
-                                    <input type="text" id="gpuType" name="gpuType" value="${product.gpuType}" required>
+                                    <input type="text" id="gpuType" name="gpuType" value="${product.gpuType}" placeholder="e.g., Adreno, Apple, Mali" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="gpuName">GPU Name</label>
-                                    <input type="text" id="gpuName" name="gpuName" value="${product.gpuName}" required>
+                                    <input type="text" id="gpuName" name="gpuName" value="${product.gpuName}" placeholder="e.g., Adreno 740, Mali-G78" required>
                                 </div>
                             </div>
                         </div>
@@ -505,8 +602,8 @@
                                         <option value="16GB" ${ram == '16GB' ? 'selected' : ''}>16GB</option>
                                         <option value="other" ${ram_custom != null ? 'selected' : ''}>Other</option>
                                     </select>
-                                    <div id="ramInputContainer" class="${ram_custom != null ? '' : 'hidden'}">
-                                        <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM" value="${ram_custom}">
+                                    <div id="ramInputContainer" class="${ram_custom != null ? 'custom-input-container' : 'hidden'}">
+                                        <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM amount" value="${ram_custom}">
                                     </div>
                                 </div>
                                 
@@ -520,8 +617,8 @@
                                         <option value="1TB" ${storage == '1TB' ? 'selected' : ''}>1TB</option>
                                         <option value="other" ${storage_custom != null ? 'selected' : ''}>Other</option>
                                     </select>
-                                    <div id="storageInputContainer" class="${storage_custom != null ? '' : 'hidden'}">
-                                        <input type="text" id="storageInput" name="storage_custom" placeholder="Enter Storage Capacity" value="${storage_custom}">
+                                    <div id="storageInputContainer" class="${storage_custom != null ? 'custom-input-container' : 'hidden'}">
+                                        <input type="text" id="storageInput" name="storage_custom" placeholder="Enter storage capacity" value="${storage_custom}">
                                     </div>
                                 </div>
                             </div>
@@ -533,7 +630,7 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="size">Screen Size (inch)</label>
-                                    <input type="number" id="size" name="size" value="${screenSize}" step="0.1" required>
+                                    <input type="number" id="size" name="size" value="${screenSize}" step="0.1" placeholder="e.g., 6.5" required>
                                 </div>
                                 
                                 <div class="form-group">
@@ -545,7 +642,7 @@
                                         <option value="144Hz" ${refreshRate == '144Hz' ? 'selected' : ''}>144Hz</option>
                                         <option value="other" ${refreshRate_custom != null ? 'selected' : ''}>Other</option>
                                     </select>
-                                    <div id="refreshRateInputContainer" class="${refreshRate_custom != null ? '' : 'hidden'}">
+                                    <div id="refreshRateInputContainer" class="${refreshRate_custom != null ? 'custom-input-container' : 'hidden'}">
                                         <input type="text" id="refreshRateInput" name="refreshRate_custom" placeholder="Enter refresh rate" value="${refreshRate_custom}">
                                     </div>
                                 </div>
@@ -570,7 +667,7 @@
                                             <input type="number" id="resolutionHeight" name="resolutionHeight" min="1" required placeholder="Height" value="${height}">
                                         </div>
                                     </div>
-                                    <div id="screenResolutionInputContainer" class="${screenResolution_custom != null ? '' : 'hidden'}">
+                                    <div id="screenResolutionInputContainer" class="${screenResolution_custom != null ? 'custom-input-container' : 'hidden'}">
                                         <input type="text" id="screenResolutionInput" name="screenResolution_custom" placeholder="Enter screen resolution" value="${screenResolution_custom}">
                                     </div>
                                 </div>
@@ -588,14 +685,14 @@
                                         <option value="iOS" ${os == 'iOS' ? 'selected' : ''}>iOS</option>
                                         <option value="other" ${os_custom != null ? 'selected' : ''}>Other</option>
                                     </select>
-                                    <div id="osInputContainer" class="${os_custom != null ? '' : 'hidden'}">
+                                    <div id="osInputContainer" class="${os_custom != null ? 'custom-input-container' : 'hidden'}">
                                         <input type="text" id="osInput" name="os_custom" placeholder="Enter OS" value="${os_custom}">
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="version">Operating System Version</label>
-                                    <input type="text" id="version" name="version" value="${product.operatingSystemVersion}" required>
+                                    <input type="text" id="version" name="version" value="${product.operatingSystemVersion}" placeholder="e.g., 13, iOS 16" required>
                                 </div>
                             </div>
                         </div>
