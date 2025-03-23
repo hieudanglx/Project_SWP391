@@ -79,6 +79,7 @@ public class PaymentController extends HttpServlet {
 
                         }
                         orderDAO.updateProductQuantity(orderID);
+                        
 
                         // Xóa giỏ hàng sau khi đặt hàng thành công
                         CartDao cartDao = new CartDao();

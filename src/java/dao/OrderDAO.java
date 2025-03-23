@@ -45,7 +45,7 @@ public class OrderDAO extends dao.DBContext {
 
     public List<Order_list> getAllOrder() {
         List<Order_list> orderList = new ArrayList<>();
-        String query = "SELECT * FROM Order_List"; 
+        String query = "SELECT * FROM Order_List";
 
         try ( PreparedStatement pstmt = connection.prepareStatement(query);  ResultSet rs = pstmt.executeQuery()) {
 
@@ -169,8 +169,7 @@ public class OrderDAO extends dao.DBContext {
         }
         return orderDetailsList;
     }
-    
- 
+
     public List<Order_list> getRevenueByMonth() {
         String sql = "SELECT YEAR(Date) AS Nam, MONTH(Date) AS Thang, "
                 + "SUM(Total) AS DoanhThu "
@@ -213,43 +212,43 @@ public class OrderDAO extends dao.DBContext {
     }
 
     public List<Order_Details> getOrderDetailsByOrderID(int orderID) {
-    List<Order_Details> orderDetailsList = new ArrayList<>();
-    String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, ol.OrderID, "
-            + "p.ProductName, p.Price, p.ImageURL, ol.Date, ol.Status, "
-            + "c.FullName, ol.Address, ol.PhoneNumber, ol.Total "  // Thêm Total
-            + "FROM Order_Details od "
-            + "JOIN Order_List ol ON od.OrderID = ol.OrderID "
-            + "JOIN Customer c ON ol.CustomerID = c.CustomerID "
-            + "JOIN Product p ON od.ProductID = p.ProductID "
-            + "WHERE ol.OrderID = ?";
+        List<Order_Details> orderDetailsList = new ArrayList<>();
+        String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, ol.OrderID, "
+                + "p.ProductName, p.Price, p.ImageURL, ol.Date, ol.Status, "
+                + "c.FullName, ol.Address, ol.PhoneNumber, ol.Total " // Thêm Total
+                + "FROM Order_Details od "
+                + "JOIN Order_List ol ON od.OrderID = ol.OrderID "
+                + "JOIN Customer c ON ol.CustomerID = c.CustomerID "
+                + "JOIN Product p ON od.ProductID = p.ProductID "
+                + "WHERE ol.OrderID = ?";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setInt(1, orderID);
-        ResultSet rs = ps.executeQuery();
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            Order_Details orderDetail = new Order_Details(
-                    rs.getInt("OrderDetailID"),
-                    rs.getInt("Quantity"),
-                    rs.getInt("ProductID"),
-                    rs.getInt("OrderID"),
-                    rs.getString("ProductName"),
-                    rs.getInt("Price"),
-                    rs.getString("ImageURL"),
-                    rs.getDate("Date"),
-                    rs.getString("Status"),
-                    rs.getString("FullName"),
-                    rs.getString("Address"),
-                    rs.getString("PhoneNumber"),
-                    rs.getInt("Total")  // Lấy thêm Total
-            );
-            orderDetailsList.add(orderDetail);
+            while (rs.next()) {
+                Order_Details orderDetail = new Order_Details(
+                        rs.getInt("OrderDetailID"),
+                        rs.getInt("Quantity"),
+                        rs.getInt("ProductID"),
+                        rs.getInt("OrderID"),
+                        rs.getString("ProductName"),
+                        rs.getInt("Price"),
+                        rs.getString("ImageURL"),
+                        rs.getDate("Date"),
+                        rs.getString("Status"),
+                        rs.getString("FullName"),
+                        rs.getString("Address"),
+                        rs.getString("PhoneNumber"),
+                        rs.getInt("Total") // Lấy thêm Total
+                );
+                orderDetailsList.add(orderDetail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return orderDetailsList;
     }
-    return orderDetailsList;
-}
 
     public List<Order_Details> getOrdersByCustomer(int customerID) {
         List<Order_Details> orderList = new ArrayList<>();
@@ -284,45 +283,44 @@ public class OrderDAO extends dao.DBContext {
         }
         return orderList;
     }
-    
+
     public List<Order_Details> getOrdersByStatusCustomer(int customerID, String status) {
-    List<Order_Details> orderList = new ArrayList<>();
-    String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, od.OrderID, " +
-                 "       p.ProductName, p.Price, p.ImageURL, o.Date, o.Status " +
-                 "FROM Order_Details od " +
-                 "JOIN Product p ON od.ProductID = p.ProductID " +
-                 "JOIN Order_List o ON od.OrderID = o.OrderID " +
-                 "WHERE o.CustomerID = ? " + 
-                 (status != null && !status.equals("Tất cả") ? "AND o.Status = ? " : "") +
-                 "ORDER BY o.Date DESC"; // Sắp xếp theo ngày gần nhất
+        List<Order_Details> orderList = new ArrayList<>();
+        String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, od.OrderID, "
+                + "       p.ProductName, p.Price, p.ImageURL, o.Date, o.Status "
+                + "FROM Order_Details od "
+                + "JOIN Product p ON od.ProductID = p.ProductID "
+                + "JOIN Order_List o ON od.OrderID = o.OrderID "
+                + "WHERE o.CustomerID = ? "
+                + (status != null && !status.equals("Tất cả") ? "AND o.Status = ? " : "")
+                + "ORDER BY o.Date DESC"; // Sắp xếp theo ngày gần nhất
 
-    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setInt(1, customerID);
-        if (status != null && !status.equals("Tất cả")) {
-            stmt.setString(2, status);
-        }
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, customerID);
+            if (status != null && !status.equals("Tất cả")) {
+                stmt.setString(2, status);
+            }
 
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            Order_Details order = new Order_Details(
-                rs.getInt("OrderDetailID"),
-                rs.getInt("Quantity"),
-                rs.getInt("ProductID"),
-                rs.getInt("OrderID"),
-                rs.getString("ProductName"),
-                rs.getInt("Price"),
-                rs.getString("ImageURL"),
-                rs.getDate("Date"),
-                rs.getString("Status")
-            );
-            orderList.add(order);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Order_Details order = new Order_Details(
+                        rs.getInt("OrderDetailID"),
+                        rs.getInt("Quantity"),
+                        rs.getInt("ProductID"),
+                        rs.getInt("OrderID"),
+                        rs.getString("ProductName"),
+                        rs.getInt("Price"),
+                        rs.getString("ImageURL"),
+                        rs.getDate("Date"),
+                        rs.getString("Status")
+                );
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return orderList;
     }
-    return orderList;
-}
-
 
     private List<Order_list> getRevenueData(String sql, String type) {
         List<Order_list> revenueList = new ArrayList<>();
@@ -425,9 +423,10 @@ public class OrderDAO extends dao.DBContext {
             e.printStackTrace();
         }
     }
+
     public void updateProductQuantity(int orderID) {
         String selectQuery = "SELECT ProductID, Quantity FROM Order_Details WHERE OrderID = ?";
-        String updateQuery = "UPDATE Product SET Quantity_Product = Quantity_Product - ? WHERE ProductID = ?";
+        String updateQuery = "UPDATE Product SET Quantity_Product = Quantity_Product - ?, Quantity_Sell = Quantity_Sell + ? WHERE ProductID = ?";
 
         try ( PreparedStatement pstmtSelect = connection.prepareStatement(selectQuery);  PreparedStatement pstmtUpdate = connection.prepareStatement(updateQuery)) {
 
@@ -439,7 +438,8 @@ public class OrderDAO extends dao.DBContext {
                 int quantity = rs.getInt("Quantity");
 
                 pstmtUpdate.setInt(1, quantity);
-                pstmtUpdate.setInt(2, productID);
+                pstmtUpdate.setInt(2, quantity);
+                pstmtUpdate.setInt(3, productID);
                 pstmtUpdate.executeUpdate();
             }
         } catch (SQLException e) {
