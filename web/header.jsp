@@ -85,7 +85,9 @@
                                     <c:if test="${not empty sessionScope.customer}">
                                         <p>Giỏ hàng</p>
                                         <span class="cart-count">
-                                        <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                            <span class="text-danger fw-bold">
+                                                <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                            </span>
                                         </span>
                                     </c:if>
                                 </div>

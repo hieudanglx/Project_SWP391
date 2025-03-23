@@ -61,7 +61,7 @@ public class CartDao extends DBContext {
         String sql = "UPDATE Cart SET Quantity = Quantity " + type + " 1 "
                 + "WHERE CustomerID = ? AND ProductID = ? ";
         if (type.contains("+")) {
-            sql += "AND Quantity < 5 AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity + 1)";
+            sql += "AND (SELECT Quantity_Product FROM Product WHERE ProductID = ?) > (Quantity + 1)";
         }
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, customerID);
@@ -95,8 +95,8 @@ public class CartDao extends DBContext {
         return 0;
     }
 
-    public int getTotalCart(List<Product> list, int CustomerID) throws SQLException {
-        String sql = "SELECT COALESCE(SUM(c.Quantity * p.Price), 0) AS Total_Cart_Value\n"
+    public long getTotalCart(List<Product> list, int CustomerID) throws SQLException {
+        String sql = "SELECT COALESCE(SUM(CAST(c.Quantity AS BIGINT) * CAST(p.Price AS BIGINT)), 0) AS Total_Cart_Value\n"
                 + "FROM Cart c\n"
                 + "JOIN Product p ON c.ProductID = p.ProductID\n"
                 + "WHERE c.CustomerID = ?";
@@ -104,7 +104,7 @@ public class CartDao extends DBContext {
             ps.setInt(1, CustomerID);
             try ( ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    return rs.getInt("Total_Cart_Value");
+                    return rs.getLong("Total_Cart_Value");
                 }
             } catch (Exception e) {
                 System.out.println("dao.CartDao.getTotalCart(): " + e.getMessage());

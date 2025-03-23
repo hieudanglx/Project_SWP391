@@ -124,7 +124,9 @@
             }
         </style>
     </head>
-    <body data-status="${status} data-status="${Message}>
+    <body data-status="${sessionScope.status}" data-message="${sessionScope.message}">
+        <c:remove var="status" scope="session"/>
+        <c:remove var="message" scope="session"/>
         <%@include file="header.jsp" %>
 
         <!-- Main Container -->
@@ -177,19 +179,20 @@
                                                                     <a href="UpdateCartController?id=${product.productID}&type=-"
                                                                        class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0;"
-                                                                       onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct});">-</a>
+                                                                       onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct}) || false;">-</a>
                                                                     <input type="text"
                                                                            class="form-control text-center border-secondary" style="width: 100px"
                                                                            value="${product.quantityProduct}"
                                                                            disabled>
                                                                     <a href="UpdateCartController?id=${product.productID}&type=%2B"
                                                                        class="btn btn-outline-secondary px-3"
-                                                                       style="margin: 0; pointer-events: ${product.quantitySell == product.quantityProduct + 1 ? 'none' : 'auto'}; opacity: ${product.quantitySell == product.quantityProduct + 1 ? '0.5' : '1'};"
-                                                                       onclick="return increaseQuantity(${product.productID}, ${product.quantityProduct});">+</a>
+                                                                       style="margin: 0"
+                                                                       >+</a>
                                                                 </div>
+                                                                <!-- Nút xóa -->
                                                                 <a href="UpdateCartController?id=${product.productID}&type=R"
                                                                    class="btn btn-link text-danger"
-                                                                   onclick="return confirmRemove(${product.productID});">
+                                                                   onclick="return confirmRemove(${product.productID}) || false;"> <!-- Thêm || false -->
                                                                     <i class="fas fa-trash fa-lg"></i>
                                                                 </a>
                                                             </div>
@@ -278,7 +281,6 @@
                                             <div class="d-flex justify-content-between align-items-center h5">
                                                 <span>Tổng cộng:</span>
                                                 <span class="text-danger fw-bold">
-
                                                     <fmt:formatNumber value="${total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
                                                 </span>
                                             </div>
@@ -347,74 +349,89 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <!-- Modal Xác Nhận -->
-            <div class="modal fade" id="confirmPaymentModal" tabindex="-1" aria-labelledby="confirmPaymentLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-0 shadow">
-                        <div class="modal-header bg-gradient-primary text-white border-0">
-                            <h5 class="modal-title" id="confirmPaymentLabel">
-                                <i class="fas fa-shopping-cart me-2"></i>Xác nhận thanh toán
-                            </h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body py-4">
-                            <div class="text-center mb-3">
-                                <div class="payment-icon-circle mb-3">
-                                    <i class="fas fa-credit-card fa-2x text-primary"></i>
-                                </div>
-                                <h5 class="fw-bold">Bạn có chắc chắn muốn thanh toán không?</h5>
-                                <p class="text-muted">Vui lòng xác nhận để hoàn tất quá trình thanh toán của bạn</p>
+
+        </form>
+        <!-- Modal Xác Nhận -->
+        <div class="modal fade" id="confirmPaymentModal" tabindex="-1" aria-labelledby="confirmPaymentLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header bg-gradient-primary text-white border-0">
+                        <h5 class="modal-title" id="confirmPaymentLabel">
+                            <i class="fas fa-shopping-cart me-2"></i>Xác nhận thanh toán
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-4">
+                        <div class="text-center mb-3">
+                            <div class="payment-icon-circle mb-3">
+                                <i class="fas fa-credit-card fa-2x text-primary"></i>
                             </div>
+                            <h5 class="fw-bold">Bạn có chắc chắn muốn thanh toán không?</h5>
+                            <p class="text-muted">Vui lòng xác nhận để hoàn tất quá trình thanh toán của bạn</p>
                         </div>
-                        <div class="modal-footer border-0 justify-content-center">
-                            <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
-                                <i class="fas fa-times me-1"></i>Hủy bỏ
-                            </button>
-                            <button type="button" class="btn btn-primary px-4" id="confirmPaymentBtn">
-                                <i class="fas fa-check me-1"></i>Xác nhận
-                            </button>
-                        </div>
+                    </div>
+                    <div class="modal-footer border-0 justify-content-center">
+                        <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i>Hủy bỏ
+                        </button>
+                        <button type="button" class="btn btn-primary px-4" id="confirmPaymentBtn">
+                            <i class="fas fa-check me-1"></i>Xác nhận
+                        </button>
                     </div>
                 </div>
             </div>
-        </form>
-    </body>
-    <!-- Popup container -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
-            <div id="popupIcon" class="popup-icon"></div>
-            <h3 id="popupMessage"></h3>
-            <div class="popup-buttons" id="popupButtons"></div>
         </div>
-    </div>
+        <!-- Popup Xác Nhận (Dùng trong giỏ hàng) -->
+        <div class="confirm-popup-overlay" id="confirmPopup">
+            <div class="confirm-popup-content shadow-lg">
+                <div class="confirm-popup-body">
+                    <div class="confirm-popup-icon">⚠️</div>
+                    <h5 class="confirm-popup-title" id="confirmPopupMessage"></h5>
+                </div>
+                <div class="confirm-popup-footer">
+                    <button type="button" class="btn btn-secondary" onclick="hideConfirmPopup()">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirmActionBtn">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Thông Báo (Dùng cho các trang khác) -->
+        <div class="alert-popup-overlay" id="alertPopup">
+            <div class="alert-popup-content">
+                <div class="alert-popup-icon" id="alertIcon" style="display: none"></div>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <h5 class="alert-popup-message" id="alertMessage"></h5>
+            </div>
+        </div>
+
+    </body>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    var paymentForm = document.querySelector("form[action='PaymentController']");
-                    var openModalBtn = document.getElementById("openConfirmModal");
-                    var confirmBtn = document.getElementById("confirmPaymentBtn");
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var paymentForm = document.querySelector("form[action='PaymentController']");
+                            var openModalBtn = document.getElementById("openConfirmModal");
+                            var confirmBtn = document.getElementById("confirmPaymentBtn");
 
-                    // Khi nhấn "Thanh toán ngay", hiển thị modal
-                    openModalBtn.addEventListener("click", function () {
-                        var confirmModal = new bootstrap.Modal(document.getElementById("confirmPaymentModal"));
-                        confirmModal.show();
-                    });
+                            // Khi nhấn "Thanh toán ngay", hiển thị modal
+                            openModalBtn.addEventListener("click", function () {
+                                var confirmModal = new bootstrap.Modal(document.getElementById("confirmPaymentModal"));
+                                confirmModal.show();
+                            });
 
-                    // Khi nhấn "Xác nhận" trong modal, submit form
-                    confirmBtn.addEventListener("click", function () {
-                        // Thêm hiệu ứng loading nếu cần
-                        confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang xử lý...';
-                        confirmBtn.disabled = true;
+                            // Khi nhấn "Xác nhận" trong modal, submit form
+                            confirmBtn.addEventListener("click", function () {
+                                // Thêm hiệu ứng loading nếu cần
+                                confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang xử lý...';
+                                confirmBtn.disabled = true;
 
-                        // Cho phần loading hiển thị 1 giây trước khi submit form
-                        setTimeout(function () {
-                            paymentForm.submit();
-                        }, 1000);
-                    });
-                });
+                                // Cho phần loading hiển thị 1 giây trước khi submit form
+                                setTimeout(function () {
+                                    paymentForm.submit();
+                                }, 1000);
+                            });
+                        });
     </script>   
 
     <script>
@@ -480,7 +497,7 @@
             fetchData();
         });
     </script>
-    <script src="js/popup.js"></script>
+
     <script>
         document.getElementById("checkoutBtn").addEventListener("click", function () {
             let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
@@ -491,5 +508,5 @@
             }
         });
     </script>
-
+    <script src="js/popup.js"></script>
 </html>

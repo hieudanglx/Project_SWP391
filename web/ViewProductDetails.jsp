@@ -100,7 +100,9 @@
             }
         </style>
     </head>
-    <body data-status="${status}">
+    <body data-status="${sessionScope.status}" data-message="${sessionScope.message}">
+        <c:remove var="status" scope="session"/>
+        <c:remove var="message" scope="session"/>
         <%@include file="header.jsp" %>
 
         <div class="container py-5 details">
@@ -288,7 +290,7 @@
                                                         (${feedback.ratePoint}/5)
                                                     </div>
                                                 </div>
-                                                   <!-- Hiển thị phản hồi nếu có -->  
+                                                <!-- Hiển thị phản hồi nếu có -->  
                                                 <c:set var="hasReply" value="false" />
                                                 <c:forEach var="item" items="${replyFeedbackList}">
                                                     <c:if test="${item.feedbackID == feedback.feedbackID}">
@@ -375,8 +377,8 @@
 
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&type=%2B&page=detail" class="btn btn-lg btn-dark py-3">
-                                    <i class="fas fa-cart-plus me-2"></i>
+                                <a href="UpdateCartController?id=${product.productID}&type=%2B&page=detail" class="btn btn-lg btn-dark py-3"
+                                   <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
                                 </a>
                                 <a href="UpdateCartController?id=${product.productID}&type=%2B" class="btn btn-lg btn-primary py-3">
@@ -390,9 +392,19 @@
             </div>
         </div>
         <%@include file="footer.jsp" %>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="js/popup.js"></script>
-        <script>
+        <!-- Popup Thông Báo (Dùng cho các trang khác) -->
+        <div class="alert-popup-overlay" id="alertPopup">
+            <div class="alert-popup-content">
+                <div class="alert-popup-icon" id="alertIcon" style="display: none"></div>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <h5 class="alert-popup-message" id="alertMessage"></h5>
+            </div>
+        </div>
+
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/popup.js"></script>
+    <script>
                                                         function selectOption(type, value) {
                                                             const productID = ${product.productID};
                                                             const currentRom = "${product.rom}";
@@ -410,25 +422,13 @@
                                                             // Load lại trang với tham số mới
                                                             window.location.href = url;
                                                         }
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            const tabLinks = document.querySelectorAll('#nav-tab button');
+                                                        const tabLinks = document.querySelectorAll('#nav-tab button');
 
-                                                            tabLinks.forEach(button => {
-                                                                button.addEventListener('shown.bs.tab', function (event) {
-                                                                    const targetTab = document.querySelector(event.target.dataset.bsTarget);
-                                                                    targetTab.classList.add("fade");
-                                                                });
+                                                        tabLinks.forEach(button => {
+                                                            button.addEventListener('shown.bs.tab', function (event) {
+                                                                const targetTab = document.querySelector(event.target.dataset.bsTarget);
+                                                                targetTab.classList.add("fade");
                                                             });
                                                         });
-        </script>
-    </body>
-    <!-- Popup container -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
-            <div id="popupIcon" class="popup-icon"></div>
-            <h3 id="popupMessage"></h3>
-            <div class="popup-buttons" id="popupButtons"></div>
-        </div>
-    </div>
+    </script>
 </html>
