@@ -23,7 +23,9 @@
         <link rel="stylesheet" href="css/viewListProduct.css">
         <link rel="stylesheet" href="css/popup.css">
     </head>
-    <body data-status="${status}">
+    <body data-status="${sessionScope.status}" data-message="${sessionScope.message}">
+        <c:remove var="status" scope="session"/>
+        <c:remove var="message" scope="session"/>
         <div id="wallpaper">
             <%@include file="header.jsp" %>
             <div id="content">
@@ -99,13 +101,12 @@
                 </div>
             </div>
         </div>
-        <!-- Popup container -->
-        <div class="popup-overlay" id="popupOverlay">
-            <div class="popup-content">
-                <span class="close-btn" onclick="closePopup()">&times;</span>
-                <div id="popupIcon" class="popup-icon"></div>
-                <h3 id="popupMessage"></h3>
-                <div class="popup-buttons" id="popupButtons"></div>
+        <!-- Popup Thông Báo (Dùng cho các trang khác) -->
+        <div class="alert-popup-overlay" id="alertPopup">
+            <div class="alert-popup-content">
+                <div class="alert-popup-icon" id="alertIcon"></div>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <h5 class="alert-popup-message" id="alertMessage"></h5>
             </div>
         </div>
         <%@include file="footer.jsp" %>
