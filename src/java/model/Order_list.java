@@ -37,6 +37,13 @@ public class Order_list {
         this.revenue = revenue;
     }
 
+    public Order_list(int period, double revenue) {
+        this.period = period;
+        this.revenue = revenue;
+    }
+    
+    
+
     public Order_list(int OrderID, int CustomerID, int StaffID, String Address, Date Date, String Status, String PhoneNumber, double Total) {
         this.OrderID = OrderID;
         this.CustomerID = CustomerID;

@@ -92,20 +92,20 @@
         </style>
     </head>
     <body>
- <%@include file="sidebar.jsp" %>
+        <%@include file="sidebar.jsp" %>
         <!-- Sidebar -->
-<!--        <div class="sidebar">
-            <h4 class="text-center mb-4">
-                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-            </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="feedback"><i class="fas fa-comments"></i> Manage Feedback</a>
-            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>-->
+        <!--        <div class="sidebar">
+                    <h4 class="text-center mb-4">
+                        <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
+                    </h4>
+                    <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
+                    <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
+                    <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+                    <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+                    <a href="feedback"><i class="fas fa-comments"></i> Manage Feedback</a>
+                    <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
+                    <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
+                </div>-->
 
         <!-- Main Content -->
         <div class="content">
@@ -163,6 +163,13 @@
                     <div class="card p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>Revenue Statistics</h5>
+
+                            <!-- Dropdown chọn năm -->
+                            <select id="yearSelect" class="form-select w-25 me-2">
+                                <!-- Danh sách năm sẽ được JS tạo tự động -->
+                            </select>
+
+                            <!-- Dropdown chọn kiểu lọc -->
                             <select id="chartMode" class="form-select w-25">
                                 <option value="month">Month</option>
                                 <option value="quarter">Quarter</option>
@@ -171,16 +178,6 @@
                         </div>
                         <div class="chart-container">
                             <canvas id="revenueChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Products Pie Chart -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <h5 class="text-center">Product Sales Distribution</h5>
-                        <div class="chart-container">
-                            <canvas id="productChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -220,38 +217,53 @@
                         .catch(error => console.error('Logout Error:', error));
             }
 
-            async function fetchRevenueData(type) {
-                const response = await fetch(`Revenue?type=${type}`);
-                if (!response.ok) {
-                    console.error("Lỗi khi lấy dữ liệu từ server");
+            async function fetchRevenueData(type, year) {
+                try {
+                    const response = await fetch(`RevenueData?filter=${type}&year=${year}`);
+                    if (!response.ok) {
+                        console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+                        return {};
+                    }
+                    const data = await response.json();
+
+                    const result = {};
+                    data.forEach(item => {
+                        const label = type === "year" ? item.year : item.period;
+                        result[label] = item.revenue;
+                    });
+
+                    return result;
+                } catch (error) {
+                    console.error("Error in fetchRevenueData:", error);
                     return {};
                 }
-                return await response.json();
             }
 
             async function renderChart(type = "month") {
-                const revenueData = await fetchRevenueData(type);
+                const year = document.getElementById("yearSelect").value;
+                const revenueData = await fetchRevenueData(type, year);
                 const labels = Object.keys(revenueData);
                 const values = Object.values(revenueData);
 
                 // Xóa biểu đồ cũ nếu có
-                const existingChart = Chart.getChart(document.getElementById("revenueChart"));
+                const existingChart = Chart.getChart("revenueChart");
                 if (existingChart) {
                     existingChart.destroy();
                 }
 
-                // Vẽ biểu đồ mới
+                // Tạo biểu đồ mới
                 const ctx = document.getElementById("revenueChart").getContext("2d");
                 new Chart(ctx, {
                     type: "line",
                     data: {
                         labels: labels,
                         datasets: [{
-                                label: "Revenue (VND)",
+                                label: `Revenue ${year} (VND)`,
                                 data: values,
                                 borderColor: "#0d6efd",
                                 borderWidth: 2,
-                                fill: false
+                                fill: false,
+                                tension: 0.1
                             }]
                     },
                     options: {
@@ -262,7 +274,24 @@
                                 beginAtZero: true,
                                 ticks: {
                                     callback: function (value) {
-                                        return value.toLocaleString("vi-VN") + " VND";
+                                        return new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND',
+                                            maximumFractionDigits: 0
+                                        }).format(value);
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function (context) {
+                                        return new Intl.NumberFormat('vi-VN', {
+                                            style: 'currency',
+                                            currency: 'VND',
+                                            maximumFractionDigits: 0
+                                        }).format(context.raw);
                                     }
                                 }
                             }
@@ -270,13 +299,63 @@
                     }
                 });
             }
+            async function populateYearSelect() {
+                const yearSelect = document.getElementById("yearSelect");
 
-            // Gọi vẽ biểu đồ mặc định (theo tháng)
-            renderChart();
+                try {
+                    const response = await fetch("RevenueData?getYears=true");
+                    if (!response.ok)
+                        throw new Error("Lỗi khi lấy danh sách năm");
 
-            // Xử lý khi chọn kiểu thống kê 
-            document.getElementById("chartMode").addEventListener("change", function () {
-                renderChart(this.value);
+                    const years = await response.json();
+                    console.log("Danh sách năm từ API:", years); // Debug
+
+                    yearSelect.innerHTML = ""; // Xóa danh sách cũ
+
+                    if (years.length === 0) {
+                        console.warn("Không có năm nào trong database.");
+                        return;
+                    }
+
+                    years.forEach(year => {
+                        const option = document.createElement("option");
+                        option.value = year;
+                        option.textContent = year;
+                        yearSelect.appendChild(option);
+                    });
+
+                    yearSelect.value = years[0]; // Chọn năm mới nhất
+                    console.log("Năm mặc định được chọn:", years[0]); // Debug
+
+                } catch (error) {
+                    console.error("Không thể lấy danh sách năm, sử dụng dữ liệu mặc định.", error);
+
+                    const currentYear = new Date().getFullYear();
+                    for (let year = 2019; year <= currentYear; year++) {
+                        const option = document.createElement("option");
+                        option.value = year;
+                        option.textContent = year;
+                        yearSelect.appendChild(option);
+                    }
+
+                    yearSelect.value = currentYear;
+                    console.log("Dữ liệu mặc định được dùng:", currentYear); // Debug
+                }
+            }
+
+
+// Initialize default chart (monthly)
+            document.addEventListener("DOMContentLoaded", async function () {
+                await populateYearSelect();
+                renderChart("month");
+
+                document.getElementById("chartMode").addEventListener("change", function () {
+                    renderChart(this.value);
+                });
+
+                document.getElementById("yearSelect").addEventListener("change", function () {
+                    renderChart(document.getElementById("chartMode").value);
+                });
             });
         </script>
     </body>

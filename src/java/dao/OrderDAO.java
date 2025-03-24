@@ -176,7 +176,7 @@ public class OrderDAO extends dao.DBContext {
                 + "FROM Order_List "
                 + "WHERE Status = 'Thành Công' "
                 + "GROUP BY YEAR(Date), MONTH(Date) "
-                + "ORDER BY Nam, Thang";
+                + "ORDER BY Nam DESC, Thang DESC";
         return getRevenueData(sql, "month");
     }
 
@@ -211,6 +211,27 @@ public class OrderDAO extends dao.DBContext {
         return getRevenueData(sql, "quarter");
     }
 
+    public List<Integer> getAvailableYears() {
+        List<Integer> years = new ArrayList<>();
+        String sql = "SELECT DISTINCT YEAR(Date) AS year FROM Order_List ORDER BY year DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                years.add(rs.getInt(1));
+            }
+
+            // Debug: In ra danh sách năm lấy được
+            System.out.println("Years retrieved: " + years);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return years;
+    }
+
+    
     public List<Order_Details> getOrderDetailsByOrderID(int orderID) {
         List<Order_Details> orderDetailsList = new ArrayList<>();
         String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, ol.OrderID, "

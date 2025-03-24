@@ -19,32 +19,44 @@
             body {
                 background-color: #f8f9fa;
             }
+            /* Navbar */
+            .navbar-custom {
+                background-color: white;
+                padding: 15px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            /* Sidebar */
             .sidebar {
-                width: 250px;
                 height: 100vh;
-                background: #343a40;
+                width: 250px;
+                background: linear-gradient(to bottom, #343a40, #212529);
                 color: white;
                 position: fixed;
-                padding: 20px;
-            }
-            .sidebar h4 {
-                text-align: center;
-                margin-bottom: 20px;
-                font-weight: bold;
+                padding-top: 20px;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             }
             .sidebar a {
-                color: white;
+                padding: 12px 20px;
                 text-decoration: none;
+                font-size: 16px;
+                color: rgba(255, 255, 255, 0.8);
                 display: block;
-                padding: 10px;
-                border-radius: 5px;
-                transition: 0.3s;
+                transition: all 0.3s;
+                border-left: 4px solid transparent;
             }
             .sidebar a:hover {
-                background: #007bff;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border-left: 4px solid #0d6efd;
             }
-            .sidebar i {
+            .sidebar a i {
                 margin-right: 10px;
+                width: 20px;
+                text-align: center;
             }
             .content {
                 margin-left: 270px;
@@ -70,22 +82,35 @@
     <body>
         <!-- Sidebar -->
         <div class="sidebar">
-            <h4>📊 Dashboard</h4>
-            <a href="#"><i class="fas fa-users"></i> Manager Staff</a>
-            <a href="#"><i class="fas fa-user"></i> Manage Customer</a>
-            <a href="#"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="#"><i class="fas fa-comments"></i> Manager Feedback</a>
-            <a href="#"><i class="fas fa-chart-line"></i> Manager Revenue</a>
-            <a href="#"><i class="fas fa-warehouse"></i> Manager Inventory</a>
+            <h4 class="text-center mb-4">
+                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
+            </h4>
+            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
+            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
+            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+            <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
+            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
+            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
         </div>
 
         <!-- Main Content -->
         <div class="content">
-            <h2 class="text-center">📦 Chi Tiết Nhập Hàng</h2>
-
-            <!-- Search Box -->
-            <div class="search-box">
-                <input type="text" class="form-control w-25" placeholder="🔍 Tìm kiếm sản phẩm">
+            <!-- Navbar -->
+            <div class="navbar-custom">
+                <h3>📦 Import Details</h3>
+<!--                <div class="search-container">
+                    <form action="SearchAccountCustomer" method="POST" class="d-flex">
+                        <div class="input-group">
+                            <input type="text" name="keyword" class="form-control" placeholder="Search username">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                </div>-->
+                <div>
+                    <a href="ManagerProfile.jsp" class="btn btn-outline-secondary me-2">Admin</a>
+                    <a href="javascript:void(0);" class="btn btn-danger" onclick="logout()">Logout</a>
+                </div>
             </div>
 
             <!-- Table -->
@@ -128,4 +153,32 @@
             </div>
         </div>
     </body>
+      <script>
+            function logout() {
+                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/LoginOfDashboard.jsp';
+                            } else {
+                                alert('Logout Failed!');
+                            }
+                        })
+                        .catch(error => console.error('Logout Error:', error));
+            }
+            async function getRevenue() {
+                try {
+                    let response = await fetch("RevenueTotal"); // Gọi API
+                    let data = await response.json(); // Chuyển response về JSON
+                    console.log("Tổng doanh thu:", data.totalSales); // Log kết quả
+
+                    // Hiển thị trên HTML
+                    document.getElementById("totalRevenue").innerText = data.totalSales + " VND";
+                } catch (error) {
+                    console.error("Lỗi khi lấy doanh thu:", error);
+                }
+            }
+            document.addEventListener("DOMContentLoaded", getRevenue);
+
+        </script>
+
 </html>

@@ -44,6 +44,10 @@
         <servlet-name>VnpayPayment</servlet-name>
         <servlet-class>controller.VnpayPayment</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RevenueData</servlet-name>
+        <servlet-class>controller.RevenueData</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -99,6 +103,10 @@
     <servlet-mapping>
         <servlet-name>VnpayPayment</servlet-name>
         <url-pattern>/VnpayPayment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RevenueData</servlet-name>
+        <url-pattern>/RevenueData</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
