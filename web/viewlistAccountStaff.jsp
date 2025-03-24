@@ -1,19 +1,30 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin Dashboard - List Staff</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <title>Admin Dashboard - Staff Management</title>
+
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+        <!-- SweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f8f9fa;
+                background-color: #f0f2f5;
+                overflow-x: hidden;
             }
+
+            /* Sidebar */
             .sidebar {
                 height: 100vh;
                 width: 250px;
@@ -26,7 +37,6 @@
             .sidebar a {
                 padding: 12px 20px;
                 text-decoration: none;
-                font-size: 16px;
                 color: rgba(255, 255, 255, 0.8);
                 display: block;
                 transition: all 0.3s;
@@ -42,127 +52,329 @@
                 width: 20px;
                 text-align: center;
             }
+
+            /* Main Content */
             .content {
                 margin-left: 250px;
-                padding: 20px;
+                padding: 25px;
+                transition: all 0.3s ease;
             }
+
+            /* Navbar */
             .navbar-custom {
                 background-color: white;
-                padding: 15px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+                margin-bottom: 25px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
             }
-            .table-responsive {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-            .table thead {
-                background-color: #343a40;
-                color: white;
-            }
-            .table tbody tr:hover {
-                background-color: #f1f1f1;
-            }
-            .btn-primary {
-                background-color: #0d6efd;
-                border-color: #0d6efd;
-                padding: 8px 16px;
+
+            .navbar-custom h4 {
                 font-weight: 600;
+                color: #2b3035;
+                margin: 0;
             }
-            .btn-primary:hover {
+
+            .profile {
+                display: flex;
+                align-items: center;
+            }
+
+            .profile a.profile-link {
+                margin-right: 15px;
+                font-weight: 600;
+                color: #0d6efd;
+                text-decoration: none;
+                padding: 8px 15px;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+            .profile a.profile-link:hover {
+                background-color: rgba(13, 110, 253, 0.1);
+            }
+
+            .btn-logout {
+                padding: 8px 16px;
+                border-radius: 6px;
+                transition: all 0.2s;
+                font-weight: 500;
+                box-shadow: 0 2px 5px rgba(220, 53, 69, 0.2);
+            }
+
+            .btn-logout:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+            }
+
+            /* Search Box */
+            .search-container {
+                width: 40%;
+                margin: 0 auto;
+            }
+
+            .search-box {
+                display: flex;
+                align-items: center;
+                background-color: white;
+                border-radius: 8px;
+                padding: 4px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e0e0e0;
+                transition: all 0.3s;
+            }
+
+            .search-box:focus-within {
+                box-shadow: 0 3px 15px rgba(13, 110, 253, 0.15);
+                border-color: #0d6efd;
+            }
+
+            .search-box input {
+                border: none;
+                padding: 8px 15px;
+                width: 100%;
+                outline: none;
+                font-size: 15px;
+            }
+
+            .search-box button {
+                background-color: #0d6efd;
+                color: white;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 6px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .search-box button:hover {
                 background-color: #0b5ed7;
-                border-color: #0a58ca;
             }
-            .btn-warning {
+
+            /* Table */
+            .table-container {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+                overflow-x: auto;
+            }
+
+            .table {
+                table-layout: auto; /* Tự động điều chỉnh kích thước cột dựa trên nội dung */
+                width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+            }
+
+            .table th, .table td {
+                white-space: normal; /* Cho phép văn bản xuống dòng */
+                word-wrap: break-word; /* Tự động ngắt dòng nếu văn bản quá dài */
+                overflow-wrap: break-word; /* Tương tự như word-wrap */
+                padding: 12px 18px; /* Khoảng cách bên trong các ô */
+                vertical-align: middle; /* Căn giữa nội dung theo chiều dọc */
+            }
+
+            .table thead th {
+                background-color: #343a40; /* Màu nền header */
+                color: white; /* Màu chữ */
+                font-weight: 500; /* Độ đậm của chữ */
+                padding: 12px 18px; /* Khoảng cách bên trong các ô */
+                border: none; /* Loại bỏ đường viền */
+            }
+
+            .table thead th:first-child {
+                border-top-left-radius: 8px; /* Bo tròn góc trên cùng bên trái */
+            }
+
+            .table thead th:last-child {
+                border-top-right-radius: 8px; /* Bo tròn góc trên cùng bên phải */
+            }
+
+            .table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+            .table tbody tr:hover {
+                background-color: rgba(240, 242, 245, 0.6);
+                transition: background-color 0.2s;
+            }
+
+            /* Status Badge */
+            .status-badge {
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 500;
+                display: inline-block;
+            }
+
+            .active-status {
+                background-color: rgba(40, 167, 69, 0.1);
+                color: #28a745;
+            }
+
+            .inactive-status {
+                background-color: rgba(220, 53, 69, 0.1);
+                color: #dc3545;
+            }
+
+            /* Action Buttons */
+            .table-action-btn {
+                margin-right: 5px;
+                border-radius: 6px;
+                padding: 6px 12px;
+                font-size: 13px;
+                font-weight: 500;
+                transition: all 0.2s;
+                min-width: 80px;
+                text-align: center;
+            }
+
+            .table-action-btn:hover {
+                transform: translateY(-2px);
+            }
+
+            .btn-edit {
                 background-color: #ffc107;
                 border-color: #ffc107;
-                padding: 8px 16px;
-                font-weight: 600;
+                box-shadow: 0 2px 5px rgba(255, 193, 7, 0.2);
             }
-            .btn-warning:hover {
+
+            .btn-edit:hover {
                 background-color: #e0a800;
                 border-color: #d39e00;
+                box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
             }
-            .btn-danger {
-                background-color: #dc3545;
+
+            .btn-delete {
+                background-color: transparent;
+                color: #dc3545;
                 border-color: #dc3545;
-                padding: 8px 16px;
+                box-shadow: 0 2px 5px rgba(220, 53, 69, 0.1);
+            }
+
+            .btn-delete:hover {
+                background-color: #dc3545;
+                color: white;
+                box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+            }
+
+            /* Staff Image */
+            .staff-image {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid #f0f2f5;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Delete Confirmation Modal */
+            .modal-header.bg-danger {
+                background-color: #dc3545 !important;
+            }
+
+            .modal-title {
                 font-weight: 600;
             }
-            .btn-danger:hover {
-                background-color: #bb2d3b;
-                border-color: #b02a37;
+
+            .modal-body .alert {
+                border-radius: 8px;
+                border: none;
             }
-            .alert-warning {
-                background-color: #fff3cd;
-                border-color: #ffeeba;
-                color: #856404;
-                padding: 10px;
-                border-radius: 5px;
+
+            /* Create Staff Button */
+            .btn-create {
+                background-color: #0d6efd;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                font-weight: 500;
+                margin-bottom: 20px;
+                box-shadow: 0 3px 10px rgba(13, 110, 253, 0.2);
+                transition: all 0.2s;
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .btn-create:hover {
+                background-color: #0b5ed7;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            }
+
+            .btn-create i {
+                margin-right: 8px;
             }
         </style>
     </head>
+
     <body>
         <jsp:include page="sidebar.jsp" />
-        <!-- Sidebar -->
-<!--        <div class="sidebar">
-            <h4 class="text-center mb-4">
-                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-            </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="feedback"><i class="fas fa-comments"></i> Manage Feedback</a>
-            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>-->
 
         <!-- Main Content -->
         <div class="content">
+
             <!-- Navbar -->
             <div class="navbar-custom">
-                <h3>Staff Account List</h3>
-                <form action="SearchAccountStaff" method="get" class="d-flex">
-                    <input type="text" name="fullname" placeholder="Search by Full Name" class="form-control me-2">
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-                <% String message = (String) session.getAttribute("message"); %>
-                <% if (message != null) { %>
-                <div id="alert-box" class="alert alert-warning text-center">
-                    <strong>Thông báo:</strong> <%= message %>
-                </div>
-                <% session.removeAttribute("message"); %>
-                <% } %>
-                <div>
-                    <a href="ManagerProfile.jsp" class="btn btn-outline-secondary me-2">Admin</a>
-                    <a href="javascript:void(0);" class="btn btn-danger" onclick="logout()">Logout</a>
+                <h4><i class="fas fa-user-tie me-2"></i>Admin Dashboard - Staff Management</h4>
+                <div class="profile">
+                    <a href="ManagerProfile.jsp" class="profile-link">
+                        <i class="fas fa-user-circle me-1"></i>${sessionScope.Username}
+                    </a>
+                    <a href="javascript:void(0);" class="btn btn-danger btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
                 </div>
             </div>
 
             <!-- Create Staff Button -->
-            <div class="d-flex justify-content-end mb-3">
-                <a href="Create_account_staff.jsp" class="btn btn-primary">Create Staff</a>
+            <div class="d-flex justify-content-end mb-4">
+                <a href="Create_account_staff.jsp" class="btn btn-create">
+                    <i class="fas fa-user-plus"></i>Create Staff
+                </a>
             </div>
 
-            <!-- Staff Table -->
-            <div class="table-responsive">
-                <table class="table table-striped text-center">
-                    <thead class="table-dark">
+            <!-- Search Bar -->
+            <div class="search-container mb-4">
+                <form action="SearchAccountStaff" method="POST" class="search-box">
+                    <input type="text" name="fullname" placeholder="Search by full name..." autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <!-- Hiển thị thông báo bằng SweetAlert2 -->
+            <% String message = (String) session.getAttribute("message"); %>
+            <% if (message != null) { %>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    Swal.fire({
+                        title: "Notification",
+                        text: "<%= message %>",
+                        icon: "info",
+                        confirmButtonText: "OK",
+                        confirmButtonColor: "#0d6efd"
+                    });
+                });
+            </script>
+            <% session.removeAttribute("message"); %>
+            <% } %>
+
+            <!-- Table -->
+            <div class="table-container" style="overflow-x: auto;">
+                <table class="table table-hover">
+                    <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
                             <th>Username</th>
+                            <th>Full Name</th>
                             <th>CCCD</th>
                             <th>Gender</th>
                             <th>BirthDay</th>
                             <th>Address</th>
-                            <th>Province/City</th>
+                            <th>City</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Status</th>
@@ -170,25 +382,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${list}" var="s">
-                            <c:if test="${s.username ne 'admin'}">
+                        <c:forEach items="${list}" var="staff">
+                            <c:if test="${staff.username ne 'admin'}">
                                 <tr>
-                                    <td>${s.staffID}</td>
-                                    <td>${s.fullName}</td>
-                                    <td>${s.username}</td>
-                                    <td>${s.cccd}</td>
-                                    <td>${s.sex}</td>
-                                    <td>${s.dob}</td>
-                                    <td>${s.address}</td>
-                                    <td>${s.province_city}</td>
-                                    <td>${s.email}</td>
-                                    <td>${s.phoneNumber}</td>          
-                                    <td>${s.status == 0 ? "Active" : "Inactive"}</td>
+                                    <td><span class="badge bg-dark">${staff.staffID}</span></td>
+                                    <td class="fw-medium">${staff.username}</td>
+                                    <td>${staff.fullName}</td>
+                                    <td>${staff.cccd}</td>
+                                    <td>${staff.sex}</td>
+                                    <td>${staff.dob}</td>
+                                    <td>${staff.address}</td>
+                                    <td>${staff.province_city}</td>
+                                    <td>${staff.email}</td>                               
+                                    <td>${staff.phoneNumber}</td>
                                     <td>
-                                        <a href="EditAccountStaff_ForAdmin?staffID=${s.staffID}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="DeleteAccount_Staff?staffID=${s.staffID}"
-                                           onclick="return confirm('Are you sure you want to delete this staff member?');"
-                                           class="btn btn-danger btn-sm">Delete</a>
+                                        <span class="status-badge ${staff.status == 0 ? 'active-status' : 'inactive-status'}">
+                                            ${staff.status == 0 ? 'Active' : 'Inactive'}
+                                        </span>
+                                    </td>
+                                    <td>              
+                                        <div class="d-flex">
+                                            <a href="EditAccountStaff_ForAdmin?staffID=${staff.staffID}" class="btn btn-edit table-action-btn me-2">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </a>
+                                            <a href="javascript:void(0);" class="btn btn-delete table-action-btn"
+                                               onclick="confirmDelete(${staff.staffID}, '${staff.username}')">
+                                                <i class="fas fa-trash-alt me-1"></i>Delete
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             </c:if>
@@ -198,17 +419,71 @@
             </div>
         </div>
 
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">Are you sure you want to delete this staff account?</p>
+                        <div class="alert alert-warning">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-info-circle me-2 text-warning fs-5"></i>
+                                <strong>Staff details:</strong>
+                            </div>
+                            <ul class="list-unstyled ms-4 mb-0">
+                                <li><strong>ID:</strong> <span id="deleteStaffId"></span></li>
+                                <li><strong>Username:</strong> <span id="deleteStaffName"></span></li>
+                            </ul>
+                        </div>
+                        <p class="text-danger mb-0"><strong>This action cannot be undone.</strong></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times me-1"></i>Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn" onclick="proceedWithDelete()">
+                            <i class="fas fa-trash-alt me-1"></i>Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             function logout() {
                 fetch('/LogOutStaffAndAdminController', {method: 'POST'})
                         .then(response => {
-                            if (response.ok) {
+                            if (response.ok)
                                 window.location.href = '/LoginOfDashboard.jsp';
-                            } else {
+                            else
                                 alert('Logout Failed!');
-                            }
                         })
                         .catch(error => console.error('Logout Error:', error));
+            }
+
+            let staffToDelete = null;
+
+            function confirmDelete(staffId, username) {
+                // Store the staff ID for delete action
+                staffToDelete = staffId;
+
+                // Update the modal with staff details
+                document.getElementById('deleteStaffId').textContent = staffId;
+                document.getElementById('deleteStaffName').textContent = username;
+
+                // Show the confirmation modal
+                const deleteModal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+                deleteModal.show();
+            }
+
+            function proceedWithDelete() {
+                if (staffToDelete) {
+                    window.location.href = "DeleteAccount_Staff?staffID=" + staffToDelete;
+                }
             }
         </script>
     </body>
