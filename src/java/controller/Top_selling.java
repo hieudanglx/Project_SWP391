@@ -4,22 +4,24 @@
  */
 package controller;
 
-import dao.AccountDao;
+import dao.OrderDAO;
+import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import model.Order_list;
+import model.Product;
 
 /**
  *
  * @author Tran Phong Hai - CE180803
  */
-@WebServlet(name = "LoginStaff_Admin", urlPatterns = {"/LoginStaff_Admin"})
-public class LoginStaff_Admin extends HttpServlet {
+public class Top_selling extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +40,10 @@ public class LoginStaff_Admin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginStaff_Admin</title>");
+            out.println("<title>Servlet Top_selling</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginStaff_Admin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Top_selling at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +61,33 @@ public class LoginStaff_Admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDao pd = new ProductDao();
+        OrderDAO orderDao = new OrderDAO();
+        String categoryIdParam = request.getParameter("categoryId");
+        int categoryId = (categoryIdParam != null) ? Integer.parseInt(categoryIdParam) : 1; // Mặc định là 1
+        List<Product> products = pd.getTopSellingProducts(categoryId);
+
+        List<Order_list> recentOrders =orderDao.getOrdernew();
+        
+        request.setAttribute("products", products);
+        request.setAttribute("selectedCategory", categoryId);
+        request.setAttribute("recentOrder", recentOrders);
+
+        // 🛠 Lấy tổng số sản phẩm từ DB
+        int totalProduct = pd.getTotalProduct();
+        int totalOrderSuccessful = pd.getTotalPendingOrder();
+        int TotalOrderDelivery = pd.getTotalOrderDelivery();
+        
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("totalProducts", totalProduct); // Lưu vào session
+        session.setAttribute("totalOrderSuccessful", totalOrderSuccessful);
+        session.setAttribute("TotalOrderDelivery", TotalOrderDelivery);
+        
+        
+
+        request.getRequestDispatcher("HomeDashBoard_Staff.jsp").forward(request, response);
+        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
     }
 
     /**
@@ -73,50 +101,7 @@ public class LoginStaff_Admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-
-        AccountDao accountDAO = new AccountDao();
-        String username = request.getParameter("Username").trim();
-        String password = request.getParameter("Password").trim();
-
-        if (username.isEmpty() || password.isEmpty()) {
-            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            return;
-        }
-
-        try {
-            Integer status = accountDAO.ValidateStaff_Admin(username, password); // Đổi tên cho rõ ràng
-
-            if (status != null) {
-                if (status == 0) { // Tài khoản hoạt động
-                    HttpSession session = request.getSession();
-                    session.setAttribute("Username", username);
-                    session.setAttribute("fullname", accountDAO.getFullname(username));
-
-                    if (!"admin".equalsIgnoreCase(username)) {
-                        session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
-                    }
-
-                    final String destinationPage = "admin".equalsIgnoreCase(username)
-                            ? "HomeDashBoard_Admin.jsp"
-                            : "Top_selling"; // cái này là trang của Dash board staff
-
-                    response.sendRedirect(destinationPage);
-                    return;
-                } else if (status == 1) { // Tài khoản bị chặn
-                    request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");
-                }
-            } else {
-                request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu không hợp lệ!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("errorMessage", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
-        }
-
-        // Trả lỗi về JSP
-        request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**

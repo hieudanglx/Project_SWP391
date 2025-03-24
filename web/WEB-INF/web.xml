@@ -48,6 +48,14 @@
         <servlet-name>RevenueData</servlet-name>
         <servlet-class>controller.RevenueData</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Top_selling</servlet-name>
+        <servlet-class>controller.Top_selling</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>listOrderNew</servlet-name>
+        <servlet-class>controller.listOrderNew</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -107,6 +115,14 @@
     <servlet-mapping>
         <servlet-name>RevenueData</servlet-name>
         <url-pattern>/RevenueData</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Top_selling</servlet-name>
+        <url-pattern>/Top_selling</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>listOrderNew</servlet-name>
+        <url-pattern>/listOrderNew</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

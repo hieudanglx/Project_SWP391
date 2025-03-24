@@ -183,26 +183,42 @@
                 </div>
             </div>
 
-            <!-- Product List -->
-            <div class="card mt-4 p-3 table-container">
-                <h5>Product List</h5>
-                <table class="table table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Price ($)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1</td><td>iPhone 14</td><td>Phone</td><td>999</td></tr>
-                        <tr><td>2</td><td>MacBook Pro</td><td>Laptop</td><td>1299</td></tr>
-                        <tr><td>3</td><td>Galaxy Tab S8</td><td>Tablet</td><td>699</td></tr>
-                    </tbody>
-                </table>
+            <!-- Top Selling Products Table -->
+            <div class="dashboard-table mb-4">
+                <div class="table-header">
+                    <h6 class="mb-0">Top Selling Products</h6>
+                    <span class="badge" style="background-color: var(--danger-color);">Hot</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Product Name</th>
+                                <th>Color</th>
+                                <th>Memory</th>
+                                <th>Price</th>
+                                <th>Sold</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="product" items="${products}">
+                                <tr>
+                                    <td class="text-center">${product.productID}</td>
+                                    <td>${product.productName}</td>
+                                    <td>${product.color}</td>
+                                    <td>${product.rom}</td>
+                                    <td class="text-end">
+                                        <fmt:formatNumber value="${product.price}" pattern="#,### VND"/>
+                                    </td>
+                                    <td class="text-center">${product.quantitySell}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+
 
         <script>
             function logout() {

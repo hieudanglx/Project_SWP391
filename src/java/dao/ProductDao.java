@@ -60,7 +60,7 @@ public class ProductDao extends DBContext {
         }
         return list;
     }
-    
+
     public Map<Integer, String> getProductNames() {
         Map<Integer, String> productNames = new HashMap<>();
         String sql = "SELECT productID, productName FROM Product"; // Đúng cột productName
@@ -68,9 +68,9 @@ public class ProductDao extends DBContext {
             while (rs.next()) {
                 int id = rs.getInt("productID");
                 String name = rs.getString("productName"); // Đúng cột productName
-                productNames.put(id, name);               
+                productNames.put(id, name);
             }
-             System.out.println("Product Names: " + productNames); // Debug
+            System.out.println("Product Names: " + productNames); // Debug
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -512,4 +512,79 @@ public class ProductDao extends DBContext {
         return list;
     }
 
+    public List<Product> getTopSellingProducts(int categoryId) {
+        String sql = "SELECT TOP 10 P.ProductID, P.ProductName, P.Color, P.Rom, P.Price, P.Quantity_Sell AS TotalSold "
+                + "FROM Product P "
+                + "WHERE P.CategoryID = ? "
+                + "ORDER BY P.Quantity_Sell DESC";
+
+        List<Product> products = new ArrayList<>();
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, categoryId); // Gán giá trị cho tham số ?
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                products.add(new Product(
+                        rs.getInt("ProductID"),
+                        rs.getString("ProductName"),
+                        rs.getString("Color"),
+                        rs.getString("Rom"),
+                        rs.getInt("Price"),
+                        rs.getInt("TotalSold")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public int getTotalProduct() {
+        String sql = "SELECT COUNT(*) AS totalProduct FROM Product";
+        try ( PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                int totalProduct = rs.getInt("totalProduct"); // Sửa thành "totalProduct"
+                System.out.println("Tổng số sản phẩm: " + totalProduct);
+                return totalProduct; // Trả về số lượng sản phẩm
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0; // Trả về 0 nếu có lỗi
+    }
+
+    public int getTotalPendingOrder() {
+        String sql = "SELECT COUNT(*) AS totalOrderSuccessful FROM Order_List WHERE Status = 'Thành công'";
+        try ( PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+          if(rs.next()){
+            return  rs.getInt("totalOrderSuccessful");
+          }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int getTotalOrderDelivery() {
+        String sql = "SELECT COUNT(*) AS TotalOrderDelivery FROM Order_List WHERE Status = 'Giao Hàng'";
+        try ( PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+          if(rs.next()){
+            return  rs.getInt("TotalOrderDelivery");
+          }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        ProductDao pd = new ProductDao();
+        List<Product> products = pd.getTopSellingProducts(1); // Thay 1 bằng CategoryID mong muốn
+
+        System.out.println("Top 10 sản phẩm bán chạy nhất:");
+        for (Product product : products) {
+            System.out.println("ProductID: " + product.getProductID() + ", Name: " + product.getProductName()
+                    + ", Color: " + product.getColor() + ", ROM: " + product.getRom() + ", Sold: " + product.getQuantitySell());
+        }
+    }
 }

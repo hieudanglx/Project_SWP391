@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
  */
 public class Order_list {
 
-   private int OrderID;
+    private int OrderID;
     private int CustomerID;
     private int StaffID;
     private String Address;
@@ -21,8 +21,10 @@ public class Order_list {
     private String Status;
     private String PhoneNumber;
     private double Total;
-    
-
+    private String fullname;
+    private String productName;
+    private int Quantity;
+    private double price;
     private int year;
     private int period; // Tháng hoặc quý
     private double revenue;
@@ -41,8 +43,6 @@ public class Order_list {
         this.period = period;
         this.revenue = revenue;
     }
-    
-    
 
     public Order_list(int OrderID, int CustomerID, int StaffID, String Address, Date Date, String Status, String PhoneNumber, double Total) {
         this.OrderID = OrderID;
@@ -53,7 +53,7 @@ public class Order_list {
         this.Status = Status;
         this.PhoneNumber = PhoneNumber;
         this.Total = Total;
-        
+
     }
 
     public Order_list(int OrderID, String Status, double Total) {
@@ -61,9 +61,19 @@ public class Order_list {
         this.Status = Status;
         this.Total = Total;
     }
-    
-    
-    
+
+    // order gần nhất
+    public Order_list(String fullname, Date Date, String Address, String productName, double price, String Status, int Quantity, double Total) {
+        this.fullname = fullname;
+        this.Date = Date;
+        this.Address = Address;
+        this.productName = productName;
+        this.price = price;
+        this.Status = Status;
+        this.Quantity = Quantity;
+        this.Total = Total;
+
+    }
 
     public Order_list(int OrderID, Date Date, double Total) {
         this.OrderID = OrderID;
@@ -71,11 +81,40 @@ public class Order_list {
         this.Total = Total;
     }
 
-    
     public Order_list() {
     }
 
-   
+    public int getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(int Quantity) {
+        this.Quantity = Quantity;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     public int getOrderID() {
         return OrderID;
@@ -173,8 +212,8 @@ public class Order_list {
             return "Năm: " + year + ", " + type + ": " + period + ", Doanh thu: " + formatter.format(revenue);
         } else {
             // Nếu là dữ liệu đơn hàng
-            return "Order ID: " + OrderID + ", Ngày: " + (Date != null ? Date.toString() : "Chưa có") +
-                    ", Tổng tiền: " + formatter.format(Total);
+            return "Order ID: " + OrderID + ", Ngày: " + (Date != null ? Date.toString() : "Chưa có")
+                    + ", Tổng tiền: " + formatter.format(Total);
         }
     }
 }

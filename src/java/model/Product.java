@@ -29,12 +29,15 @@ public class Product {
     private String imageURL;
     private int isDelete;
     
+    private int totalProduct;
+    private int OrderSuccessful;
+
     // createProduct
-    public Product(String productName, int price, int categoryID, String brand, 
-                   String operatingSystemName, String operatingSystemVersion, 
-                   String ram, String rom, String color, String screenSize, 
-                   String cameraBehind, String cameraFront, String chipName, 
-                   String refreshRate, String imageURL, int isDelete) {
+    public Product(String productName, int price, int categoryID, String brand,
+            String operatingSystemName, String operatingSystemVersion,
+            String ram, String rom, String color, String screenSize,
+            String cameraBehind, String cameraFront, String chipName,
+            String refreshRate, String imageURL, int isDelete) {
         this.productName = productName;
         this.price = price;
         this.categoryID = categoryID;
@@ -52,7 +55,7 @@ public class Product {
         this.imageURL = imageURL;
         this.isDelete = isDelete;
     }
-    
+
     public Product(int productID, String productName, int price, int categoryID, String brand, String cameraFront, String cameraBehind, String ram, String ramType, String supportsUpgradingRAM, String rom, String supportsUpgradingROM, String color, String operatingSystemName, String operatingSystemVersion, String screenSize, String refreshRate, String screenResolution, String chipType, String chipName, String gpuType, String gpuName, int quantitySell, int quantityProduct, String imageURL, int isDelete) {
         this.productID = productID;
         this.productName = productName;
@@ -94,7 +97,7 @@ public class Product {
     }
 
     public Product(int categoryID, String brand, String ram, String rom, String operatingSystemName, String screenSize,
-             String screenResolution, String refreshRate, String chipType, String chipName) {
+            String screenResolution, String refreshRate, String chipType, String chipName) {
         this.categoryID = categoryID;
         this.brand = brand;
         this.ram = ram;
@@ -105,6 +108,16 @@ public class Product {
         this.refreshRate = refreshRate;
         this.chipType = chipType;
         this.chipName = chipName;
+    }
+
+    // top 10 san phẩm bán chạy nhất từng loại mặc hàng 
+    public Product(int productID, String productName,String color,  String rom, int price, int quantitySell) {
+        this.productID = productID;
+        this.productName = productName;
+        this.color = color;
+        this.rom = rom;
+        this.price = price;
+        this.quantitySell = quantitySell;
     }
 
     public Product() {

@@ -371,6 +371,36 @@ public class OrderDAO extends dao.DBContext {
         }
         return totalSales;
     }
+    
+    public List<Order_list> getOrdernew(){
+    List<Order_list> order_list = new ArrayList<>();
+    String sql = "SELECT TOP 10 c.FullName, ol.Date, ol.Address, p.ProductName, " +
+                     "p.Price, ol.Status, od.Quantity, ol.Total " +
+                     "FROM Order_List ol " +
+                     "JOIN Order_Details od ON ol.OrderID = od.OrderID " +
+                     "JOIN Product p ON od.ProductID = p.ProductID " +
+                     "JOIN Customer c ON ol.CustomerID = c.CustomerID " +
+                     "ORDER BY ol.Date DESC";
+    
+    try(PreparedStatement pstmt = connection.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()){
+       while (rs.next()){
+          Order_list order = new Order_list();
+                order.setFullname(rs.getString("FullName"));
+                order.setDate(rs.getDate("Date"));
+                order.setAddress(rs.getString("Address"));
+                order.setProductName(rs.getString("ProductName"));
+                order.setPrice(rs.getDouble("Price"));
+                order.setStatus(rs.getString("Status"));
+                order.setQuantity(rs.getInt("Quantity"));
+                order.setTotal(rs.getDouble("Total"));
+                order_list.add(order);
+       }
+    }catch(Exception e){
+     e.printStackTrace();
+    }
+        return order_list;    
+    }
 
 //    public static void main(String[] args) {
 //        OrderDAO orderDAO = new OrderDAO();
