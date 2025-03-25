@@ -56,6 +56,14 @@
         <servlet-name>listOrderNew</servlet-name>
         <servlet-class>controller.listOrderNew</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddToCartController</servlet-name>
+        <servlet-class>controller.AddToCartController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveInCartController</servlet-name>
+        <servlet-class>controller.RemoveInCartController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -123,6 +131,14 @@
     <servlet-mapping>
         <servlet-name>listOrderNew</servlet-name>
         <url-pattern>/listOrderNew</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToCartController</servlet-name>
+        <url-pattern>/AddToCartController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveInCartController</servlet-name>
+        <url-pattern>/RemoveInCartController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -19,17 +19,17 @@
         <style>
             /* Fix cứng kích thước cho trang giỏ hàng */
             .cart-container {
-                width: 1200px !important;
-                min-width: 1200px !important;
+                width: 1140px !important;
+                min-width: 1140px !important;
                 margin: 0 auto;
                 padding: 30px 15px;
                 min-height: 70vh;
             }
 
             /* Đè style Bootstrap */
-            @media (min-width: 1200px) {
+            @media (min-width: 1140px) {
                 .cart-container {
-                    max-width: 1200px !important;
+                    max-width: 1140px !important;
                 }
             }
 
@@ -190,9 +190,9 @@
                                                                        >+</a>
                                                                 </div>
                                                                 <!-- Nút xóa -->
-                                                                <a href="UpdateCartController?id=${product.productID}&type=R"
+                                                                <a href="RemoveInCartController?id=${product.productID}"
                                                                    class="btn btn-link text-danger"
-                                                                   onclick="return confirmRemove(${product.productID}) || false;"> <!-- Thêm || false -->
+                                                                   onclick="return confirmRemove(${product.productID})">
                                                                     <i class="fas fa-trash fa-lg"></i>
                                                                 </a>
                                                             </div>
@@ -435,8 +435,8 @@
                         // Xử lý fixed width
                         function enforceCartWidth() {
                             const container = document.querySelector('.cart-container');
-                            if (window.innerWidth < 1200) {
-                                container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+                            if (window.innerWidth < 1140) {
+                                container.style.transform = `translateX(${(1140 - window.innerWidth)/2}px)`;
                             } else {
                                 container.style.transform = 'none';
                             }

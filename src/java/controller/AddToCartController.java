@@ -24,8 +24,8 @@ import model.Product;
  *
  * @author CE180594_Phan Quốc Duy
  */
-@WebServlet(name = "UpdateCartController", urlPatterns = {"/UpdateCartController"})
-public class UpdateCartController extends HttpServlet {
+@WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
+public class AddToCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,31 +44,45 @@ public class UpdateCartController extends HttpServlet {
         CartDao link = new CartDao();
 
         Customer c = (Customer) session.getAttribute("customer");
+        if (c == null) {
+            response.sendRedirect("choiceLogin.jsp");
+            return;
+        }
 
         // Kiểm tra tham số bắt buộc
-        String type = request.getParameter("type");
+        String web= (request.getParameter("web") == null
+                || request.getParameter("web").isEmpty()) ? "" : request.getParameter("web");
         String idParam = request.getParameter("id");
+        String categoryIDParam = (request.getParameter("CategoryID") == null
+                || request.getParameter("CategoryID").isEmpty()) ? "" : request.getParameter("CategoryID");
 
         int id = Integer.parseInt(idParam);
+        String url = "ViewCartController"; // Mặc định
+
+        // Xử lý URL redirect
+        if (web.contains("list") && categoryIDParam != null) {
+            url = "ViewListProductGC?CategoryID=" + Integer.parseInt(categoryIDParam);
+        } else if (web.contains("detail")) {
+            url = "ViewProductDetailsController?id=" + id;
+        }
+
+        System.out.println(url);
         String status = "success";
-        String message = "Cập nhật thành công";
-        // Xử lý logic
-        switch (type) {
-            case "-":
-                message = "Cập nhật thành công";
-                if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
-                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                    status = "error";
-                    message = "Cập nhật thất bại";
-                }
-                break;
-            case "+":
-                if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
-                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                    status = "error";
-                    message = "Sản phẩm đã hết hàng";
-                }
-                break;
+        String message = "Thêm thành công";
+
+        if (link.ProductExistsInCart(c.getCustomerID(), id)) {
+            System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
+            if (!link.updateCartProduct(c.getCustomerID(), id, "+")) {
+                System.out.println("controller.UpdateCartController.processRequest() add sai r");
+                status = "error";
+                message = "Sản phẩm đã hết hàng";
+            }
+        } else {
+            if (!link.AddProductToCart(c.getCustomerID(), id)) {
+                System.out.println("controller.AddProductToCart.processRequest() add sai r");
+                status = "error";
+                message = "Sản phẩm đã hết hàng";
+            }
         }
         // Cập nhật session
         List<Product> list = new ArrayList<>();
@@ -76,7 +90,7 @@ public class UpdateCartController extends HttpServlet {
         session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
         session.setAttribute("status", status);
         session.setAttribute("message", message);
-        request.getRequestDispatcher("ViewCartController").forward(request, response);
+        request.getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -94,7 +108,7 @@ public class UpdateCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(UpdateCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -112,7 +126,7 @@ public class UpdateCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(UpdateCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -125,4 +139,5 @@ public class UpdateCartController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

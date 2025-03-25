@@ -374,11 +374,11 @@
 
                             <!-- Action Buttons -->
                             <div class="d-grid gap-2">
-                                <a href="UpdateCartController?id=${product.productID}&type=%2B&page=detail" class="btn btn-lg btn-dark py-3"
+                                <a href="AddToCartController?id=${product.productID}&web=detail" class="btn btn-lg btn-dark py-3"
                                    <i class="fas fa-cart-plus me-2"></i>
                                     Thêm vào giỏ hàng
                                 </a>
-                                <a href="UpdateCartController?id=${product.productID}&type=%2B" class="btn btn-lg btn-primary py-3">
+                                <a href="AddToCartController?id=${product.productID}" class="btn btn-lg btn-primary py-3">
                                     <i class="fas fa-bolt me-2"></i>
                                     Mua ngay
                                 </a>
