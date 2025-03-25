@@ -9,7 +9,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        
+
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <!-- Google Fonts -->
@@ -39,13 +39,13 @@
             transition: all 0.3s ease;
             z-index: 1000;
         }
-        
+
         .sidebar-header {
             padding: 12px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 15px;
         }
-        
+
         .sidebar-logo {
             font-size: 24px;
             font-weight: 700;
@@ -56,12 +56,12 @@
             justify-content: center;
             margin-bottom: 10px;
         }
-        
+
         .sidebar-logo i {
             margin-right: 10px;
             color: #2fd1cb;
         }
-        
+
         .sidebar a {
             padding: 14px 20px;
             text-decoration: none;
@@ -74,21 +74,21 @@
             margin: 4px 0;
             border-radius: 0 30px 30px 0;
         }
-        
+
         .sidebar a:hover {
             background: rgba(255, 255, 255, 0.1);
             color: white;
             border-left: 4px solid #2fd1cb;
             transform: translateX(5px);
         }
-        
+
         .sidebar a.active {
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border-left: 4px solid #2fd1cb;
             font-weight: 500;
         }
-        
+
         .sidebar a i {
             margin-right: 15px;
             width: 20px;
@@ -96,7 +96,7 @@
             font-size: 18px;
             color: #2fd1cb;
         }
-        
+
         .menu-category {
             color: rgba(255, 255, 255, 0.5);
             font-size: 12px;
@@ -124,12 +124,12 @@
             justify-content: space-between;
             border-radius: 10px;
         }
-        
+
         .profile {
             display: flex;
             align-items: center;
         }
-        
+
         .profile a {
             margin-right: 15px;
             font-weight: 600;
@@ -137,11 +137,11 @@
             text-decoration: none;
             transition: all 0.2s;
         }
-        
+
         .profile a:hover {
             color: #2fd1cb;
         }
-        
+
         .profile img {
             width: 40px;
             height: 40px;
@@ -157,12 +157,12 @@
             border-radius: 12px;
             box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
         }
-        
+
         .table thead {
             background-color: #162742;
             color: white;
         }
-        
+
         .table tbody tr:hover {
             background-color: #f8f9fa;
         }
@@ -176,14 +176,14 @@
             border-radius: 8px;
             transition: all 0.3s;
         }
-        
+
         .btn-primary:hover {
             background-color: #25b5b0;
             border-color: #25b5b0;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(47, 209, 203, 0.3);
         }
-        
+
         .btn-warning {
             background-color: #ffb74d;
             border-color: #ffb74d;
@@ -192,14 +192,14 @@
             border-radius: 8px;
             transition: all 0.3s;
         }
-        
+
         .btn-warning:hover {
             background-color: #ffa726;
             border-color: #ffa726;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(255, 183, 77, 0.3);
         }
-        
+
         .btn-danger {
             background-color: #ef5350;
             border-color: #ef5350;
@@ -208,14 +208,14 @@
             border-radius: 8px;
             transition: all 0.3s;
         }
-        
+
         .btn-danger:hover {
             background-color: #e53935;
             border-color: #e53935;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(239, 83, 80, 0.3);
         }
-        
+
         /* Toggle button for responsive sidebar */
         .sidebar-toggle {
             position: fixed;
@@ -234,7 +234,19 @@
             cursor: pointer;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
-        
+
+        /* Disabled links styling */
+        .sidebar a.disabled {
+            color: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .sidebar a.disabled i {
+            color: rgba(47, 209, 203, 0.4);
+        }
+
         /* For responsive design */
         @media (max-width: 992px) {
             .sidebar {
@@ -255,11 +267,20 @@
         }
     </style>
     <body>
+        <%
+            // Kiểm tra session Username
+            String username = (String) session.getAttribute("Username");
+            boolean isAdmin = "admin".equals(username);
+            
+            // Xác định URL Dashboard dựa trên role
+            String dashboardUrl = isAdmin ? "HomeDashBoard_Admin.jsp" : "HomeDashBoard_Staff.jsp";
+        %>
+
         <!-- Toggle button for mobile -->
         <button class="sidebar-toggle" id="sidebarToggle">
             <i class="fas fa-bars"></i>
         </button>
-        
+
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -268,20 +289,20 @@
                     <span>Admin Portal</span>
                 </div>
             </div>
-            
+
             <div class="menu-category">Main Navigation</div>
-            <a href="HomeDashBoard_Admin.jsp" class="active">
+            <a href="<%= dashboardUrl %>" class="active">
                 <i class="fas fa-home"></i> Dashboard
             </a>
-            
+
             <div class="menu-category">User Management</div>
-            <a href="/ListAccountStaff">
+            <a href="/ListAccountStaff" class="<%= !isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-user-tie"></i> Manage Staff
             </a>
-            <a href="listAccountCustomer">
+            <a href="listAccountCustomer" class="<%= !isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-users"></i> Manage Customers
             </a>
-            
+
             <div class="menu-category">Shop Management</div>
             <a href="listProductsForAdmin">
                 <i class="fas fa-box"></i> Manage Products
@@ -292,7 +313,7 @@
             <a href="ListInventory">
                 <i class="fas fa-warehouse"></i> Manage Inventory
             </a>
-            
+
             <div class="menu-category">Business Insights</div>
             <a href="feedback">
                 <i class="fas fa-comment-dots"></i> Customer Feedback
@@ -300,19 +321,17 @@
             <a href="Revenue">
                 <i class="fas fa-chart-line"></i> Revenue Analytics
             </a>
-            
+
             <div class="menu-category">Account</div>
-            <a href="profile.jsp">
+            <a href="viewProfileStaff" class="<%= isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-user-circle"></i> My Profile
             </a>
-            <a href="logout.jsp">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
+            <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>                         
         </div>
-        
+
         <!-- JavaScript for toggling sidebar on mobile -->
         <script>
-            document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebarToggle').addEventListener('click', function () {
                 document.getElementById('sidebar').classList.toggle('active');
                 document.querySelector('.content').classList.toggle('sidebar-active');
             });
