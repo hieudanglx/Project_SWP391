@@ -81,7 +81,7 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
         boolean exists = cusDAO.isEmailExisted(email);
 
         if (!exists) {
-            request.setAttribute("error", "Email không tồn tại trong hệ thống!");
+            request.setAttribute("errorMessage", "Email không tồn tại trong hệ thống!");
             request.getRequestDispatcher("forgotPasswordOfCustomer.jsp").forward(request, response);
             return;
         }

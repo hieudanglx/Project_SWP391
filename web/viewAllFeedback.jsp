@@ -7,205 +7,263 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!DOCTYPE html>
-<html>
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
-        <title>Danh sách Feedback</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản Lý Feedback</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
         <style>
+            :root {
+                --primary-color: #3498db;
+                --secondary-color: #2ecc71;
+                --background-light: #f4f6f7;
+                --text-dark: #2c3e50;
+            }
+
             body {
-                display: flex;
-                font-family: Arial, sans-serif;
-                background-color: #f8f9fa;
+                background-color: var(--background-light);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                color: var(--text-dark);
             }
+
+            .dashboard-container {
+                display: flex;
+                min-height: 100vh;
+            }
+
             .sidebar {
-                width: 250px;
-                height: 100vh;
-                background-color: #343a40;
+                width: 260px;
+                background: linear-gradient(135deg, var(--primary-color), #2980b9);
                 color: white;
-                position: fixed;
-                padding-top: 20px;
-                transition: background-color 0.3s;
+                padding: 20px 0;
+                transition: width 0.3s ease;
             }
+
             .sidebar a {
-                padding: 10px 15px;
-                text-decoration: none;
-                font-size: 18px;
-                color: white;
+                color: rgba(255,255,255,0.8);
+                padding: 12px 20px;
                 display: block;
-                transition: background-color 0.3s ease;
+                text-decoration: none;
+                transition: all 0.3s ease;
             }
+
             .sidebar a:hover {
-                background-color: #495057;
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+                transform: translateX(10px);
             }
+
             .content {
-                margin-left: 250px;
-                width: calc(100% - 250px);
+                flex-grow: 1;
                 padding: 20px;
+                margin-left: 260px;
+                transition: margin-left 0.3s ease;
             }
-            .navbar-custom {
+
+            .feedback-table {
                 background: white;
-                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-                padding: 10px 20px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+
+            .feedback-card {
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            .alert {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                animation: slideIn 0.5s ease;
+            }
+
+            @keyframes slideIn {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+            }
+
+            .rate-badge {
+                display: inline-block;
+                padding: 5px 10px;
+                border-radius: 20px;
+                font-weight: bold;
+            }
+
+            .rate-badge-good { 
+                background-color: #28a745; 
+                color: white; 
+            }
+
+            .rate-badge-average { 
+                background-color: #ffc107; 
+                color: black; 
+            }
+
+            .rate-badge-poor { 
+                background-color: #dc3545; 
+                color: white; 
             }
         </style>
     </head>
     <body>
-        <jsp:include page="sidebar.jsp" />
-<!--        <div class="sidebar">
-            <h4 class="text-center">
-                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-            </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-chart-bar"></i> Manager Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="listOrderAdmin"><i class="fas fa-box"></i> Manage Orders</a>
-            <a href="feedback"><i class="fas fa-cog"></i> Manager Feedback</a>
-            <a href="Revenue"><i class="fas fa-cog"></i> Manager Revenue</a>
-            <a href="ListInventory"><i class="fas fa-cog"></i> Manager Inventory</a>
-        </div>-->
-        <div class="content">
-            <!-- Navbar -->
-            <nav class="navbar-custom">
-                <h4>Admin Dashboard - View All Feedback</h4>
-                <div class="ms-auto">
-                    <a href="/viewProfileStaff" class="text-decoration-none text-dark me-3 fw-bold"> ${sessionScope.fullname}</a>
-                    <a href="javascript:void(0);" class="text-lg-startr fw-bold" onclick="logout()">Logout</a>
+        <div class="dashboard-container">
+            <jsp:include page="sidebar.jsp" />
+
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <h2 class="text-center mb-4">
+                                <i class="fas fa-comment-dots me-2"></i>Quản Lý Feedback
+                            </h2>
+
+                            <c:if test="${not empty sessionScope.repSuccess}">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    ${sessionScope.repSuccess}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <c:remove var="repSuccess" scope="session"/>
+                            </c:if>
+
+                            <c:if test="${not empty sessionScope.errorMessage}">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    ${sessionScope.errorMessage}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <c:remove var="errorMessage" scope="session"/>
+                            </c:if>
+
+                            <div class="table-responsive feedback-table">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Khách Hàng</th>
+                                            <th>Nội Dung</th>
+                                            <th>Điểm Đánh Giá</th>
+                                            <th>Sản Phẩm</th>
+                                            <th>Hành Động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:choose>
+                                            <c:when test="${not empty feedbackList}">
+                                                <c:forEach var="feedback" items="${feedbackList}">
+                                                    <tr>
+                                                        <td>${feedback.feedbackID}</td>
+                                                        <td>${customerNames[feedback.customerID] != null ? customerNames[feedback.customerID] : 'Không xác định'}</td>
+                                                        <td>
+                                                            ${feedback.content}
+                                                            <c:if test="${not empty feedbackReplies[feedback.feedbackID]}">
+                                                                <div class="text-muted mt-2">
+                                                                    <strong>Phản hồi:</strong> 
+                                                                    ${feedbackReplies[feedback.feedbackID]}
+                                                                </div>
+                                                            </c:if>
+                                                        </td>
+                                                        <td>
+                                                            <span class="rate-badge ${feedback.ratePoint >= 4 ? 'rate-badge-good' : 
+                                                                    (feedback.ratePoint >= 2 ? 'rate-badge-average' : 'rate-badge-poor')}">
+                                                                ${feedback.ratePoint}/5
+                                                            </span>
+                                                        </td>
+                                                        <td>${productNames[feedback.productID] != null ? productNames[feedback.productID] : 'Không xác định'}</td>
+                                                        <td>
+                                                            <div class="btn-group" role="group">
+                                                                <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" 
+                                                                   class="btn btn-sm btn-outline-danger" 
+                                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                                <button class="btn btn-sm btn-outline-primary" 
+                                                                        data-bs-toggle="modal" 
+                                                                        data-bs-target="#replyModal${feedback.feedbackID}">
+                                                                    <i class="fas fa-reply"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <tr>
+                                                    <td colspan="6" class="text-center text-muted">
+                                                        <i class="fas fa-inbox fa-2x mb-3"></i>
+                                                        <p>Không có feedback nào để hiển thị</p>
+                                                    </td>
+                                                </tr>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </nav>  
-
-            <div class="container mt-4">
-                <h2 class="text-center">Danh sách Feedback</h2>
-
-                <!-- Hiển thị thông báo thành công -->
-                <c:if test="${not empty sessionScope.repSuccess}">
-                    <div id="successMessage" class="alert alert-success">${sessionScope.repSuccess}</div>
-                    <c:remove var="repSuccess" scope="session"/>
-                </c:if>
-
-                <!-- Hiển thị thông báo lỗi -->
-                <c:if test="${not empty sessionScope.errorMessage}">
-                    <div id="errorMessage" class="alert alert-danger">${sessionScope.errorMessage}</div>
-                    <c:remove var="errorMessage" scope="session"/>
-                </c:if>
-
-                <table class="table table-bordered">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Customer</th>
-                            <th>Nội dung</th>
-                            <th>Điểm đánh giá</th>
-                            <th>Product ID</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:choose>
-                            <c:when test="${not empty feedbackList}">
-                                <c:forEach var="feedback" items="${feedbackList}">
-                                    <tr>
-                                        <td>${feedback.feedbackID}</td>
-                                        <td>${customerNames[feedback.customerID] != null ? customerNames[feedback.customerID] : 'Không xác định'}</td>
-                                        <td>${feedback.content}
-                                            <div id="reply_${feedback.feedbackID}">
-                                                <c:if test="${not empty feedbackReplies[feedback.feedbackID]}">
-                                                    <br><strong>Phản hồi:</strong> ${feedbackReplies[feedback.feedbackID]}
-                                                </c:if>
-                                            </div>
-                                        </td>
-                                        <td>${feedback.ratePoint}</td>
-                                        <td>${productNames[feedback.productID] != null ? productNames[feedback.productID] : 'Không xác định'}</td>
-
-                                        <td>
-                                            <div class="card p-3 mb-2">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" class="btn btn-danger"
-                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a>
-                                                    <form action="feedback" method="post" class="w-100 ms-3">
-                                                        <input type="hidden" name="action" value="reply">
-                                                        <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
-                                                        <input type="hidden" name="customerID" value="${feedback.customerID}">
-
-                                                        <c:choose>
-                                                            <c:when test="${sessionScope.username eq 'admin'}">
-                                                                <div class="mb-2">
-                                                                    <label for="staffID">Admin:</label>
-                                                                    <input type="hidden" name="staffID" value="${sessionScope.adminID}">
-                                                                    <span class="fw-bold">${sessionScope.adminID}</span>
-                                                                </div>
-                                                                <div class="mb-2">
-                                                                    <label for="replyContent_${feedback.feedbackID}" class="form-label">Nhập phản hồi:</label>
-                                                                    <textarea name="replyContent" id="replyContent_${feedback.feedbackID}" 
-                                                                              class="form-control" placeholder="Nhập phản hồi..." required></textarea>
-                                                                </div>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <div class="mb-2">
-                                                                    <label for="staffID">Staff ID:</label>
-                                                                    <input type="hidden" name="staffID" value="${sessionScope.staffId}">
-                                                                    <span class="fw-bold">${sessionScope.staffId}</span>
-                                                                </div>
-
-                                                                <div class="mb-2">
-                                                                    <label for="replyContent_${feedback.feedbackID}" class="form-label">Nhập phản hồi:</label>
-                                                                    <textarea name="replyContent" id="replyContent_${feedback.feedbackID}" 
-                                                                              class="form-control" placeholder="Nhập phản hồi..." required></textarea>
-                                                                </div>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                        <button type="submit" class="btn btn-primary w-100">Gửi phản hồi</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </c:when>
-                            <c:otherwise>
-                                <tr>
-                                    <td colspan="6" class="text-center">Không có feedback nào.</td>
-                                </tr>
-                            </c:otherwise>
-                        </c:choose>
-                    </tbody>
-                </table>
             </div>
         </div>
 
-        <!-- JavaScript để ẩn thông báo sau 5 giây -->
+        <!-- Reply Modals for each feedback -->
+        <c:forEach var="feedback" items="${feedbackList}">
+            <div class="modal fade" id="replyModal${feedback.feedbackID}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Phản Hồi Feedback</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="feedback" method="post">
+                                <input type="hidden" name="action" value="reply">
+                                <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
+                                <input type="hidden" name="customerID" value="${feedback.customerID}">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Người Phản Hồi:</label>
+                                    <input type="text" class="form-control" 
+                                           value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}" 
+                                           readonly>
+                                    <input type="hidden" name="staffID" 
+                                           value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="replyContent" class="form-label">Nội Dung Phản Hồi</label>
+                                    <textarea name="replyContent" class="form-control" rows="4" 
+                                              placeholder="Nhập phản hồi..." required></textarea>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Gửi Phản Hồi
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            setTimeout(function () {
-                let successMsg = document.getElementById("successMessage");
-                let errorMsg = document.getElementById("errorMessage");
-                if (successMsg)
-                    successMsg.style.display = "none";
-                if (errorMsg)
-                    errorMsg.style.display = "none";
-            }, 3000);
-        </script>
-        <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = '/LoginOfDashboard.jsp';
-                            } else {
-                                alert('Logout Fail!');
-                            }
-                        })
-                        .catch(error => console.error('Logout Error:', error));
-            }
+            document.addEventListener('DOMContentLoaded', function() {
+                var alertElements = document.querySelectorAll('.alert');
+                alertElements.forEach(function(alert) {
+                    setTimeout(function() {
+                        bootstrap.Alert.getOrCreateInstance(alert).close();
+                    }, 5000);
+                });
+            });
         </script>
     </body>
 </html>
-

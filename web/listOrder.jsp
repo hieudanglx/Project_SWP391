@@ -270,15 +270,7 @@
 
             <!-- Navbar -->
             <nav class="navbar-custom">
-                <h4><i class="fas fa-shopping-cart me-2"></i>Admin Dashboard - Order Management</h4>
-                <div class="profile">
-                    <a href="ManagerProfile.jsp" class="profile-link">
-                        <i class="fas fa-user-circle me-1"></i>${sessionScope.Username}
-                    </a>
-                    <a href="javascript:void(0);" class="btn btn-danger btn-logout" onclick="logout()">
-                        <i class="fas fa-sign-out-alt me-1"></i>Logout
-                    </a>
-                </div>
+                <h4><i class="fas fa-shopping-cart me-2"></i>Admin Dashboard - Order Management</h4>             
             </nav>
 
             <!-- Status Filter -->

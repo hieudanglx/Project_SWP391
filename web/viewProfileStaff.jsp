@@ -17,7 +17,7 @@
         <style>
             body {
                 font-family: 'Poppins', sans-serif;
-                background: linear-gradient(135deg, #667eea, #764ba2);
+                background: linear-gradient(135deg, #8396b3, #9eb1d0);
                 margin: 0;
                 padding: 0;
                 color: #333;
@@ -33,7 +33,7 @@
             }
             .sidebar {
                 width: 250px;
-                background: #333;
+                background: #2d2d2d;
                 color: white;
                 padding: 30px 20px;
             }
