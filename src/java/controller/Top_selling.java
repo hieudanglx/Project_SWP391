@@ -9,6 +9,7 @@ import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,7 @@ import model.Product;
  *
  * @author Tran Phong Hai - CE180803
  */
+
 public class Top_selling extends HttpServlet {
 
     /**
@@ -87,7 +89,7 @@ public class Top_selling extends HttpServlet {
         
 
         request.getRequestDispatcher("HomeDashBoard_Staff.jsp").forward(request, response);
-        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
+        
     }
 
     /**

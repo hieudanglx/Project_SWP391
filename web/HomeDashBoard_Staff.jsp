@@ -219,8 +219,9 @@
     </style>
 </head>
 <body>
+     <%@include file="sidebar.jsp" %>
     <div class="dashboard-wrapper">
-        <%@ include file="siderbar_Staff.jsp" %>
+       
         
         <main class="main-content">
             <div class="dashboard-header">

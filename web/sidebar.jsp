@@ -4,7 +4,7 @@
     Author     : Dinh Van Do - CE182224
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%--<%@page contentType="text/html" pageEncoding="UTF-8"%>--%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -268,12 +268,12 @@
     </style>
     <body>
         <%
-            // Kiểm tra session Username
+            // Ki?m tra session Username
             String username = (String) session.getAttribute("Username");
             boolean isAdmin = "admin".equals(username);
             
-            // Xác định URL Dashboard dựa trên role
-            String dashboardUrl = isAdmin ? "HomeDashBoard_Admin.jsp" : "HomeDashBoard_Staff.jsp";
+            // X�c ??nh URL Dashboard d?a tr�n role
+            String dashboardUrl = isAdmin ? "HomeDashBoard_Admin.jsp" : "Top_selling";
         %>
 
         <!-- Toggle button for mobile -->
