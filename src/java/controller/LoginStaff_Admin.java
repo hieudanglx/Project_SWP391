@@ -100,7 +100,7 @@ public class LoginStaff_Admin extends HttpServlet {
 
                     final String destinationPage = "admin".equalsIgnoreCase(username)
                             ? "HomeDashBoard_Admin.jsp"
-                            : "HomeDashBoard_Staff.jsp";
+                            : "Top_selling"; // cái này là trang của Dash board staff
 
                     response.sendRedirect(destinationPage);
                     return;

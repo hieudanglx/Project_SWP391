@@ -4,6 +4,8 @@
  */
 package dao;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,6 +50,51 @@ public class AccountDao extends dao.DBContext {
         return null;
     }
 
+//    // Hàm mã hóa mật khẩu MD5
+//    public static String hashMD5(String input) {
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            md.update(input.getBytes());
+//            byte[] byteData = md.digest();
+//
+//            StringBuilder hexString = new StringBuilder();
+//            for (byte b : byteData) {
+//                String hex = Integer.toHexString(0xff & b);
+//                if (hex.length() == 1) hexString.append('0');
+//                hexString.append(hex);
+//            }
+//            return hexString.toString();
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    // Kiểm tra đăng nhập (Trả về Role: "Admin" hoặc "Staff", hoặc null nếu sai)
+//    public String ValidateStaff_Admin(String username, String password) {
+//        if (connection == null) {
+//            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
+//            return null;
+//        }
+//
+//        String query = "SELECT role, status FROM Staff WHERE username = ? AND password = ?";
+//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+//            pstmt.setString(1, username);
+//            pstmt.setString(2, hashMD5(password)); // So sánh mật khẩu đã mã hóa MD5
+//
+//            try (ResultSet rs = pstmt.executeQuery()) {
+//                if (rs.next()) {
+//                    int status = rs.getInt("status");
+//                    if (status == 0) {  // 0 = Hoạt động, 1 = Bị chặn
+//                        return rs.getString("role"); // Trả về "Admin" hoặc "Staff"
+//                    }
+//                    return "blocked"; // Trả về nếu tài khoản bị chặn
+//                }
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null; // Sai tên đăng nhập hoặc mật khẩu
+//    }
     public Integer getStaffIdByUsername(String username) {
         String query = "SELECT staffID FROM Staff WHERE username = ?";
 

@@ -176,7 +176,7 @@ public class OrderDAO extends dao.DBContext {
                 + "FROM Order_List "
                 + "WHERE Status = 'Thành Công' "
                 + "GROUP BY YEAR(Date), MONTH(Date) "
-                + "ORDER BY Nam, Thang";
+                + "ORDER BY Nam DESC, Thang DESC";
         return getRevenueData(sql, "month");
     }
 
@@ -211,6 +211,27 @@ public class OrderDAO extends dao.DBContext {
         return getRevenueData(sql, "quarter");
     }
 
+    public List<Integer> getAvailableYears() {
+        List<Integer> years = new ArrayList<>();
+        String sql = "SELECT DISTINCT YEAR(Date) AS year FROM Order_List ORDER BY year DESC";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                years.add(rs.getInt(1));
+            }
+
+            // Debug: In ra danh sách năm lấy được
+            System.out.println("Years retrieved: " + years);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return years;
+    }
+
+    
     public List<Order_Details> getOrderDetailsByOrderID(int orderID) {
         List<Order_Details> orderDetailsList = new ArrayList<>();
         String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, ol.OrderID, "
@@ -349,6 +370,36 @@ public class OrderDAO extends dao.DBContext {
             e.printStackTrace();
         }
         return totalSales;
+    }
+    
+    public List<Order_list> getOrdernew(){
+    List<Order_list> order_list = new ArrayList<>();
+    String sql = "SELECT TOP 10 c.FullName, ol.Date, ol.Address, p.ProductName, " +
+                     "p.Price, ol.Status, od.Quantity, ol.Total " +
+                     "FROM Order_List ol " +
+                     "JOIN Order_Details od ON ol.OrderID = od.OrderID " +
+                     "JOIN Product p ON od.ProductID = p.ProductID " +
+                     "JOIN Customer c ON ol.CustomerID = c.CustomerID " +
+                     "ORDER BY ol.Date DESC";
+    
+    try(PreparedStatement pstmt = connection.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()){
+       while (rs.next()){
+          Order_list order = new Order_list();
+                order.setFullname(rs.getString("FullName"));
+                order.setDate(rs.getDate("Date"));
+                order.setAddress(rs.getString("Address"));
+                order.setProductName(rs.getString("ProductName"));
+                order.setPrice(rs.getDouble("Price"));
+                order.setStatus(rs.getString("Status"));
+                order.setQuantity(rs.getInt("Quantity"));
+                order.setTotal(rs.getDouble("Total"));
+                order_list.add(order);
+       }
+    }catch(Exception e){
+     e.printStackTrace();
+    }
+        return order_list;    
     }
 
 //    public static void main(String[] args) {

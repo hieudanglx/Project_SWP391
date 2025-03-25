@@ -4,24 +4,24 @@
  */
 package controller;
 
-import com.google.gson.Gson;
 import dao.OrderDAO;
+import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Order_list;
+import model.Product;
 
 /**
  *
  * @author Tran Phong Hai - CE180803
  */
-@WebServlet("/RevenueByMonth")
-public class RevenueByMonth extends HttpServlet {
+public class Top_selling extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +40,10 @@ public class RevenueByMonth extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RevenueByMonth</title>");
+            out.println("<title>Servlet Top_selling</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RevenueByMonth at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Top_selling at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,21 +61,33 @@ public class RevenueByMonth extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String filter = request.getParameter("filter");
-        List<Order_list> revenueList = null;
-      
-        OrderDAO orderDAO = new OrderDAO();
-        if ("month".equals(filter)) {
-            revenueList = orderDAO.getRevenueByMonth();
-        } else if ("quarter".equals(filter)) {
-            revenueList = orderDAO.getRevenueByQuarter();
-        } else if ("year".equals(filter)) {
-            revenueList = orderDAO.getRevenueByYear();
-        }
+        ProductDao pd = new ProductDao();
+        OrderDAO orderDao = new OrderDAO();
+        String categoryIdParam = request.getParameter("categoryId");
+        int categoryId = (categoryIdParam != null) ? Integer.parseInt(categoryIdParam) : 1; // Mặc định là 1
+        List<Product> products = pd.getTopSellingProducts(categoryId);
 
-        request.setAttribute("revenuelist", revenueList);
-        request.setAttribute("filterType", filter);
-        request.getRequestDispatcher("manageRevenue.jsp").forward(request, response);
+        List<Order_list> recentOrders =orderDao.getOrdernew();
+        
+        request.setAttribute("products", products);
+        request.setAttribute("selectedCategory", categoryId);
+        request.setAttribute("recentOrder", recentOrders);
+
+        // 🛠 Lấy tổng số sản phẩm từ DB
+        int totalProduct = pd.getTotalProduct();
+        int totalOrderSuccessful = pd.getTotalPendingOrder();
+        int TotalOrderDelivery = pd.getTotalOrderDelivery();
+        
+        
+        HttpSession session = request.getSession();
+        session.setAttribute("totalProducts", totalProduct); // Lưu vào session
+        session.setAttribute("totalOrderSuccessful", totalOrderSuccessful);
+        session.setAttribute("TotalOrderDelivery", TotalOrderDelivery);
+        
+        
+
+        request.getRequestDispatcher("HomeDashBoard_Staff.jsp").forward(request, response);
+        request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
     }
 
     /**

@@ -123,17 +123,25 @@ public class InventoryDAO extends dao.DBContext {
     }
 
     public boolean importProduct(int productID, int importQuantity, int importPrice, String supplier, Date importDate) {
-        String sql = "INSERT INTO Import_Inventory (ProductID, Import_quantity, Import_price, Supplier, Date) VALUES (?, ?, ?, ?, ?)";
+        String insertSql = "INSERT INTO Import_Inventory (ProductID, Import_price, Date, Import_quantity, Supplier) VALUES (?, ?, ?, ?, ?)";
+        String updateSql = "UPDATE Product SET Quantity_Product = Quantity_Product + ? WHERE ProductID = ?";
 
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, productID);
-            ps.setInt(2, importQuantity);
-            ps.setInt(3, importPrice);
-            ps.setString(4, supplier);
-            ps.setDate(5, importDate);
+        try ( PreparedStatement insertPs = connection.prepareStatement(insertSql);  PreparedStatement updatePs = connection.prepareStatement(updateSql)) {
 
-            int rowsAffected = ps.executeUpdate();
-            return rowsAffected > 0;
+            // Thêm dữ liệu vào Import_Inventory
+            insertPs.setInt(1, productID);
+            insertPs.setInt(2, importPrice);
+            insertPs.setDate(3, importDate);
+            insertPs.setInt(4, importQuantity);
+            insertPs.setString(5, supplier);
+            insertPs.executeUpdate();
+
+            // Cập nhật số lượng tồn kho trong bảng Product
+            updatePs.setInt(1, importQuantity);
+            updatePs.setInt(2, productID);
+            int rowsUpdated = updatePs.executeUpdate();
+
+            return rowsUpdated > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -142,13 +150,15 @@ public class InventoryDAO extends dao.DBContext {
 
     public List<Inventory> searchInventory(String keyword) {
         List<Inventory> inventories = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, i.Date AS Latest_Import_Date, "
-                + "p.Price, p.Quantity_Product "
-                + "FROM Product p "
-                + "LEFT JOIN Import_Inventory i "
-                + "ON p.ProductID = i.ProductID "
-                + "AND i.Date = (SELECT MAX(Date) FROM Import_Inventory WHERE ProductID = p.ProductID) "
-                + "WHERE p.ProductName LIKE ?;";
+        String sql = "SELECT p.ProductID, p.ProductName, i.Latest_Import_Date, "
+            + "p.Price, p.Quantity_Product "
+            + "FROM Product p "
+            + "LEFT JOIN ( "
+            + "    SELECT ProductID, MAX(Date) AS Latest_Import_Date "
+            + "    FROM Import_Inventory "
+            + "    GROUP BY ProductID "
+            + ") i ON p.ProductID = i.ProductID "
+            + "WHERE p.ProductName LIKE ?;";
 
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");  // Thêm ký tự % để tìm kiếm gần đúng
