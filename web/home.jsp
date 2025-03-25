@@ -116,7 +116,7 @@
                                                         <div class="info-product">
                                                             <h4>
                                                                 <a href="ViewProductDetailsController?name=${p.productName}&id=${p.productID}">
-                                                                    ${p.productName}
+                                                                    ${p.productName} ${p.ram} ${p.rom} 
                                                                 </a>
                                                             </h4>
                                                             <div class="price">

@@ -341,3 +341,33 @@ input:focus, button:focus {
 #content .bar-menu{
     display:none
 }
+
+
+.pagination-container {
+    margin-top: 30px;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.pagination {
+    flex-wrap: wrap;
+}
+
+.page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.page-link {
+    color: #007bff;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+@media (max-width: 576px) {
+    .page-item .page-link {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}

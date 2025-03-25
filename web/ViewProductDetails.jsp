@@ -111,10 +111,7 @@
                 <div class="col-lg-8">
                     <div class="product-header mb-4">
                         <h1 class="product-title">
-                            Điện thoại ${product.productName} ${product.rom} 
-                            <c:if test="${product.rom != null && !product.rom.isEmpty()}">
-                                ${product.rom} <!-- Thêm dung lượng nếu có -->
-                            </c:if>
+                            ${product.productName} ${product.ram} ${product.rom}  
                         </h1>
                         <div class="sales-info">
                             <span class="sold-quantity">
