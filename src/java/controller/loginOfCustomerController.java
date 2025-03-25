@@ -117,7 +117,7 @@ public class loginOfCustomerController extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
+            request.setAttribute("errorMessage", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
         }
     }

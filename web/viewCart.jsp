@@ -254,6 +254,8 @@
                                             <!-- Địa chỉ chi tiết -->
                                             <label class="form-label">Địa chỉ cụ thể</label>
                                             <input type="text" class="form-control mb-4" name="street" placeholder="Số nhà, tên đường..." required>                                       
+                                            <p id="addressError" class="text-danger" style="display: none;">Vui lòng nhập đầy đủ địa chỉ trước khi thanh toán!</p>
+
                                         </div>
 
 
@@ -414,93 +416,129 @@
                             var openModalBtn = document.getElementById("openConfirmModal");
                             var confirmBtn = document.getElementById("confirmPaymentBtn");
 
-                            // Khi nhấn "Thanh toán ngay", hiển thị modal
                             openModalBtn.addEventListener("click", function () {
+                                var city = document.getElementById("city");
+                                var district = document.getElementById("district");
+                                var street = document.querySelector("input[name='street']");
+                                var errorMessage = document.getElementById("addressError");
+
+                                var isValid = true;
+
+                                if (!city.value) {
+                                    highlightField(city);
+                                    isValid = false;
+                                }
+                                if (!district.value) {
+                                    highlightField(district);
+                                    isValid = false;
+                                }
+                                if (!street.value.trim()) {
+                                    highlightField(street);
+                                    isValid = false;
+                                }
+
+                                if (!isValid) {
+                                    errorMessage.style.display = "block"; // Hiển thị thông báo lỗi
+                                    return; // Dừng lại nếu địa chỉ chưa đầy đủ
+                                }
+
+                                errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu hợp lệ
+
                                 var confirmModal = new bootstrap.Modal(document.getElementById("confirmPaymentModal"));
                                 confirmModal.show();
                             });
 
-                            // Khi nhấn "Xác nhận" trong modal, submit form
                             confirmBtn.addEventListener("click", function () {
-                                // Thêm hiệu ứng loading nếu cần
                                 confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang xử lý...';
                                 confirmBtn.disabled = true;
 
-                                // Cho phần loading hiển thị 1 giây trước khi submit form
                                 setTimeout(function () {
                                     paymentForm.submit();
                                 }, 1000);
                             });
-                        });
-                        // Xử lý fixed width
-                        function enforceCartWidth() {
-                            const container = document.querySelector('.cart-container');
-                            if (window.innerWidth < 1140) {
-                                container.style.transform = `translateX(${(1140 - window.innerWidth)/2}px)`;
-                            } else {
-                                container.style.transform = 'none';
-                            }
-                        }
 
-                        // window.addEventListener('resize', enforceCartWidth);
-                        //enforceCartWidth(); // Khởi chạy lần đầu
-
-                        document.addEventListener("DOMContentLoaded", function () {
-                            const citySelect = document.getElementById("city");
-                            const districtSelect = document.getElementById("district");
-                            // Lấy dữ liệu tỉnh/thành phố từ GitHub
-                            const fetchData = async () => {
-                                try {
-                                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                                    const data = response.data;
-                                    renderCities(data);
-                                } catch (error) {
-                                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                                }
-                            };
-                            // Hiển thị danh sách tỉnh/thành phố
-                            const renderCities = (data) => {
-                                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                                data.forEach(province => {
-                                    let option = document.createElement("option");
-                                    option.value = province.Id;
-                                    option.setAttribute("data-name", province.Name);
-                                    option.textContent = province.Name;
-                                    citySelect.appendChild(option);
-                                });
-                                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
-                                citySelect.addEventListener("change", function () {
-                                    const selectedCityId = this.value;
-                                    const selectedCity = data.find(p => p.Id === selectedCityId);
-                                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
-                                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                                    if (selectedCity) {
-                                        selectedCity.Districts.forEach(district => {
-                                            let option = document.createElement("option");
-                                            option.value = district.Id;
-                                            option.setAttribute("data-name", district.Name);
-                                            option.textContent = district.Name;
-                                            districtSelect.appendChild(option);
-                                        });
-                                    }
-                                });
-                                // Khi chọn quận/huyện, cập nhật giá trị ẩn
-                                districtSelect.addEventListener("change", function () {
-                                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
-                                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
-                                });
-                            };
-                            fetchData();
-                        });
-                        document.getElementById("checkoutBtn").addEventListener("click", function () {
-                            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-                            if (paymentMethod === "COD") {
-                                window.location.href = "PaymentController";
-                            } else if (paymentMethod === "VNPAY") {
-                                window.location.href = "vnpay_pay.jsp";
+                            function highlightField(field) {
+                                field.classList.add("border", "border-danger");
+                                setTimeout(() => {
+                                    field.classList.remove("border", "border-danger");
+                                }, 3000);
                             }
                         });
+
+    </script>       
+    <script>
+        // Xử lý fixed width
+        function enforceCartWidth() {
+            const container = document.querySelector('.cart-container');
+            if (window.innerWidth < 1200) {
+                container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+            } else {
+                container.style.transform = 'none';
+            }
+        }
+
+        // window.addEventListener('resize', enforceCartWidth);
+        //enforceCartWidth(); // Khởi chạy lần đầu
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const citySelect = document.getElementById("city");
+            const districtSelect = document.getElementById("district");
+            // Lấy dữ liệu tỉnh/thành phố từ GitHub
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                    const data = response.data;
+                    renderCities(data);
+                } catch (error) {
+                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                }
+            };
+            // Hiển thị danh sách tỉnh/thành phố
+            const renderCities = (data) => {
+                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                data.forEach(province => {
+                    let option = document.createElement("option");
+                    option.value = province.Id;
+                    option.setAttribute("data-name", province.Name);
+                    option.textContent = province.Name;
+                    citySelect.appendChild(option);
+                });
+                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
+                citySelect.addEventListener("change", function () {
+                    const selectedCityId = this.value;
+                    const selectedCity = data.find(p => p.Id === selectedCityId);
+                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
+                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                    if (selectedCity) {
+                        selectedCity.Districts.forEach(district => {
+                            let option = document.createElement("option");
+                            option.value = district.Id;
+                            option.setAttribute("data-name", district.Name);
+                            option.textContent = district.Name;
+                            districtSelect.appendChild(option);
+                        });
+                    }
+                });
+                // Khi chọn quận/huyện, cập nhật giá trị ẩn
+                districtSelect.addEventListener("change", function () {
+                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
+                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
+                });
+            };
+            fetchData();
+        });
+    </script>
+
+    <script>
+        document.getElementById("checkoutBtn").addEventListener("click", function () {
+            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            if (paymentMethod === "COD") {
+                window.location.href = "PaymentController";
+            } else if (paymentMethod === "VNPAY") {
+                window.location.href = "vnpay_pay.jsp";
+            }
+        });
     </script>
     <script src="js/popup.js"></script>
 </html>
