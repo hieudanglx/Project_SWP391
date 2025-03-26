@@ -76,7 +76,7 @@ public class feedback extends HttpServlet {
 
         Map<Integer, String> productNames = productDao.getProductNames();
         request.setAttribute("productNames", productNames);
-     
+
         Map<Integer, String> feedbackReplies = reply_feedbackDAO.getAllReplies();
         request.setAttribute("feedbackReplies", feedbackReplies);
 
@@ -101,12 +101,16 @@ public class feedback extends HttpServlet {
             }
 
             int staffID = Integer.parseInt(staffIDStr);
-
             String content_Reply = request.getParameter("replyContent");
 
-            boolean repSuccess = reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
-            System.out.println("Reply result: " + repSuccess);
+            // Kiểm tra xem feedback đã có phản hồi chưa
+            if (reply_feedbackDAO.checkFeedbackHasReply(feedbackID)) {
+                session.setAttribute("errorMessage", "Không thể phản hồi nữa!");
+                response.sendRedirect("feedback");
+                return;
+            }
 
+            boolean repSuccess = reply_feedbackDAO.replyToFeedback(feedbackID, customerID, staffID, content_Reply);
             if (repSuccess) {
                 session.setAttribute("repSuccess", "Phản hồi đã được gửi thành công!");
             } else {
@@ -117,4 +121,3 @@ public class feedback extends HttpServlet {
         }
     }
 }
-

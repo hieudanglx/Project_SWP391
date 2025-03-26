@@ -14,110 +14,179 @@
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
         <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f8f9fa;
+            :root {
+                --primary-color: #3498db;
+                --secondary-color: #2ecc71;
+                --background-color: #f4f6f9;
+                --sidebar-color: #2c3e50;
+                --text-color: #333;
+                --hover-color: rgba(255,255,255,0.1);
+            }
+
+            * {
                 margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--background-color);
+                line-height: 1.6;
             }
 
             /* Sidebar */
             .sidebar {
+                width: 260px;
                 height: 100vh;
-                width: 250px;
-                background: linear-gradient(to bottom, #343a40, #212529);
-                color: white;
                 position: fixed;
                 top: 0;
                 left: 0;
-                padding-top: 20px;
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar a {
-                padding: 12px 20px;
-                text-decoration: none;
-                font-size: 16px;
-                color: rgba(255, 255, 255, 0.8);
-                display: block;
-                transition: all 0.3s;
-                border-left: 4px solid transparent;
-            }
-            .sidebar a:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: var(--sidebar-color);
                 color: white;
-                border-left: 4px solid #0d6efd;
+                transition: all 0.3s;
+                z-index: 1000;
+                box-shadow: 4px 0 10px rgba(0,0,0,0.1);
             }
 
-            /* Main Content */
-            .content {
-                margin-left: 250px;
+            .sidebar-logo {
                 padding: 20px;
-                padding-top: 80px; /* Thêm khoảng trống để tránh bị header che */
+                text-align: center;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
             }
 
-            /* Header */
+            .sidebar a {
+                display: flex;
+                align-items: center;
+                padding: 12px 20px;
+                color: rgba(255,255,255,0.7);
+                text-decoration: none;
+                transition: all 0.3s;
+                position: relative;
+            }
+
+            .sidebar a i {
+                margin-right: 10px;
+                width: 25px;
+                text-align: center;
+            }
+
+            .sidebar a:hover {
+                background: var(--hover-color);
+                color: white;
+            }
+
+            .sidebar a::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 4px;
+                background: transparent;
+                transition: background 0.3s;
+            }
+
+            .sidebar a:hover::before {
+                background: var(--primary-color);
+            }
+
+            /* Content Area */
+            .content {
+                margin-left: 260px;
+                padding: 30px;
+                transition: all 0.3s;
+            }
+
             .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 background: white;
-                padding: 15px 20px;
-                border-bottom: 2px solid #ddd;
-                position: fixed;
-                top: 0;
-                left: 250px;
-                width: calc(100% - 250px);
-                height: 60px;
-                z-index: 1000;
-            }
-            .header h4 {
-                margin: 0;
-                font-weight: bold;
-                color: #333;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                margin-bottom: 25px;
             }
 
-            /* Table Container */
-            .table-container {
-                margin-top: 20px;
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-                padding: 20px;
+            .header h4 {
+                margin: 0;
+                color: var(--sidebar-color);
+                font-weight: 700;
             }
-            .table th {
-                background-color: #007bff;
+
+            .filter-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .filter-buttons .btn {
+                background-color: var(--primary-color);
                 color: white;
-                font-weight: bold;
+                transition: all 0.3s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
             }
-            .table td, .table th {
-                vertical-align: middle;
-                text-align: center;
+
+            .filter-buttons .btn:hover {
+                background-color: #2980b9;
+                transform: translateY(-2px);
             }
+
+            .table-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+                padding: 25px;
+            }
+
+            .table {
+                margin-bottom: 0;
+            }
+
+            .table thead {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+            .table thead th {
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                border: none;
+            }
+
             .table tbody tr:hover {
-                background-color: #f1f1f1;
+                background-color: rgba(52, 152, 219, 0.05);
             }
+
             .no-data {
                 text-align: center;
                 color: #888;
-                padding: 20px;
+                padding: 30px;
+                font-style: italic;
+            }
+
+            @media (max-width: 768px) {
+                .sidebar {
+                    width: 0;
+                    overflow: hidden;
+                }
+                .content {
+                    margin-left: 0;
+                }
             }
         </style>
     </head>
     <body>
         <jsp:include page="sidebar.jsp" />
-        <!-- Sidebar -->
-        <!--        <div class="sidebar">
-                    <h4 class="text-center mb-4">
-                        <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-                    </h4>
-                    <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-                    <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-                    <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-                    <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-                    <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
-                    <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-                    <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-                </div>-->
 
         <!-- Main Content -->
         <div class="content">
@@ -125,20 +194,23 @@
                 <h4>Manage Revenue</h4>               
             </div>
 
-            <!-- Filter Buttons -->
-
-
             <!-- Table -->
             <div class="table-container">
                 <div class="filter-buttons">
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="month" class="btn">Lọc theo Tháng</button>
+                        <button type="submit" name="filter" value="month" class="btn">
+                            <i class="fas fa-calendar-alt"></i> Filter by Month
+                        </button>
                     </form>
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="quarter" class="btn">Lọc theo Quý</button>
+                        <button type="submit" name="filter" value="quarter" class="btn">
+                            <i class="fas fa-chart-pie"></i> Filter by Quarter
+                        </button>
                     </form>
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="year" class="btn">Lọc theo Năm</button>
+                        <button type="submit" name="filter" value="year" class="btn">
+                            <i class="fas fa-calendar"></i> Filter by Year
+                        </button>
                     </form>
                 </div>
                 <div>
@@ -152,10 +224,10 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Năm</th>
-                                    <% if ("month".equals(filter)) { %> <th>Tháng</th> <% } %>
-                                    <% if ("quarter".equals(filter)) { %> <th>Quý</th> <% } %>
-                                    <th>Doanh Thu</th>
+                                    <th>Year</th>
+                                    <% if ("month".equals(filter)) { %> <th>Month</th> <% } %>
+                                    <% if ("quarter".equals(filter)) { %> <th>Quarter</th> <% } %>
+                                    <th>Revenue</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,9 +256,9 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Tổng tiền</th>
+                                    <th>Order ID</th>
+                                    <th>Date booked</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,7 +279,7 @@
                     <%
                             } else {
                     %>
-                    <div class="no-data">Không có dữ liệu</div>
+                    <div class="no-data">No data available</div>
                     <%
                             }
                         }

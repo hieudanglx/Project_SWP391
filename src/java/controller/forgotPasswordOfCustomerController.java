@@ -76,6 +76,8 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         CustomerDAO cusDAO = new CustomerDAO();
+        EmailSenderCustomer sendEmail = new EmailSenderCustomer();
+        OTPGenerate creatOTP = new OTPGenerate();
         String email = request.getParameter("email");
 
         boolean exists = cusDAO.isEmailExisted(email);
@@ -87,13 +89,14 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
         }
 
         // Tạo OTP và lưu vào session
-        String otp = OTPGenerate.generateOTP();
+        String otp = creatOTP.generateOTP();
         HttpSession session = request.getSession();
         session.setAttribute("otp", otp);
         session.setAttribute("email", email);
+        session.setAttribute("otpTime", System.currentTimeMillis()); // Lưu thời gian gửi OTP
 
         // Gửi OTP đến email
-        EmailSenderCustomer.sendEmail(email, "Mã OTP đặt lại mật khẩu",
+        sendEmail.sendEmail(email, "Mã OTP đặt lại mật khẩu",
                 "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
         request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
     }

@@ -4,6 +4,7 @@
     Author     : Dang Khac Hieu_CE180465
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -22,19 +23,19 @@
                 height: 100vh;
             }
             .left-section {
-                flex: 0.35; /* Gi?m k�ch th??c ph?n m�u xanh */
+                flex: 0.35; /* Gi?m kích th??c ph?n màu xanh */
                 background: linear-gradient(135deg, #7287FF, #A8C1FF);
                 color: white;
                 display: flex;
                 align-items: center; /* C?n gi?a theo chi?u d?c */
                 justify-content: center; /* C?n gi?a theo chi?u ngang */
                 text-align: center;
-                font-size: 40px; /* T?ng k�ch th??c ch? */
+                font-size: 40px; /* T?ng kích th??c ch? */
                 font-weight: bold;
                 padding: 20px;
             }
             .right-section {
-                flex: 0.65; /* T?ng k�ch th??c ph?n login */
+                flex: 0.65; /* T?ng kích th??c ph?n login */
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -43,21 +44,21 @@
             }
             .login-box {
                 width: 100%;
-                max-width: 450px; /* T?ng k�ch th??c login box */
+                max-width: 450px; /* T?ng kích th??c login box */
                 text-align: center;
             }
             .login-box h3 {
-                font-size: 32px; /* T?ng size ch? ti�u ?? */
+                font-size: 32px; /* T?ng size ch? tiêu ?? */
             }
             .form-control {
                 border-radius: 30px;
-                padding: 15px 20px; /* T?ng kho?ng c�ch trong � nh?p */
+                padding: 15px 20px; /* T?ng kho?ng cách trong ô nh?p */
                 font-size: 16px;
             }
             .btn-primary {
                 border-radius: 30px;
                 padding: 14px;
-                font-size: 18px; /* N�t l?n h?n */
+                font-size: 18px; /* Nút l?n h?n */
                 width: 100%;
                 background-color: #007bff;
                 border: none;
@@ -84,7 +85,7 @@
                 .left-section {
                     height: 25vh;
                     flex: none;
-                    font-size: 28px; /* Ch?nh nh? l?i tr�n mobile */
+                    font-size: 28px; /* Ch?nh nh? l?i trên mobile */
                     align-items: center;
                 }
                 .right-section {
@@ -97,20 +98,20 @@
     <body>
         <div class="wrapper">
             <div class="left-section">
-                WELCOME TO DASHBOARD
+                CHÀO MỪNG ĐẾN VỚI DASHBOARD
             </div>
             <div class="right-section">
                 <div class="login-box">
-                    <h3 class="fw-bold">Hello Again!</h3>
-                    <p class="fs-5">Welcome Back</p>
+                    <h3 class="fw-bold">Xin chào lần nữa!</h3>
+                    <p class="fs-5">Chào mừng trở lại</p>
                     <form action="LoginStaff_Admin" method="POST">
                         <div class="mb-3">
                             <input type="text" id="Username" name="Username" class="form-control form-control-lg"
-                                   placeholder="Enter a valid username" required>
+                                   placeholder="Nhập tên người dùng" required>
                         </div>
                         <div class="mb-3">
                             <input type="password" id="Password" name="Password" class="form-control"
-                                   placeholder="Password" required>
+                                   placeholder="Nhập mật khẩu" required>
                         </div>
                         <c:if test="${not empty errorMessage}">
                             <div class="text-danger text-center fw-bold mt-2">${errorMessage}</div>
@@ -119,13 +120,11 @@
                             <div class="text-danger text-center fw-bold mt-2">${blockedMessage}</div>
                         </c:if>
 
-                        <button type="submit" class="btn btn-primary">Login</button>
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href = 'forgotPasswordStaff.jsp'" >Forgot Password</button>
+                        <button type="submit" class="btn btn-primary">Đăng nhập</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href = 'forgotPasswordStaff.jsp'" >Quên mật khẩu</button>
                     </form>
                 </div>
-            </div>
-
-
+            </div
         </div>
     </body>
 </html>

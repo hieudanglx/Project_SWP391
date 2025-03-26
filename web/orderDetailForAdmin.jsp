@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : orderDetailForAdmin
     Created on : Mar 15, 2025, 1:26:55 AM
     Author     : Dinh Van Do - CE182224
@@ -241,21 +241,21 @@
         <div class="content">
             <div class="main-content">
                 <div class="container">
-                    <h2>Chi tiết đơn hàng</h2>
+                    <h2>Order Detail</h2>
 
                     <!-- Thông tin khách hàng -->
                     <div class="section">
-                        <h3>Thông tin khách hàng</h3>
-                        <p><strong>Khách hàng:</strong> ${orderDetails[0].fullNameCustomer}</p>
-                        <p><strong>Địa chỉ giao hàng:</strong> ${orderDetails[0].address}</p>
-                        <p><strong>Số điện thoại:</strong> ${orderDetails[0].phoneNumber}</p>
-                        <p><strong>Ngày đặt hàng:</strong> ${orderDetails[0].date}</p>
+                        <h3>Customer information</h3>
+                        <p><strong>Customer:</strong> ${orderDetails[0].fullNameCustomer}</p>
+                        <p><strong>Shipping address:</strong> ${orderDetails[0].address}</p>
+                        <p><strong>Phone number:</strong> ${orderDetails[0].phoneNumber}</p>
+                        <p><strong>Order date:</strong> ${orderDetails[0].date}</p>
                     </div>
 
                     <!-- Nhân viên xử lý -->
                     <div class="section">
-                        <h3>Nhân viên xử lý</h3>
-                        <p><strong>Tên nhân viên:</strong> 
+                        <h3>Processing staff</h3>
+                        <p><strong>Staff name:</strong>
                             <c:choose>
                                 <c:when test="${empty orderDetails[0].fullNameStaff}">
                                     Admin
@@ -270,10 +270,10 @@
                     <!-- Bảng danh sách sản phẩm -->
                     <table>
                         <tr>
-                            <th>Tên sản phẩm</th>
-                            <th>Màu sắc</th>
-                            <th>Giá</th>
-                            <th>Số lượng</th>
+                            <th>Product Name</th>
+                            <th>Color</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
                         </tr>
                         <c:forEach var="orderDetail" items="${orderDetails}">
                             <tr>
@@ -299,8 +299,8 @@
 
                     <!-- Thông tin đơn hàng -->
                     <div class="section order-info">
-                        <h3>Thông tin đơn hàng</h3>
-                        <p><strong>Trạng thái:</strong> 
+                        <h3>Order information</h3>
+                        <p><strong>Status:</strong>
                             <span class="order-status
                                   <c:choose>
                                       <c:when test='${orderDetails[0].status == "Chờ xử lý"}'>pending</c:when>
@@ -317,7 +317,7 @@
                                 ${orderDetails[0].status}
                             </span>
                         </p>
-                        <p class="total-price">Tổng tiền: <fmt:formatNumber value="${orderDetails[0].total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ</p>
+                        <p class="total-price">Total: <fmt:formatNumber value="${orderDetails[0].total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ</p>
                     </div>
                 </div>
             </div>

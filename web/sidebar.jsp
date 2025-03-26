@@ -361,7 +361,17 @@
                 document.getElementById('sidebar').classList.toggle('active');
                 document.querySelector('.content').classList.toggle('sidebar-active');                               
             });
-            
+            function logout() {
+                fetch('/LogOutStaffAndAdminController', { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/LoginOfDashboard.jsp';
+                        } else {
+                            alert('Logout Failed!');
+                        }
+                    })
+                    .catch(error => console.error('Logout Error:', error));
+            }
             
         </script>
     </body>
