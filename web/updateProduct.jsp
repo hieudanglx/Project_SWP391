@@ -556,11 +556,7 @@
                                                 <i class="fas fa-arrow-left me-2"></i>Back to List
                                             </a>
                                         </div>
-                                        <div>
-                                            <a href="#" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete this product?')">
-                                                <i class="fas fa-trash-alt me-2"></i>Delete Product
-                                            </a>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </form>

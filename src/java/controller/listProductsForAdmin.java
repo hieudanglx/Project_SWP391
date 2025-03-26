@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Product;
 import model.ProductForAdmin;
@@ -35,7 +36,10 @@ public class listProductsForAdmin extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            HttpSession session = request.getSession();
+            if((String)session.getAttribute("Username")==null){         
+           request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);                
+            }
             ProductDao l = new ProductDao();
        List<Product> list = l.getAllProductsForAdmin();
        if (list.isEmpty()){

@@ -340,21 +340,21 @@
                                     </a>
                                     <c:if test="${order.status == 'Chờ xử lý'}">
                                         <a href="javascript:void(0);" 
-                                           onclick="confirmStatusChange(${order.orderID}, 'Delivery', 'Confirm this order?')" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Giao Hàng', 'Confirm this order?')" 
                                            class="btn btn-success table-action-btn">
                                             <i class="fas fa-check me-1"></i>Confirm
                                         </a>
                                     </c:if>
                                     <c:if test="${order.status == 'Giao Hàng'}">
                                         <a href="javascript:void(0);" 
-                                           onclick="confirmStatusChange(${order.orderID}, 'Canceled', 'Cancel this order?')" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Đã Hủy', 'Cancel this order?')" 
                                            class="btn btn-outline-danger table-action-btn">
                                             <i class="fas fa-times me-1"></i>Cancel
                                         </a>
                                         <a href="javascript:void(0);" 
-                                           onclick="confirmStatusChange(${order.orderID}, 'Thành công', 'Xác nhận đơn hàng đã hoàn tất?')" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Thành công', 'Confirm order completed?')" 
                                            class="btn btn-success table-action-btn">
-                                            <i class="fas fa-check-circle me-1"></i>Thành công
+                                            <i class="fas fa-check-circle me-1"></i>Success
                                         </a>
                                     </c:if>
                                 </td>
@@ -399,17 +399,7 @@
         </div>
 
         <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/LoginOfDashboard.jsp';
-                        } else {
-                            alert('Logout Failed!');
-                        }
-                    })
-                    .catch(error => console.error('Logout Error:', error));
-            }
+            
             
             let orderIdToChange = null;
             let newStatus = null;

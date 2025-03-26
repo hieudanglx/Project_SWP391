@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.DecimalFormat;
 
 /**
@@ -60,7 +61,10 @@ public class RevenueTotal extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         OrderDAO dao = new OrderDAO();
-
+        HttpSession session = request.getSession();
+            if((String)session.getAttribute("Username")==null){         
+           request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);                
+            }
         // Lấy tổng doanh thu
         double totalSales = dao.getTotalSales();
         System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);

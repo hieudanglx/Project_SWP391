@@ -56,8 +56,10 @@ public class LogOutStaffAndAdminController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.removeAttribute("acc");
+       HttpSession session = request.getSession();
+            if (session != null) {
+                session.invalidate();
+            }
         response.sendRedirect("LoginOfDashboard.jsp");
     }
 
