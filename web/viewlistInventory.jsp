@@ -155,11 +155,7 @@
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
-                </div>
-                <div>
-                    <a href="ManagerProfile.jsp" class="btn btn-outline-secondary me-2">Admin</a>
-                    <a href="javascript:void(0);" class="btn btn-danger" onclick="logout()">Logout</a>
-                </div>
+                </div>               
             </div>
 
             <!-- Filter Buttons -->

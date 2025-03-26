@@ -4,33 +4,28 @@
  */
 package controller;
 
-import dao.OrderDAO;
+import dao.CartDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
-import model.Order_Details;
-import model.Order_list;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Customer;
+import model.Product;
 
 /**
  *
- * @author Dang Khac Hieu_CE180465
+ * @author CE180594_Phan Quốc Duy
  */
-@WebServlet(name = "Order_History", urlPatterns = {"/Order_History"})
-public class Order_History extends HttpServlet {
-
-    private static final long serialVersionUID = 1L;
-    private OrderDAO orderDAO;
-
-    public Order_History() {
-        super();
-        orderDAO = new OrderDAO();
-    }
+@WebServlet(name = "RemoveInCartController", urlPatterns = {"/RemoveInCartController"})
+public class RemoveInCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,22 +35,32 @@ public class Order_History extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Order_History</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Order_History at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+            throws ServletException, IOException, SQLException {
+        HttpSession session = request.getSession();
+        CartDao link = new CartDao();
+
+        Customer c = (Customer) session.getAttribute("customer");
+
+        // Kiểm tra tham số bắt buộc
+        String idParam = request.getParameter("id");
+
+        int id = Integer.parseInt(idParam);
+        String url = "ViewCartController"; // Mặc định
+
+        System.out.println(url);
+        String status = "success";
+        String message = "Xóa thành công";
+        link.removeProductFromCart(c.getCustomerID(), id);
+        // Cập nhật session
+        List<Product> list = new ArrayList<>();
+        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
+        session.setAttribute("status", status);
+        session.setAttribute("message", message);
+        request.getRequestDispatcher(url).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -69,32 +74,13 @@ public class Order_History extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    HttpSession session = request.getSession();
-    
-    // Lấy customerID từ session
-    Integer customerID = (Integer) session.getAttribute("customerID");
-
-//        System.out.println(customerID);
-    
-
-    // Gọi hàm lấy danh sách đơn hàng của khách hàng
-    List<Order_Details> orderDetails = orderDAO.getOrdersByCustomer(customerID);
-//        System.out.println(orderDetails);
-//    if (orderDetails.isEmpty()) {
-//        request.setAttribute("error.","rong" );
-//        request.getRequestDispatcher("error.jsp").forward(request, response);
-//    }
-
-    
-
-    
-    // Đưa danh sách đơn hàng vào request attribute
-    request.setAttribute("orderDetails", orderDetails);
-
-    // Chuyển hướng đến trang lịch sử đơn hàng
-    request.getRequestDispatcher("OrderHistory.jsp").forward(request, response);
-}
+            throws ServletException, IOException {
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RemoveInCartController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -107,7 +93,11 @@ public class Order_History extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(RemoveInCartController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

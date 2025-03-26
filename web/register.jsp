@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <html lang="en">
 
     <head>
@@ -104,68 +105,70 @@
     </head>
     <body>
 
+
+
         <div class="register-card">
-            <h3 class="text-center register-title mb-4">Create an Account</h3>
+            <h3 class="text-center register-title mb-4">Tạo một tài khoản</h3>
             <form action="RegisterController" method="post" onsubmit="return validateForm();">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username..." value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
+                            <label for="username" class="form-label">Tên người dùng</label>
+                            <input type="text" id="username" name="username" class="form-control" placeholder="Nhập tên người dùng của bạn..." value="<%= request.getParameter("username") != null ? request.getParameter("username") : "" %>">
                             <div id="usernameError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="fullName" class="form-label">Full Name</label>
-                            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name..." value="<%= request.getParameter("fullName") != null ? request.getParameter("fullName") : "" %>">
+                            <label for="fullName" class="form-label">Họ và tên</label>
+                            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Nhập tên đầy đủ của bạn..." value="<%= request.getParameter("fullName") != null ? request.getParameter("fullName") : "" %>">
                             <div id="fullNameError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="phoneNumber" class="form-label">Phone Number</label>
-                            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Enter your phone..." value="<%= request.getParameter("phoneNumber") != null ? request.getParameter("phoneNumber") : "" %>">
+                            <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" placeholder="Nhập số điện thoại của bạn..." value="<%= request.getParameter("phoneNumber") != null ? request.getParameter("phoneNumber") : "" %>">
                             <div id="phoneError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="dob" class="form-label">Date of Birth</label>
+                            <label for="dob" class="form-label">Ngày sinh</label>
                             <input type="date" id="dob" name="dob" class="form-control" value="<%= request.getParameter("dob") != null ? request.getParameter("dob") : "" %>">
                             <div id="dobError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="text" id="email" name="email" class="form-control" placeholder="Enter your email..." value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
+                            <input type="text" id="email" name="email" class="form-control" placeholder="Nhập email của bạn..." value="<%= request.getParameter("email") != null ? request.getParameter("email") : "" %>">
                             <div id="emailError" class="error-message"></div>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Enter password...">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Nhập mật khẩu...">
                             <div id="passwordError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirm Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Confirm password...">
+                            <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Xác nhận mật khẩu...">
                             <div id="confirmPasswordError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" id="address" name="address" class="form-control" placeholder="Enter your address..." value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Nhập địa chỉ của bạn..." value="<%= request.getParameter("address") != null ? request.getParameter("address") : "" %>">
                             <div id="addressError" class="error-message"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="sex" class="form-label">Gender</label>
+                            <label for="sex" class="form-label">Giới tính</label>
                             <select id="sex" name="sex" class="form-select" required>
-                                <option value="" disabled>-- Select Gender --</option>
-                                <option value="Male" <%= "Male".equals(request.getParameter("sex")) ? "selected" : "" %>>Male</option>
-                                <option value="Female" <%= "Female".equals(request.getParameter("sex")) ? "selected" : "" %>>Female</option>
-                                <option value="Other" <%= "Other".equals(request.getParameter("sex")) ? "selected" : "" %>>Other</option>
+                                <option value="" disabled>-- Chọn giới tính --</option>
+                                <option value="Male" <%= "Male".equals(request.getParameter("sex")) ? "selected" : "" %>>Nam</option>
+                                <option value="Female" <%= "Female".equals(request.getParameter("sex")) ? "selected" : "" %>>Nữ</option>
+                                <option value="Other" <%= "Other".equals(request.getParameter("sex")) ? "selected" : "" %>>Khác</option>
                             </select>
                             <div id="sexError" class="error-message"></div>
                         </div>
@@ -173,11 +176,11 @@
                 </div>
 
                 <div class="mb-3 text-center">
-                    <input type="submit" class="btn btn-primary w-100" value="Register">
+                    <input type="submit" class="btn btn-primary w-100" value="Đăng ký">
                 </div>
 
                 <div class="mb-3 text-center">
-                    <a href="loginOfCustomer.jsp" class="text-decoration-none text-primary">Already have an account? Login here</a>
+                    <a href="loginOfCustomer.jsp" class="text-decoration-none text-primary">Đã có tài khoản? Đăng nhập tại đây!</a>
                 </div>
             </form>
         </div>
@@ -234,65 +237,65 @@
                 clearErrors();
 
                 if (!username) {
-                    showError('usernameError', "Username cannot be empty!");
+                    showError('usernameError', "Tên người dùng không được để trống!");
                     isValid = false;
                 }
 
                 if (!fullName) {
-                    showError('fullNameError', "Full Name cannot be empty!");
+                    showError('fullNameError', "Tên đầy đủ không được để trống!");
                     isValid = false;
                 }
 
                 if (!dob) {
-                    showError('dobError', "Date of Birth cannot be empty!");
+                    showError('dobError', "Ngày sinh không được để trống!");
                     isValid = false;
                 }
 
                 if (!sex) {
-                    showError('sexError', "Please select a gender!");
+                    showError('sexError', "Vui lòng chọn giới tính!");
                     isValid = false;
                 }
 
                 if (!phoneNumber) {
-                    showError('phoneError', "Phone number cannot be empty!");
+                    showError('phoneError', "Số điện thoại không được để trống!");
                     isValid = false;
                 } else if (!isValidPhone(phoneNumber)) {
-                    showError('phoneError', "Phone number must have 10 digits and start with 0.");
+                    showError('phoneError', "Số điện thoại phải có 10 chữ số và bắt đầu bằng số 0.");
                     isValid = false;
                 } else if (existingPhoneNumbers.includes(phoneNumber)) {
-                    showError('phoneError', "Phone number is already registered.");
+                    showError('phoneError', "Số điện thoại đã được đăng ký.");
                     isValid = false;
                 }
 
                 if (!email) {
-                    showError('emailError', "Email cannot be empty!");
+                    showError('emailError', "Email không được để trống!");
                     isValid = false;
                 } else if (!isValidEmail(email)) {
-                    showError('emailError', "Invalid email format (example@domain.com).");
+                    showError('emailError', "Định dạng email không hợp lệ (example@domain.com).");
                     isValid = false;
                 } else if (existingEmails.includes(email)) {
-                    showError('emailError', "Email is already registered.");
+                    showError('emailError', "Email đã được đăng ký.");
                     isValid = false;
                 }
 
                 if (!password) {
-                    showError('passwordError', "Password cannot be empty!");
+                    showError('passwordError', "Mật khẩu không được để trống!");
                     isValid = false;
                 } else if (!isValidPassword(password)) {
-                    showError('passwordError', "Password must be 8-16 characters long, with at least one uppercase letter and one number.");
+                    showError('passwordError', "Mật khẩu phải dài từ 8-16 ký tự, có ít nhất một chữ cái viết hoa và một chữ số.");
                     isValid = false;
                 }
 
                 if (!confirmPassword) {
-                    showError('confirmPasswordError', "Confirm Password cannot be empty!");
+                    showError('confirmPasswordError', "Xác nhận mật khẩu không được để trống!");
                     isValid = false;
                 } else if (password !== confirmPassword) {
-                    showError('confirmPasswordError', "Passwords do not match!");
+                    showError('confirmPasswordError', "Mật khẩu không khớp!");
                     isValid = false;
                 }
 
                 if (!address) {
-                    showError('addressError', "Address cannot be empty!");
+                    showError('addressError', "Địa chỉ không được để trống!");
                     isValid = false;
                 }
 
@@ -319,6 +322,9 @@
                 document.querySelectorAll('.error-message').forEach(error => error.textContent = "");
             }
         </script>
+
+
+
     </body>
 
 </html>

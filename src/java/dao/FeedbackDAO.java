@@ -96,6 +96,23 @@ public class FeedbackDAO extends DBContext {
         return null;
     }
 
+    // Lấy danh sách sản phẩm từ orderID
+    public List<Integer> getProductIDsByOrderID(int orderID) {
+        List<Integer> productIDs = new ArrayList<>();
+        String sql = "SELECT productID FROM Order_Details WHERE orderID = ?";
+
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, orderID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                productIDs.add(rs.getInt("productID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productIDs;
+    }
+
     // Thêm feedback mới
     public boolean addFeedback(Feedback feedback) {
         String sql = "INSERT INTO Feedback (CustomerID, Content, RatePoint, ProductID) VALUES (?, ?, ?, ?)";
@@ -227,6 +244,19 @@ public class FeedbackDAO extends DBContext {
             e.printStackTrace();
         }
         return feedbackList;
+    }
+
+    public boolean updateOrderStatus(int orderID, String status) {
+        String sql = "UPDATE Order_List SET Status = ? WHERE OrderID = ?";
+        try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, orderID);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

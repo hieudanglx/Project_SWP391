@@ -112,11 +112,7 @@
             <!-- Navbar -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                    <h4 class="mb-0">Welcome to Dashboard Admin</h4>
-                    <div class="ms-auto d-flex align-items-center">
-                        <a href="ManagerProfile.jsp" class="text-decoration-none text-dark me-3 fw-bold">${sessionScope.fullname}</a>
-                        <a href="javascript:void(0);" class="btn btn-danger" onclick="logout()">Logout</a>
-                    </div>
+                    <h4 class="mb-0">Welcome to Dashboard</h4>                    
                 </div>
             </nav>
 

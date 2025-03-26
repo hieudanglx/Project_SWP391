@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +24,8 @@ import model.Product;
  *
  * @author CE180594_Phan Quốc Duy
  */
-@WebServlet(name = "ViewCartController", urlPatterns = {"/ViewCartController"})
-public class ViewCartController extends HttpServlet {
+@WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
+public class AddToCartController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,49 +39,61 @@ public class ViewCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        CartDao link = new CartDao();
-        HttpSession session = request.getSession();
-        Customer customer = (Customer) session.getAttribute("customer");
 
-        if (customer == null) {
+        HttpSession session = request.getSession();
+        CartDao link = new CartDao();
+
+        Customer c = (Customer) session.getAttribute("customer");
+        if (c == null) {
             response.sendRedirect("choiceLogin.jsp");
             return;
         }
-        
-        if (checkStock(customer.getCustomerID())) {
-            String status = "waring";
-            String message = "Cart đã được cập nhật do 1 số sản phẩm của bạn đã thay đổi số lượng";
-            session.setAttribute("status", status);
-            session.setAttribute("message", message);
+
+        // Kiểm tra tham số bắt buộc
+        String web= (request.getParameter("web") == null
+                || request.getParameter("web").isEmpty()) ? "" : request.getParameter("web");
+        String idParam = request.getParameter("id");
+        String categoryIDParam = (request.getParameter("CategoryID") == null
+                || request.getParameter("CategoryID").isEmpty()) ? "" : request.getParameter("CategoryID");
+
+        int id = Integer.parseInt(idParam);
+        String url = "ViewCartController"; // Mặc định
+
+        // Xử lý URL redirect
+        if (web.contains("list") && categoryIDParam != null) {
+            url = "ViewListProductGC?CategoryID=" + Integer.parseInt(categoryIDParam);
+        } else if (web.contains("detail")) {
+            url = "ViewProductDetailsController?id=" + id;
         }
 
-        List<Product> cartItems = link.getCartByCustomerID(customer.getCustomerID());
-        request.setAttribute("list", cartItems);
-        session.setAttribute("size", link.getTotalItems(cartItems, customer.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(cartItems, customer.getCustomerID()));
-        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
-    }
-    
-    public Boolean checkStock(int customerID){
-        CartDao link = new CartDao();
-        int check = 0;
-        List<Product> cartItems = link.getCartByCustomerID(customerID);
-        for (Product product : cartItems) {
-            int stockQuantity = link.getProductQuantity(product.getProductID());
-            if (stockQuantity == 0) {
-                // Nếu sản phẩm hết hàng, xóa khỏi giỏ
-                link.removeProductFromCart(customerID, product.getProductID());
-                check++;
-            } else if (product.getQuantityProduct() > stockQuantity) {
-                // Nếu số lượng trong giỏ lớn hơn số lượng tồn kho, cập nhật lại số lượng trong giỏ
-                link.updateCartQuantity(customerID, product.getProductID(), stockQuantity);
-                check++;
+        System.out.println(url);
+        String status = "success";
+        String message = "Thêm thành công";
+
+        if (link.ProductExistsInCart(c.getCustomerID(), id)) {
+            System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
+            if (!link.updateCartProduct(c.getCustomerID(), id, "+")) {
+                System.out.println("controller.UpdateCartController.processRequest() add sai r");
+                status = "error";
+                message = "Sản phẩm đã hết hàng";
+            }
+        } else {
+            if (!link.AddProductToCart(c.getCustomerID(), id)) {
+                System.out.println("controller.AddProductToCart.processRequest() add sai r");
+                status = "error";
+                message = "Sản phẩm đã hết hàng";
             }
         }
-        return check!=0;
+        // Cập nhật session
+        List<Product> list = new ArrayList<>();
+        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
+        session.setAttribute("status", status);
+        session.setAttribute("message", message);
+        request.getRequestDispatcher(url).forward(request, response);
     }
-    
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -95,7 +108,7 @@ public class ViewCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ViewCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -113,7 +126,7 @@ public class ViewCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ViewCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

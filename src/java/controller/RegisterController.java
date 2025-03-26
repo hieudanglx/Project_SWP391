@@ -48,19 +48,19 @@ public class RegisterController extends HttpServlet {
             CustomerDAO customerDAO = new CustomerDAO();
 
             if (customerDAO.isUsernameExisted(username)) {
-                request.setAttribute("errorMessage", "Username already exists!");
+                request.setAttribute("errorMessage", "Tên người dùng đã tồn tại!");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
             if (customerDAO.isPhoneExisted(phoneNumber)) {
-                request.setAttribute("errorMessage", "Phone number already exists!");
+                request.setAttribute("errorMessage", "Số điện thoại đã tồn tại!");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
 
             if (customerDAO.isEmailExisted(email)) {
-                request.setAttribute("errorMessage", "Email already exists!");
+                request.setAttribute("errorMessage", "Email đã tồn tại!");
                 request.getRequestDispatcher("register.jsp").forward(request, response);
                 return;
             }
@@ -69,7 +69,7 @@ public class RegisterController extends HttpServlet {
             customerDAO.add(newCustomer);
 
             // Đăng ký thành công
-            request.setAttribute("successMessage", "Registration successful! You can now log in.");
+            request.setAttribute("successMessage", "Đăng ký thành công! Bây giờ bạn có thể đăng nhập.");
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
         } catch (Exception e) {
             request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());

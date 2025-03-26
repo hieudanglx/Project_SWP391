@@ -19,17 +19,17 @@
         <style>
             /* Fix cứng kích thước cho trang giỏ hàng */
             .cart-container {
-                width: 1200px !important;
-                min-width: 1200px !important;
+                width: 1140px !important;
+                min-width: 1140px !important;
                 margin: 0 auto;
                 padding: 30px 15px;
                 min-height: 70vh;
             }
 
             /* Đè style Bootstrap */
-            @media (min-width: 1200px) {
+            @media (min-width: 1140px) {
                 .cart-container {
-                    max-width: 1200px !important;
+                    max-width: 1140px !important;
                 }
             }
 
@@ -180,19 +180,22 @@
                                                                        class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0;"
                                                                        onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct}) || false;">-</a>
-                                                                    <input type="text"
-                                                                           class="form-control text-center border-secondary" style="width: 100px"
+                                                                    <input type="number"
+                                                                           class="form-control text-center border-secondary" 
+                                                                           style="width: 100px"
+                                                                           min="1" 
+                                                                           step="1"
                                                                            value="${product.quantityProduct}"
-                                                                           disabled>
-                                                                    <a href="UpdateCartController?id=${product.productID}&type=%2B"
-                                                                       class="btn btn-outline-secondary px-3"
+                                                                           onkeypress="return handleKeyPress(event, this, ${product.productID})"
+                                                                           onchange="updateQuantityEdit(this, ${product.productID})">
+                                                                    <a class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0"
-                                                                       >+</a>
+                                                                       onclick="incrementQuantity(${product.productID}, ${product.quantityProduct})">+</a>
                                                                 </div>
                                                                 <!-- Nút xóa -->
-                                                                <a href="UpdateCartController?id=${product.productID}&type=R"
+                                                                <a href="RemoveInCartController?id=${product.productID}"
                                                                    class="btn btn-link text-danger"
-                                                                   onclick="return confirmRemove(${product.productID}) || false;"> <!-- Thêm || false -->
+                                                                   onclick="return confirmRemove(${product.productID})">
                                                                     <i class="fas fa-trash fa-lg"></i>
                                                                 </a>
                                                             </div>
@@ -432,81 +435,104 @@
                                 }, 1000);
                             });
                         });
-    </script>   
+                        // Xử lý fixed width
+                        function enforceCartWidth() {
+                            const container = document.querySelector('.cart-container');
+                            if (window.innerWidth < 1140) {
+                                container.style.transform = `translateX(${(1140 - window.innerWidth)/2}px)`;
+                            } else {
+                                container.style.transform = 'none';
+                            }
+                        }
 
-    <script>
-        // Xử lý fixed width
-        function enforceCartWidth() {
-            const container = document.querySelector('.cart-container');
-            if (window.innerWidth < 1200) {
-                container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
-            } else {
-                container.style.transform = 'none';
-            }
-        }
+                        // window.addEventListener('resize', enforceCartWidth);
+                        //enforceCartWidth(); // Khởi chạy lần đầu
 
-        // window.addEventListener('resize', enforceCartWidth);
-        //enforceCartWidth(); // Khởi chạy lần đầu
-
-        document.addEventListener("DOMContentLoaded", function () {
-            const citySelect = document.getElementById("city");
-            const districtSelect = document.getElementById("district");
-            // Lấy dữ liệu tỉnh/thành phố từ GitHub
-            const fetchData = async () => {
-                try {
-                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                    const data = response.data;
-                    renderCities(data);
-                } catch (error) {
-                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                }
-            };
-            // Hiển thị danh sách tỉnh/thành phố
-            const renderCities = (data) => {
-                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                data.forEach(province => {
-                    let option = document.createElement("option");
-                    option.value = province.Id;
-                    option.setAttribute("data-name", province.Name);
-                    option.textContent = province.Name;
-                    citySelect.appendChild(option);
-                });
-                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
-                citySelect.addEventListener("change", function () {
-                    const selectedCityId = this.value;
-                    const selectedCity = data.find(p => p.Id === selectedCityId);
-                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
-                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                    if (selectedCity) {
-                        selectedCity.Districts.forEach(district => {
-                            let option = document.createElement("option");
-                            option.value = district.Id;
-                            option.setAttribute("data-name", district.Name);
-                            option.textContent = district.Name;
-                            districtSelect.appendChild(option);
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const citySelect = document.getElementById("city");
+                            const districtSelect = document.getElementById("district");
+                            // Lấy dữ liệu tỉnh/thành phố từ GitHub
+                            const fetchData = async () => {
+                                try {
+                                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                                    const data = response.data;
+                                    renderCities(data);
+                                } catch (error) {
+                                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                                }
+                            };
+                            // Hiển thị danh sách tỉnh/thành phố
+                            const renderCities = (data) => {
+                                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                                data.forEach(province => {
+                                    let option = document.createElement("option");
+                                    option.value = province.Id;
+                                    option.setAttribute("data-name", province.Name);
+                                    option.textContent = province.Name;
+                                    citySelect.appendChild(option);
+                                });
+                                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
+                                citySelect.addEventListener("change", function () {
+                                    const selectedCityId = this.value;
+                                    const selectedCity = data.find(p => p.Id === selectedCityId);
+                                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
+                                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                                    if (selectedCity) {
+                                        selectedCity.Districts.forEach(district => {
+                                            let option = document.createElement("option");
+                                            option.value = district.Id;
+                                            option.setAttribute("data-name", district.Name);
+                                            option.textContent = district.Name;
+                                            districtSelect.appendChild(option);
+                                        });
+                                    }
+                                });
+                                // Khi chọn quận/huyện, cập nhật giá trị ẩn
+                                districtSelect.addEventListener("change", function () {
+                                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
+                                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
+                                });
+                            };
+                            fetchData();
                         });
-                    }
-                });
-                // Khi chọn quận/huyện, cập nhật giá trị ẩn
-                districtSelect.addEventListener("change", function () {
-                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
-                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
-                });
-            };
-            fetchData();
-        });
-    </script>
+                        document.getElementById("checkoutBtn").addEventListener("click", function () {
+                            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                            if (paymentMethod === "COD") {
+                                window.location.href = "PaymentController";
+                            } else if (paymentMethod === "VNPAY") {
+                                window.location.href = "vnpay_pay.jsp";
+                            }
+                        });
+                        function updateQuantityEdit(input, productId) {
+                            const quantity = input.value.trim();
+                            let parsedQuantity = parseInt(quantity);
 
-    <script>
-        document.getElementById("checkoutBtn").addEventListener("click", function () {
-            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            if (paymentMethod === "COD") {
-                window.location.href = "PaymentController";
-            } else if (paymentMethod === "VNPAY") {
-                window.location.href = "vnpay_pay.jsp";
-            }
-        });
+                            // Kiểm tra hợp lệ
+                            if (isNaN(parsedQuantity) || parsedQuantity < 1) {
+                                alert("Vui lòng nhập số nguyên lớn hơn 0");
+                                input.value = input.defaultValue;
+                                return;
+                            }
+
+                            // Cập nhật URL
+                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+parsedQuantity;
+                            window.location.href = url;
+                        }
+
+                        function incrementQuantity(productId, currentQuantity) {
+                            const newQuantity = currentQuantity + 1;
+                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+newQuantity;
+                            window.location.href = url;
+                        }
+
+                        function handleKeyPress(event, input, productId) {
+                            if (event.key === 'Enter') {
+                                event.preventDefault();
+                                updateQuantityEdit(input, productId);
+                            }
+                            return event.key.match(/[0-9]/) !== null;
+                        }
     </script>
     <script src="js/popup.js"></script>
 </html>

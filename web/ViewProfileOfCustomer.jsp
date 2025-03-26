@@ -168,46 +168,49 @@
                     </div>
                     <nav class="profile-nav">
                         <ul>
-                            <li><a onclick="showSection('profile')">Profile</a></li>
-                            <li><a onclick="showSection('changePassword')">Change Password</a></li>
-                            <li><a onclick="showSection('changePhoneNumber')">Change Phone Number</a></li>
-                            <li><a onclick="showSection('orderHistory')">Order History</a></li>
+                            <li><a onclick="showSection('profile')">Hồ sơ</a></li>
+                            <li><a onclick="showSection('changePassword')">Đổi mật khẩu</a></li>
+                            <li><a onclick="showSection('changePhoneNumber')">Đổi số điện thoại</a></li>
+                            <li><a onclick="window.location.href='/Order_History'">Lịch sử đơn hàng</a></li>
+
                         </ul>
                     </nav>
                 </aside>
 
+                    
+                    
                 <main class="profile-content">
                     <section id="profile" class="content-section active">
-                        <h2><strong>My Profile</strong></h2>
-                        <p>Manage profile information to keep your account secure</p>
+                        <h2><strong>Hồ sơ của tôi</strong></h2>
+                        <p>Quản lý thông tin hồ sơ để giữ an toàn cho tài khoản của bạn</p>
 
                         <form action="UpdateProfile" method="POST">
-                            <label>Username</label>
+                            <label>Tên người dùng</label>
                             <input type="text" name="username" value="${sessionScope.customer.username}" readonly>
 
-                            <label>Full Name</label>
+                            <label>Họ và tên</label>
                             <input type="text" name="fullName" value="${sessionScope.customer.fullName}" required>
 
                             <label>Email</label>
                             <input type="email" name="email" value="${sessionScope.customer.email}" readonly>
 
-                            <label>Phone number</label>
+                            <label>Số điện thoại</label>
                             <input type="text" name="phoneNumber" value="${sessionScope.customer.phoneNumber}" readonly>
 
-                            <label>Address</label>
+                            <label>Địa chỉ</label>
                             <input type="text" name="address" value="${sessionScope.customer.address}" required>
 
-                            <label>BirthDay</label>
+                            <label>Ngày sinh</label>
                             <input type="date" name="dob" value="${sessionScope.customer.dob}" required>
 
-                            <label>Gender</label>
+                            <label>Giới tính</label>
                             <select name="sex" required>
                                 <option value="Male" ${sessionScope.customer.sex == 'Male' ? 'selected' : ''}>Male</option>
                                 <option value="Female" ${sessionScope.customer.sex == 'Female' ? 'selected' : ''}>Female</option>
                                 <option value="Other" ${sessionScope.customer.sex == 'Other' ? 'selected' : ''}>Other</option>
                             </select>
 
-                            <button type="submit" class="save-btn">Save Changes</button>
+                            <button type="submit" class="save-btn">Lưu thay đổi</button>
                         </form>
 
                         <div class="avatar-upload">
@@ -215,7 +218,7 @@
                                 <img id="avatarPreview" src="<%= avatarPath != null ? request.getContextPath() + "/" + avatarPath : request.getContextPath() + "/images/user-placeholder.png" %>" 
                                      alt="Avatar">
                                 <input type="file" name="avatar" id="avatarInput" accept="image/*" onchange="previewAvatar(event)">
-                                <button type="submit">Upload</button>
+                                <button type="submit">Tải ảnh lên</button>
                             </form>
                         </div>
                     </section>
@@ -235,7 +238,7 @@
 
 
                     <section id="changePassword" class="content-section">
-                        <h2><strong>Change Password</strong></h2>
+                        <h2><strong>Đổi mật khẩu</strong></h2>
 
                         <!-- Hiển thị thông báo lỗi nếu có -->
                         <c:if test="${not empty errorMessage}">
@@ -245,22 +248,22 @@
                         <form action="ChangePasswordOfCustomer" method="POST" onsubmit="return validatePassword()">
                             <input type="hidden" name="email" value="${sessionScope.customer.email}" required>
 
-                            <label>Current Password</label>
+                            <label>Mật khẩu hiện tại</label>
                             <input type="password" name="currentPassword" required>
 
-                            <label>New Password</label>
+                            <label>Mật khẩu mới</label>
                             <input type="password" id="newPassword" name="newPassword" required>
 
-                            <label>Confirm New Password</label>
+                            <label>Xác nhận mật khẩu mới</label>
                             <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
-                            <button type="submit" class="save-btn">Update Password</button>
+                            <button type="submit" class="save-btn">Cập nhật mật khẩu</button>
                         </form>
                     </section>
 
 
                     <section id="changePhoneNumber" class="content-section">
-                        <h2><strong>Change Phone Number</strong></h2>
+                        <h2><strong>Đổi số điện thoại</strong></h2>
 
                         <!-- Hiển thị thông báo thành công -->
                         <c:if test="${not empty successMessage}">
@@ -275,19 +278,19 @@
                         <form action="ChangePhoneNumberOfCustomer" method="POST" onsubmit="return validatePhoneNumber()">
                             <input type="hidden" name="email" value="${sessionScope.customer.email}" required>
 
-                            <label>Current Phone Number</label>
+                            <label>Số điện thoại cũ</label>
                             <input type="text" name="currentPhoneNumber" value="${sessionScope.customer.phoneNumber}" readonly>
 
 
-                            <label>New Phone Number</label>
+                            <label>Số điện thoại mới</label>
                             <input type="text" name="newPhoneNumber" required>
 
-                            <button type="submit" class="save-btn">Update Phone Number</button>
+                            <button type="submit" class="save-btn">Cập nhật số điện thoại</button>
                         </form>
                     </section>
 
                     <section id="orderHistory" class="content-section">
-                        <a href="Order_History" class="btn btn-primary">View Order History</a>
+                        <a href="/Order_History" class="btn btn-primary">Xem lịch sử đơn hàng</a>
                     </section>
                 </main>
             </div>
