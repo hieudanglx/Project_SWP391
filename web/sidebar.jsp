@@ -272,7 +272,7 @@
             String username = (String) session.getAttribute("Username");
             boolean isAdmin = "admin".equals(username);
             
-            // Xác ??nh URL Dashboard d?a trên role
+            // X?c ??nh URL Dashboard d?a tr?n role
             String dashboardUrl = isAdmin ? "HomeDashBoard_Admin.jsp" : "Top_selling";
         %>
 

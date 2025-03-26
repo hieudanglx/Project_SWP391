@@ -8,6 +8,8 @@ package dao;
  *
  * @author nguye
  */
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
@@ -18,6 +20,22 @@ import java.sql.SQLException;
 
 public class CustomerDAO extends DBContext {
 
+    // Hàm mã hóa mật khẩu MD5
+    public String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     public boolean updateAvatar(int customerId, String avatarPath) {
         String sql = "UPDATE Customer SET imgcustomer = ? WHERE CustomerID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {

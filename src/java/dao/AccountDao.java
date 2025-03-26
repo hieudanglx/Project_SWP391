@@ -36,7 +36,7 @@ public class AccountDao extends dao.DBContext {
         String query = "Select username, password, status from Staff where username = ? and password = ?";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
+            pstmt.setString(2, hashPassword(password));
 
             try ( ResultSet rs = pstmt.executeQuery()) {
 
@@ -49,52 +49,23 @@ public class AccountDao extends dao.DBContext {
         }
         return null;
     }
+    // Hàm mã hóa mật khẩu MD5
+    public String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(password.getBytes());
+            byte[] digest = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-//    // Hàm mã hóa mật khẩu MD5
-//    public static String hashMD5(String input) {
-//        try {
-//            MessageDigest md = MessageDigest.getInstance("MD5");
-//            md.update(input.getBytes());
-//            byte[] byteData = md.digest();
-//
-//            StringBuilder hexString = new StringBuilder();
-//            for (byte b : byteData) {
-//                String hex = Integer.toHexString(0xff & b);
-//                if (hex.length() == 1) hexString.append('0');
-//                hexString.append(hex);
-//            }
-//            return hexString.toString();
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    // Kiểm tra đăng nhập (Trả về Role: "Admin" hoặc "Staff", hoặc null nếu sai)
-//    public String ValidateStaff_Admin(String username, String password) {
-//        if (connection == null) {
-//            System.out.println("Lỗi: Kết nối cơ sở dữ liệu không tồn tại.");
-//            return null;
-//        }
-//
-//        String query = "SELECT role, status FROM Staff WHERE username = ? AND password = ?";
-//        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-//            pstmt.setString(1, username);
-//            pstmt.setString(2, hashMD5(password)); // So sánh mật khẩu đã mã hóa MD5
-//
-//            try (ResultSet rs = pstmt.executeQuery()) {
-//                if (rs.next()) {
-//                    int status = rs.getInt("status");
-//                    if (status == 0) {  // 0 = Hoạt động, 1 = Bị chặn
-//                        return rs.getString("role"); // Trả về "Admin" hoặc "Staff"
-//                    }
-//                    return "blocked"; // Trả về nếu tài khoản bị chặn
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null; // Sai tên đăng nhập hoặc mật khẩu
-//    }
     public Integer getStaffIdByUsername(String username) {
         String query = "SELECT staffID FROM Staff WHERE username = ?";
 
@@ -112,6 +83,7 @@ public class AccountDao extends dao.DBContext {
 
         return null; // Trả về null nếu không tìm thấy
     }
+    
     public Integer getAdminIdByUsername(String username) {
         String query = "SELECT staffID FROM Staff WHERE username = ?";
 
@@ -129,7 +101,6 @@ public class AccountDao extends dao.DBContext {
 
         return null; // Trả về null nếu không tìm thấy
     }
-    
 
     public AccountStaff getStaffByEmail(String email) {
         if (connection == null) {
@@ -304,7 +275,7 @@ public class AccountDao extends dao.DBContext {
         }
         return false;
     }
-    
+
     public List<AccountCustomer> searchCustomerByUsername(String keyword) {
         List<AccountCustomer> customers = new ArrayList<>();
         String query = "SELECT customerID, username,fullName, email, address, phoneNumber, sex, dob, status, imgCustomer FROM Customer WHERE username LIKE ? OR fullname LIKE ?";
@@ -353,7 +324,7 @@ public class AccountDao extends dao.DBContext {
         try ( PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, staff.getAddress());
             ps.setString(2, staff.getEmail());
-            ps.setString(3, staff.getPassword());
+            ps.setString(3, hashPassword(staff.getPassword()));
             ps.setString(4, staff.getFullName());
             ps.setString(5, staff.getPhoneNumber());
             ps.setString(6, staff.getUsername());
@@ -448,7 +419,6 @@ public class AccountDao extends dao.DBContext {
 //    public void unblockCustomer(int customerID) {
 //        updateCustomerStatus(customerID, 0); // 0 = Active
 //    }
-
     public boolean isUsernameStaffExists(String username) {
         String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -514,12 +484,12 @@ public class AccountDao extends dao.DBContext {
         if (isUsernameStaffExists(username) || isEmailStaffExists(email) || isPhoneNumberStaffExists(phoneNumber) || isCCCDExists(cccd)) {
             return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
         }
-
+        
         String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Province_City, DOB, Sex, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, fullName);
             ps.setString(2, username);
-            ps.setString(3, password); // Cân nhắc mã hóa nếu cần bảo mật
+            ps.setString(3, hashPassword(password)); // Cân nhắc mã hóa nếu cần bảo mật
             ps.setString(4, email);
             ps.setString(5, phoneNumber);
             ps.setString(6, address);
@@ -565,7 +535,7 @@ public class AccountDao extends dao.DBContext {
     public boolean updateStaffPassword(String email, String newPassword) {
         String query = "UPDATE Staff SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, newPassword);
+            stmt.setString(1, hashPassword(newPassword));
             stmt.setString(2, email);
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
@@ -626,7 +596,7 @@ public class AccountDao extends dao.DBContext {
 
             ps.setString(1, staff.getAddress());
             ps.setString(2, staff.getEmail());
-            ps.setString(3, staff.getPassword());
+            ps.setString(3, hashPassword(staff.getPassword()));
             ps.setString(4, staff.getFullName());
             ps.setString(5, staff.getPhoneNumber());
             ps.setInt(6, staff.getStatus());
@@ -653,6 +623,10 @@ public class AccountDao extends dao.DBContext {
         } else {
             System.out.println("❌ Xóa khách hàng thất bại!");
         }
+
+        String password = "123";
+        String hashedPassword = accountDao.hashPassword(password);
+        System.out.println("MD5 Hash: " + hashedPassword);
     }
 
 }

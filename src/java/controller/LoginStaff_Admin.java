@@ -79,11 +79,11 @@ public class LoginStaff_Admin extends HttpServlet {
         String username = request.getParameter("Username").trim();
         String password = request.getParameter("Password").trim();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-            return;
-        }
+//        if (username.isEmpty() || password.isEmpty()) {
+//            request.setAttribute("errorMessage", "Tên người dùng và mật khẩu không được để trống!");
+//            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+//            return;
+//        }
 
         try {
             Integer status = accountDAO.ValidateStaff_Admin(username, password); // Đổi tên cho rõ ràng
@@ -94,7 +94,7 @@ public class LoginStaff_Admin extends HttpServlet {
                     session.setAttribute("Username", username);
                     session.setAttribute("fullname", accountDAO.getFullname(username));
 
-                    if (!"admin".equalsIgnoreCase(username)) {
+                    if (!"admin".equalsIgnoreCase(username) ) {
                         session.setAttribute("staffId", accountDAO.getStaffIdByUsername(username));
                     }
 
