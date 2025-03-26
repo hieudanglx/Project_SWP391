@@ -132,13 +132,13 @@
             <div class="table-container">
                 <div class="filter-buttons">
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="month" class="btn">Lọc theo Tháng</button>
+                        <button type="submit" name="filter" value="month" class="btn">Filter by Month</button>
                     </form>
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="quarter" class="btn">Lọc theo Quý</button>
+                        <button type="submit" name="filter" value="quarter" class="btn">Filter by Quarter</button>
                     </form>
                     <form method="GET" action="RevenueByMonth" style="display:inline;">
-                        <button type="submit" name="filter" value="year" class="btn">Lọc theo Năm</button>
+                        <button type="submit" name="filter" value="year" class="btn">Filter by Year</button>
                     </form>
                 </div>
                 <div>
@@ -153,9 +153,9 @@
                             <thead>
                                 <tr>
                                     <th>Năm</th>
-                                    <% if ("month".equals(filter)) { %> <th>Tháng</th> <% } %>
-                                    <% if ("quarter".equals(filter)) { %> <th>Quý</th> <% } %>
-                                    <th>Doanh Thu</th>
+                                    <% if ("month".equals(filter)) { %> <th>Monht</th> <% } %>
+                                    <% if ("quarter".equals(filter)) { %> <th>Quarter</th> <% } %>
+                                    <th>Revenue</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -184,9 +184,9 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Ngày đặt</th>
-                                    <th>Tổng tiền</th>
+                                    <th>Order ID</th>
+                                    <th>Date booked</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -207,7 +207,7 @@
                     <%
                             } else {
                     %>
-                    <div class="no-data">Không có dữ liệu</div>
+                    <div class="no-data">No data available</div>
                     <%
                             }
                         }

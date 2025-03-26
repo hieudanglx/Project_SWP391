@@ -45,6 +45,8 @@ public class PaymentController extends HttpServlet {
             try {
                 HttpSession session = request.getSession();
                 CartDao link = new CartDao();
+                OrderDAO orderDAO = new OrderDAO();
+                CartDao cartDao = new CartDao();
                 Customer c = (Customer) session.getAttribute("customer"); // Lấy thông tin khách hàng
                 List<Product> list = link.getCartByCustomerID(c.getCustomerID());
 
@@ -66,7 +68,6 @@ public class PaymentController extends HttpServlet {
 
                 if (paymentMethod.equals("COD")) {
                     // Thêm đơn hàng vào Order_list
-                    OrderDAO orderDAO = new OrderDAO();
 
                     Order_list order = new Order_list(0, customerID, staffID, address, Date, status, phoneNumber, total);
                     int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
@@ -79,10 +80,8 @@ public class PaymentController extends HttpServlet {
 
                         }
                         orderDAO.updateProductQuantity(orderID);
-                        
 
                         // Xóa giỏ hàng sau khi đặt hàng thành công
-                        CartDao cartDao = new CartDao();
                         cartDao.clearCart(c.getCustomerID());
 
                         int size = link.getTotalItems(list, c.getCustomerID()); // Lưu giá trị vào biến size

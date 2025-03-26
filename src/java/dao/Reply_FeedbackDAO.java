@@ -38,7 +38,7 @@ public class Reply_FeedbackDAO extends DBContext {
         }
     }
 
-    public Map<Integer, String> getAllReplies() { 
+    public Map<Integer, String> getAllReplies() {
         Map<Integer, String> replies = new HashMap<>();
         String sql = "SELECT feedbackID, content_Reply FROM Reply_Feedback";
 
@@ -72,6 +72,20 @@ public class Reply_FeedbackDAO extends DBContext {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public boolean checkFeedbackHasReply(int feedbackID) {
+        String sql = "SELECT COUNT(*) FROM Reply_Feedback WHERE feedbackID = ?";
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, feedbackID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu số lượng > 0 nghĩa là đã có phản hồi
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

@@ -86,8 +86,12 @@
             }
 
             @keyframes slideIn {
-                from { transform: translateX(100%); }
-                to { transform: translateX(0); }
+                from {
+                    transform: translateX(100%);
+                }
+                to {
+                    transform: translateX(0);
+                }
             }
 
             .rate-badge {
@@ -97,19 +101,19 @@
                 font-weight: bold;
             }
 
-            .rate-badge-good { 
-                background-color: #28a745; 
-                color: white; 
+            .rate-badge-good {
+                background-color: #28a745;
+                color: white;
             }
 
-            .rate-badge-average { 
-                background-color: #ffc107; 
-                color: black; 
+            .rate-badge-average {
+                background-color: #ffc107;
+                color: black;
             }
 
-            .rate-badge-poor { 
-                background-color: #dc3545; 
-                color: white; 
+            .rate-badge-poor {
+                background-color: #dc3545;
+                color: white;
             }
         </style>
     </head>
@@ -122,23 +126,21 @@
                     <div class="row mb-4">
                         <div class="col">
                             <h2 class="text-center mb-4">
-                                <i class="fas fa-comment-dots me-2"></i>Quản Lý Feedback
+                                <i class="fas fa-comment-dots me-2"></i>Feedback Management
                             </h2>
 
-                            <c:if test="${not empty sessionScope.repSuccess}">
+                            <c:if test="${not empty repSuccess}">
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                    ${sessionScope.repSuccess}
+                                    ${repSuccess}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
-                                <c:remove var="repSuccess" scope="session"/>
                             </c:if>
 
-                            <c:if test="${not empty sessionScope.errorMessage}">
+                            <c:if test="${not empty errorMessage}">
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    ${sessionScope.errorMessage}
+                                    ${errorMessage}
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
-                                <c:remove var="errorMessage" scope="session"/>
                             </c:if>
 
                             <div class="table-responsive feedback-table">
@@ -146,11 +148,11 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>ID</th>
-                                            <th>Khách Hàng</th>
-                                            <th>Nội Dung</th>
-                                            <th>Điểm Đánh Giá</th>
-                                            <th>Sản Phẩm</th>
-                                            <th>Hành Động</th>
+                                            <th>Client</th>
+                                            <th>Content</th>
+                                            <th>Rating Score</th>
+                                            <th>Product</th>
+                                            <th>Act</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -159,111 +161,111 @@
                                                 <c:forEach var="feedback" items="${feedbackList}">
                                                     <tr>
                                                         <td>${feedback.feedbackID}</td>
-                                                        <td>${customerNames[feedback.customerID] != null ? customerNames[feedback.customerID] : 'Không xác định'}</td>
+                                                        <td>${customerNames[feedback.customerID] != null ? customerNames[feedback.customerID] : 'Unknown'}</td>
                                                         <td>
                                                             ${feedback.content}
                                                             <c:if test="${not empty feedbackReplies[feedback.feedbackID]}">
                                                                 <div class="text-muted mt-2">
-                                                                    <strong>Phản hồi:</strong> 
+                                                                    <strong>Response:</strong> 
                                                                     ${feedbackReplies[feedback.feedbackID]}
                                                                 </div>
                                                             </c:if>
                                                         </td>
                                                         <td>
                                                             <span class="rate-badge ${feedback.ratePoint >= 4 ? 'rate-badge-good' : 
-                                                                    (feedback.ratePoint >= 2 ? 'rate-badge-average' : 'rate-badge-poor')}">
-                                                                ${feedback.ratePoint}/5
-                                                            </span>
-                                                        </td>
-                                                        <td>${productNames[feedback.productID] != null ? productNames[feedback.productID] : 'Không xác định'}</td>
-                                                        <td>
-                                                            <div class="btn-group" role="group">
-                                                                <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" 
-                                                                   class="btn btn-sm btn-outline-danger" 
-                                                                   onclick="return confirm('Bạn có chắc chắn muốn xóa?');">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </a>
-                                                                <button class="btn btn-sm btn-outline-primary" 
-                                                                        data-bs-toggle="modal" 
-                                                                        data-bs-target="#replyModal${feedback.feedbackID}">
-                                                                    <i class="fas fa-reply"></i>
-                                                                </button>
-                                                            </div>
+                                                                                      (feedback.ratePoint >= 2 ? 'rate-badge-average' : 'rate-badge-poor')}">
+                                                                      ${feedback.ratePoint}/5
+                                                                  </span>
+                                                            </td>
+                                                            <td>${productNames[feedback.productID] != null ? productNames[feedback.productID] : 'Unknown'}</td>
+                                                            <td>
+                                                                <div class="btn-group" role="group">
+                                                                    <a href="feedback?action=delete&feedbackID=${feedback.feedbackID}" 
+                                                                       class="btn btn-sm btn-outline-danger" 
+                                                                       onclick="return confirm('Are you sure you want to delete?');">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                    <button class="btn btn-sm btn-outline-primary" 
+                                                                            data-bs-toggle="modal" 
+                                                                            data-bs-target="#replyModal${feedback.feedbackID}">
+                                                                        <i class="fas fa-reply"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center text-muted">
+                                                            <i class="fas fa-inbox fa-2x mb-3"></i>
+                                                            <p>There is no feedback to display.</p>
                                                         </td>
                                                     </tr>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <tr>
-                                                    <td colspan="6" class="text-center text-muted">
-                                                        <i class="fas fa-inbox fa-2x mb-3"></i>
-                                                        <p>Không có feedback nào để hiển thị</p>
-                                                    </td>
-                                                </tr>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </tbody>
-                                </table>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Reply Modals for each feedback -->
-        <c:forEach var="feedback" items="${feedbackList}">
-            <div class="modal fade" id="replyModal${feedback.feedbackID}" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Phản Hồi Feedback</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="feedback" method="post">
-                                <input type="hidden" name="action" value="reply">
-                                <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
-                                <input type="hidden" name="customerID" value="${feedback.customerID}">
+            <!-- Reply Modals for each feedback -->
+            <c:forEach var="feedback" items="${feedbackList}">
+                <div class="modal fade" id="replyModal${feedback.feedbackID}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Response feedback</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="feedback" method="post">
+                                    <input type="hidden" name="action" value="reply">
+                                    <input type="hidden" name="feedbackID" value="${feedback.feedbackID}">
+                                    <input type="hidden" name="customerID" value="${feedback.customerID}">
 
-                                <div class="mb-3">
-                                    <label class="form-label">Người Phản Hồi:</label>
-                                    <input type="text" class="form-control" 
-                                           value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}" 
-                                           readonly>
-                                    <input type="hidden" name="staffID" 
-                                           value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}">
-                                </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Respondent:</label>
+                                        <input type="text" class="form-control" 
+                                               value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}" 
+                                               readonly>
+                                        <input type="hidden" name="staffID" 
+                                               value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}">
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="replyContent" class="form-label">Nội Dung Phản Hồi</label>
-                                    <textarea name="replyContent" class="form-control" rows="4" 
-                                              placeholder="Nhập phản hồi..." required></textarea>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="replyContent" class="form-label">Response Content</label>
+                                        <textarea name="replyContent" class="form-control" rows="4" 
+                                                  placeholder="Enter response..." required></textarea>
+                                    </div>
 
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-paper-plane me-2"></i>Gửi Phản Hồi
-                                    </button>
-                                </div>
-                            </form>
+                                    <div class="text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-paper-plane me-2"></i>Send response
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var alertElements = document.querySelectorAll('.alert');
-                alertElements.forEach(function(alert) {
-                    setTimeout(function() {
-                        bootstrap.Alert.getOrCreateInstance(alert).close();
-                    }, 5000);
-                });
-            });
-        </script>
-    </body>
-</html>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                                                                           document.addEventListener('DOMContentLoaded', function () {
+                                                                               var alertElements = document.querySelectorAll('.alert');
+                                                                               alertElements.forEach(function (alert) {
+                                                                                   setTimeout(function () {
+                                                                                       bootstrap.Alert.getOrCreateInstance(alert).close();
+                                                                                   }, 5000);
+                                                                               });
+                                                                           });
+            </script>
+        </body>
+    </html>

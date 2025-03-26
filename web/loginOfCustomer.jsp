@@ -23,15 +23,15 @@
                          alt="Login Illustration">
                 </div>
                 <div class="form-container">
-                    <h2>LOGIN</h2>
+                    <h2>ĐĂNG NHẬP</h2>
                     <form action="loginOfCustomer" method="post">
                         <div class="input-group">                    
                             <input type="text" id="username" name="username" class="form-control form-control-lg"
-                                   placeholder="Username" required> 
+                                   placeholder="Tên người dùng" required> 
                         </div>
                         <div class="input-group">                        
                             <input type="password" id="password" name="password" class="form-control"
-                                   placeholder="Password" required>
+                                   placeholder="Mật khẩu" required>
                         </div>
                         <div>
                             <button class="btn">Đăng nhập</button>
@@ -60,6 +60,8 @@
                     </form>
                 </div>
             </div>  
+                    
         </div>
+                     <%@include file="footer.jsp" %>
     </body>
 </html>
