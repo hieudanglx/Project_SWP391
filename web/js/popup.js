@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (currentAction && currentProductId) {
             switch (currentAction) {
                 case '-':
-                    url = `UpdateCartController?id=${currentProductId}&type=-`;
+                    url = `UpdateCartController?id=${currentProductId}&type=-&Quantity=1`;
                     break;
                 case 'R':
                     url = `RemoveInCartController?id=${currentProductId}`;

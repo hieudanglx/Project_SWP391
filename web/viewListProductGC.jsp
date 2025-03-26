@@ -111,8 +111,8 @@
                                                                     <img src="${p.imageURL}" alt="${p.productName}">
                                                                 </a>
                                                                 <div class="action">
-                                                                    <a href="AddToCartController?id=${p.productID}" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
-                                                                    <a href="AddToCartController?id=${p.productID}&CategoryID=${p.categoryID}&web=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
+                                                                    <a href="AddToCartController?id=${p.productID}&Quantity=${p.quantityProduct}" class="buy"><i class="fas fa-bolt "></i> Mua ngay</a>
+                                                                    <a href="AddToCartController?id=${p.productID}&CategoryID=${p.categoryID}&Quantity=${p.quantityProduct}&web=list" class="like"><i class="fas fa-cart-plus me-2"></i> Thêm giỏ</a>
                                                                     <div class="clear"></div>
                                                                 </div>
                                                             </div>

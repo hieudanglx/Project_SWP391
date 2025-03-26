@@ -13,5 +13,6 @@
     </head>
     <body>
         <h1>${error}</h1>
+        <div>404 NOT FOUND</div>
     </body>
 </html>

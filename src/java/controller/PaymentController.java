@@ -53,7 +53,7 @@ public class PaymentController extends HttpServlet {
                 String paymentMethod = request.getParameter("paymentMethod");
 
                 int customerID = c.getCustomerID();
-                int staffID = 1;
+                int staffID = 2;
                 String city = request.getParameter("cityName"); // Lấy tên tỉnh
                 String district = request.getParameter("districtName"); // Lấy tên huyện
                 String street = request.getParameter("street");
@@ -65,7 +65,6 @@ public class PaymentController extends HttpServlet {
                 String phoneNumber = request.getParameter("phone");
 
                 double total = Double.parseDouble(request.getParameter("total"));
-
                 if (paymentMethod.equals("COD")) {
                     // Thêm đơn hàng vào Order_list
 
@@ -84,7 +83,7 @@ public class PaymentController extends HttpServlet {
                         // Xóa giỏ hàng sau khi đặt hàng thành công
                         cartDao.clearCart(c.getCustomerID());
 
-                        int size = link.getTotalItems(list, c.getCustomerID()); // Lưu giá trị vào biến size
+                        int size = link.getTotalItems(customerID); // Lưu giá trị vào biến size
                         session.setAttribute("size", 0); // Đặt biến size vào session
 
                         //  Double totals = (Double) session.getAttribute("total");

@@ -351,6 +351,11 @@
                                            class="btn btn-outline-danger table-action-btn">
                                             <i class="fas fa-times me-1"></i>Cancel
                                         </a>
+                                        <a href="javascript:void(0);" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Thành công', 'Xác nhận đơn hàng đã hoàn tất?')" 
+                                           class="btn btn-success table-action-btn">
+                                            <i class="fas fa-check-circle me-1"></i>Thành công
+                                        </a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -429,6 +434,9 @@
                 } else if (status === 'Đã Hủy') {
                     modalHeader.className = 'modal-header bg-danger text-white';
                     confirmBtn.className = 'btn btn-danger';
+                } else if (status === 'Thành công') {
+                    modalHeader.className = 'modal-header bg-success text-white';
+                    confirmBtn.className = 'btn btn-success';
                 }
                 
                 // Show the confirmation modal

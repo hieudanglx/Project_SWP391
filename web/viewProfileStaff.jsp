@@ -217,26 +217,25 @@
 
                 <!-- Change Password Section -->
                 <section id="changePassword" class="content-section">
-                    <h2><strong>Đổi mật khẩu</strong></h2>
+                    <h2><strong>Thay đổi mật khẩu</strong></h2>
+
+                    <!-- Hiển thị thông báo lỗi nếu có -->
+                    <c:if test="${not empty errorMessage}">
+                        <p style="color: red;">${errorMessage}</p>
+                    </c:if>
 
                     <form action="changePasswordStaff" method="POST" onsubmit="return validatePassword()">
                         <input type="hidden" name="email" value="${sessionScope.staff.email}">
 
-                        <div class="form-group">
-                            <label>Mật khẩu hiện tại</label>
-                            <input type="password" name="currentPassword" required>
-                        </div>
+                        <input type="hidden" name="email" value="${sessionScope.staff.email}" required>
+                        <label>Mật khẩu hiện tại</label>
+                        <input type="password" name="currentPassword" required>
 
-                        <div class="form-group">
-                            <label>Mật khẩu mới</label>
-                            <input type="password" id="newPassword" name="newPassword" required>
-                            <small class="hint">Ít nhất 8 ký tự, chứa 1 chữ hoa và 1 số</small>
-                        </div>
+                        <label>Mật khẩu mới</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
 
-                        <div class="form-group">
-                            <label>Xác nhận mật khẩu mới</label>
-                            <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
-                        </div>
+                        <label>Xác nhận mật khẩu mới</label>
+                        <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
                         <button type="submit" class="save-btn">Cập nhật mật khẩu</button>
                     </form>

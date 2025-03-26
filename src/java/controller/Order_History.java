@@ -75,15 +75,16 @@ public class Order_History extends HttpServlet {
     // Lấy customerID từ session
     Integer customerID = (Integer) session.getAttribute("customerID");
 
-  
+//        System.out.println(customerID);
     
 
     // Gọi hàm lấy danh sách đơn hàng của khách hàng
     List<Order_Details> orderDetails = orderDAO.getOrdersByCustomer(customerID);
-    if (orderDetails.isEmpty()) {
-        request.setAttribute("error.","rong" );
-        request.getRequestDispatcher("error.jsp").forward(request, response);
-    }
+//        System.out.println(orderDetails);
+//    if (orderDetails.isEmpty()) {
+//        request.setAttribute("error.","rong" );
+//        request.getRequestDispatcher("error.jsp").forward(request, response);
+//    }
 
     
 

@@ -8,6 +8,22 @@
         <title>Staff Registration</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
+            
+            .content {
+                margin-left: 250px;
+                padding: 20px;
+                background-color: #f0f2f5;
+            }
+            .content {
+                    margin-left: 0;
+                }
+                /* Main Content Styles - ENHANCED */
+            .main-content {
+                flex: 1;
+                padding: 30px 20px;
+                display: flex;
+                justify-content: center;
+            }
             .card {
                 width: 450px;
                 max-height: 80vh;
@@ -20,8 +36,10 @@
             }
         </style>
     </head>
-    <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
-        <div class="card p-4 shadow-lg">
+    <body>
+        <jsp:include page="sidebar.jsp" />
+        <div class="content">
+        <div class="main-content">
             <h3 class="text-center mb-3">Staff Registration</h3>
 
             <c:if test="${not empty errorMessage}">
@@ -89,7 +107,7 @@
                 </div>
             </form>
         </div>
-
+</div>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 let cccdInput = document.getElementById("cccd");

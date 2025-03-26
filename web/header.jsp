@@ -18,9 +18,6 @@
         <link rel="stylesheet" href="css/header.css"  type="text/css" >
         <link rel="stylesheet" href="css/popup.css"  type="text/css" >
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
-        <style>
-            
-        </style>
     </head>
     <body>
         <header class="header">
@@ -28,7 +25,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            
+                            <p>Chào mừng đến với shop bán hàng!</p>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="top-menu">
@@ -37,7 +34,7 @@
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
                                                 Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
-                                                <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Đăng xuất</button>
+                                                <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
                                             </c:when>
                                             <c:otherwise>
                                                 <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>
@@ -88,9 +85,7 @@
                                     <c:if test="${not empty sessionScope.customer}">
                                         <p>Giỏ hàng</p>
                                         <span class="cart-count">
-                                            <span class="text-danger fw-bold">
-                                                <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
-                                            </span>
+                                        <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
                                         </span>
                                     </c:if>
                                 </div>
@@ -123,7 +118,7 @@
 
             function confirmLogout(event) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định
-                let confirmAction = confirm("Bạn có muốn đăng xuất không??");
+                let confirmAction = confirm("Do you want to log out?");
                 if (confirmAction) {
                     window.location.href = "logoutOfCustomerController";
                 }

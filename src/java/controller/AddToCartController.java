@@ -13,12 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Customer;
-import model.Product;
 
 /**
  *
@@ -26,6 +23,8 @@ import model.Product;
  */
 @WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
 public class AddToCartController extends HttpServlet {
+
+    CartDao link = new CartDao();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,56 +40,55 @@ public class AddToCartController extends HttpServlet {
             throws ServletException, IOException, SQLException {
 
         HttpSession session = request.getSession();
-        CartDao link = new CartDao();
+        Customer customer = (Customer) session.getAttribute("customer");
 
-        Customer c = (Customer) session.getAttribute("customer");
-        if (c == null) {
+        // Kiểm tra đăng nhập
+        if (customer == null) {
             response.sendRedirect("choiceLogin.jsp");
             return;
         }
 
-        // Kiểm tra tham số bắt buộc
-        String web= (request.getParameter("web") == null
-                || request.getParameter("web").isEmpty()) ? "" : request.getParameter("web");
-        String idParam = request.getParameter("id");
-        String categoryIDParam = (request.getParameter("CategoryID") == null
-                || request.getParameter("CategoryID").isEmpty()) ? "" : request.getParameter("CategoryID");
-
-        int id = Integer.parseInt(idParam);
-        String url = "ViewCartController"; // Mặc định
-
-        // Xử lý URL redirect
-        if (web.contains("list") && categoryIDParam != null) {
-            url = "ViewListProductGC?CategoryID=" + Integer.parseInt(categoryIDParam);
-        } else if (web.contains("detail")) {
-            url = "ViewProductDetailsController?id=" + id;
-        }
-
-        System.out.println(url);
         String status = "success";
-        String message = "Thêm thành công";
+        String message = "Thêm vào giỏ hàng thành công";
 
-        if (link.ProductExistsInCart(c.getCustomerID(), id)) {
-            System.out.println("controller.ProductExistsInCart.processRequest() ton tai r");
-            if (!link.updateCartProduct(c.getCustomerID(), id, "+")) {
-                System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                status = "error";
-                message = "Sản phẩm đã hết hàng";
-            }
+        // Parse tham số
+        String quantityParam = request.getParameter("Quantity");
+        int quantity = (quantityParam != null) ? Integer.parseInt(quantityParam) : 1;
+        int productId = Integer.parseInt(request.getParameter("id"));
+
+        // Xử lý logic chính
+        if (quantity <= 0) {
+            status = "error";
+            message = "Số lượng không hợp lệ";
         } else {
-            if (!link.AddProductToCart(c.getCustomerID(), id)) {
-                System.out.println("controller.AddProductToCart.processRequest() add sai r");
+            int quantityInCart = link.productExistsInCart(customer.getCustomerID(), productId);
+            if (quantityInCart == 0) {
+                link.addProductToCart(customer.getCustomerID(), productId);
+            } else if (quantity > quantityInCart) {
+                link.updateCartQuantity(customer.getCustomerID(), productId, quantityInCart + 1);
+            } else {
                 status = "error";
-                message = "Sản phẩm đã hết hàng";
+                message = "Số lượng vượt quá tồn kho";
             }
         }
-        // Cập nhật session
-        List<Product> list = new ArrayList<>();
-        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
+
+        // Xác định URL và cập nhật session
+        String redirectUrl = determineRedirectUrl(request, productId);
         session.setAttribute("status", status);
         session.setAttribute("message", message);
-        request.getRequestDispatcher(url).forward(request, response);
+        session.setAttribute("size", link.getTotalItems(customer.getCustomerID()));
+        session.setAttribute("total", link.getTotalCartValue(customer.getCustomerID()));
+        request.getRequestDispatcher(redirectUrl).forward(request, response);
+    }
+
+    private String determineRedirectUrl(HttpServletRequest request, int productId) {
+        String web = request.getParameter("web") != null ? request.getParameter("web") : "";
+        String categoryId = request.getParameter("CategoryID");
+
+        if (web.contains("list") && categoryId != null) {
+            return "ViewListProductGC?CategoryID=" + categoryId;
+        }
+        return web.contains("detail") ? "ViewProductDetailsController?id=" + productId : "ViewCartController";
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

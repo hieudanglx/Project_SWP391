@@ -56,8 +56,8 @@ public class ViewCartController extends HttpServlet {
 
         List<Product> cartItems = link.getCartByCustomerID(customer.getCustomerID());
         request.setAttribute("list", cartItems);
-        session.setAttribute("size", link.getTotalItems(cartItems, customer.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(cartItems, customer.getCustomerID()));
+        session.setAttribute("size", link.getTotalItems(customer.getCustomerID()));
+        session.setAttribute("total", link.getTotalCartValue(customer.getCustomerID()));
         request.getRequestDispatcher("viewCart.jsp").forward(request, response);
     }
     

@@ -39,6 +39,21 @@ public class AccountStaff {
         this.province_city = province_city;
         this.status = status;
     }
+     public AccountStaff(String fullName, String username, String password, String email, 
+                      String phoneNumber, String address, String cccd, 
+                      String province_city, String dob, String sex, int status) {
+        this.fullName = fullName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.cccd = cccd;
+        this.province_city = province_city;
+        this.dob = dob;
+        this.sex = sex;
+        this.status = status;
+    }
 
     public int getStaffID() {
         return staffID;

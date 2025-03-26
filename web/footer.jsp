@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
     <body>
-        <footer>
+        <footer style="margin-top: 100px">
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">

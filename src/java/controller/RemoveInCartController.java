@@ -13,12 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Customer;
-import model.Product;
 
 /**
  *
@@ -48,19 +45,15 @@ public class RemoveInCartController extends HttpServlet {
         String idParam = request.getParameter("id");
 
         int id = Integer.parseInt(idParam);
-        String url = "ViewCartController"; // Mặc định
-
-        System.out.println(url);
         String status = "success";
         String message = "Xóa thành công";
         link.removeProductFromCart(c.getCustomerID(), id);
         // Cập nhật session
-        List<Product> list = new ArrayList<>();
-        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
+        session.setAttribute("size", link.getTotalItems(c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCartValue(c.getCustomerID()));
         session.setAttribute("status", status);
         session.setAttribute("message", message);
-        request.getRequestDispatcher(url).forward(request, response);
+        request.getRequestDispatcher("ViewCartController").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
