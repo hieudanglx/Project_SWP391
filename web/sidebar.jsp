@@ -304,13 +304,13 @@
             </a>
 
             <div class="menu-category">Shop Management</div>
-            <a href="listProductsForAdmin">
+            <a href="listProductsForAdmin"class="<%= !isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-box"></i> Manage Products
             </a>
             <a href="listOrderAdmin">
                 <i class="fas fa-shopping-cart"></i> Manage Orders
             </a>
-            <a href="ListInventory">
+            <a href="ListInventory"class="<%= !isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-warehouse"></i> Manage Inventory
             </a>
 
@@ -318,7 +318,7 @@
             <a href="feedback">
                 <i class="fas fa-comment-dots"></i> Customer Feedback
             </a>
-            <a href="Revenue">
+            <a href="Revenue"class="<%= !isAdmin ? "disabled" : "" %>">
                 <i class="fas fa-chart-line"></i> Revenue Analytics
             </a>
 
