@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
         <!-- Google Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
         <title>Admin Dashboard</title>
     </head>
 
@@ -95,6 +95,32 @@
             text-align: center;
             font-size: 18px;
             color: #2fd1cb;
+        }
+
+        /* Existing active link styling with some enhancements */
+        .sidebar a.active {
+            background: rgba(255, 255, 255, 0.2); /* Slightly more visible background */
+            color: white;
+            border-left: 4px solid #2fd1cb; /* Teal accent border */
+            font-weight: 600; /* Slightly bolder font */
+            transform: translateX(10px); /* More pronounced horizontal shift */
+            box-shadow: 0 4px 10px rgba(47, 209, 203, 0.3); /* Subtle shadow effect */
+            transition: all 0.3s ease; /* Smooth transition for hover and active states */
+        }
+
+        /* Additional hover effect for non-active links */
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left: 4px solid rgba(47, 209, 203, 0.7); /* Softer accent on hover */
+            transform: translateX(8px);
+        }
+
+        /* Icon styling for active state */
+        .sidebar a.active i {
+            color: #2fd1cb; /* Bright teal for active icon */
+            transform: scale(1.1); /* Slightly larger icon */
+            transition: transform 0.3s ease;
         }
 
         .menu-category {
@@ -272,7 +298,7 @@
             String username = (String) session.getAttribute("Username");
             boolean isAdmin = "admin".equals(username);
             
-            // Xác ??nh URL Dashboard d?a trên role
+            // X?c ??nh URL Dashboard d?a tr?n role
             String dashboardUrl = isAdmin ? "HomeDashBoard_Admin.jsp" : "Top_selling";
         %>
 
@@ -333,8 +359,10 @@
         <script>
             document.getElementById('sidebarToggle').addEventListener('click', function () {
                 document.getElementById('sidebar').classList.toggle('active');
-                document.querySelector('.content').classList.toggle('sidebar-active');
+                document.querySelector('.content').classList.toggle('sidebar-active');                               
             });
+            
+            
         </script>
     </body>
 </html>

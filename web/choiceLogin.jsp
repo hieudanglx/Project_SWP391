@@ -24,7 +24,7 @@
     </style>
 </head>
 <body>
-     <%@include file="header.jsp" %>
+    <%@include file="header.jsp" %>
     <div class="container">
         <div class="row">
             <!-- Đăng nhập staff_Admin -->
@@ -46,5 +46,6 @@
 
 
     </div>
+    <%@include file="footer.jsp" %>
 </body>
 </html>

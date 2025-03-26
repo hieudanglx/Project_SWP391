@@ -52,34 +52,30 @@ public class UpdateCartController extends HttpServlet {
         int id = Integer.parseInt(idParam);
         String status = "success";
         String message = "Cập nhật thành công";
+        String quantityParam = request.getParameter("Quantity");
+        int quantity = Integer.parseInt(quantityParam);
         // Xử lý logic
         switch (type) {
             case "-":
-                if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
-                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
-                    status = "error";
-                    message = "Cập nhật thất bại";
-                }
+                link.updateCartQuantity(c.getCustomerID(), id, quantity - 1);
                 break;
             case "E":
-                String quantityParam = request.getParameter("Quantity");
-                double quantity = Double.parseDouble(quantityParam);
                 int stock = link.getProductQuantity(id);
                 if (stock >= quantity) {
-                    link.updateCartQuantity(c.getCustomerID(), id, (int) quantity);
+                    link.updateCartQuantity(c.getCustomerID(), id, quantity);
                 } else {
                     status = "error";
                     message = "Số lượng vượt quá tồn kho";
                 }
                 break;
         }
+        List<Product> cartItems = link.getCartByCustomerID(c.getCustomerID());
         // Cập nhật session
         session.setAttribute("status", status);
         session.setAttribute("message", message);
-         List<Product> cartItems = link.getCartByCustomerID(c.getCustomerID());
         request.setAttribute("list", cartItems);
-        session.setAttribute("size", link.getTotalItems(cartItems, c.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(cartItems, c.getCustomerID()));
+        session.setAttribute("size", link.getTotalItems(c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCartValue(c.getCustomerID()));
         request.getRequestDispatcher("viewCart.jsp").forward(request, response);
     }
 

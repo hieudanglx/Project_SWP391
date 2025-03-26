@@ -24,13 +24,13 @@
                 --transition: all 0.3s ease;
                 --sidebar-width: 250px;
             }
-            
+
             * {
                 box-sizing: border-box;
                 margin: 0;
                 padding: 0;
             }
-            
+
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: var(--light-bg);
@@ -40,19 +40,29 @@
                 display: flex;
                 flex-direction: column;
             }
-            
+            .input-error {
+                border-color: red !important;
+                box-shadow: 0 0 5px rgba(255,0,0,0.5) !important;
+            }
+            .error-text {
+                display: block;
+                color: red;
+                font-size: 0.8em;
+                margin-top: 5px;
+            }
+
             .content {
                 margin-left: 250px;
                 padding: 20px;
                 background-color: #f0f2f5;
             }
-            
+
             .page-wrapper {
                 display: flex;
                 flex: 1;
                 min-height: calc(100vh - 60px);
             }
-            
+
             /* Sidebar Styles - keeping as is */
             .sidebar {
                 width: var(--sidebar-width);
@@ -65,27 +75,27 @@
                 top: 0;
                 height: 100vh;
             }
-            
+
             .sidebar-logo {
                 text-align: center;
                 padding: 0 20px 20px;
                 border-bottom: 1px solid var(--border);
                 margin-bottom: 20px;
             }
-            
+
             .sidebar-logo img {
                 max-width: 150px;
                 height: auto;
             }
-            
+
             .sidebar-menu {
                 list-style: none;
             }
-            
+
             .sidebar-item {
                 margin-bottom: 5px;
             }
-            
+
             .sidebar-link {
                 display: flex;
                 align-items: center;
@@ -95,18 +105,18 @@
                 transition: var(--transition);
                 font-weight: 500;
             }
-            
+
             .sidebar-link:hover, .sidebar-link.active {
                 background-color: rgba(67, 97, 238, 0.1);
                 color: var(--primary);
             }
-            
+
             .sidebar-link i {
                 margin-right: 10px;
                 width: 20px;
                 text-align: center;
             }
-            
+
             .sidebar-category {
                 padding: 10px 20px;
                 font-size: 12px;
@@ -116,7 +126,7 @@
                 margin-top: 15px;
                 font-weight: 600;
             }
-            
+
             /* Main Content Styles - ENHANCED */
             .main-content {
                 flex: 1;
@@ -124,7 +134,7 @@
                 display: flex;
                 justify-content: center;
             }
-            
+
             .container {
                 background: var(--white);
                 border-radius: 16px;
@@ -136,7 +146,7 @@
                 position: relative;
                 overflow: hidden;
             }
-            
+
             .container::before {
                 content: "";
                 position: absolute;
@@ -146,7 +156,7 @@
                 height: 8px;
                 background: linear-gradient(to right, var(--primary), #6366f1);
             }
-            
+
             h2 {
                 color: var(--text);
                 margin-bottom: 30px;
@@ -156,7 +166,7 @@
                 position: relative;
                 padding-bottom: 15px;
             }
-            
+
             h2:after {
                 content: '';
                 position: absolute;
@@ -168,28 +178,28 @@
                 background: linear-gradient(to right, var(--primary), #6366f1);
                 border-radius: 2px;
             }
-            
+
             h2 i {
                 color: var(--primary);
                 margin-right: 10px;
             }
-            
+
             .form-section {
                 margin-bottom: 35px;
                 border-bottom: 1px solid #eee;
                 padding-bottom: 30px;
                 transition: all 0.3s ease;
             }
-            
+
             .form-section:hover {
                 border-bottom-color: #d1d5db;
             }
-            
+
             .form-section:last-child {
                 border-bottom: none;
                 margin-bottom: 15px;
             }
-            
+
             .form-section-title {
                 font-size: 20px;
                 color: var(--primary);
@@ -201,20 +211,20 @@
                 padding-left: 10px;
                 border-left: 4px solid var(--primary);
             }
-            
+
             .form-row {
                 display: flex;
                 flex-wrap: wrap;
                 gap: 24px;
                 margin-bottom: 20px;
             }
-            
+
             .form-group {
                 flex: 1 1 calc(50% - 12px);
                 min-width: 250px;
                 position: relative;
             }
-            
+
             label {
                 font-weight: 500;
                 display: block;
@@ -222,7 +232,7 @@
                 color: var(--text);
                 font-size: 16px;
             }
-            
+
             input, select {
                 width: 100%;
                 padding: 14px;
@@ -233,48 +243,48 @@
                 background-color: #f9fafb;
                 color: var(--text);
             }
-            
+
             input:focus, select:focus {
                 outline: none;
                 border-color: var(--primary);
                 box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
                 background-color: #fff;
             }
-            
+
             input:hover, select:hover {
                 border-color: #cbd5e1;
             }
-            
+
             .input-group {
                 display: flex;
                 align-items: center;
                 gap: 10px;
             }
-            
+
             .resolution-inputs {
                 display: flex;
                 gap: 10px;
                 align-items: center;
             }
-            
+
             .resolution-inputs input {
                 width: 80px;
             }
-            
+
             .resolution-inputs span {
                 color: var(--text-light);
             }
-            
+
             .hidden {
                 display: none;
             }
-            
+
             .button-group {
                 display: flex;
                 gap: 20px;
                 margin-top: 40px;
             }
-            
+
             button, .btn-back {
                 flex: 1;
                 padding: 15px 20px;
@@ -292,29 +302,29 @@
                 border: none;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
-            
+
             button {
                 background: linear-gradient(to right, var(--success), #32d74b);
                 color: var(--white);
             }
-            
+
             button:hover {
                 background: linear-gradient(to right, var(--success-hover), #28bd40);
                 transform: translateY(-2px);
                 box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
             }
-            
+
             .btn-back {
                 background-color: var(--secondary);
                 color: var(--white);
             }
-            
+
             .btn-back:hover {
                 background-color: var(--secondary-hover);
                 transform: translateY(-2px);
                 box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
             }
-            
+
             .error-message {
                 color: #fff;
                 text-align: center;
@@ -329,151 +339,434 @@
                 font-weight: 500;
                 box-shadow: 0 4px 6px rgba(231, 76, 60, 0.2);
             }
-            
+
             /* Custom input elements */
             .custom-input-container {
                 margin-top: 10px;
                 animation: fadeIn 0.3s ease;
             }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-5px); }
-                to { opacity: 1; transform: translateY(0); }
+
+            .popup-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                display: none;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
             }
-            
+
+            .popup-content {
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                max-width: 400px;
+                width: 90%;
+                position: relative;
+            }
+
+            .popup-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+                color: #6c757d;
+                font-size: 20px;
+            }
+
+            .popup-success {
+                color: #2ecc71;
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-5px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
             /* Responsive Styles */
             @media (max-width: 992px) {
                 .page-wrapper {
                     flex-direction: column;
                 }
-                
+
                 .sidebar {
                     width: 100%;
                     height: auto;
                     position: relative;
                     padding: 10px 0;
                 }
-                
+
                 .sidebar-logo {
                     padding: 10px 20px;
                     margin-bottom: 10px;
                 }
-                
+
                 .sidebar-menu {
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: center;
                 }
-                
+
                 .sidebar-item {
                     margin: 0 5px;
                 }
-                
+
                 .sidebar-link {
                     padding: 8px 15px;
                 }
-                
+
                 .sidebar-category {
                     display: none;
                 }
-                
+
                 .content {
                     margin-left: 0;
                 }
-                
+
                 .container {
                     padding: 30px 20px;
                 }
             }
-            
+
             @media (max-width: 768px) {
                 .form-group {
                     flex: 1 1 100%;
                 }
-                
+
                 .button-group {
                     flex-direction: column;
                 }
-                
+
                 .sidebar-menu {
                     flex-direction: column;
                 }
-                
+
                 .sidebar-item {
                     margin: 0;
                 }
             }
         </style>
         <script>
-            function toggleInput(selectId, inputContainerId, inputId) {
-                var select = document.getElementById(selectId);
-                var inputContainer = document.getElementById(inputContainerId);
-                var input = document.getElementById(inputId);
+            document.addEventListener('DOMContentLoaded', function() {
+            // Check for success parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            if (success === 'true') {
+            showSuccessPopup();
+            }
 
-                if (select.value === "other") {
-                    inputContainer.classList.remove("hidden");
-                    inputContainer.classList.add("custom-input-container");
-                    input.required = true;
-                } else {
-                    inputContainer.classList.add("hidden");
-                    inputContainer.classList.remove("custom-input-container");
-                    input.required = false;
-                    input.value = "";
-                }
+            // Popup function
+            function showSuccessPopup() {
+            // Create popup overlay
+            const popupOverlay = document.createElement('div');
+            popupOverlay.className = 'popup-overlay';
+            popupOverlay.innerHTML = `
+            <div class="popup-content">
+                <span class="popup-close">&times;</span>
+                <div class="popup-success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>Phone Created Successfully</h3>
+                <p>The phone has been added to the product list.</p>
+                <button id="closePopupBtn" class="btn-back" style="margin-top: 15px;">Close</button>
+            </div>
+        `;
+            // Append to body
+            document.body.appendChild(popupOverlay);
+            // Show popup
+            popupOverlay.style.display = 'flex';
+            // Close button functionality
+            const closeButton = popupOverlay.querySelector('.popup-close');
+            const closePopupBtn = popupOverlay.querySelector('#closePopupBtn');
+            closeButton.addEventListener('click', closePopup);
+            closePopupBtn.addEventListener('click', closePopup);
+            }
+
+            // Close popup function
+            function closePopup() {
+            const popupOverlay = document.querySelector('.popup-overlay');
+            if (popupOverlay) {
+            popupOverlay.style.display = 'none';
+            popupOverlay.remove();
+            }
+            // Remove success parameter from URL
+            history.replaceState(null, '', window.location.pathname);
+            }
+            });
+            ////////
+            function toggleInput(selectId, inputContainerId, inputId) {
+            var select = document.getElementById(selectId);
+            var inputContainer = document.getElementById(inputContainerId);
+            var input = document.getElementById(inputId);
+            if (select.value === "other") {
+            inputContainer.classList.remove("hidden");
+            inputContainer.classList.add("custom-input-container");
+            input.required = true;
+            } else {
+            inputContainer.classList.add("hidden");
+            inputContainer.classList.remove("custom-input-container");
+            input.required = false;
+            input.value = "";
+            }
             }
 
             document.addEventListener("DOMContentLoaded", function () {
-                // Initialize all dropdowns on page load
-                const dropdowns = document.querySelectorAll('select');
-                dropdowns.forEach(dropdown => {
-                    const id = dropdown.id;
-                    if (id) {
-                        const containerId = id + 'InputContainer';
-                        const inputId = id + 'Input';
-                        const container = document.getElementById(containerId);
-                        
-                        if (container && dropdown.value === 'other') {
-                            container.classList.remove('hidden');
-                            container.classList.add("custom-input-container");
-                            const input = document.getElementById(inputId);
-                            if (input) input.required = true;
-                        }
-                    }
-                });
-                
-                function formatInputWithUnit(inputId, unit) {
-                    var input = document.getElementById(inputId);
-                    if (!input) return;
-                    
-                    input.addEventListener("input", function () {
-                        let value = this.value.replace(/\D/g, ''); // Only keep digits
-                        if (value) {
-                            this.value = value + unit;
-                        }
-                    });
-                    
-                    // Format initial value if present
-                    if (input.value && !input.value.endsWith(unit)) {
-                        let value = input.value.replace(/\D/g, '');
-                        if (value) input.value = value + unit;
-                    }
-                }
-
-                formatInputWithUnit("ramInput", "GB");
-                formatInputWithUnit("storageInput", "TB");
-                formatInputWithUnit("refreshRateInput", "Hz");
-                
-                // Add subtle animation on form section hover
-                const formSections = document.querySelectorAll('.form-section');
-                formSections.forEach(section => {
-                    section.addEventListener('mouseenter', function() {
-                        this.style.backgroundColor = '#fafbff';
-                    });
-                    section.addEventListener('mouseleave', function() {
-                        this.style.backgroundColor = '';
-                    });
-                });
+            // Initialize all dropdowns on page load
+            const dropdowns = document.querySelectorAll('select');
+            dropdowns.forEach(dropdown => {
+            const id = dropdown.id;
+            if (id) {
+            const containerId = id + 'InputContainer';
+            const inputId = id + 'Input';
+            const container = document.getElementById(containerId);
+            if (container && dropdown.value === 'other') {
+            container.classList.remove('hidden');
+            container.classList.add("custom-input-container");
+            const input = document.getElementById(inputId);
+            if (input) input.required = true;
+            }
+            }
             });
+            function formatInputWithUnit(inputId, unit) {
+            var input = document.getElementById(inputId);
+            if (!input) return;
+            input.addEventListener("input", function () {
+            let value = this.value.replace(/\D/g, ''); // Only keep digits
+            if (value) {
+            this.value = value + unit;
+            }
+            });
+            // Format initial value if present
+            if (input.value && !input.value.endsWith(unit)) {
+            let value = input.value.replace(/\D/g, '');
+            if (value) input.value = value + unit;
+            }
+            }
+
+            formatInputWithUnit("ramInput", "GB");
+            formatInputWithUnit("storageInput", "TB");
+            formatInputWithUnit("refreshRateInput", "Hz");
+            // Add subtle animation on form section hover
+            const formSections = document.querySelectorAll('.form-section');
+            formSections.forEach(section => {
+            section.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#fafbff';
+            });
+            section.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '';
+            });
+            });
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            // Validation Utility Functions
+            const validators = {
+                
+            // Required field check
+            required: (value) => value.trim() !== '',
+                    // Positive number check
+                    positiveNumber: (value) => !isNaN(value) && parseFloat(value) >= 0,
+                    // Price range validation
+                    priceRange: (value) => {
+            const numValue = parseFloat(value);
+            return numValue >= 0 && numValue <= 1000000000;
+            },
+                    // URL validation
+                    validURL: (url) => {
+            try {
+            new URL(url);
+            return true;
+            } catch {
+            return false;
+            }
+            },
+                    // Camera specification validation
+                    cameraSpec: (value) => {
+            // Allows formats like: 12MP, 48MP + 12MP, Multiple specs with +
+            const cameraRegex = /^(\d+MP\s*(\+\s*\d+MP)*)?$/;
+            return cameraRegex.test(value.trim());
+            },
+                    // Screen size validation
+                    screenSize: (value) => {
+            const numValue = parseFloat(value);
+            return !isNaN(numValue) && numValue > 0 && numValue <= 10;
+            }
+            
+            };
+            // Error Display Utility
+            function showError(input, message) {
+            // Remove any existing error
+            const existingError = input.parentNode.querySelector('.error-text');
+            if (existingError) existingError.remove();
+            // Create and append error message
+            const errorSpan = document.createElement('span');
+            errorSpan.className = 'error-text';
+            errorSpan.style.color = 'red';
+            errorSpan.style.fontSize = '0.8em';
+            errorSpan.style.marginTop = '5px';
+            errorSpan.textContent = message;
+            input.parentNode.appendChild(errorSpan);
+            input.classList.add('input-error');
+            }
+
+            // Clear Error Utility
+            function clearError(input) {
+            const errorSpan = input.parentNode.querySelector('.error-text');
+            if (errorSpan) errorSpan.remove();
+            input.classList.remove('input-error');
+            }
+
+            // Validate Specific Fields
+            const validationRules = {
+            productName: {
+            validate: validators.required,
+                    errorMessage: 'Product name is required'
+            },
+                    price: {
+                    validate: (value) => validators.required(value) &&
+                            validators.positiveNumber(value) &&
+                            validators.priceRange(value),
+                            errorMessage: 'Invalid price. Must be between 0 and 1,000,000,000'
+                    },
+                    color: {
+                    validate: validators.required,
+                            errorMessage: 'Color is required'
+                    },
+                    imageURL: {
+                    validate: (value) => validators.required(value) && validators.validURL(value),
+                            errorMessage: 'Please enter a valid image URL'
+                    },
+                    frontCamera: {
+                    validate: (value) => validators.required(value) && validators.cameraSpec(value),
+                            errorMessage: 'Invalid front camera specification (e.g., 12MP)'
+                    },
+                    rearCamera: {
+                    validate: (value) => validators.required(value) && validators.cameraSpec(value),
+                            errorMessage: 'Invalid rear camera specification (e.g., 48MP + 12MP)'
+                    },
+                    chiptype: {
+                    validate: validators.required,
+                            errorMessage: 'Chip brand is required'
+                    },
+                    chip: {
+                    validate: validators.required,
+                            errorMessage: 'Chip name is required'
+                    },
+                    gpuType: {
+                    validate: validators.required,
+                            errorMessage: 'GPU brand is required'
+                    },
+                    gpuName: {
+                    validate: validators.required,
+                            errorMessage: 'GPU name is required'
+                    },
+                    size: {
+                    validate: (value) => validators.required(value) && validators.screenSize(value),
+                            errorMessage: 'Invalid screen size (must be between 0 and 10 inches)'
+                    },
+                    version: {
+                    validate: validators.required,
+                            errorMessage: 'Operating system version is required'
+                    }
+            };
+            // Custom Dropdown Validation
+            function validateCustomInput(selectElement) {
+            const customContainer = selectElement.parentNode.querySelector('.custom-input-container:not(.hidden)');
+            if (customContainer) {
+            const customInput = customContainer.querySelector('input');
+            if (customInput && selectElement.value === 'other') {
+            return validators.required(customInput.value);
+            }
+            }
+            return true;
+            }
+
+            // Form Validation
+            function validateForm(event) {
+            let isValid = true;
+            // Validate standard fields
+            Object.keys(validationRules).forEach(fieldName => {
+            const input = document.getElementById(fieldName);
+            if (input) {
+            const rule = validationRules[fieldName];
+            clearError(input);
+            if (!rule.validate(input.value)) {
+            showError(input, rule.errorMessage);
+            isValid = false;
+            }
+            }
+            });
+            // Validate dropdowns with custom inputs
+            const customDropdowns = ['brand', 'ram', 'storage', 'refreshRate', 'screenResolution', 'os'];
+            customDropdowns.forEach(dropdownId => {
+            const select = document.getElementById(dropdownId);
+            if (select) {
+            clearError(select);
+            if (!validateCustomInput(select)) {
+            showError(select, 'Custom input is required when "Other" is selected');
+            isValid = false;
+            }
+            }
+            });
+            // Prevent form submission if validation fails
+            if (!isValid) {
+            event.preventDefault();
+            }
+            }
+
+            // Add event listeners
+            form.addEventListener('submit', validateForm);
+            // Live validation on input
+            Object.keys(validationRules).forEach(fieldName => {
+            const input = document.getElementById(fieldName);
+            if (input) {
+            input.addEventListener('input', () => {
+            const rule = validationRules[fieldName];
+            clearError(input);
+            if (!rule.validate(input.value)) {
+            showError(input, rule.errorMessage);
+            }
+            });
+            }
+            });
+            // Dynamic custom input validation
+            const customDropdowns = document.querySelectorAll('select');
+            customDropdowns.forEach(select => {
+            select.addEventListener('change', function() {
+            const customContainer = this.parentNode.querySelector('.custom-input-container');
+            if (customContainer) {
+            const customInput = customContainer.querySelector('input');
+            if (this.value === 'other') {
+            customContainer.classList.remove('hidden');
+            customInput.required = true;
+            } else {
+            customContainer.classList.add('hidden');
+            customInput.required = false;
+            customInput.value = '';
+            }
+            }
+            });
+            });
+            });
+// Additional CSS for error styling (can be added to existing stylesheet)
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+   
+`;
+            document.head.appendChild(styleElement);
         </script>
     </head>
     <body>
@@ -483,13 +776,13 @@
             <div class="main-content">
                 <div class="container">
                     <h2><i class="fas fa-mobile-alt"></i> Enter Phone Information</h2>
-                    
+
                     <c:if test="${not empty error}">
                         <div style="color: red; text-align: center; margin-bottom: 15px;">
                             ${error}
                         </div>
                     </c:if>
-                        
+
                     <% String error = request.getParameter("error"); %>
                     <% if (error != null) { %>
                     <div class="error-message"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
@@ -513,7 +806,7 @@
                                     <input type="number" id="price" name="price" min="0" max="1000000000" value="${product.price}" placeholder="Enter price" required>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="brand">Brand</label>
@@ -529,13 +822,13 @@
                                         <input type="text" id="brandInput" name="brand_custom" placeholder="Enter brand" value="${brand_custom}">
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="color">Color</label>
                                     <input type="text" id="color" name="color" value="${product.color}" placeholder="Enter phone color" required>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="imageUrl">Image URL</label>
@@ -551,7 +844,7 @@
                                     <label for="frontCamera">Front Camera</label>
                                     <input type="text" id="frontCamera" name="frontCamera" value="${product.cameraFront}" placeholder="e.g., 12MP" required>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="rearCamera">Rear Camera</label>
                                     <input type="text" id="rearCamera" name="rearCamera" value="${product.cameraBehind}" placeholder="e.g., 48MP + 12MP + 5MP" required>
@@ -561,25 +854,25 @@
 
                         <div class="form-section">
                             <div class="form-section-title"><i class="fas fa-microchip"></i> Performance Specifications</div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="chiptype">Chip Brand</label>
                                     <input type="text" id="chiptype" name="chiptype" value="${product.chipType}" placeholder="e.g., Snapdragon, Apple, MediaTek" required>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="chip">Chip Name</label>
                                     <input type="text" id="chip" name="chip" value="${product.chipName}" placeholder="e.g., A15 Bionic, 8 Gen 2" required>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="gpuType">GPU Brand</label>
                                     <input type="text" id="gpuType" name="gpuType" value="${product.gpuType}" placeholder="e.g., Adreno, Apple, Mali" required>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="gpuName">GPU Name</label>
                                     <input type="text" id="gpuName" name="gpuName" value="${product.gpuName}" placeholder="e.g., Adreno 740, Mali-G78" required>
@@ -589,7 +882,7 @@
 
                         <div class="form-section">
                             <div class="form-section-title"><i class="fas fa-memory"></i> Memory & Storage</div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="ram">RAM</label>
@@ -606,7 +899,7 @@
                                         <input type="text" id="ramInput" name="ram_custom" placeholder="Enter RAM amount" value="${ram_custom}">
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="storage">Storage Capacity</label>
                                     <select id="storage" name="storage" onchange="toggleInput('storage', 'storageInputContainer', 'storageInput')">
@@ -626,13 +919,13 @@
 
                         <div class="form-section">
                             <div class="form-section-title"><i class="fas fa-desktop"></i> Display</div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="size">Screen Size (inch)</label>
                                     <input type="number" id="size" name="size" value="${screenSize}" step="0.1" placeholder="e.g., 6.5" required>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="refreshRate">Refresh Rate</label>
                                     <select id="refreshRate" name="refreshRate" onchange="toggleInput('refreshRate', 'refreshRateInputContainer', 'refreshRateInput')">
@@ -647,7 +940,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="screenResolution">Screen Resolution</label>
@@ -673,10 +966,10 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <div class="form-section-title"><i class="fas fa-cogs"></i> Operating System</div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="os">Operating System</label>
@@ -689,7 +982,7 @@
                                         <input type="text" id="osInput" name="os_custom" placeholder="Enter OS" value="${os_custom}">
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="version">Operating System Version</label>
                                     <input type="text" id="version" name="version" value="${product.operatingSystemVersion}" placeholder="e.g., 13, iOS 16" required>

@@ -176,16 +176,16 @@
 
                                                             <div class="d-flex align-items-center gap-3">
                                                                 <div class="input-group quantity-input-group">
-                                                                    <a href="UpdateCartController?id=${product.productID}&type=-"
+                                                                    <a href="UpdateCartController?id=${product.productID}&type=-&Quantity=${product.quantityProduct}"
                                                                        class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0;"
                                                                        onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct}) || false;">-</a>
                                                                     <input type="number"
                                                                            class="form-control text-center border-secondary" 
                                                                            style="width: 100px"
-                                                                           min="1" 
-                                                                           step="1"
+                                                                           min="1" max="999999999" step="1"
                                                                            value="${product.quantityProduct}"
+                                                                           oninput="validateQuantityInput(this)"
                                                                            onkeypress="return handleKeyPress(event, this, ${product.productID})"
                                                                            onchange="updateQuantityEdit(this, ${product.productID})">
                                                                     <a class="btn btn-outline-secondary px-3"
@@ -406,7 +406,7 @@
                 <h5 class="alert-popup-message" id="alertMessage"></h5>
             </div>
         </div>
-
+        <%@include file="footer.jsp" %>
     </body>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -504,13 +504,28 @@
                                 window.location.href = "vnpay_pay.jsp";
                             }
                         });
+                        // Hàm validate khi nhập
+                        function validateQuantityInput(input) {
+                            const value = parseInt(input.value);
+                            if (value > 999999999) {
+                                input.value = 999999999;
+                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
+                            }
+                        }
+
                         function updateQuantityEdit(input, productId) {
                             const quantity = input.value.trim();
                             let parsedQuantity = parseInt(quantity);
 
                             // Kiểm tra hợp lệ
                             if (isNaN(parsedQuantity) || parsedQuantity < 1) {
-                                alert("Vui lòng nhập số nguyên lớn hơn 0");
+                                showAlertPopup('error', 'Vui lòng nhập số nguyên lớn hơn 0');
+                                input.value = input.defaultValue;
+                                return;
+                            }
+
+                            if (parsedQuantity > 999999999) {
+                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
                                 input.value = input.defaultValue;
                                 return;
                             }
@@ -521,6 +536,10 @@
                         }
 
                         function incrementQuantity(productId, currentQuantity) {
+                            if (currentQuantity >= 999999999) {
+                                showAlertPopup('warning', 'Đã đạt số lượng tối đa cho phép');
+                                return;
+                            }
                             const newQuantity = currentQuantity + 1;
                             const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+newQuantity;
                             window.location.href = url;
@@ -529,6 +548,15 @@
                         function handleKeyPress(event, input, productId) {
                             if (event.key === 'Enter') {
                                 event.preventDefault();
+
+                                // Kiểm tra trước khi submit
+                                const value = parseInt(input.value);
+                                if (value > 999999999) {
+                                    showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
+                                    input.value = input.defaultValue;
+                                    return false;
+                                }
+
                                 updateQuantityEdit(input, productId);
                             }
                             return event.key.match(/[0-9]/) !== null;
