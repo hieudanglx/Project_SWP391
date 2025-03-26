@@ -55,28 +55,32 @@ public class UpdateCartController extends HttpServlet {
         // Xử lý logic
         switch (type) {
             case "-":
-                message = "Cập nhật thành công";
                 if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
                     System.out.println("controller.UpdateCartController.processRequest() add sai r");
                     status = "error";
                     message = "Cập nhật thất bại";
                 }
                 break;
-            case "+":
-                if (!link.updateCartProduct(c.getCustomerID(), id, type)) {
-                    System.out.println("controller.UpdateCartController.processRequest() add sai r");
+            case "E":
+                String quantityParam = request.getParameter("Quantity");
+                double quantity = Double.parseDouble(quantityParam);
+                int stock = link.getProductQuantity(id);
+                if (stock >= quantity) {
+                    link.updateCartQuantity(c.getCustomerID(), id, (int) quantity);
+                } else {
                     status = "error";
-                    message = "Sản phẩm đã hết hàng";
+                    message = "Số lượng vượt quá tồn kho";
                 }
                 break;
         }
         // Cập nhật session
-        List<Product> list = new ArrayList<>();
-        session.setAttribute("size", link.getTotalItems(list, c.getCustomerID()));
-        session.setAttribute("total", link.getTotalCart(list, c.getCustomerID()));
         session.setAttribute("status", status);
         session.setAttribute("message", message);
-        request.getRequestDispatcher("ViewCartController").forward(request, response);
+         List<Product> cartItems = link.getCartByCustomerID(c.getCustomerID());
+        request.setAttribute("list", cartItems);
+        session.setAttribute("size", link.getTotalItems(cartItems, c.getCustomerID()));
+        session.setAttribute("total", link.getTotalCart(cartItems, c.getCustomerID()));
+        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -40,9 +40,16 @@ public class SearchController extends HttpServlet {
         String name = request.getParameter("keyword");
         int CategoryID = Integer.parseInt(request.getParameter("CategoryID"));
         List<Product> list = link.searchProductsByName(name, CategoryID);
-        request.setAttribute("search", "search");
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+
+        if (list.isEmpty()) {
+            request.getSession().setAttribute("message", "Không tìm thấy tài khoản nào với tên '" + name + "'");
+            response.sendRedirect("viewListProductGC.jsp"); // Chuyển hướng về trang danh sách
+        } else {
+            request.setAttribute("search", "search");
+            request.setAttribute("list", list);
+            request.getRequestDispatcher("viewListProductGC.jsp").forward(request, response);
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
