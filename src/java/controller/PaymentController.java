@@ -83,7 +83,7 @@ public class PaymentController extends HttpServlet {
                         CartDao cartDao = new CartDao();
                         cartDao.clearCart(c.getCustomerID());
 
-                        int size = link.getTotalItems(list, c.getCustomerID()); // Lưu giá trị vào biến size
+                        int size = link.getTotalItems(customerID); // Lưu giá trị vào biến size
                         session.setAttribute("size", 0); // Đặt biến size vào session
 
                         //  Double totals = (Double) session.getAttribute("total");
