@@ -171,11 +171,14 @@
                             <li><a onclick="showSection('profile')">Hồ sơ</a></li>
                             <li><a onclick="showSection('changePassword')">Đổi mật khẩu</a></li>
                             <li><a onclick="showSection('changePhoneNumber')">Đổi số điện thoại</a></li>
-                            <li><a onclick="showSection('orderHistory')">Lịch sử đơn hàng</a></li>
+                            <li><a onclick="window.location.href='/Order_History'">Lịch sử đơn hàng</a></li>
+
                         </ul>
                     </nav>
                 </aside>
 
+                    
+                    
                 <main class="profile-content">
                     <section id="profile" class="content-section active">
                         <h2><strong>Hồ sơ của tôi</strong></h2>

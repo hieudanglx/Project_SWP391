@@ -103,7 +103,6 @@
         </style>
     </head>
     <body>
-
         <%-- Hiển thị thông báo thành công hoặc lỗi --%>
         <c:if test="${not empty successMessage}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -125,7 +124,7 @@
             <h2 class="text-center">Lịch sử đơn hàng</h2>
 
             <div class="text-center mb-3">
-                <a href="homeController?CatogoryID=2" class="btn btn-outline-primary">Quay về trang chủ</a>
+                <a href="javascript:history.back()" class="btn btn-outline-primary">Quay về trang trước</a>
             </div>
 
 
