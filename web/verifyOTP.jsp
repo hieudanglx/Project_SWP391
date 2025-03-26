@@ -63,5 +63,6 @@
 
         window.onload = updateCountdown; // Bắt đầu đếm ngược khi trang tải
     </script>
+     <%@include file="footer.jsp" %>
 </body>
 </html>

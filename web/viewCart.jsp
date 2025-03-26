@@ -19,17 +19,17 @@
         <style>
             /* Fix cứng kích thước cho trang giỏ hàng */
             .cart-container {
-                width: 1140px !important;
-                min-width: 1140px !important;
+                width: 1200px !important;
+                min-width: 1200px !important;
                 margin: 0 auto;
                 padding: 30px 15px;
                 min-height: 70vh;
             }
 
             /* Đè style Bootstrap */
-            @media (min-width: 1140px) {
+            @media (min-width: 1200px) {
                 .cart-container {
-                    max-width: 1140px !important;
+                    max-width: 1200px !important;
                 }
             }
 
@@ -176,26 +176,23 @@
 
                                                             <div class="d-flex align-items-center gap-3">
                                                                 <div class="input-group quantity-input-group">
-                                                                    <a href="UpdateCartController?id=${product.productID}&type=-&Quantity=${product.quantityProduct}"
+                                                                    <a href="UpdateCartController?id=${product.productID}&type=-"
                                                                        class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0;"
                                                                        onclick="return decreaseQuantity(${product.productID}, ${product.quantityProduct}) || false;">-</a>
-                                                                    <input type="number"
-                                                                           class="form-control text-center border-secondary" 
-                                                                           style="width: 100px"
-                                                                           min="1" max="999999999" step="1"
+                                                                    <input type="text"
+                                                                           class="form-control text-center border-secondary" style="width: 100px"
                                                                            value="${product.quantityProduct}"
-                                                                           oninput="validateQuantityInput(this)"
-                                                                           onkeypress="return handleKeyPress(event, this, ${product.productID})"
-                                                                           onchange="updateQuantityEdit(this, ${product.productID})">
-                                                                    <a class="btn btn-outline-secondary px-3"
+                                                                           disabled>
+                                                                    <a href="UpdateCartController?id=${product.productID}&type=%2B"
+                                                                       class="btn btn-outline-secondary px-3"
                                                                        style="margin: 0"
-                                                                       onclick="incrementQuantity(${product.productID}, ${product.quantityProduct})">+</a>
+                                                                       >+</a>
                                                                 </div>
                                                                 <!-- Nút xóa -->
-                                                                <a href="RemoveInCartController?id=${product.productID}"
+                                                                <a href="UpdateCartController?id=${product.productID}&type=R"
                                                                    class="btn btn-link text-danger"
-                                                                   onclick="return confirmRemove(${product.productID})">
+                                                                   onclick="return confirmRemove(${product.productID}) || false;"> <!-- Thêm || false -->
                                                                     <i class="fas fa-trash fa-lg"></i>
                                                                 </a>
                                                             </div>
@@ -406,7 +403,7 @@
                 <h5 class="alert-popup-message" id="alertMessage"></h5>
             </div>
         </div>
-        <%@include file="footer.jsp" %>
+
     </body>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -435,132 +432,81 @@
                                 }, 1000);
                             });
                         });
-                        // Xử lý fixed width
-                        function enforceCartWidth() {
-                            const container = document.querySelector('.cart-container');
-                            if (window.innerWidth < 1140) {
-                                container.style.transform = `translateX(${(1140 - window.innerWidth)/2}px)`;
-                            } else {
-                                container.style.transform = 'none';
-                            }
-                        }
+    </script>   
 
-                        // window.addEventListener('resize', enforceCartWidth);
-                        //enforceCartWidth(); // Khởi chạy lần đầu
+    <script>
+        // Xử lý fixed width
+        function enforceCartWidth() {
+            const container = document.querySelector('.cart-container');
+            if (window.innerWidth < 1200) {
+                container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
+            } else {
+                container.style.transform = 'none';
+            }
+        }
 
-                        document.addEventListener("DOMContentLoaded", function () {
-                            const citySelect = document.getElementById("city");
-                            const districtSelect = document.getElementById("district");
-                            // Lấy dữ liệu tỉnh/thành phố từ GitHub
-                            const fetchData = async () => {
-                                try {
-                                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
-                                    const data = response.data;
-                                    renderCities(data);
-                                } catch (error) {
-                                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
-                                }
-                            };
-                            // Hiển thị danh sách tỉnh/thành phố
-                            const renderCities = (data) => {
-                                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
-                                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                                data.forEach(province => {
-                                    let option = document.createElement("option");
-                                    option.value = province.Id;
-                                    option.setAttribute("data-name", province.Name);
-                                    option.textContent = province.Name;
-                                    citySelect.appendChild(option);
-                                });
-                                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
-                                citySelect.addEventListener("change", function () {
-                                    const selectedCityId = this.value;
-                                    const selectedCity = data.find(p => p.Id === selectedCityId);
-                                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
-                                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-                                    if (selectedCity) {
-                                        selectedCity.Districts.forEach(district => {
-                                            let option = document.createElement("option");
-                                            option.value = district.Id;
-                                            option.setAttribute("data-name", district.Name);
-                                            option.textContent = district.Name;
-                                            districtSelect.appendChild(option);
-                                        });
-                                    }
-                                });
-                                // Khi chọn quận/huyện, cập nhật giá trị ẩn
-                                districtSelect.addEventListener("change", function () {
-                                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
-                                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
-                                });
-                            };
-                            fetchData();
+        // window.addEventListener('resize', enforceCartWidth);
+        //enforceCartWidth(); // Khởi chạy lần đầu
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const citySelect = document.getElementById("city");
+            const districtSelect = document.getElementById("district");
+            // Lấy dữ liệu tỉnh/thành phố từ GitHub
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get("https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json");
+                    const data = response.data;
+                    renderCities(data);
+                } catch (error) {
+                    console.error("Lỗi khi tải dữ liệu địa chỉ:", error);
+                }
+            };
+            // Hiển thị danh sách tỉnh/thành phố
+            const renderCities = (data) => {
+                citySelect.innerHTML = '<option value="">Chọn tỉnh/thành phố</option>';
+                districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                data.forEach(province => {
+                    let option = document.createElement("option");
+                    option.value = province.Id;
+                    option.setAttribute("data-name", province.Name);
+                    option.textContent = province.Name;
+                    citySelect.appendChild(option);
+                });
+                // Khi chọn tỉnh, cập nhật danh sách quận/huyện
+                citySelect.addEventListener("change", function () {
+                    const selectedCityId = this.value;
+                    const selectedCity = data.find(p => p.Id === selectedCityId);
+                    document.getElementById("cityName").value = selectedCity ? selectedCity.Name : "";
+                    districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
+                    if (selectedCity) {
+                        selectedCity.Districts.forEach(district => {
+                            let option = document.createElement("option");
+                            option.value = district.Id;
+                            option.setAttribute("data-name", district.Name);
+                            option.textContent = district.Name;
+                            districtSelect.appendChild(option);
                         });
-                        document.getElementById("checkoutBtn").addEventListener("click", function () {
-                            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-                            if (paymentMethod === "COD") {
-                                window.location.href = "PaymentController";
-                            } else if (paymentMethod === "VNPAY") {
-                                window.location.href = "vnpay_pay.jsp";
-                            }
-                        });
-                        // Hàm validate khi nhập
-                        function validateQuantityInput(input) {
-                            const value = parseInt(input.value);
-                            if (value > 999999999) {
-                                input.value = 999999999;
-                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                            }
-                        }
+                    }
+                });
+                // Khi chọn quận/huyện, cập nhật giá trị ẩn
+                districtSelect.addEventListener("change", function () {
+                    let selectedDistrict = districtSelect.options[districtSelect.selectedIndex];
+                    document.getElementById("districtName").value = selectedDistrict.getAttribute("data-name") || "";
+                });
+            };
+            fetchData();
+        });
+    </script>
 
-                        function updateQuantityEdit(input, productId) {
-                            const quantity = input.value.trim();
-                            let parsedQuantity = parseInt(quantity);
-
-                            // Kiểm tra hợp lệ
-                            if (isNaN(parsedQuantity) || parsedQuantity < 1) {
-                                showAlertPopup('error', 'Vui lòng nhập số nguyên lớn hơn 0');
-                                input.value = input.defaultValue;
-                                return;
-                            }
-
-                            if (parsedQuantity > 999999999) {
-                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                                input.value = input.defaultValue;
-                                return;
-                            }
-
-                            // Cập nhật URL
-                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+parsedQuantity;
-                            window.location.href = url;
-                        }
-
-                        function incrementQuantity(productId, currentQuantity) {
-                            if (currentQuantity >= 999999999) {
-                                showAlertPopup('warning', 'Đã đạt số lượng tối đa cho phép');
-                                return;
-                            }
-                            const newQuantity = currentQuantity + 1;
-                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+newQuantity;
-                            window.location.href = url;
-                        }
-
-                        function handleKeyPress(event, input, productId) {
-                            if (event.key === 'Enter') {
-                                event.preventDefault();
-
-                                // Kiểm tra trước khi submit
-                                const value = parseInt(input.value);
-                                if (value > 999999999) {
-                                    showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                                    input.value = input.defaultValue;
-                                    return false;
-                                }
-
-                                updateQuantityEdit(input, productId);
-                            }
-                            return event.key.match(/[0-9]/) !== null;
-                        }
+    <script>
+        document.getElementById("checkoutBtn").addEventListener("click", function () {
+            let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            if (paymentMethod === "COD") {
+                window.location.href = "PaymentController";
+            } else if (paymentMethod === "VNPAY") {
+                window.location.href = "vnpay_pay.jsp";
+            }
+        });
     </script>
     <script src="js/popup.js"></script>
 </html>
