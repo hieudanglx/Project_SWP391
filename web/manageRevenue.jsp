@@ -122,11 +122,7 @@
         <!-- Main Content -->
         <div class="content">
             <div class="header">
-                <h4>Manage Revenue</h4>
-                <div class="user-info">
-                    <a href="ManagerProfile.jsp">${sessionScope.fullname}</a>
-                    <a href="javascript:void(0);" onclick="logout()">Logout</a>
-                </div>
+                <h4>Manage Revenue</h4>               
             </div>
 
             <!-- Filter Buttons -->

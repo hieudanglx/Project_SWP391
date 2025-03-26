@@ -7,7 +7,9 @@
 <html lang="vi">
     <head>
         <title>Lịch sử đơn hàng</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
         <style>
             body {
                 background-color: #f8f9fa;
@@ -101,8 +103,30 @@
         </style>
     </head>
     <body>
+        <%-- Hiển thị thông báo thành công hoặc lỗi --%>
+        <c:if test="${not empty successMessage}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${successMessage}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <c:remove var="successMessage" scope="session"/>
+        </c:if>
+
+        <c:if test="${not empty errorMessage}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                ${errorMessage}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <c:remove var="errorMessage" scope="session"/>
+        </c:if>
+
         <div class="container">
             <h2 class="text-center">Lịch sử đơn hàng</h2>
+
+            <div class="text-center mb-3">
+                <a href="javascript:history.back()" class="btn btn-outline-primary">Quay về trang trước</a>
+            </div>
+
 
             <%-- Hiển thị thông báo khi hủy đơn --%>
             <c:if test="${not empty sessionScope.message}">
@@ -160,6 +184,58 @@
                             <p style="color: gray;">${order.date}</p>
                             <a href="OrderDetail?orderID=${order.orderID}" class="btn btn-outline-danger btn-sm">Xem chi tiết</a>
 
+
+
+                            <%-- Chỉ hiển thị nút Feedback nếu đơn hàng có trạng thái "Thành công" --%>
+                            <c:if  test="${fn:toLowerCase(fn:trim(order.status)) == 'thành công'}">
+                                <button class="btn btn-outline-danger btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#feedbackModal-${order.orderID}" 
+                                        data-orderid="${order.orderID}">
+                                    Ðánh giá
+                                </button>
+
+
+
+                                <!-- Modal Feedback (Mỗi đơn hàng có một modal riêng biệt) -->
+                                <div class="modal fade" id="feedbackModal-${order.orderID}" tabindex="-1" aria-labelledby="feedbackModalLabel-${order.orderID}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="feedbackModalLabel-${order.orderID}">Viết đánh giá của bạn</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="SubmitReviewController" method="post">
+                                                    <input type="hidden" name="orderID" value="${order.orderID}">
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Đánh giá (1-5 sao):</label>
+                                                        <select class="form-select" name="rating" required>
+                                                            <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
+                                                            <option value="4">⭐⭐⭐⭐ - Tốt</option>
+                                                            <option value="3">⭐⭐⭐ - Bình thường</option>
+                                                            <option value="2">⭐⭐ - Tệ</option>
+                                                            <option value="1">⭐ - Rất tệ</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Nội dung đánh giá:</label>
+                                                        <textarea class="form-control" name="comment" rows="3" required></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+
+
+                            
+
+
+
+
                             <%-- Chỉ hiển thị nút hủy nếu đơn hàng đang chờ xử lý --%>
                             <c:if test="${fn:trim(order.status) eq 'Chờ Xử Lý' or fn:trim(order.status) eq 'Chờ xử lý'}">
                                 <form action="Cancel_order" method="post" style="display:inline;">
@@ -183,5 +259,41 @@
                 </c:if>
             </c:forEach>
         </div>
+        <script>
+//            var feedbackModal = document.getElementById('feedbackModal');
+//            feedbackModal.addEventListener('show.bs.modal', function (event) {
+//                var button = event.relatedTarget;
+//                var orderID = button.getAttribute('data-orderid');
+//                document.getElementById('orderID').value = orderID;
+//            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Lấy tất cả các nút feedback
+                var feedbackButtons = document.querySelectorAll(".feedback-btn");
+
+                feedbackButtons.forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        // Lấy orderID từ data-orderid của nút
+                        var orderID = this.getAttribute("data-orderid");
+
+                        // Tìm modal tương ứng theo ID động
+                        var modal = document.getElementById("feedbackModal-" + orderID);
+
+                        // Kiểm tra modal có tồn tại không
+                        if (modal) {
+                            var inputOrderID = modal.querySelector("input[name='orderID']");
+                            if (inputOrderID) {
+                                inputOrderID.value = orderID;
+                            }
+
+                            // Hiển thị modal
+                            var modalInstance = new bootstrap.Modal(modal);
+                            modalInstance.show();
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

@@ -13,18 +13,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Customer;
-import model.Product;
 
 /**
  *
  * @author CE180594_Phan Quốc Duy
  */
-@WebServlet(name = "ViewCartController", urlPatterns = {"/ViewCartController"})
-public class ViewCartController extends HttpServlet {
+@WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
+public class AddToCartController extends HttpServlet {
+
+    CartDao link = new CartDao();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,49 +38,60 @@ public class ViewCartController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        CartDao link = new CartDao();
+
         HttpSession session = request.getSession();
         Customer customer = (Customer) session.getAttribute("customer");
 
+        // Kiểm tra đăng nhập
         if (customer == null) {
             response.sendRedirect("choiceLogin.jsp");
             return;
         }
-        
-        if (checkStock(customer.getCustomerID())) {
-            String status = "waring";
-            String message = "Cart đã được cập nhật do 1 số sản phẩm của bạn đã thay đổi số lượng";
-            session.setAttribute("status", status);
-            session.setAttribute("message", message);
-        }
 
-        List<Product> cartItems = link.getCartByCustomerID(customer.getCustomerID());
-        request.setAttribute("list", cartItems);
-        session.setAttribute("size", link.getTotalItems(customer.getCustomerID()));
-        session.setAttribute("total", link.getTotalCartValue(customer.getCustomerID()));
-        request.getRequestDispatcher("viewCart.jsp").forward(request, response);
-    }
-    
-    public Boolean checkStock(int customerID){
-        CartDao link = new CartDao();
-        int check = 0;
-        List<Product> cartItems = link.getCartByCustomerID(customerID);
-        for (Product product : cartItems) {
-            int stockQuantity = link.getProductQuantity(product.getProductID());
-            if (stockQuantity == 0) {
-                // Nếu sản phẩm hết hàng, xóa khỏi giỏ
-                link.removeProductFromCart(customerID, product.getProductID());
-                check++;
-            } else if (product.getQuantityProduct() > stockQuantity) {
-                // Nếu số lượng trong giỏ lớn hơn số lượng tồn kho, cập nhật lại số lượng trong giỏ
-                link.updateCartQuantity(customerID, product.getProductID(), stockQuantity);
-                check++;
+        String status = "success";
+        String message = "Thêm vào giỏ hàng thành công";
+
+        // Parse tham số
+        String quantityParam = request.getParameter("Quantity");
+        int quantity = (quantityParam != null) ? Integer.parseInt(quantityParam) : 1;
+        int productId = Integer.parseInt(request.getParameter("id"));
+
+        // Xử lý logic chính
+        if (quantity <= 0) {
+            status = "error";
+            message = "Số lượng không hợp lệ";
+        } else {
+            int quantityInCart = link.productExistsInCart(customer.getCustomerID(), productId);
+            if (quantityInCart == 0) {
+                link.addProductToCart(customer.getCustomerID(), productId);
+            } else if (quantity > quantityInCart) {
+                link.updateCartQuantity(customer.getCustomerID(), productId, quantityInCart + 1);
+            } else {
+                status = "error";
+                message = "Số lượng vượt quá tồn kho";
             }
         }
-        return check!=0;
+
+        // Xác định URL và cập nhật session
+        String redirectUrl = determineRedirectUrl(request, productId);
+        session.setAttribute("status", status);
+        session.setAttribute("message", message);
+        session.setAttribute("size", link.getTotalItems(customer.getCustomerID()));
+        session.setAttribute("total", link.getTotalCartValue(customer.getCustomerID()));
+        request.getRequestDispatcher(redirectUrl).forward(request, response);
     }
-    
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
+    private String determineRedirectUrl(HttpServletRequest request, int productId) {
+        String web = request.getParameter("web") != null ? request.getParameter("web") : "";
+        String categoryId = request.getParameter("CategoryID");
+
+        if (web.contains("list") && categoryId != null) {
+            return "ViewListProductGC?CategoryID=" + categoryId;
+        }
+        return web.contains("detail") ? "ViewProductDetailsController?id=" + productId : "ViewCartController";
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -95,7 +106,7 @@ public class ViewCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ViewCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -113,7 +124,7 @@ public class ViewCartController extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ViewCartController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddToCartController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

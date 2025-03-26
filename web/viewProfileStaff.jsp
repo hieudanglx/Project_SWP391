@@ -17,7 +17,7 @@
         <style>
             body {
                 font-family: 'Poppins', sans-serif;
-                background: linear-gradient(135deg, #667eea, #764ba2);
+                background: linear-gradient(135deg, #8396b3, #9eb1d0);
                 margin: 0;
                 padding: 0;
                 color: #333;
@@ -33,7 +33,7 @@
             }
             .sidebar {
                 width: 250px;
-                background: #333;
+                background: #2d2d2d;
                 color: white;
                 padding: 30px 20px;
             }
@@ -193,7 +193,7 @@
 
                 <!-- Change Password Section -->
                 <section id="changePassword" class="content-section">
-                    <h2><strong>Change Password</strong></h2>
+                    <h2><strong>Thay đổi mật khẩu</strong></h2>
 
                     <!-- Hiển thị thông báo lỗi nếu có -->
                     <c:if test="${not empty errorMessage}">
@@ -203,16 +203,16 @@
                     <form action="changePasswordStaff" method="POST" onsubmit="return validatePassword()">
 
                         <input type="hidden" name="email" value="${sessionScope.staff.email}" required>
-                        <label>Current Password</label>
+                        <label>Mật khẩu hiện tại</label>
                         <input type="password" name="currentPassword" required>
 
-                        <label>New Password</label>
+                        <label>Mật khẩu mới</label>
                         <input type="password" id="newPassword" name="newPassword" required>
 
-                        <label>Confirm New Password</label>
+                        <label>Xác nhận mật khẩu mới</label>
                         <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
-                        <button type="submit" class="save-btn">Update Password</button>
+                        <button type="submit" class="save-btn">Cập nhật mật khẩu</button>
                     </form>
 
 

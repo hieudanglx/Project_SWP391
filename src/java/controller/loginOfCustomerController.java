@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.Customer;
@@ -98,9 +99,8 @@ public class loginOfCustomerController extends HttpServlet {
                 if (status == 0) { // Tài khoản hợp lệ & không bị chặn
                     HttpSession session = request.getSession();
                     Customer customer = cusDAO.getCustomer(username, password);
-                    List<Product> list = new ArrayList<>();
-                    session.setAttribute("size", link.getTotalItems(list, customer.getCustomerID()));
-                    session.setAttribute("total", link.getTotalCart(list, customer.getCustomerID()));
+                    session.setAttribute("size", link.getTotalItems(customer.getCustomerID()));
+                    session.setAttribute("total", link.getTotalCartValue(customer.getCustomerID()));
                     session.setAttribute("customer", customer);
                     session.setAttribute("customerID", customer.getCustomerID());
 
@@ -115,9 +115,8 @@ public class loginOfCustomerController extends HttpServlet {
                 request.setAttribute("errorMessage", "Tên người dùng hoặc mật khẩu không hợp lệ!");
                 request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau.");
+        } catch (ServletException | IOException | SQLException e) {
+            request.setAttribute("errorMessage", "Lỗi máy chủ nội bộ. Vui lòng thử lại sau." +e.getMessage());
             request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
         }
     }

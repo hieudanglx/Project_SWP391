@@ -34,7 +34,7 @@
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
                                                 Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
-                                                <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
+                                                <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Đăng xuất</button>
                                             </c:when>
                                             <c:otherwise>
                                                 <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>

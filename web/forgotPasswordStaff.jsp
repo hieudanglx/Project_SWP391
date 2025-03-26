@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Forgot Password</title>
+        <title>Quên mật khẩu</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <style>
             body {
