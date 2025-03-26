@@ -233,7 +233,7 @@
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <!-- Nội dung Đánh giá -->
 
-                            <div class="mb-4">
+<!--                            <div class="mb-4">
                                 <h4>Viết đánh giá của bạn</h4>
                                 <form action="SubmitReviewController" method="post">
                                     <input type="hidden" name="productID" value="${product.productID}">
@@ -253,7 +253,7 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
                                 </form>
-                            </div>
+                            </div>-->
                             <% if (session.getAttribute("successMessage") != null) { %>
                             <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
                             <% session.removeAttribute("successMessage"); }%>
