@@ -1,5 +1,5 @@
 <%-- 
-    Document   : forgotPassword_Staff
+    Document   : forgotPasswordStaff
     Created on : Feb 25, 2025
     Author     : nguye - CE170583
 --%>

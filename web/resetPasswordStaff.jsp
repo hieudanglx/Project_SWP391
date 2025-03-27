@@ -5,48 +5,17 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <title>Reset Password</title>
-        <style>
-            .container {
-                max-width: 500px;
-                margin: 50px auto;
-                background: white;
-                padding: 25px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                text-align: center;
-            }
-            .xacnhan {
-                background-color: #E5E1DA;
-                border-radius: 10px;
-                color: #547488;
-                font-weight: 500;
-                border: none;
-                font-size: 16px;
-                padding: 8px 20px;
-                cursor: pointer;
-            }
-            .xacnhan:hover {
-                background-color: #89A8B2;
-                color: white;
-            }
-            .inputpassword {
-                width: 30%;
-                margin: 10px 0;
-                padding: 8px;
-                border-radius: 5px;
-                border: 1px solid #dee2e6;
-                font-size: 16px;
-            }
-            .error-message {
-                color: red;
-                font-size: 14px;
-                margin-top: 5px;
-            }
-        </style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i">
+        <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" type="text/css" >
+        <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css" type="text/css" >
+        <link rel="stylesheet" href="css/header.css"  type="text/css" >
+        <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
+        <link rel="stylesheet" href="css/resetPassword.css">
         <script>
             function validatePassword() {
                 var password = document.getElementById("newPassword").value;
@@ -65,9 +34,9 @@
             }
         </script>
     </head>
+    <%@include file="header.jsp"%>
     <body>
-        <%@include file="header.jsp" %>
-        <div class="container">
+        <div class="containerx">
             <h2>Reset Password</h2>
             <form action="resetPasswordOfStaffController" method="post" onsubmit="return validatePassword();">
                 <div>
@@ -86,5 +55,6 @@
             <p class="error-message"><%= errorMessage %></p>
             <% } %>
         </div>
+         <%@include file="footer.jsp" %>
     </body>
 </html>

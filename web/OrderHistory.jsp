@@ -124,7 +124,7 @@
             <h2 class="text-center">Lịch sử đơn hàng</h2>
 
             <div class="text-center mb-3">
-                <a href="javascript:history.back()" class="btn btn-outline-primary">Quay về trang trước</a>
+                <a href="ViewProfileOfCustomer" class="btn btn-outline-primary">Quay về trang cá nhân</a>
             </div>
 
 
@@ -231,7 +231,7 @@
                             </c:if>
 
 
-                            
+
 
 
 

@@ -140,7 +140,7 @@
             </script>
             <% } %>
 
-            <form action="changePasswordCustomer" method="POST">
+            <form action="changePasswordStaff" method="POST">
                 <div class="form-group">
                     <label for="oldPassword">Mật khẩu cũ:</label>
                     <input type="password" name="oldPassword" required>
@@ -158,7 +158,7 @@
 
                 <button type="submit">Đổi Mật Khẩu</button>
             </form>
-        </div>
+        </div>  
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {

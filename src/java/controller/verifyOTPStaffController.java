@@ -70,7 +70,7 @@ public class verifyOTPStaffController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
@@ -80,9 +80,16 @@ public class verifyOTPStaffController extends HttpServlet {
         // Lấy OTP đúng từ session (luôn ở dạng String)
         String correctOTP = (String) session.getAttribute("otp");
 
-        if (correctOTP == null) {
+        // Lấy thời gian OTP được gửi từ session
+        Long otpTime = (Long) session.getAttribute("otpTime");
+        int otpExpiryTime =  30 * 1000; // 5 phút (5 x 60 x 1000 ms)
+
+        // Kiểm tra nếu không có OTP hoặc OTP đã hết hạn
+        if (correctOTP == null || otpTime == null || (System.currentTimeMillis() - otpTime > otpExpiryTime)) {
+            session.removeAttribute("otp");  // Xóa OTP khỏi session
+            session.removeAttribute("otpTime");
             request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
-            request.getRequestDispatcher("ViewProfileOfCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("forgotPasswordStaff.jsp").forward(request, response);
             return;
         }
 
@@ -95,6 +102,7 @@ public class verifyOTPStaffController extends HttpServlet {
         }
     }
 
+
     /**
      * Returns a short description of the servlet.
      *
@@ -105,4 +113,3 @@ public class verifyOTPStaffController extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 }
-

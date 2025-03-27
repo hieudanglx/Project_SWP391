@@ -137,7 +137,7 @@
                             <button class="nav-link active" id="specs-tab" data-bs-toggle="tab" 
                                     data-bs-target="#specs" type="button" role="tab">Thông số kỹ thuật</button>
                             <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" 
-                                    data-bs-target="#reviews" type="button" role="tab">Đánh giá (128)</button>
+                                    data-bs-target="#reviews" type="button" role="tab">Đánh giá</button>
                         </div>
                     </nav>
 

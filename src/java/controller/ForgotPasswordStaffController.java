@@ -93,6 +93,7 @@ public class ForgotPasswordStaffController extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("otp", otp);
         session.setAttribute("email", email);
+        session.setAttribute("otpTime", System.currentTimeMillis()); // Lưu thời gian gửi OTP
 
         // Gửi OTP đến email
         EmailSenderCustomer.sendEmail(email, "Mã OTP đặt lại mật khẩu",
