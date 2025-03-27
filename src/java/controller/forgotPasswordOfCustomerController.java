@@ -96,8 +96,8 @@ public class forgotPasswordOfCustomerController extends HttpServlet {
         session.setAttribute("otpTime", System.currentTimeMillis()); // Lưu thời gian gửi OTP
 
         // Gửi OTP đến email
-        sendEmail.sendEmail(email, "Mã OTP đặt lại mật khẩu",
-                "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
+        sendEmail.sendEmail(email, "OTP code reset password",
+                "Your OTP is: " + otp + "\nPlease enter this OTP to continue.");
         request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
     }
 

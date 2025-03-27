@@ -104,9 +104,6 @@
         </style>
     </head>
     <body>
-
-
-
         <div class="register-card">
             <h3 class="text-center register-title mb-4">Tạo một tài khoản</h3>
             <form action="RegisterController" method="post" onsubmit="return validateForm();">
