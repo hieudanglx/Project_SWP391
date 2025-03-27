@@ -34,6 +34,7 @@ public class listOrderAdmin extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+           
             OrderDAO o = new OrderDAO();
             List<Order_list> list = o.getAllOrder();
             if (list.isEmpty()){

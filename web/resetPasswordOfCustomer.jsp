@@ -55,5 +55,6 @@
             <p class="error-message"><%= errorMessage %></p>
             <% } %>
         </div>
+         <%@include file="footer.jsp" %>
     </body>
 </html>

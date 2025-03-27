@@ -270,29 +270,21 @@
 
             <!-- Navbar -->
             <nav class="navbar-custom">
-                <h4><i class="fas fa-shopping-cart me-2"></i>Admin Dashboard - Order Management</h4>
-                <div class="profile">
-                    <a href="ManagerProfile.jsp" class="profile-link">
-                        <i class="fas fa-user-circle me-1"></i>${sessionScope.Username}
-                    </a>
-                    <a href="javascript:void(0);" class="btn btn-danger btn-logout" onclick="logout()">
-                        <i class="fas fa-sign-out-alt me-1"></i>Logout
-                    </a>
-                </div>
+                <h4><i class="fas fa-shopping-cart me-2"></i>Admin Dashboard - Order Management</h4>             
             </nav>
 
             <!-- Status Filter -->
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div class="dropdown">
                     <button class="btn filter-button dropdown-toggle" type="button" id="filterStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-filter me-1"></i>Lọc theo trạng thái
+                        <i class="fas fa-filter me-1"></i>Filter by status
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="filterStatusDropdown">
-                        <li><a class="dropdown-item" href="filterStatus"><i class="fas fa-list me-2"></i>Tất cả</a></li>
-                        <li><a class="dropdown-item" href="filterStatus?status=Chờ xử lý"><i class="fas fa-clock me-2"></i>Chờ xử lý</a></li>
-                        <li><a class="dropdown-item" href="filterStatus?status=Giao Hàng"><i class="fas fa-truck me-2"></i>Giao Hàng</a></li>
-                        <li><a class="dropdown-item" href="filterStatus?status=Đã Hủy"><i class="fas fa-ban me-2"></i>Đã Hủy</a></li>
-                        <li><a class="dropdown-item" href="filterStatus?status=Thành công"><i class="fas fa-check-circle me-2"></i>Thành công</a></li>
+                        <li><a class="dropdown-item" href="filterStatus"><i class="fas fa-list me-2"></i>All</a></li>
+                        <li><a class="dropdown-item" href="filterStatus?status=Chờ xử lý"><i class="fas fa-clock me-2"></i>Pending processing</a></li>
+                        <li><a class="dropdown-item" href="filterStatus?status=Giao Hàng"><i class="fas fa-truck me-2"></i>Delivery</a></li>
+                        <li><a class="dropdown-item" href="filterStatus?status=Đã Hủy"><i class="fas fa-ban me-2"></i>Canceled</a></li>
+                        <li><a class="dropdown-item" href="filterStatus?status=Thành công"><i class="fas fa-check-circle me-2"></i>Success</a></li>
                     </ul>
                 </div>
             </div>
@@ -348,16 +340,21 @@
                                     </a>
                                     <c:if test="${order.status == 'Chờ xử lý'}">
                                         <a href="javascript:void(0);" 
-                                           onclick="confirmStatusChange(${order.orderID}, 'Giao Hàng', 'Xác nhận đơn hàng này?')" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Giao Hàng', 'Confirm this order?')" 
                                            class="btn btn-success table-action-btn">
-                                            <i class="fas fa-check me-1"></i>Xác nhận
+                                            <i class="fas fa-check me-1"></i>Confirm
                                         </a>
                                     </c:if>
                                     <c:if test="${order.status == 'Giao Hàng'}">
                                         <a href="javascript:void(0);" 
-                                           onclick="confirmStatusChange(${order.orderID}, 'Đã Hủy', 'Hủy đơn hàng này?')" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Đã Hủy', 'Cancel this order?')" 
                                            class="btn btn-outline-danger table-action-btn">
-                                            <i class="fas fa-times me-1"></i>Hủy
+                                            <i class="fas fa-times me-1"></i>Cancel
+                                        </a>
+                                        <a href="javascript:void(0);" 
+                                           onclick="confirmStatusChange(${order.orderID}, 'Thành công', 'Confirm order completed?')" 
+                                           class="btn btn-success table-action-btn">
+                                            <i class="fas fa-check-circle me-1"></i>Success
                                         </a>
                                     </c:if>
                                 </td>
@@ -373,28 +370,28 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header" id="modalHeader">
-                        <h5 class="modal-title" id="statusChangeModalLabel">Xác nhận thay đổi trạng thái</h5>
+                        <h5 class="modal-title" id="statusChangeModalLabel">Confirm status change</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <p id="modalMessage">Bạn có chắc muốn thay đổi trạng thái đơn hàng này?</p>
+                        <p id="modalMessage">Are you sure you want to change this order status?</p>
                         <div class="alert alert-info">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="fas fa-info-circle me-2 fs-5"></i>
-                                <strong>Chi tiết đơn hàng:</strong>
+                                <strong>Order details:</strong>
                             </div>
                             <ul class="list-unstyled ms-4 mb-0">
-                                <li><strong>Mã đơn hàng:</strong> <span id="orderIdDisplay"></span></li>
-                                <li><strong>Trạng thái mới:</strong> <span id="newStatusDisplay"></span></li>
+                                <li><strong>Order code:</strong> <span id="orderIdDisplay"></span></li>
+                                <li><strong>New status:</strong> <span id="newStatusDisplay"></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            <i class="fas fa-times me-1"></i>Hủy bỏ
+                            <i class="fas fa-times me-1"></i>Cancel
                         </button>
                         <button type="button" class="btn" id="confirmStatusBtn" onclick="proceedWithStatusChange()">
-                            <i class="fas fa-check me-1"></i>Xác nhận
+                            <i class="fas fa-check me-1"></i>Confirm
                         </button>
                     </div>
                 </div>
@@ -402,17 +399,7 @@
         </div>
 
         <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', { method: 'POST' })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/LoginOfDashboard.jsp';
-                        } else {
-                            alert('Logout Failed!');
-                        }
-                    })
-                    .catch(error => console.error('Logout Error:', error));
-            }
+            
             
             let orderIdToChange = null;
             let newStatus = null;
@@ -437,6 +424,9 @@
                 } else if (status === 'Đã Hủy') {
                     modalHeader.className = 'modal-header bg-danger text-white';
                     confirmBtn.className = 'btn btn-danger';
+                } else if (status === 'Thành công') {
+                    modalHeader.className = 'modal-header bg-success text-white';
+                    confirmBtn.className = 'btn btn-success';
                 }
                 
                 // Show the confirmation modal

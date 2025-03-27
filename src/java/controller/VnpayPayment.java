@@ -80,8 +80,6 @@ public class VnpayPayment extends HttpServlet {
                         // Xóa giỏ hàng sau khi đặt hàng thành công
                         CartDao cartDao = new CartDao();
                         cartDao.clearCart(c.getCustomerID());
-
-                        int size = link.getTotalItems(list, c.getCustomerID()); // Lưu giá trị vào biến size
                         session.setAttribute("size", 0); // Đặt biến size vào session
 
                         //  Double totals = (Double) session.getAttribute("total");

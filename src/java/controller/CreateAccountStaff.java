@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.AccountStaff;
 
 public class CreateAccountStaff extends HttpServlet {
 
@@ -58,9 +59,10 @@ public class CreateAccountStaff extends HttpServlet {
             request.getRequestDispatcher("Create_account_staff.jsp").forward(request, response);
             return;
         }
+        AccountStaff staff = new AccountStaff(fullName, username, password, email, phoneNumber, address, cccd, province, dob, sex, 0);
 
         // Thêm nhân viên vào database
-        boolean success = staffDAO.addStaff(fullName, username, password, email, phoneNumber, address, cccd, province, dob, sex, statusBoolean);
+        boolean success = staffDAO.addStaff(staff);
         if (success) {
             response.sendRedirect("ListAccountStaff");
         } else {

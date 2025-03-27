@@ -61,7 +61,7 @@ public class EditAccount_Staff extends HttpServlet {
         String address = request.getParameter("address");
         String cccd = request.getParameter("cccd");
 
-        //Kiểm tra dữ liệu hợp lệ
+        // Kiểm tra dữ liệu hợp lệ
         if (fullName == null || email == null || phoneNumber == null || address == null || cccd == null
                 || fullName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty() || address.isEmpty() || cccd.isEmpty()) {
             request.setAttribute("errorMessage", "All fields are required!");

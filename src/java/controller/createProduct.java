@@ -145,7 +145,7 @@ public class createProduct extends HttpServlet {
             if (exist) {
 
                 // Nếu sản phẩm đã tồn tại, truyền thông tin lỗi và dữ liệu về JSP
-                request.setAttribute("error", "The product already exists.");
+                request.setAttribute("error", "Product already exists. Please change 1 of the following 4 data fields: Phone Name,Color,RAM,Storage Capacity.");
                 request.setAttribute("product", product);
 
                 // Truyền các giá trị tùy chỉnh về JSP
@@ -181,7 +181,7 @@ public class createProduct extends HttpServlet {
                 if (categoryID == 2) {
 
                     if (isAdded) {
-                        response.sendRedirect("createProduct.jsp?error=Phone created successfully.");
+                        response.sendRedirect("createProduct.jsp?success=true");
                     } else {
                         response.sendRedirect("createProduct.jsp?error=Failed to create Phone.");
                     }

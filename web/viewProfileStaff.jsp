@@ -17,7 +17,7 @@
         <style>
             body {
                 font-family: 'Poppins', sans-serif;
-                background: linear-gradient(135deg, #667eea, #764ba2);
+                background: linear-gradient(135deg, #8396b3, #9eb1d0);
                 margin: 0;
                 padding: 0;
                 color: #333;
@@ -33,7 +33,7 @@
             }
             .sidebar {
                 width: 250px;
-                background: #333;
+                background: #2d2d2d;
                 color: white;
                 padding: 30px 20px;
             }
@@ -118,6 +118,22 @@
             .save-btn:hover {
                 background: #ff9900;
             }
+            .error-message {
+                color: #ff0000; /* Màu đỏ */
+                font-size: 0.8rem;
+                margin-top: 0.25rem;
+                display: block;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+                position: relative;
+            }
+
+            /* Màu đỏ khi input có lỗi */
+            input.error {
+                border-color: #ff0000;
+            }
         </style>
     </head>
     <body>
@@ -130,7 +146,7 @@
                 <nav class="profile-nav">
                     <ul>
                         <li><a onclick="showSection('profile')">Hồ sơ</a></li>
-                        <li><a onclick="showSection('changePassword')">Ðổi mật khẩu</a></li>
+                        <li><a onclick="showSection('changePassword')">Đổi mật khẩu</a></li>
                     </ul>
                 </nav>
             </aside>
@@ -140,52 +156,60 @@
                 <section id="profile" class="content-section active">
                     <h2><strong>Hồ sơ của tôi</strong></h2>
                     <p>Quản lý thông tin hồ sơ của bạn.</p>
-                    <c:if test="${not empty sessionScope.updateSuccess}">
-                        <script>
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: '${sessionScope.updateSuccess}',
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                        </script>
-                        <% session.removeAttribute("updateSuccess"); %> 
-                    </c:if>
 
-                    <c:if test="${not empty errorMessage}">
+                    <!-- Hiển thị thông báo chung -->
+                    <c:if test="${not empty sessionScope.updateSuccess or not empty errorMessage}">
                         <script>
                             Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: '${errorMessage}',
-                                showConfirmButton: true
+                                icon: '${not empty sessionScope.updateSuccess ? "success" : "error"}',
+                                title: '${not empty sessionScope.updateSuccess ? "Success!" : "Error!"}',
+                                text: '${not empty sessionScope.updateSuccess ? sessionScope.updateSuccess : errorMessage}',
+                                showConfirmButton: ${not empty errorMessage},
+                                timer: ${not empty sessionScope.updateSuccess ? '2000' : 'null'}
                             });
+                            <% session.removeAttribute("updateSuccess"); %>
                         </script>
                     </c:if>
 
-                    <form action="EditAccount_Staff" method="POST">
+                    <form action="EditAccount_Staff" method="POST" onsubmit="return validateProfileForm()">
                         <div class="profile-details">
-                            <label>Staff ID</label>
-                            <input type="text" name="staffID" value="${sessionScope.staff.staffID}" readonly>
+                            <div class="form-group">
+                                <label>Staff ID</label>
+                                <input type="text" name="staffID" value="${sessionScope.staff.staffID}" readonly>
+                            </div>
 
-                            <label>Tên người dùng</label>
-                            <input type="text" name="username" value="${sessionScope.staff.username}" readonly>
+                            <div class="form-group">
+                                <label>Tên người dùng</label>
+                                <input type="text" name="username" value="${sessionScope.staff.username}" readonly>
+                            </div>
 
-                            <label>Họ và tên</label>
-                            <input type="text" name="fullName" value="${sessionScope.staff.fullName}" required>
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" name="fullName" value="${sessionScope.staff.fullName}" required>
+                            </div>
 
-                            <label>Email</label>
-                            <input type="email" name="email" value="${sessionScope.staff.email}" required>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="email" name="email" value="${sessionScope.staff.email}" required>
+                                <span id="emailError" class="error-message"></span>
+                            </div>
 
-                            <label>Số điện thoại</label>
-                            <input type="text" name="phoneNumber" value="${sessionScope.staff.phoneNumber}" required>
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" id="phoneNumber" name="phoneNumber" value="${sessionScope.staff.phoneNumber}" required>
+                                <span id="phoneError" class="error-message"></span>
+                            </div>
 
-                            <label>Địa chỉ</label>
-                            <input type="text" name="address" value="${sessionScope.staff.address}" required>
+                            <div class="form-group">
+                                <label>Địa chỉ</label>
+                                <input type="text" name="address" value="${sessionScope.staff.address}" required>
+                            </div>
 
-                            <label>CCCD</label>
-                            <input type="text" name="cccd" value="${sessionScope.staff.cccd}" readonly>
+                            <div class="form-group">
+                                <label>CCCD</label>
+                                <input type="text" name="cccd" value="${sessionScope.staff.cccd}" readonly>
+                            </div>
+
                             <button type="submit" class="save-btn">Lưu thay đổi</button>
                         </div>
                     </form>
@@ -193,7 +217,7 @@
 
                 <!-- Change Password Section -->
                 <section id="changePassword" class="content-section">
-                    <h2><strong>Change Password</strong></h2>
+                    <h2><strong>Thay đổi mật khẩu</strong></h2>
 
                     <!-- Hiển thị thông báo lỗi nếu có -->
                     <c:if test="${not empty errorMessage}">
@@ -201,42 +225,75 @@
                     </c:if>
 
                     <form action="changePasswordStaff" method="POST" onsubmit="return validatePassword()">
+                        <input type="hidden" name="email" value="${sessionScope.staff.email}">
 
                         <input type="hidden" name="email" value="${sessionScope.staff.email}" required>
-                        <label>Current Password</label>
+                        <label>Mật khẩu hiện tại</label>
                         <input type="password" name="currentPassword" required>
 
-                        <label>New Password</label>
+                        <label>Mật khẩu mới</label>
                         <input type="password" id="newPassword" name="newPassword" required>
 
-                        <label>Confirm New Password</label>
+                        <label>Xác nhận mật khẩu mới</label>
                         <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
 
-                        <button type="submit" class="save-btn">Update Password</button>
+                        <button type="submit" class="save-btn">Cập nhật mật khẩu</button>
                     </form>
-
-
-                    <!-- Order History Section -->
-                    <section id="orderHistory" class="content-section">
-                        <h2><strong>Order History</strong></h2>
-                        <p>View your past orders.</p>
-                    </section>
+                </section>
             </main>
         </div>
 
         <script>
-            function validatePassword() {
-                let currentPassword = document.querySelector("input[name='currentPassword']").value;
-                let newPassword = document.getElementById("newPassword").value;
-                let confirmNewPassword = document.getElementById("confirmNewPassword").value;
+            // Hàm chung để hiển thị các section
+            function showSection(sectionId) {
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(sectionId).classList.add('active');
+            }
 
-                // Điều kiện: Ít nhất 1 chữ hoa, 1 số, và tối thiểu 8 ký tự
-                let passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            // Validate form profile
+            function validateProfileForm() {
+                const phoneNumber = document.getElementById('phoneNumber').value.trim();
+                const email = document.getElementById('email').value.trim();
+
+                // Clear previous errors
+                document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+                let isValid = true;
+
+                // Validate phone number
+                if (!phoneNumber) {
+                    showError('phoneError', "Vui lòng nhập số điện thoại!");
+                    isValid = false;
+                } else if (!/^[0-9]{10}$/.test(phoneNumber) || !phoneNumber.startsWith('0')) {
+                    showError('phoneError', "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!");
+                    isValid = false;
+                }
+
+                // Validate email
+                if (!email) {
+                    showError('emailError', "Vui lòng nhập email!");
+                    isValid = false;
+                } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showError('emailError', "Email không hợp lệ!");
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            // Validate password change
+            function validatePassword() {
+                const currentPassword = document.querySelector("input[name='currentPassword']").value;
+                const newPassword = document.getElementById("newPassword").value;
+                const confirmNewPassword = document.getElementById("confirmNewPassword").value;
+                const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 
                 if (!passwordRegex.test(newPassword)) {
                     Swal.fire({
                         icon: "error",
-                        title: "Invalid Password",
+                        title: "Mật khẩu không hợp lệ!",
                         text: "Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa và 1 số!"
                     });
                     return false;
@@ -245,8 +302,8 @@
                 if (newPassword !== confirmNewPassword) {
                     Swal.fire({
                         icon: "error",
-                        title: "Mismatch Password",
-                        text: "Mật khẩu xác nhận không khớp!"
+                        title: "Mật khẩu không khớp!",
+                        text: "Mật khẩu xác nhận không trùng khớp!"
                     });
                     return false;
                 }
@@ -254,23 +311,18 @@
                 if (newPassword === currentPassword) {
                     Swal.fire({
                         icon: "error",
-                        title: "Invalid Password",
-                        text: "Mật khẩu mới không được trùng với mật khẩu cũ!"
+                        title: "Mật khẩu không hợp lệ",
+                        text: "Mật khẩu mới không được trùng với mật khẩu hiện tại!"
                     });
                     return false;
                 }
 
                 return true;
             }
-        </script>
 
-
-        <script>
-            function showSection(sectionId) {
-                document.querySelectorAll('.content-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById(sectionId).classList.add('active');
+            // Helper function to show error messages
+            function showError(elementId, message) {
+                document.getElementById(elementId).textContent = message;
             }
         </script>
     </body>

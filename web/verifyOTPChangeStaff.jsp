@@ -93,6 +93,7 @@
         </style>
     </head>
     <body>
+        <%@include file="header.jsp" %>
         <!-- Content Spacer để tránh bị header che -->
         <div class="header-spacer"></div>
 
@@ -114,6 +115,9 @@
             <p class="error-message"><%= errorMessage %></p>
             <% } %>
         </div>
+          <footer class="mt-auto">
+        <%@include file="footer.jsp" %>
+    </footer>
     </body>
 </html>
 

@@ -151,7 +151,7 @@ public class AccountDao extends dao.DBContext {
 
     public List<AccountStaff> getAllAccountStaff() {
         List<AccountStaff> list = new ArrayList<>();
-        String query = "SELECT * FROM Staff"; // Truy vấn lấy tất cả staff
+        String query = "SELECT * FROM Staff Where IsDelete=0"; // Truy vấn lấy tất cả staff
         try ( PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
@@ -308,16 +308,16 @@ public class AccountDao extends dao.DBContext {
     }
 
     public boolean deleteAccountStaff(int staffID) {
-        String query = "DELETE FROM Staff WHERE staffID = ?";
-        try ( PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, staffID); // Thiết lập giá trị cho tham số staffID
-            int rowsDeleted = stmt.executeUpdate();
-            return rowsDeleted > 0; // Trả về true nếu có ít nhất một hàng bị xóa
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+    String query = "UPDATE [dbo].[Staff] SET IsDelete = 1 WHERE StaffID = ?";
+    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        stmt.setInt(1, staffID);
+        int rowsDeleted = stmt.executeUpdate();
+        return rowsDeleted > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
     }
+}
 
     public boolean updateAccountStaff(AccountStaff staff) {
         String query = "UPDATE Staff SET address = ?, email = ?, password = ?, fullName = ?, phoneNumber = ?, username = ?, status = ? WHERE staffID = ?";
@@ -479,25 +479,25 @@ public class AccountDao extends dao.DBContext {
         return false;
     }
 
-    public boolean addStaff(String fullName, String username, String password, String email, String phoneNumber, String address, String cccd, String provinceCity, String dob, String sex, boolean status) {
+    public boolean addStaff(AccountStaff staff) {
         // Kiểm tra trùng lặp trước khi thêm
-        if (isUsernameStaffExists(username) || isEmailStaffExists(email) || isPhoneNumberStaffExists(phoneNumber) || isCCCDExists(cccd)) {
+        if (isUsernameStaffExists(staff.getUsername()) || isEmailStaffExists(staff.getEmail()) || isPhoneNumberStaffExists(staff.getPhoneNumber()) || isCCCDExists(staff.getCccd())) {
             return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
         }
         
         String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Province_City, DOB, Sex, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, fullName);
-            ps.setString(2, username);
-            ps.setString(3, hashPassword(password)); // Cân nhắc mã hóa nếu cần bảo mật
-            ps.setString(4, email);
-            ps.setString(5, phoneNumber);
-            ps.setString(6, address);
-            ps.setString(7, cccd);
-            ps.setString(8, provinceCity);  // Thêm tỉnh/thành phố
-            ps.setDate(9, java.sql.Date.valueOf(dob)); // Chuyển đổi từ String sang SQL Date
-            ps.setString(10, sex); // Giới tính
-            ps.setBoolean(11, status); // SQL Server hiểu 0 = Active, 1 = Inactive
+            ps.setString(1, staff.getFullName());
+            ps.setString(2, staff.getUsername());
+            ps.setString(3, hashPassword(staff.getPassword())); // Cân nhắc mã hóa nếu cần bảo mật
+            ps.setString(4, staff.getEmail());
+            ps.setString(5, staff.getPhoneNumber());
+            ps.setString(6, staff.getAddress());
+            ps.setString(7, staff.getCccd());
+            ps.setString(8, staff.getProvince_city());  // Thêm tỉnh/thành phố
+            ps.setDate(9, java.sql.Date.valueOf(staff.getDob())); // Chuyển đổi từ String sang SQL Date
+            ps.setString(10, staff.getSex()); // Giới tính
+            ps.setInt(11, staff.getStatus()); // SQL Server hiểu 0 = Active, 1 = Inactive
 
             return ps.executeUpdate() > 0; // Trả về true nếu thêm thành công
         } catch (SQLException e) {

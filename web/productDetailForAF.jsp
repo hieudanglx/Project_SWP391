@@ -416,10 +416,6 @@
             <nav class="navbar-custom">
                 <h4><i class="fas fa-tag me-2"></i>Admin Dashboard - Product Detail</h4>
 
-                <div class="profile">
-                    <a href="ManagerProfile.jsp" class="profile-link"><i class="fas fa-user me-2"></i>Admin</a>
-                    <a href="javascript:void(0);" class="logout-link" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                </div>
             </nav>
 
             <div class="product-detail">
@@ -614,33 +610,21 @@
                             <i class="fas fa-edit"></i>
                             <span>Update</span>
                         </a>
-                        <a href="deleteProduct?productID=${product.productID}" 
+<!--                        <a href="deleteProduct?productID=${product.productID}" 
                            onclick="return confirm('Are you sure you want to delete this product?');"
                            class="btn btn-danger">
                             <i class="fas fa-trash-alt"></i>
                             <span>Delete</span>
-                        </a>
-                        <a href="listProductsForAdmin" class="btn btn-secondary">
+                        </a>-->
+<!--                        <a href="listProductsForAdmin" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i>
                             <span>Back to List</span>
-                        </a>
+                        </a>-->
                     </div>
                 </div>
             </div>
         </div>
 
-        <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/LoginOfDashboard.jsp';
-                        } else {
-                            alert('Logout Failed!');
-                        }
-                    })
-                    .catch(error => console.error('Logout Error:', error));
-            }
-        </script>
+      
     </body>
 </html>

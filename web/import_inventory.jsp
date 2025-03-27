@@ -5,11 +5,11 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html lang="vi">
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nhập Kho Sản Phẩm</title>
+        <title>Import Products to Inventory</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         <style>
@@ -124,23 +124,7 @@
         </style>
     </head>
     <body>
-         
-
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h4 class="text-center mb-0">
-                    <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                </h4>
-            </div>
-            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box-open"></i> Manage Products</a>
-            <a href="feedback"><i class="fas fa-comment-alt"></i> Manage Feedback</a>
-            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-            <a href="ListInventory" class="active"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>
+        <jsp:include page="sidebar.jsp" />
 
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
@@ -148,16 +132,6 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="ManagerProfile.jsp"><i class="fas fa-user"></i> Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="LoginOfDashboard.jsp"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </nav>
 
@@ -171,7 +145,7 @@
 
             <div class="card shadow-sm mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-plus-circle text-success me-2"></i> Nhập Kho Sản Phẩm</h5>
+                    <h5 class="mb-0"><i class="fas fa-plus-circle text-success me-2"></i> Import Products to Inventory</h5>
                 </div>
                 <div class="card-body p-4">
                     <% if (request.getAttribute("error") != null) { %>
@@ -183,7 +157,7 @@
                     <form action="importInventory" method="post">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="productID" class="form-label">Mã Sản Phẩm:</label>
+                                <label for="productID" class="form-label">Product ID:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                     <input type="number" id="productID" name="productID" class="form-control readonly-field" value="${param.productID != null ? param.productID : inventory.productID}" readonly />
@@ -191,7 +165,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="productName" class="form-label">Tên Sản Phẩm:</label>
+                                <label for="productName" class="form-label">Product Name:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-tag"></i></span>
                                     <input type="text" id="productName" name="productName" class="form-control readonly-field" value="${param.productName != null ? param.productName : inventory.productName}" readonly />
@@ -199,7 +173,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="price" class="form-label">Giá Bán:</label>
+                                <label for="price" class="form-label">Selling Price:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-money-bill"></i></span>
                                     <input type="number" id="price" name="price" class="form-control readonly-field" value="${param.price != null ? param.price : inventory.price}" readonly />
@@ -208,7 +182,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="importQuantity" class="form-label">Số Lượng Nhập:</label>
+                                <label for="importQuantity" class="form-label">Import Quantity:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-boxes"></i></span>
                                     <input type="number" id="importQuantity" name="importQuantity" class="form-control" value="${param.importQuantity != null ? param.importQuantity : inventory.getImport_quantity()}" required min="1" />
@@ -216,7 +190,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="importPrice" class="form-label">Giá Nhập:</label>
+                                <label for="importPrice" class="form-label">Import Price:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-tags"></i></span>
                                     <input type="number" id="importPrice" name="importPrice" class="form-control" value="${param.importPrice != null ? param.importPrice : inventory.getImport_price()}" required min="1000" />
@@ -225,7 +199,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="supplier" class="form-label">Nhà Cung Cấp:</label>
+                                <label for="supplier" class="form-label">Supplier:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-truck"></i></span>
                                     <input type="text" id="supplier" name="supplier" class="form-control" value="${param.supplier != null ? param.supplier : inventory.supplier}" required />
@@ -233,7 +207,7 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label for="importDate" class="form-label">Ngày Nhập:</label>
+                                <label for="importDate" class="form-label">Import Date:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     <input type="date" id="importDate" name="importDate" class="form-control" value="${param.importDate != null ? param.importDate : inventory.getDATE()}" required />
@@ -243,10 +217,10 @@
                             <div class="col-12">
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <a href="ListInventory" class="btn btn-outline-secondary">
-                                        <i class="fas fa-arrow-left me-2"></i>Quay Lại
+                                        <i class="fas fa-arrow-left me-2"></i>Back
                                     </a>
                                     <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-save me-2"></i>Nhập Kho
+                                        <i class="fas fa-save me-2"></i>Import to Inventory
                                     </button>
                                 </div>
                             </div>
@@ -262,18 +236,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = '/LoginOfDashboard.jsp';
-                            } else {
-                                alert('Logout Failed!');
-                            }
-                        })
-                        .catch(error => console.error('Logout Error:', error));
-            }
-
+            
             // Form validation
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.querySelector('form');
@@ -283,19 +246,19 @@
                     const supplier = document.getElementById('supplier').value;
 
                     if (importQuantity <= 0) {
-                        alert('Số lượng nhập phải lớn hơn 0');
+                        alert('Import quantity must be greater than 0');
                         event.preventDefault();
                         return false;
                     }
 
                     if (importPrice <= 0) {
-                        alert('Giá nhập phải lớn hơn 0');
+                        alert('Import price must be greater than 0');
                         event.preventDefault();
                         return false;
                     }
 
                     if (supplier.trim() === '') {
-                        alert('Vui lòng nhập tên nhà cung cấp');
+                        alert('Please enter supplier name');
                         event.preventDefault();
                         return false;
                     }

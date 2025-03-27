@@ -18,12 +18,19 @@ function hideConfirmPopup() {
     currentAction = null;
     currentProductId = null;
 }
+
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('confirmActionBtn').addEventListener('click', function () {
+        let url;
         if (currentAction && currentProductId) {
-// Sửa logic xác định type
-            const type = currentAction === 'delete' ? 'R' : '-';
-            let url = `UpdateCartController?id=${currentProductId}&type=${type}`;
+            switch (currentAction) {
+                case '-':
+                    url = `UpdateCartController?id=${currentProductId}&type=-&Quantity=1`;
+                    break;
+                case 'R':
+                    url = `RemoveInCartController?id=${currentProductId}`;
+                    break;
+            }
             // Thêm console log để debug
             console.log("Redirecting to:", url);
             window.location.href = url;
@@ -52,7 +59,7 @@ function showAlertPopup(type, message) {
             icon.classList.add('warning-icon', 'fas', 'fa-exclamation-triangle');
             break;
     }
-    if (type != 'warning') {
+    if (type !== 'warning') {
         messageElement.textContent = message;
         // Tự động ẩn sau 1s
         setTimeout(() => {
@@ -63,10 +70,10 @@ function showAlertPopup(type, message) {
 
 // ========== XỬ LÝ SỰ KIỆN ==========
 function decreaseQuantity(productId, quantity) {
-    if (quantity <= 1) {
+    if (quantity === 1) {
         showConfirmPopup(
                 "Giảm số lượng về 0 sẽ xóa sản phẩm khỏi giỏ hàng!",
-                'delete',
+                '-',
                 productId
                 );
         return false;
@@ -77,7 +84,7 @@ function decreaseQuantity(productId, quantity) {
 function confirmRemove(productId) {
     showConfirmPopup(
             "Bạn chắc chắn muốn xóa sản phẩm này?",
-            'delete',
+            'R',
             productId
             );
     return false;
@@ -86,6 +93,7 @@ function confirmRemove(productId) {
 window.onload = function () {
     checkCartStatus();
 };
+
 function checkCartStatus() {
     const status = document.body.getAttribute("data-status");
     const message = document.body.getAttribute("data-message");
