@@ -76,14 +76,12 @@ public class PaymentController extends HttpServlet {
                         for (Product item : list) {
                             Order_Details orderDetail = new Order_Details(0, item.getQuantityProduct(), item.getProductID(), orderID);
                             orderDAO.insertOrderDetail(orderDetail);
-
                         }
                         orderDAO.updateProductQuantity(orderID);
 
                         // Xóa giỏ hàng sau khi đặt hàng thành công
                         cartDao.clearCart(c.getCustomerID());
-
-                        int size = link.getTotalItems(customerID); // Lưu giá trị vào biến size
+                        
                         session.setAttribute("size", 0); // Đặt biến size vào session
 
                         //  Double totals = (Double) session.getAttribute("total");
