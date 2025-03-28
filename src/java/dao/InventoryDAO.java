@@ -23,27 +23,15 @@ public class InventoryDAO extends dao.DBContext {
     public List<Inventory> getAllInventories() {
         List<Inventory> inventories = new ArrayList<>();
         String query = "WITH LatestImport AS ( "
-                + "    SELECT "
-                + "        i.ProductID, "
-                + "        i.Date, "
-                + "        i.Import_price, "
-                + "        i.Supplier, "
-                + "        ROW_NUMBER() OVER (PARTITION BY i.ProductID ORDER BY i.Date DESC, i.Import_price DESC) AS rn "
+                + "    SELECT i.ProductID, i.Date, i.Import_price, i.Supplier, "
+                + "           ROW_NUMBER() OVER (PARTITION BY i.ProductID ORDER BY i.Date DESC, i.Import_price DESC) AS rn "
                 + "    FROM Import_Inventory i "
                 + ") "
-                + "SELECT "
-                + "    p.ProductID, "
-                + "    p.ProductName, "
-                + "    li.Date AS Latest_Import_Date, "
-                + "    li.Import_price, "
-                + "    p.Price, "
-                + "    p.Quantity_Product, "
-                + "    li.Supplier "
+                + "SELECT p.ProductID, p.ProductName, p.Color, p.Rom, "
+                + "       li.Date AS Latest_Import_Date, li.Import_price, p.Price, p.Quantity_Product, li.Supplier "
                 + "FROM Product p "
-                + "LEFT JOIN LatestImport li "
-                + "    ON p.ProductID = li.ProductID "
-                + "    AND li.rn = 1 "
-                + "WHERE p.IsDelete = 0;";  // Chỉ lấy sản phẩm chưa bị xóa
+                + "LEFT JOIN LatestImport li ON p.ProductID = li.ProductID AND li.rn = 1 "
+                + "WHERE p.IsDelete = 0;";
 
         try ( PreparedStatement stmt = connection.prepareStatement(query);  ResultSet rs = stmt.executeQuery()) {
 
@@ -51,22 +39,24 @@ public class InventoryDAO extends dao.DBContext {
                 Inventory inventory = new Inventory(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
+                        rs.getString("Color"),
+                        rs.getString("Rom"),
                         rs.getDate("Latest_Import_Date"),
                         rs.getInt("Import_price"),
                         rs.getInt("Price"),
                         rs.getInt("Quantity_Product"),
-                        rs.getString("Supplier")
+                        rs.getString("Supplier") != null ? rs.getString("Supplier") : "Unknown"
                 );
                 inventories.add(inventory);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Lỗi truy vấn getAllInventories: " + e.getMessage());
         }
         return inventories;
     }
 
     public Inventory getProductById(int productId) {
-        String query = "SELECT ProductID, ProductName, Price FROM Product WHERE ProductID = ?";
+        String query = "SELECT ProductID, ProductName, Price ,Color, Rom FROM Product WHERE ProductID = ?";
         try ( PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
@@ -75,7 +65,9 @@ public class InventoryDAO extends dao.DBContext {
                 return new Inventory(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
-                        rs.getInt("Price") // Lấy giá bán từ DB
+                        rs.getInt("Price"), // Lấy giá bán từ DB
+                        rs.getString("Color"),
+                        rs.getString("Rom")
                 );
             }
         } catch (Exception e) {
@@ -85,9 +77,28 @@ public class InventoryDAO extends dao.DBContext {
         return null; // Trả về null nếu không tìm thấy sản phẩm
     }
 
+//    public int getProductIdByDetails(String productName, String color, String capacity) {
+//        int productId = -1;
+//        String query = "SELECT ProductID FROM Product p WHERE ProductName = ? AND Color = ? AND p.Rom = ?";
+//        try (PreparedStatement ps = connection.prepareStatement(query)) {
+//
+//            ps.setString(1, productName);
+//            ps.setString(2, color);
+//            ps.setString(3, capacity);
+//
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                productId = rs.getInt("product_id");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return productId;
+//    }
+
     public List<Inventory> getInventoryListByCategory(String categoryType) {
         List<Inventory> inventoryList = new ArrayList<>();
-        String query = "SELECT P.ProductID, P.ProductName, I.Date AS Latest_Import_Date, "
+        String query = "SELECT P.ProductID, P.ProductName,P.Color, P.Rom, I.Date AS Latest_Import_Date, "
                 + "I.Import_price AS Import_Price, P.Price AS Selling_Price, "
                 + "P.Quantity_Product, I.Supplier "
                 + "FROM Product P "
@@ -108,6 +119,8 @@ public class InventoryDAO extends dao.DBContext {
                 Inventory inventory = new Inventory(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
+                        rs.getString("Color"),
+                        rs.getString("Rom"),
                         rs.getDate("Latest_Import_Date"), // Đúng tên cột
                         rs.getInt("Import_Price"), // Đúng tên cột
                         rs.getInt("Selling_Price"), // Đúng tên cột
@@ -127,7 +140,7 @@ public class InventoryDAO extends dao.DBContext {
         String insertSql = "INSERT INTO Import_Inventory (ProductID, Import_price, Date, Import_quantity, Supplier) VALUES (?, ?, ?, ?, ?)";
         String updateSql = "UPDATE Product SET Quantity_Product = Quantity_Product + ? WHERE ProductID = ?";
 
-        try (PreparedStatement insertPs = connection.prepareStatement(insertSql);  PreparedStatement updatePs = connection.prepareStatement(updateSql)) {
+        try ( PreparedStatement insertPs = connection.prepareStatement(insertSql);  PreparedStatement updatePs = connection.prepareStatement(updateSql)) {
 
             // Thêm dữ liệu vào Import_Inventory
             insertPs.setInt(1, productID);
@@ -152,14 +165,14 @@ public class InventoryDAO extends dao.DBContext {
     public List<Inventory> searchInventory(String keyword) {
         List<Inventory> inventories = new ArrayList<>();
         String sql = "SELECT p.ProductID, p.ProductName, i.Latest_Import_Date, "
-            + "p.Price, p.Quantity_Product "
-            + "FROM Product p "
-            + "LEFT JOIN ( "
-            + "    SELECT ProductID, MAX(Date) AS Latest_Import_Date "
-            + "    FROM Import_Inventory "
-            + "    GROUP BY ProductID "
-            + ") i ON p.ProductID = i.ProductID "
-            + "WHERE p.ProductName LIKE ?;";
+                + "p.Price, p.Quantity_Product "
+                + "FROM Product p "
+                + "LEFT JOIN ( "
+                + "    SELECT ProductID, MAX(Date) AS Latest_Import_Date "
+                + "    FROM Import_Inventory "
+                + "    GROUP BY ProductID "
+                + ") i ON p.ProductID = i.ProductID "
+                + "WHERE p.ProductName LIKE ?;";
 
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");  // Thêm ký tự % để tìm kiếm gần đúng
@@ -194,43 +207,40 @@ public class InventoryDAO extends dao.DBContext {
         return -1; // Trả về -1 nếu không tìm thấy sản phẩm
     }
 
-   public List<Inventory> getImportHistory(Integer productID) {
-    List<Inventory> importList = new ArrayList<>();
-    String sql = "SELECT i.ProductID, p.ProductName, p.Brand, "
-               + "i.Import_price, i.Import_quantity, i.Date AS Import_Date, i.Supplier "
-               + "FROM Import_Inventory i "
-               + "JOIN Product p ON i.ProductID = p.ProductID "
-               + "WHERE (? IS NULL OR i.ProductID = ?) "
-               + "ORDER BY i.Date DESC, i.Import_InventoryID ASC";
+    public List<Inventory> getImportHistory(Integer productID) {
+        List<Inventory> importList = new ArrayList<>();
+        String sql = "SELECT i.ProductID, p.ProductName,p.Color ,p.Rom, p.Brand, i.Import_price, i.Import_quantity, i.Date AS Import_Date, i.Supplier FROM Import_Inventory i "
+                + "JOIN Product p ON i.ProductID = p.ProductID WHERE (?  IS NULL OR i.ProductID = ?) ORDER BY i.Date DESC, i.Import_InventoryID ASC;";
 
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        if (productID != null) {
-            ps.setInt(1, productID);
-            ps.setInt(2, productID);
-        } else {
-            ps.setNull(1, Types.INTEGER);
-            ps.setNull(2, Types.INTEGER);
-        }
+        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
+            if (productID != null) {
+                ps.setInt(1, productID);
+                ps.setInt(2, productID);
+            } else {
+                ps.setNull(1, Types.INTEGER);
+                ps.setNull(2, Types.INTEGER);
+            }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Inventory inventory = new Inventory(
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Inventory inventory = new Inventory(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
+                        rs.getString("Color"),
+                        rs.getString("Rom"),
                         rs.getString("Brand"),
                         rs.getInt("Import_price"),
                         rs.getInt("Import_quantity"),
                         rs.getDate("Import_Date"),
                         rs.getString("Supplier")
                 );
-            importList.add(inventory);
+                importList.add(inventory);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return importList;
     }
-    return importList;
-}
-
 
 }
 

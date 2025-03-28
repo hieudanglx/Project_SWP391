@@ -6,7 +6,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -88,7 +88,10 @@
             <div class="navbar-custom">
                 <h3>📦 Import Details</h3>
             </div>
-
+            <form action="ExportImportHistory" method="get">
+                <input type="hidden" name="productID" value="${param.productID}">
+                <button type="submit">Xuất Excel</button>
+            </form>
             <!-- Table -->
             <div class="table-container">
                 <table class="table table-bordered table-hover text-center">
@@ -96,6 +99,8 @@
                         <tr>
                             <th>Product ID</th>
                             <th>Product Name</th>
+                            <th>Color</th>
+                            <th>Rom</th>
                             <th>Brand</th>
                             <th>Import Price (VND)</th>
                             <th>Import Quantity</th>
@@ -115,8 +120,13 @@
                                     <tr>
                                         <td><strong>${inventory.productID}</strong></td>
                                         <td>${inventory.productName}</td>
+                                        <td>${inventory.color}</td>
+                                        <td>${inventory.rom}</td>
                                         <td>${inventory.brand}</td>
-                                        <td class="text-danger fw-bold">${inventory.import_price}</td>
+                                        <td class="text-danger fw-bold">
+                                            <fmt:formatNumber value="${inventory.import_price}" type="number" groupingUsed="true" maxFractionDigits="0" />
+                                            VND
+                                        </td>
                                         <td class="text-primary">${inventory.import_quantity}</td>
                                         <td>${inventory.DATE}</td>
                                         <td>${inventory.supplier}</td>
@@ -131,8 +141,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            
-            
+
+
             async function getRevenue() {
                 try {
                     let response = await fetch("RevenueTotal");

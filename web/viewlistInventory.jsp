@@ -1,8 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<jsp:useBean id="importList" scope="request" type="java.util.List<model.Inventory>" />
-
+<%--<jsp:useBean id="importList" scope="request" type="java.util.List<model.Inventory>" />--%>
+<c:set var="importList" value="${requestScope.importList}" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -127,20 +127,20 @@
         </style>
     </head>
     <body>
-    <jsp:include page="sidebar.jsp" />
+        <jsp:include page="sidebar.jsp" />
         <!-- Sidebar -->
-<!--        <div class="sidebar">
-            <h4 class="text-center mb-4">
-                <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-            </h4>
-            <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-            <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-            <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-            <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
-            <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-            <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-        </div>-->
+        <!--        <div class="sidebar">
+                    <h4 class="text-center mb-4">
+                        <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
+                    </h4>
+                    <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
+                    <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
+                    <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
+                    <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
+                    <a href="feedback"><i class="fas fa-comment-dots"></i> Manage Feedback</a>
+                    <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
+                    <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
+                </div>-->
 
         <!-- Main Content -->
         <div class="content">
@@ -171,6 +171,18 @@
                 </form>
             </div>
 
+            <form action="importExcel" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".xls,.xlsx" required>
+                <button type="submit">Nhập dữ liệu</button>
+                <c:if test="${not empty sessionScope.successMessage}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <strong>${sessionScope.successMessage}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <% session.removeAttribute("successMessage"); %>
+                </c:if>
+            </form>
+
             <!-- Inventory Table -->
             <div class="table-responsive">
                 <table class="table table-bordered table-hover text-center">
@@ -178,6 +190,8 @@
                         <tr>
                             <th>Product ID</th>
                             <th>Product Name</th>
+                            <th>Color</th>
+                            <th>Rom</th>
                             <th>Import Date</th>
                             <th>Sale Price</th>
                             <th>Import Quantity</th>
@@ -196,6 +210,8 @@
                                     <tr>
                                         <td>${inventory.productID}</td>
                                         <td>${inventory.productName}</td>
+                                        <td>${inventory.color}</td>
+                                        <td>${inventory.rom}</td>
                                         <td>${inventory.DATE}</td>
                                         <td>${inventory.price}</td>
                                         <td>${inventory.quantityProduct}</td>

@@ -24,16 +24,21 @@ public class Inventory {
     private int total_QuantitySell;
     private String Supplier;
     private String Brand;
+    
+    private String Rom;
+    private String Color;
 
     public Inventory(int total_QuantityStock, int total_QuantitySell) {
         this.total_QuantityStock = total_QuantityStock;
         this.total_QuantitySell = total_QuantitySell;
     }
 
-    public Inventory(int ProductID, String productName, int price) {
+    public Inventory(int ProductID, String productName, int price, String Color, String Rom) {
         this.ProductID = ProductID;
         this.productName = productName;
         this.price = price;
+        this.Color = Color;
+        this.Rom = Rom;
     }
 
     public String getBrand() {
@@ -54,15 +59,31 @@ public class Inventory {
         this.Supplier = Supplier;
     }
 
-    public Inventory(int ProductID, String productName, String Brand, int Import_price, int Import_quantity, Date DATE, String Supplier) {
+    public Inventory(int ProductID, String productName, String Color, String Rom, String Brand, int Import_price, int Import_quantity, Date DATE, String Supplier) {
         this.ProductID = ProductID;
         this.productName = productName;
+        this.Color = Color;
+        this.Rom = Rom;
         this.DATE = DATE;
         this.Import_price = Import_price;
         this.Import_quantity = Import_quantity;
         this.Supplier = Supplier;
         this.Brand = Brand;
     }
+
+    public Inventory(int ProductID, String productName, String Color, String Rom,  Date DATE, int Import_price, int price, int quantityProduct, String Supplier) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.Rom = Rom;
+        this.Color = Color;
+        this.DATE = DATE;
+        this.Import_price = Import_price;
+        this.price = price;
+        this.quantityProduct = quantityProduct;
+        
+    }
+    
+    
 
     public Inventory(int ProductID, String productName, Date DATE, int price, int quantityProduct) {
         this.ProductID = ProductID;
@@ -115,6 +136,23 @@ public class Inventory {
     public Inventory() {
     }
 
+    public String getRom() {
+        return Rom;
+    }
+
+    public void setRom(String Rom) {
+        this.Rom = Rom;
+    }
+
+    public String getColor() {
+        return Color;
+    }
+
+    public void setColor(String Color) {
+        this.Color = Color;
+    }
+
+    
     public int getTotal_QuantityStock() {
         return total_QuantityStock;
     }

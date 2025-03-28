@@ -272,8 +272,8 @@
                     <div class="row align-items-center">
                         <div class="col-md-4">
                             <select id="categorySelect" name="categoryId" class="form-select" onchange="this.form.submit()">
-                                <option value="1" ${selectedCategory == 1 ? "selected" : ""}>Mobile Phones</option>
-                                <option value="2" ${selectedCategory == 2 ? "selected" : ""}>Laptops</option>
+                                <option value="2" ${selectedCategory == 2 ? "selected" : ""}>Mobile Phones</option>
+                                <option value="1" ${selectedCategory == 1 ? "selected" : ""}>Laptops</option>
                                 <option value="3" ${selectedCategory == 3 ? "selected" : ""}>Tablets</option>
                             </select>
                         </div>

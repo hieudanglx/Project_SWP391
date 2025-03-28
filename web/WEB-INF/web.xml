@@ -64,6 +64,14 @@
         <servlet-name>RemoveInCartController</servlet-name>
         <servlet-class>controller.RemoveInCartController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ExportImportHistory</servlet-name>
+        <servlet-class>controller.ExportImportHistory</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>importExcel</servlet-name>
+        <servlet-class>controller.importExcel</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -139,6 +147,14 @@
     <servlet-mapping>
         <servlet-name>RemoveInCartController</servlet-name>
         <url-pattern>/RemoveInCartController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportImportHistory</servlet-name>
+        <url-pattern>/ExportImportHistory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>importExcel</servlet-name>
+        <url-pattern>/importExcel</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

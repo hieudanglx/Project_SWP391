@@ -134,7 +134,8 @@
                 </button>
             </div>
         </nav>
-
+        
+       
         <div class="content">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -154,6 +155,7 @@
                     </div>
                     <% } %>
 
+                    
                     <form action="importInventory" method="post">
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -236,7 +238,7 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            
+
             // Form validation
             document.addEventListener('DOMContentLoaded', function () {
                 const form = document.querySelector('form');

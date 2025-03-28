@@ -5,6 +5,7 @@
 package controller;
 
 import dao.OrderDAO;
+import dao.ProductDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +15,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.text.DecimalFormat;
+import java.util.List;
+import model.Order_list;
+import model.Product;
 
 /**
  *
@@ -60,12 +64,18 @@ public class RevenueTotal extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDao pd = new ProductDao();
         OrderDAO dao = new OrderDAO();
         HttpSession session = request.getSession();
-            if((String)session.getAttribute("Username")==null){         
-           request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);                
-            }
+        if ((String) session.getAttribute("Username") == null) {
+            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
+        }
         // Lấy tổng doanh thu
+        String categoryIdParam = request.getParameter("categoryId");
+        int categoryId = (categoryIdParam != null) ? Integer.parseInt(categoryIdParam) : 2; // Mặc định là 1
+        List<Product> products = pd.getTopSellingProducts(categoryId);
+
+        request.setAttribute("products", products);
         double totalSales = dao.getTotalSales();
         System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);
 
@@ -77,7 +87,15 @@ public class RevenueTotal extends HttpServlet {
 
 // Gửi dữ liệu sang JSP
         request.setAttribute("totalSales", totalSales);
+
+        int totalProduct = pd.getTotalProduct();
+
+        int TotalOrderDelivery = pd.getTotalOrderDelivery();
+
+        session.setAttribute("totalProducts", totalProduct); // Lưu vào session
+        session.setAttribute("TotalOrderDelivery", TotalOrderDelivery);
         request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
+
     }
 
     /**

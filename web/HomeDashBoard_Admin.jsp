@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -16,359 +17,499 @@
         <title>Dashboard</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <style>
+            :root {
+                --primary-color: #4e73df;
+                --success-color: #1cc88a;
+                --info-color: #36b9cc;
+                --warning-color: #f6c23e;
+                --danger-color: #e74a3b;
+                --secondary-color: #858796;
+                --light-color: #f8f9fc;
+                --dark-color: #5a5c69;
+            }
+
             body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f8f9fa;
+                background-color: #f8f9fc;
+                font-family: 'Inter', sans-serif;
+                color: #333;
             }
-            .sidebar {
-                height: 100vh;
-                width: 250px;
-                background: linear-gradient(to bottom, #343a40, #212529);
-                color: white;
-                position: fixed;
-                padding-top: 20px;
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            }
-            .sidebar a {
-                padding: 12px 20px;
-                text-decoration: none;
-                font-size: 16px;
-                color: rgba(255, 255, 255, 0.8);
-                display: block;
-                transition: all 0.3s;
-                border-left: 4px solid transparent;
-            }
-            .sidebar a:hover {
-                background: rgba(255, 255, 255, 0.1);
-                color: white;
-                border-left: 4px solid #0d6efd;
-            }
-            .sidebar a i {
-                margin-right: 10px;
-                width: 20px;
-                text-align: center;
-            }
+
             .content {
                 margin-left: 250px;
                 padding: 20px;
+                transition: all 0.3s;
             }
+
+            @media (max-width: 768px) {
+                .content {
+                    margin-left: 0;
+                }
+            }
+
             .navbar {
-                background-color: white;
-                padding: 15px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
+                background: white !important;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+                padding: 1rem 1.5rem;
             }
+
+            .stat-card {
+                border-radius: 0.35rem;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+                transition: transform 0.3s, box-shadow 0.3s;
+                border-left: 0.25rem solid;
+                overflow: hidden;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2);
+            }
+
+            .stat-card.total-products {
+                border-left-color: var(--primary-color);
+            }
+
+            .stat-card.total-sales {
+                border-left-color: var(--success-color);
+            }
+
+            .stat-card.successful-orders {
+                border-left-color: var(--warning-color);
+            }
+
+            .stat-icon {
+                font-size: 1.5rem;
+                opacity: 0.8;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 600;
+                color: var(--secondary-color);
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--dark-color);
+            }
+
             .card {
                 border: none;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s;
+                border-radius: 0.35rem;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+                margin-bottom: 1.5rem;
             }
-            .card:hover {
-                transform: translateY(-5px);
+
+            .card-header {
+                background-color: #f8f9fc;
+                border-bottom: 1px solid #e3e6f0;
+                padding: 1rem 1.35rem;
+                font-weight: 600;
+                color: var(--dark-color);
             }
+
             .chart-container {
-                width: 100%;
-                height: 300px;
-                margin-top: 20px;
+                padding: 1.25rem;
+                height: 100%;
             }
+
             .table-container {
-                margin-top: 20px;
-                padding: 20px;
-                background-color: white;
-                border-radius: 10px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                padding: 0;
             }
-            .table thead {
-                background-color: #343a40;
-                color: white;
+
+            .table {
+                margin-bottom: 0;
             }
+
+            .table thead th {
+                border-bottom: 2px solid #e3e6f0;
+                font-weight: 600;
+                text-transform: uppercase;
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+                color: var(--secondary-color);
+                padding: 1rem;
+            }
+
+            .table tbody td {
+                padding: 1rem;
+                vertical-align: middle;
+                border-top: 1px solid #e3e6f0;
+            }
+
             .table tbody tr:hover {
-                background-color: #f1f1f1;
+                background-color: #f8f9fc;
+            }
+
+            .badge-hot {
+                background-color: var(--danger-color);
+                padding: 0.35rem 0.65rem;
+                font-size: 0.75rem;
+                font-weight: 600;
+            }
+
+            .form-select {
+                border-radius: 0.35rem;
+                border: 1px solid #d1d3e2;
+                padding: 0.375rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .form-select:focus {
+                border-color: #bac8f3;
+                box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            }
+
+            .chart-controls {
+                display: flex;
+                gap: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .chart-controls {
+                    flex-direction: column;
+                }
+
+                .chart-controls select {
+                    width: 100%;
+                }
             }
         </style>
     </head>
     <body>
         <%@include file="sidebar.jsp" %>
-        <!-- Sidebar -->
-        <!--        <div class="sidebar">
-                    <h4 class="text-center mb-4">
-                        <a href="HomeDashBoard_Admin.jsp" class="text-decoration-none text-light fw-bold">Dashboard</a>
-                    </h4>
-                    <a href="/ListAccountStaff"><i class="fas fa-user-tie"></i> Manage Staff</a>
-                    <a href="listAccountCustomer"><i class="fas fa-users"></i> Manage Customer</a>
-                    <a href="listProductsForAdmin"><i class="fas fa-box"></i> Manage Products</a>
-                    <a href="listOrderAdmin"><i class="fas fa-shopping-cart"></i> Manage Orders</a>
-                    <a href="feedback"><i class="fas fa-comments"></i> Manage Feedback</a>
-                    <a href="Revenue"><i class="fas fa-chart-line"></i> Manage Revenue</a>
-                    <a href="ListInventory"><i class="fas fa-warehouse"></i> Manage Inventory</a>
-                </div>-->
 
         <!-- Main Content -->
         <div class="content">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand navbar-light bg-white mb-4 static-top shadow">
                 <div class="container-fluid">
-                    <h4 class="mb-0">Welcome to Dashboard</h4>                    
+                    <h4 class="mb-0 font-weight-bold text-gray-800">Dashboard Overview</h4>                    
                 </div>
             </nav>
 
             <!-- Dashboard Cards -->
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card p-3 bg-primary text-white">
-                        <h5>Total Users</h5>
-                        <p class="fs-4">1,250</p>
+            <div class="row">
+                <!-- Total Products -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="stat-card total-products card border-left-primary h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stat-label">Total Products</div>
+                                    <div class="stat-value">${totalProducts != null ? totalProducts : "184"}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-box stat-icon text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-3 bg-success text-white">
-                        <h5>Total Sales</h5>
-                        <%
-      // Get totalSales from request
-      Object totalSalesObj = request.getAttribute("totalSales");
-      double totalSales = 0.0;
 
-      if (totalSalesObj != null) {
-          totalSales = (double) totalSalesObj; // Safe casting
-      }
+                <!-- Total Sales -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="stat-card total-sales card border-left-success h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stat-label">Total Sales</div>
+                                    <%
+                                        Object totalSalesObj = request.getAttribute("totalSales");
+                                        double totalSales = 0.0;
 
-      // Format the number properly
-      java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
-      String formattedTotalSales = formatter.format(totalSales);
-                        %>
+                                        if (totalSalesObj != null) {
+                                            totalSales = (double) totalSalesObj;
+                                        }
 
-                        <p class="fs-4"><b><%= formattedTotalSales %> VND</b></p>
+                                        java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
+                                        String formattedTotalSales = formatter.format(totalSales);
+                                    %>
+                                    <div class="stat-value"><%= formattedTotalSales %> VND</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-dollar-sign stat-icon text-success"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-3 bg-warning text-white">
-                        <h5>Products Sold</h5>
-                        <p class="fs-4">3,420</p>
+
+                <!-- Successful Orders -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="stat-card successful-orders card border-left-warning h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="stat-label">Successful Orders</div>
+                                    <div class="stat-value">${totalOrderSuccessful != null ? totalOrderSuccessful : "25"}</div>
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-check-circle stat-icon text-warning"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Charts Section -->
-            <div class="row mt-4">
+            <div class="row">
                 <!-- Revenue Chart -->
-                <div class="col-md-6">
-                    <div class="card p-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>Revenue Statistics</h5>
-
-                            <!-- Dropdown chọn năm -->
-                            <select id="yearSelect" class="form-select w-25 me-2">
-                                <!-- Danh sách năm sẽ được JS tạo tự động -->
-                            </select>
-
-                            <!-- Dropdown chọn kiểu lọc -->
-                            <select id="chartMode" class="form-select w-25">
-                                <option value="month">Month</option>
-                                <option value="quarter">Quarter</option>
-                                <option value="year">Year</option>
-                            </select>
+                <div class="col-xl-8 col-lg-7">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Revenue Statistics</h6>
+                            <div class="chart-controls">
+                                <select id="yearSelect" class="form-select">
+                                    <!-- Years will be populated by JS -->
+                                </select>
+                                <select id="chartMode" class="form-select">
+                                    <option value="month">Monthly</option>
+                                    <option value="quarter">Quarterly</option>
+                                    <option value="year">Yearly</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="chart-container">
                             <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
                 </div>
+
+                <!-- Category Selector -->
+                <div class="category-selector">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Select Product Category</h5>
+                        <span class="badge" style="background-color: var(--success-color);">Top Selling</span>
+                    </div>
+                    <form action="RevenueTotal" method="get">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <select id="categorySelect" name="categoryId" class="form-select" onchange="this.form.submit()">
+                                    <option value="2" ${selectedCategory == 2 ? "selected" : ""}>Mobile Phones</option>
+                                    <option value="1" ${selectedCategory == 1 ? "selected" : ""}>Laptops</option>
+                                    <option value="3" ${selectedCategory == 3 ? "selected" : ""}>Tablets</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <!-- Top Selling Products Table -->
-            <div class="dashboard-table mb-4">
-                <div class="table-header">
-                    <h6 class="mb-0">Top Selling Products</h6>
-                    <span class="badge" style="background-color: var(--danger-color);">Hot</span>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Product Name</th>
-                                <th>Color</th>
-                                <th>Memory</th>
-                                <th>Price</th>
-                                <th>Sold</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <c:forEach var="product" items="${products}">
-                                <tr>
-                                    <td class="text-center">${product.productID}</td>
-                                    <td>${product.productName}</td>
-                                    <td>${product.color}</td>
-                                    <td>${product.rom}</td>
-                                    <td class="text-end">
-                                        <fmt:formatNumber value="${product.price}" pattern="#,### VND"/>
-                                    </td>
-                                    <td class="text-center">${product.quantitySell}</td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary">Top Selling Products</h6>
+                            <span class="badge badge-hot">Hot</span>
+                        </div>
+                        <div class="table-container card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product Name</th>
+                                            <th>Color</th>
+                                            <th>Memory</th>
+                                            <th class="text-end">Price</th>
+                                            <th class="text-center">Sold</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="product" items="${products}">
+                                            <tr>
+                                                <td class="text-center">${product.productID}</td>
+                                                <td>${product.productName}</td>
+                                                <td>${product.color}</td>
+                                                <td>${product.rom}</td>
+                                                <td class="text-end">
+                                                    <fmt:formatNumber value="${product.price}" pattern="#,### VND"/>
+                                                </td>
+                                                <td class="text-center">${product.quantitySell}</td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <script>
+                function logout() {
+                    fetch('/LogOutStaffAndAdminController', {method: 'POST'})
+                            .then(response => {
+                                if (response.ok) {
+                                    window.location.href = '/LoginOfDashboard.jsp';
+                                } else {
+                                    alert('Logout Failed!');
+                                }
+                            })
+                            .catch(error => console.error('Logout Error:', error));
+                }
 
-        <script>
-            function logout() {
-                fetch('/LogOutStaffAndAdminController', {method: 'POST'})
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = '/LoginOfDashboard.jsp';
-                            } else {
-                                alert('Logout Failed!');
-                            }
-                        })
-                        .catch(error => console.error('Logout Error:', error));
-            }
-
-            async function fetchRevenueData(type, year) {
-                try {
-                    const response = await fetch(`RevenueData?filter=${type}&year=${year}`);
-                    if (!response.ok) {
-                        console.error(`Error fetching data: ${response.status} ${response.statusText}`);
-                        return {};
+                async function fetchMonthlyRevenueData(year) {
+                    try {
+                        const response = await fetch(`RevenueData?filter=month&year=${year}`);
+                        if (!response.ok) {
+                            console.error(`Error fetching data: ${response.status} ${response.statusText}`);
+                            return null;
+                        }
+                        return await response.json();
+                    } catch (error) {
+                        console.error("Error in fetchMonthlyRevenueData:", error);
+                        return null;
                     }
-                    const data = await response.json();
+                }
 
-                    const result = {};
-                    data.forEach(item => {
-                        const label = type === "year" ? item.year : item.period;
-                        result[label] = item.revenue;
+                function formatCurrency(value) {
+                    return new Intl.NumberFormat('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND',
+                        maximumFractionDigits: 0
+                    }).format(value);
+                }
+
+                async function renderMonthlyRevenueChart(year) {
+                    const monthNames = [
+                        'Jan', 'Feb', 'Mar', 'Apr',
+                        'May', 'Jun', 'Jul', 'Aug',
+                        'Sep', 'Oct', 'Nov', 'Dec'
+                    ];
+
+                    const revenueData = await fetchMonthlyRevenueData(year);
+
+                    if (!revenueData) {
+                        console.error("No revenue data available");
+                        return;
+                    }
+
+                    // Prepare data for chart
+                    const labels = monthNames;
+                    const revenues = monthNames.map((_month, index) => {
+                        const monthData = revenueData.find(item => parseInt(item.period) === (index + 1));
+                        return monthData ? monthData.revenue : 0;
                     });
 
-                    return result;
-                } catch (error) {
-                    console.error("Error in fetchRevenueData:", error);
-                    return {};
-                }
-            }
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
 
-            async function renderChart(type = "month") {
-                const year = document.getElementById("yearSelect").value;
-                const revenueData = await fetchRevenueData(type, year);
-                const labels = Object.keys(revenueData);
-                const values = Object.values(revenueData);
+                    // Destroy existing chart if it exists
+                    const existingChart = Chart.getChart('revenueChart');
+                    if (existingChart) {
+                        existingChart.destroy();
+                    }
 
-                // Xóa biểu đồ cũ nếu có
-                const existingChart = Chart.getChart("revenueChart");
-                if (existingChart) {
-                    existingChart.destroy();
-                }
-
-                // Tạo biểu đồ mới
-                const ctx = document.getElementById("revenueChart").getContext("2d");
-                new Chart(ctx, {
-                    type: "line",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                                label: `Revenue ${year} (VND)`,
-                                data: values,
-                                borderColor: "#0d6efd",
-                                borderWidth: 2,
-                                fill: false,
-                                tension: 0.1
-                            }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function (value) {
-                                        return new Intl.NumberFormat('vi-VN', {
-                                            style: 'currency',
-                                            currency: 'VND',
-                                            maximumFractionDigits: 0
-                                        }).format(value);
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                    label: `Revenue ${year}`,
+                                    data: revenues,
+                                    backgroundColor: 'rgba(78, 115, 223, 0.7)',
+                                    borderColor: 'rgba(78, 115, 223, 1)',
+                                    borderWidth: 1,
+                                    borderRadius: 4,
+                                    hoverBackgroundColor: 'rgba(78, 115, 223, 0.9)'
+                                }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.05)'
+                                    },
+                                    ticks: {
+                                        callback: function (value) {
+                                            return formatCurrency(value);
+                                        }
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
                                     }
                                 }
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        return new Intl.NumberFormat('vi-VN', {
-                                            style: 'currency',
-                                            currency: 'VND',
-                                            maximumFractionDigits: 0
-                                        }).format(context.raw);
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return formatCurrency(context.parsed.y);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                });
-            }
-            async function populateYearSelect() {
-                const yearSelect = document.getElementById("yearSelect");
-
-                try {
-                    const response = await fetch("RevenueData?getYears=true");
-                    if (!response.ok)
-                        throw new Error("Lỗi khi lấy danh sách năm");
-
-                    const years = await response.json();
-                    console.log("Danh sách năm từ API:", years); // Debug
-
-                    yearSelect.innerHTML = ""; // Xóa danh sách cũ
-
-                    if (years.length === 0) {
-                        console.warn("Không có năm nào trong database.");
-                        return;
-                    }
-
-                    years.forEach(year => {
-                        const option = document.createElement("option");
-                        option.value = year;
-                        option.textContent = year;
-                        yearSelect.appendChild(option);
                     });
+                }
 
-                    yearSelect.value = years[0]; // Chọn năm mới nhất
-                    console.log("Năm mặc định được chọn:", years[0]); // Debug
+                async function populateYearSelect() {
+                    const yearSelect = document.getElementById("yearSelect");
 
-                } catch (error) {
-                    console.error("Không thể lấy danh sách năm, sử dụng dữ liệu mặc định.", error);
+                    try {
+                        const response = await fetch("RevenueData?getYears=true");
+                        if (!response.ok)
+                            throw new Error("Error fetching years");
 
-                    const currentYear = new Date().getFullYear();
-                    for (let year = 2019; year <= currentYear; year++) {
-                        const option = document.createElement("option");
-                        option.value = year;
-                        option.textContent = year;
-                        yearSelect.appendChild(option);
+                        const years = await response.json();
+                        yearSelect.innerHTML = "";
+
+                        if (years.length === 0) {
+                            console.warn("No years available in database.");
+                            return;
+                        }
+
+                        years.forEach(year => {
+                            const option = document.createElement("option");
+                            option.value = year;
+                            option.textContent = year;
+                            yearSelect.appendChild(option);
+                        });
+
+                        yearSelect.value = years[0]; // Select the most recent year
+                        renderMonthlyRevenueChart(years[0]);
+
+                    } catch (error) {
+                        console.error("Cannot fetch years, using default data.", error);
+
+                        const currentYear = new Date().getFullYear();
+                        for (let year = 2019; year <= currentYear; year++) {
+                            const option = document.createElement("option");
+                            option.value = year;
+                            option.textContent = year;
+                            yearSelect.appendChild(option);
+                        }
+
+                        yearSelect.value = currentYear;
+                        renderMonthlyRevenueChart(currentYear);
                     }
 
-                    yearSelect.value = currentYear;
-                    console.log("Dữ liệu mặc định được dùng:", currentYear); // Debug
+                    // Add event listener for year selection
+                    yearSelect.addEventListener("change", function () {
+                        renderMonthlyRevenueChart(this.value);
+                    });
                 }
-            }
 
-
-// Initialize default chart (monthly)
-            document.addEventListener("DOMContentLoaded", async function () {
-                await populateYearSelect();
-                renderChart("month");
-
-                document.getElementById("chartMode").addEventListener("change", function () {
-                    renderChart(this.value);
-                });
-
-                document.getElementById("yearSelect").addEventListener("change", function () {
-                    renderChart(document.getElementById("chartMode").value);
-                });
-            });
-        </script>
+                // Initialize on page load
+                document.addEventListener("DOMContentLoaded", populateYearSelect);
+            </script>
     </body>
 </html>
