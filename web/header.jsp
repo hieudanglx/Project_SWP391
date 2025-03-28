@@ -143,7 +143,7 @@
 
                 // 2. Kiểm tra từ khóa
                 const keyword = keywordInput.value.trim();
-                const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|<>\/?]/g;
+                const specialCharRegex = /[!@#$%^&*()_\-=\[\]{};':"\\|<>\/?]/g;
 
                 if (keyword === "") {
                     errorMessages.push("Vui lòng nhập từ khóa tìm kiếm");
