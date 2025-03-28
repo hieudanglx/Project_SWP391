@@ -28,8 +28,16 @@ public class ViewProfileOfCustomerController extends HttpServlet {
         customerDAO = new CustomerDAO();
     }
 
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
+    }
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        System.out.println("TESST");
         HttpSession session = request.getSession();
 
         // Lấy customerId từ session
