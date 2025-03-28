@@ -34,7 +34,7 @@ public class ChangePasswordOfStaffController extends HttpServlet {
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmNewPassword = request.getParameter("confirmNewPassword");
-
+        currentPassword = accountDao.hashPassword(currentPassword);
         // Kiểm tra nếu thiếu email
         if (email == null || email.isEmpty()) {
             request.setAttribute("errorMessage", "Bạn chưa nhập email!");
