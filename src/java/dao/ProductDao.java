@@ -196,7 +196,6 @@ public class ProductDao extends DBContext {
 
     public Product getProductById(int productID) {
         String query = "SELECT * FROM Product WHERE ProductID = ?";
-
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, productID);
             try ( ResultSet rs = pstmt.executeQuery()) {
@@ -394,7 +393,7 @@ public class ProductDao extends DBContext {
     }
 
     public Product getProductByProductID(int id) {
-        String sql = "SELECT * FROM Product WHERE 1=1";
+        String sql = "SELECT * FROM Product WHERE ProductID = ?";
         List<Object> params = new ArrayList<>();
         params.add(id);
         return executeProductQuery(sql, params).get(0);

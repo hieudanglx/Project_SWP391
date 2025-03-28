@@ -258,7 +258,7 @@
 
                                             <!-- Địa chỉ chi tiết -->
                                             <label class="form-label">Địa chỉ cụ thể</label>
-                                            <input type="text" class="form-control mb-4" name="street" placeholder="Số nhà, tên đường..." required>
+                                            <input type="text" class="form-control mb-4" name="street" value="${sessionScope.customer.address}" placeholder="Số nhà, tên đường..." required>
                                             <p id="addressError" class="text-danger" style="display: none;">Vui lòng nhập đầy đủ địa chỉ trước khi thanh toán!</p>
                                         </div>
 

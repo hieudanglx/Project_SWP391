@@ -234,27 +234,27 @@
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <!-- Nội dung Đánh giá -->
 
-<!--                            <div class="mb-4">
-                                <h4>Viết đánh giá của bạn</h4>
-                                <form action="SubmitReviewController" method="post">
-                                    <input type="hidden" name="productID" value="${product.productID}">
-                                    <div class="mb-3">
-                                        <label class="form-label">Đánh giá (1-5 sao):</label>
-                                        <select class="form-select" name="rating" required>
-                                            <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
-                                            <option value="4">⭐⭐⭐⭐ - Tốt</option>
-                                            <option value="3">⭐⭐⭐ - Bình thường</option>
-                                            <option value="2">⭐⭐ - Tệ</option>
-                                            <option value="1">⭐ - Rất tệ</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nội dung đánh giá:</label>
-                                        <textarea class="form-control" name="comment" rows="3" required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                                </form>
-                            </div>-->
+                            <!--                            <div class="mb-4">
+                                                            <h4>Viết đánh giá của bạn</h4>
+                                                            <form action="SubmitReviewController" method="post">
+                                                                <input type="hidden" name="productID" value="${product.productID}">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Đánh giá (1-5 sao):</label>
+                                                                    <select class="form-select" name="rating" required>
+                                                                        <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
+                                                                        <option value="4">⭐⭐⭐⭐ - Tốt</option>
+                                                                        <option value="3">⭐⭐⭐ - Bình thường</option>
+                                                                        <option value="2">⭐⭐ - Tệ</option>
+                                                                        <option value="1">⭐ - Rất tệ</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Nội dung đánh giá:</label>
+                                                                    <textarea class="form-control" name="comment" rows="3" required></textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                            </form>
+                                                        </div>-->
                             <% if (session.getAttribute("successMessage") != null) { %>
                             <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
                             <% session.removeAttribute("successMessage"); }%>
@@ -324,18 +324,13 @@
                             <div class="mb-4">
                                 <h5 class="mb-3">Bộ nhớ</h5>
                                 <div class="d-flex flex-wrap gap-2">
-                                    <c:if test="${empty list}">
-                                        <button type="button" style="margin: 0"
-                                                class="btn btn-outline-dark color-option active fw-bold">
-                                            ${product.rom}
-                                        </button>
-                                    </c:if>
                                     <c:set var="shownROMs" value="" />
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownROMs, p.rom)}">
                                             <c:set var="shownROMs" value="${shownROMs}${p.rom};" />
-                                            <button type="button" style="margin: 0"
+                                            <button type="button" 
                                                     class="btn btn-outline-dark storage-option ${p.rom == product.rom ? 'active fw-bold' : ''}"
+                                                    data-rom="${p.rom}"
                                                     onclick="selectOption('rom', '${p.rom}')">
                                                 ${p.rom}
                                             </button>
@@ -352,19 +347,15 @@
                             <!-- Color Options -->
                             <div class="mb-4">
                                 <h5 class="mb-3">Màu sắc</h5>
+                                <!-- Sửa phần màu sắc -->
                                 <div class="d-flex flex-wrap gap-3">
                                     <c:set var="shownColors" value="" />
-                                    <c:if test="${empty list}">
-                                        <button type="button" style="margin: 0"
-                                                class="btn btn-outline-dark color-option active fw-bold">
-                                            ${product.color}
-                                        </button>
-                                    </c:if>
                                     <c:forEach items="${list}" var="p">
                                         <c:if test="${not fn:contains(shownColors, p.color)}">
                                             <c:set var="shownColors" value="${shownColors}${p.color};" />
-                                            <button type="button" style="margin: 0"
+                                            <button type="button" 
                                                     class="btn btn-outline-dark color-option ${p.color == product.color ? 'active fw-bold' : ''}"
+                                                    data-color="${p.color}"
                                                     onclick="selectOption('color', '${p.color}')">
                                                 ${p.color}
                                             </button>
@@ -428,5 +419,58 @@
                                                                 targetTab.classList.add("fade");
                                                             });
                                                         });
+                                                        // Khai báo biến toàn cục
+                                                        const allProducts = [
+                                                        <c:forEach items="${list}" var="p">
+                                                            {
+                                                                color: "${p.color}",
+                                                                rom: "${p.rom}",
+                                                                productID: "${p.productID}"
+                                                            },
+                                                        </c:forEach>
+                                                        ];
+
+                                                        // Hàm kiểm tra combo hợp lệ
+                                                        function isValidCombination(selectedColor, selectedRom) {
+                                                            return allProducts.some(product =>
+                                                                product.color === selectedColor &&
+                                                                        product.rom === selectedRom
+                                                            );
+                                                        }
+
+                                                        // Hàm cập nhật trạng thái nút
+                                                        function updateOptionAvailability() {
+                                                            const currentColor = "${product.color}";
+                                                            const currentRom = "${product.rom}";
+
+                                                            // Xử lý các nút màu
+                                                            document.querySelectorAll('.color-option').forEach(button => {
+                                                                const color = button.textContent.trim();
+                                                                const isActive = isValidCombination(color, currentRom);
+                                                                button.disabled = !isActive;
+                                                                button.classList.toggle('disabled-option', !isActive);
+                                                            });
+
+                                                            // Xử lý các nút bộ nhớ
+                                                            document.querySelectorAll('.storage-option').forEach(button => {
+                                                                const rom = button.textContent.trim();
+                                                                const isActive = isValidCombination(currentColor, rom);
+                                                                button.disabled = !isActive;
+                                                                button.classList.toggle('disabled-option', !isActive);
+                                                            });
+                                                        }
+
+                                                        // Gọi hàm khi trang tải xong
+                                                        document.addEventListener('DOMContentLoaded', updateOptionAvailability);
+
+                                                        // Thêm CSS cho option bị vô hiệu hóa
+                                                        const style = document.createElement('style');
+                                                        style.textContent = `
+                                                        .disabled-option {
+                                                            opacity: 0.5;
+                                                            cursor: not-allowed;
+                                                            pointer-events: none;
+                                                        }`;
+                                                        document.head.appendChild(style);
     </script>
 </html>
