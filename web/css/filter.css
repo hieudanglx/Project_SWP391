@@ -380,6 +380,8 @@
     }
     .range-input {
         position: relative;
+        height: 20px;
+        margin-top: -29px;
     }
     .range-input input {
         position: absolute;

@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="col-6 col-xs-6 col-sm-6 col-md-3 col-lg-3 order-md-0 order-0">
                             <div class="logo">
-                                <a href="homeController?CatogoryID=2"><img src="images/logo1.png" alt=""></a>
+                                <a href="homeController?CategoryID=2"><img src="images/logo1.png" alt=""></a>
                                 <h1>Website bán hàng</h1>
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                 <div class="container">
                     <div id="nav-menu">
                         <ul>
-                            <li class="current-menu-item"><a href="homeController?CatogoryID=2">Trang chủ</a></li>
+                            <li class="current-menu-item"><a href="homeController?CategoryID=2">Trang chủ</a></li>
                             <li>
                                 <a href="ViewListProductGC?CategoryID=${1}">Sản phẩm</a>
                                 <ul>

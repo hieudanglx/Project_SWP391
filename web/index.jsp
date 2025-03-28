@@ -20,6 +20,6 @@
         <link rel="stylesheet" href="css/responsive.css"  type="text/css" >
     </head>
     <body>
-        <c:redirect url="homeController?CatogoryID=2"/>
+        <c:redirect url="homeController?CategoryID=2"/>
     </body>
 </html>

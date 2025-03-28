@@ -68,8 +68,8 @@
                 <div class="product-box">
                     <div class="container">
 
-                        <div style="margin: 20px 0 ">
-                            <a href="homeController?CatogoryID=2">Trang chủ </a>
+                        <div style="margin-top: 180px; margin-bottom: 20px ">
+                            <a href="homeController?CategoryID=2">Trang chủ </a>
                             <span>> ${list.size()} sản phẩm</span>
                         </div>
 

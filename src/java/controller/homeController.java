@@ -32,8 +32,8 @@ public class homeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         ProductDao link = new ProductDao();
-        int CatogoryID = Integer.parseInt(request.getParameter("CatogoryID"));
-        List<Product> listP = link.getTopProductByCategoryID(CatogoryID);
+        int CategoryID = Integer.parseInt(request.getParameter("CategoryID"));
+        List<Product> listP = link.getTopProductByCategoryID(CategoryID);
         request.setAttribute("list", listP);
         request.getRequestDispatcher("home.jsp").forward(request, response);
     } 
