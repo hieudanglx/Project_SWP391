@@ -102,3 +102,61 @@ function checkCartStatus() {
         showAlertPopup(status, message);
     }
 }
+// Hàm validate khi nhập
+function validateQuantityInput(input) {
+    const value = parseInt(input.value);
+    if (value > 999999999) {
+        input.value = 999999999;
+        showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
+    }
+}
+
+function updateQuantityEdit(input, productId) {
+    const quantity = input.value.trim();
+    let parsedQuantity = parseInt(quantity);
+
+    // Kiểm tra hợp lệ
+    if (isNaN(parsedQuantity) || parsedQuantity < 1) {
+        showAlertPopup('error', 'Vui lòng nhập số nguyên lớn hơn 0');
+        input.value = input.defaultValue;
+        return;
+    }
+
+    if (parsedQuantity > 999999999) {
+        showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
+        input.value = input.defaultValue;
+        return;
+    }
+
+    // Cập nhật URL
+    const url = `UpdateCartController?id=` + productId + `&type=E&Quantity=` + parsedQuantity;
+    window.location.href = url;
+}
+
+function incrementQuantity(productId, currentQuantity) {
+    if (currentQuantity >= 999999999) {
+        showAlertPopup('warning', 'Đã đạt số lượng tối đa cho phép');
+        return;
+    }
+    const newQuantity = currentQuantity + 1;
+    const url = `UpdateCartController?id=` + productId + `&type=E&Quantity=` + newQuantity;
+    window.location.href = url;
+}
+
+function handleKeyPress(event, input, productId) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+
+        // Kiểm tra trước khi submit
+        const value = parseInt(input.value);
+        if (value > 999999999) {
+            showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
+            input.value = input.defaultValue;
+            return false;
+        }
+
+        updateQuantityEdit(input, productId);
+    }
+    return event.key.match(/[0-9]/) !== null;
+}
+

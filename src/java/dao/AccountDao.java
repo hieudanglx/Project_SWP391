@@ -420,91 +420,94 @@ public class AccountDao extends dao.DBContext {
 //        updateCustomerStatus(customerID, 0); // 0 = Active
 //    }
     public boolean isUsernameStaffExists(String username) {
-        String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, username);
-            try ( ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
+    String sql = "SELECT COUNT(*) FROM Staff WHERE Username = ? AND isDelete = 0";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, username);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
-    public boolean isEmailStaffExists(String email) {
-        String sql = "SELECT COUNT(*) FROM Staff WHERE email = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, email);
-            try ( ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
+// Kiểm tra email có tồn tại (chỉ kiểm tra tài khoản chưa bị xóa)
+public boolean isEmailStaffExists(String email) {
+    String sql = "SELECT COUNT(*) FROM Staff WHERE Email = ? AND isDelete = 0";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, email);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
-    public boolean isPhoneNumberStaffExists(String phoneNumber) {
-        String sql = "SELECT COUNT(*) FROM Staff WHERE phoneNumber= ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, phoneNumber);
-            try ( ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
+// Kiểm tra số điện thoại có tồn tại (chỉ kiểm tra tài khoản chưa bị xóa)
+public boolean isPhoneNumberStaffExists(String phoneNumber) {
+    String sql = "SELECT COUNT(*) FROM Staff WHERE PhoneNumber = ? AND isDelete = 0";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, phoneNumber);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
-    public boolean isCCCDExists(String cccd) {
-        String sql = "SELECT COUNT(*) FROM Staff WHERE cccd = ?";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, cccd);
-            try ( ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
+// Kiểm tra CCCD có tồn tại (chỉ kiểm tra tài khoản chưa bị xóa)
+public boolean isCCCDExists(String cccd) {
+    String sql = "SELECT COUNT(*) FROM Staff WHERE CCCD = ? AND isDelete = 0";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, cccd);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
-    public boolean addStaff(AccountStaff staff) {
-        // Kiểm tra trùng lặp trước khi thêm
-        if (isUsernameStaffExists(staff.getUsername()) || isEmailStaffExists(staff.getEmail()) || isPhoneNumberStaffExists(staff.getPhoneNumber()) || isCCCDExists(staff.getCccd())) {
-            return false; // Không thêm nếu có bất kỳ giá trị nào đã tồn tại
-        }
-        
-        String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, Address, CCCD, Province_City, DOB, Sex, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try ( PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, staff.getFullName());
-            ps.setString(2, staff.getUsername());
-            ps.setString(3, hashPassword(staff.getPassword())); // Cân nhắc mã hóa nếu cần bảo mật
-            ps.setString(4, staff.getEmail());
-            ps.setString(5, staff.getPhoneNumber());
-            ps.setString(6, staff.getAddress());
-            ps.setString(7, staff.getCccd());
-            ps.setString(8, staff.getProvince_city());  // Thêm tỉnh/thành phố
-            ps.setDate(9, java.sql.Date.valueOf(staff.getDob())); // Chuyển đổi từ String sang SQL Date
-            ps.setString(10, staff.getSex()); // Giới tính
-            ps.setInt(11, staff.getStatus()); // SQL Server hiểu 0 = Active, 1 = Inactive
+// Thêm nhân viên mới
+public boolean addStaff(AccountStaff staff) {
+    String sql = "INSERT INTO Staff (FullName, Username, Password, Email, PhoneNumber, "
+               + "Address, CCCD, Province_City, DOB, Sex, Status, isDelete) "
+               + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, staff.getFullName());
+        ps.setString(2, staff.getUsername());
+        ps.setString(3, hashPassword(staff.getPassword()));
+        ps.setString(4, staff.getEmail());
+        ps.setString(5, staff.getPhoneNumber());
+        ps.setString(6, staff.getAddress());
+        ps.setString(7, staff.getCccd());
+        ps.setString(8, staff.getProvince_city());
+        ps.setDate(9, java.sql.Date.valueOf(staff.getDob()));
+        ps.setString(10, staff.getSex());
+        ps.setInt(11, staff.getStatus());
+        ps.setBoolean(12, staff.isDelete());
 
-            return ps.executeUpdate() > 0; // Trả về true nếu thêm thành công
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return false;
+}
 
     public List<AccountStaff> searchStaffByFullName(String fullName) {
         List<AccountStaff> staffList = new ArrayList<>();

@@ -31,10 +31,12 @@ public class ViewProductDetailsController extends HttpServlet {
         String idParam = (request.getParameter("id") == null
                 || request.getParameter("id").isEmpty()) ? "0" : request.getParameter("id");
         int productID = Integer.parseInt(idParam);
-        
-        Product currentProduct = productDao.getProductById(productID);
-        List<Product> list = productDao.searchProductsByName(currentProduct.getProductName());
-        
+        Product currentProduct = productDao.getProductByProductID(productID);
+        String nameParam = (request.getParameter("name") == null
+                || request.getParameter("name").isEmpty()) ? currentProduct.getProductName() : request.getParameter("name");
+
+        List<Product> list = productDao.searchProductsByName(nameParam);
+
         String selectedRom = (request.getParameter("selectedRom") == null
                 || request.getParameter("selectedRom").isEmpty()) ? currentProduct.getRom() : request.getParameter("selectedRom");
         String selectedColor = (request.getParameter("selectedColor") == null
@@ -43,12 +45,11 @@ public class ViewProductDetailsController extends HttpServlet {
         Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
         if (selectedProduct == null) {
             selectedProduct = currentProduct;
-        } else if (list.size() > 2) {
-            request.setAttribute("list", list);
         }
+        request.setAttribute("list", list);
 
         Map<Integer, String> customerNames = feedbackDao.getCustomerNames();
-        List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(productID, customerNames);
+        List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(selectedProduct.getProductID(), customerNames);
         List<Reply_Feedback> replyFeedbackList = reply_feedbackDAO.getAllReplyFeedback();
 
         request.setAttribute("replyFeedbackList", replyFeedbackList);

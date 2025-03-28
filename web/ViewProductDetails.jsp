@@ -234,27 +234,27 @@
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <!-- Nội dung Đánh giá -->
 
-<!--                            <div class="mb-4">
-                                <h4>Viết đánh giá của bạn</h4>
-                                <form action="SubmitReviewController" method="post">
-                                    <input type="hidden" name="productID" value="${product.productID}">
-                                    <div class="mb-3">
-                                        <label class="form-label">Đánh giá (1-5 sao):</label>
-                                        <select class="form-select" name="rating" required>
-                                            <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
-                                            <option value="4">⭐⭐⭐⭐ - Tốt</option>
-                                            <option value="3">⭐⭐⭐ - Bình thường</option>
-                                            <option value="2">⭐⭐ - Tệ</option>
-                                            <option value="1">⭐ - Rất tệ</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Nội dung đánh giá:</label>
-                                        <textarea class="form-control" name="comment" rows="3" required></textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
-                                </form>
-                            </div>-->
+                            <!--                            <div class="mb-4">
+                                                            <h4>Viết đánh giá của bạn</h4>
+                                                            <form action="SubmitReviewController" method="post">
+                                                                <input type="hidden" name="productID" value="${product.productID}">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Đánh giá (1-5 sao):</label>
+                                                                    <select class="form-select" name="rating" required>
+                                                                        <option value="5">⭐⭐⭐⭐⭐ - Rất tốt</option>
+                                                                        <option value="4">⭐⭐⭐⭐ - Tốt</option>
+                                                                        <option value="3">⭐⭐⭐ - Bình thường</option>
+                                                                        <option value="2">⭐⭐ - Tệ</option>
+                                                                        <option value="1">⭐ - Rất tệ</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label">Nội dung đánh giá:</label>
+                                                                    <textarea class="form-control" name="comment" rows="3" required></textarea>
+                                                                </div>
+                                                                <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                                                            </form>
+                                                        </div>-->
                             <% if (session.getAttribute("successMessage") != null) { %>
                             <div class="alert alert-success"><%= session.getAttribute("successMessage") %></div>
                             <% session.removeAttribute("successMessage"); }%>

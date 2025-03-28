@@ -128,7 +128,9 @@
         <c:remove var="status" scope="session"/>
         <c:remove var="message" scope="session"/>
         <%@include file="header.jsp" %>
-
+        <c:if test="${empty sessionScope.customer}">
+            <c:redirect url="choiceLogin.jsp"></c:redirect>
+        </c:if>
         <!-- Main Container -->
         <form action="PaymentController" method="post">
             <div class="container-lg cart-container">
@@ -256,7 +258,8 @@
 
                                             <!-- Địa chỉ chi tiết -->
                                             <label class="form-label">Địa chỉ cụ thể</label>
-                                            <input type="text" class="form-control mb-4" name="street" placeholder="Số nhà, tên đường..." required>                                       
+                                            <input type="text" class="form-control mb-4" name="street" value="${sessionScope.customer.address}" placeholder="Số nhà, tên đường..." required>
+                                            <p id="addressError" class="text-danger" style="display: none;">Vui lòng nhập đầy đủ địa chỉ trước khi thanh toán!</p>
                                         </div>
 
 
@@ -417,29 +420,59 @@
                             var openModalBtn = document.getElementById("openConfirmModal");
                             var confirmBtn = document.getElementById("confirmPaymentBtn");
 
-                            // Khi nhấn "Thanh toán ngay", hiển thị modal
                             openModalBtn.addEventListener("click", function () {
+                                var city = document.getElementById("city");
+                                var district = document.getElementById("district");
+                                var street = document.querySelector("input[name='street']");
+                                var errorMessage = document.getElementById("addressError");
+
+                                var isValid = true;
+
+                                if (!city.value) {
+                                    highlightField(city);
+                                    isValid = false;
+                                }
+                                if (!district.value) {
+                                    highlightField(district);
+                                    isValid = false;
+                                }
+                                if (!street.value.trim()) {
+                                    highlightField(street);
+                                    isValid = false;
+                                }
+
+                                if (!isValid) {
+                                    errorMessage.style.display = "block"; // Hiển thị thông báo lỗi
+                                    return; // Dừng lại nếu địa chỉ chưa đầy đủ
+                                }
+
+                                errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu hợp lệ
+
                                 var confirmModal = new bootstrap.Modal(document.getElementById("confirmPaymentModal"));
                                 confirmModal.show();
                             });
 
-                            // Khi nhấn "Xác nhận" trong modal, submit form
                             confirmBtn.addEventListener("click", function () {
-                                // Thêm hiệu ứng loading nếu cần
                                 confirmBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang xử lý...';
                                 confirmBtn.disabled = true;
 
-                                // Cho phần loading hiển thị 1 giây trước khi submit form
                                 setTimeout(function () {
                                     paymentForm.submit();
                                 }, 1000);
                             });
+
+                            function highlightField(field) {
+                                field.classList.add("border", "border-danger");
+                                setTimeout(() => {
+                                    field.classList.remove("border", "border-danger");
+                                }, 3000);
+                            }
                         });
                         // Xử lý fixed width
                         function enforceCartWidth() {
                             const container = document.querySelector('.cart-container');
-                            if (window.innerWidth < 1140) {
-                                container.style.transform = `translateX(${(1140 - window.innerWidth)/2}px)`;
+                            if (window.innerWidth < 1200) {
+                                container.style.transform = `translateX(${(1200 - window.innerWidth)/2}px)`;
                             } else {
                                 container.style.transform = 'none';
                             }
@@ -504,63 +537,6 @@
                                 window.location.href = "vnpay_pay.jsp";
                             }
                         });
-                        // Hàm validate khi nhập
-                        function validateQuantityInput(input) {
-                            const value = parseInt(input.value);
-                            if (value > 999999999) {
-                                input.value = 999999999;
-                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                            }
-                        }
-
-                        function updateQuantityEdit(input, productId) {
-                            const quantity = input.value.trim();
-                            let parsedQuantity = parseInt(quantity);
-
-                            // Kiểm tra hợp lệ
-                            if (isNaN(parsedQuantity) || parsedQuantity < 1) {
-                                showAlertPopup('error', 'Vui lòng nhập số nguyên lớn hơn 0');
-                                input.value = input.defaultValue;
-                                return;
-                            }
-
-                            if (parsedQuantity > 999999999) {
-                                showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                                input.value = input.defaultValue;
-                                return;
-                            }
-
-                            // Cập nhật URL
-                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+parsedQuantity;
-                            window.location.href = url;
-                        }
-
-                        function incrementQuantity(productId, currentQuantity) {
-                            if (currentQuantity >= 999999999) {
-                                showAlertPopup('warning', 'Đã đạt số lượng tối đa cho phép');
-                                return;
-                            }
-                            const newQuantity = currentQuantity + 1;
-                            const url = `UpdateCartController?id=`+productId+`&type=E&Quantity=`+newQuantity;
-                            window.location.href = url;
-                        }
-
-                        function handleKeyPress(event, input, productId) {
-                            if (event.key === 'Enter') {
-                                event.preventDefault();
-
-                                // Kiểm tra trước khi submit
-                                const value = parseInt(input.value);
-                                if (value > 999999999) {
-                                    showAlertPopup('warning', 'Số lượng tối đa là 999,999,999');
-                                    input.value = input.defaultValue;
-                                    return false;
-                                }
-
-                                updateQuantityEdit(input, productId);
-                            }
-                            return event.key.match(/[0-9]/) !== null;
-                        }
     </script>
     <script src="js/popup.js"></script>
 </html>
