@@ -231,11 +231,12 @@
                                     <div class="mb-3">
                                         <label class="form-label">Respondent:</label>
                                         <input type="text" class="form-control" 
-                                               value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}" 
+                                               value="${sessionScope.Username eq 'admin' ? 'Admin' : sessionScope.Username}" 
                                                readonly>
                                         <input type="hidden" name="staffID" 
-                                               value="${sessionScope.username eq 'admin' ? sessionScope.adminID : sessionScope.staffId}">
+                                               value="${sessionScope.Username eq 'admin' ? 'Admin' : sessionScope.staffId}">
                                     </div>
+
 
                                     <div class="mb-3">
                                         <label for="replyContent" class="form-label">Response Content</label>

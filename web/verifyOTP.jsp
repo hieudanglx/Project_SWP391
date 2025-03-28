@@ -1,31 +1,36 @@
-<%-- 
-    Document   : verifyOTP
-    Created on : Feb 25, 2025, 10:20:57 AM
-    Author     : TRAN NHU Y -  CE182032
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Nhập OTP</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-
-            .xacnhan{
-                background-color: #E5E1DA;
-                border-radius: 10px;
-                color: #547488;
-                font-weight: 500;
-                border: none;
-            }
-            .xacnhan:hover{
-                background-color: #89A8B2;
-                color: white;
-            }
-        </style>
-    </head>
-    <body>
+<head>
+    <title>Nhập OTP</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .xacnhan {
+            background-color: #E5E1DA;
+            border-radius: 10px;
+            color: #547488;
+            font-weight: 500;
+            border: none;
+            padding: 10px 20px;
+        }
+        .xacnhan:hover {
+            background-color: #89A8B2;
+            color: white;
+        }
+        .resend-btn {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            display: none; /* Ẩn ban đầu */
+        }
+        .resend-btn:hover {
+            background-color: #F57C00;
+        }
+    </style>
+</head>
+<body>
     <%@include file="header.jsp" %>
     <div class="container">
         <h2 class="mt-5">Nhập mã OTP</h2>
@@ -36,6 +41,11 @@
             </div>
             <p id="countdown" style="font-weight: bold; color: blue;"></p> <!-- Hiển thị thời gian còn lại -->
             <button type="submit" class="xacnhan" id="submitBtn">Xác nhận</button>
+        </form>
+
+        <!-- Nút gửi lại OTP -->
+        <form action="ReOTPController" method="post">
+            <button type="submit" class="resend-btn mt-3" id="resendBtn">Gửi lại OTP</button>
         </form>
 
         <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
@@ -50,6 +60,7 @@
         function updateCountdown() {
             let countdownElement = document.getElementById("countdown");
             let submitBtn = document.getElementById("submitBtn");
+            let resendBtn = document.getElementById("resendBtn");
 
             if (timeLeft > 0) {
                 countdownElement.innerHTML = "Mã OTP hết hạn sau: " + timeLeft + " giây";
@@ -58,11 +69,13 @@
             } else {
                 countdownElement.innerHTML = "OTP đã hết hạn. Vui lòng yêu cầu lại.";
                 submitBtn.disabled = true; // Vô hiệu hóa nút submit
+                resendBtn.style.display = "block"; // Hiển thị nút gửi lại
             }
         }
 
         window.onload = updateCountdown; // Bắt đầu đếm ngược khi trang tải
     </script>
-     <%@include file="footer.jsp" %>
+
+    <%@include file="footer.jsp" %>
 </body>
 </html>

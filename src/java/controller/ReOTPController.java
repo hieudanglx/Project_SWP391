@@ -4,21 +4,25 @@
  */
 package controller;
 
+import dao.CustomerDAO;
 import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.ServletSecurity;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.io.PrintWriter;
+import model.EmailSenderCustomer;
+import model.OTPGenerate;
 
 /**
  *
  * @author TRAN NHU Y - CE182032
  */
-@WebServlet(name = "verifyOTPController", urlPatterns = {"/verifyOTPController"})
-public class verifyOTPController extends HttpServlet {
+@WebServlet(name = "ReOTPController", urlPatterns = {"/ReOTPController"})
+public class ReOTPController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +41,10 @@ public class verifyOTPController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet verifyOTPController</title>");
+            out.println("<title>Servlet ReOTPController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet verifyOTPController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ReOTPController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -72,34 +76,20 @@ public class verifyOTPController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        CustomerDAO cusDAO = new CustomerDAO();
+        EmailSenderCustomer sendEmail = new EmailSenderCustomer();
+        OTPGenerate creatOTP = new OTPGenerate();
+        // Tạo OTP và lưu vào session
+        String otp = creatOTP.generateOTP();
         HttpSession session = request.getSession();
+        session.setAttribute("otp", otp);
+        String email = (String) request.getSession().getAttribute("email");
+        session.setAttribute("otpTime", System.currentTimeMillis()); // Lưu thời gian gửi OTP
 
-        // Lấy OTP nhập từ form
-        String enteredOTP = request.getParameter("otp");
-
-        // Lấy OTP đúng từ session (luôn ở dạng String)
-        String correctOTP = (String) session.getAttribute("otp");
-
-        // Lấy thời gian OTP được gửi từ session
-        Long otpTime = (Long) session.getAttribute("otpTime");
-        int otpExpiryTime =  30 * 1000; // 30 x 1000 ms)
-
-        // Kiểm tra nếu không có OTP hoặc OTP đã hết hạn
-        if (correctOTP == null || otpTime == null || (System.currentTimeMillis() - otpTime > otpExpiryTime)) {
-            session.removeAttribute("otp");  // Xóa OTP khỏi session
-            session.removeAttribute("otpTime");
-            request.setAttribute("errorMessage", "OTP đã hết hạn. Vui lòng yêu cầu lại.");
-            request.getRequestDispatcher("forgotPasswordOfCustomer.jsp").forward(request, response);
-            return;
-        }
-
-        // So sánh OTP dưới dạng chuỗi
-        if (enteredOTP.equals(correctOTP)) {
-            request.getRequestDispatcher("resetPasswordOfCustomer.jsp").forward(request, response); // Chuyển đến trang đặt lại mật khẩu
-        } else {
-            request.setAttribute("errorMessage", "Mã OTP không đúng!");
-            request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
-        }
+        // Gửi OTP đến email
+        sendEmail.sendEmail(email, "OTP code reset password",
+                "Your OTP is: " + otp + "\nPlease enter this OTP to continue.");
+        request.getRequestDispatcher("verifyOTP.jsp").forward(request, response);
     }
 
     /**
@@ -111,4 +101,5 @@ public class verifyOTPController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 }

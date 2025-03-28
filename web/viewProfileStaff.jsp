@@ -136,7 +136,7 @@
             }
         </style>
     </head>
-    <body>
+    <body>       
         <div class="profile-container">
             <aside class="sidebar">
                 <div class="user-info">

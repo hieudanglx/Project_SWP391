@@ -168,10 +168,8 @@
             if (signValue === vnpSecureHash && transactionStatus === "00") {
                 setTimeout(function () {
                     window.location.href = "VnpayPayment";
-                }, 3000); // Chuyển sau 3 giây (3000ms)
+                }, 2000);
             }
         });
     </script>
-
-
 </html>

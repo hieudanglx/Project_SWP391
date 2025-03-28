@@ -93,14 +93,13 @@ public class feedback extends HttpServlet {
             int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
             int customerID = Integer.parseInt(request.getParameter("customerID"));
             String staffIDStr = request.getParameter("staffID");
-
-            if (staffIDStr == null || staffIDStr.trim().isEmpty()) {
-                session.setAttribute("errorMessage", "Lỗi! StaffID không hợp lệ.");
-                response.sendRedirect("feedback");
-                return;
+            int staffID;
+            if (staffIDStr.equalsIgnoreCase("admin")) {
+                  staffID = 1;               
+            } else {
+                  staffID = Integer.parseInt(staffIDStr);
             }
-
-            int staffID = Integer.parseInt(staffIDStr);
+           
             String content_Reply = request.getParameter("replyContent");
 
             // Kiểm tra xem feedback đã có phản hồi chưa

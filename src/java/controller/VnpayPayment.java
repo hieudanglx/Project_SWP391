@@ -44,28 +44,19 @@ public class VnpayPayment extends HttpServlet {
                 HttpSession session = request.getSession();
                 CartDao link = new CartDao();
                 Customer c = (Customer) session.getAttribute("customer"); // Lấy thông tin khách hàng
-                List<Product> list = link.getCartByCustomerID(c.getCustomerID());
-
-               
+                List<Product> list = link.getCartByCustomerID(c.getCustomerID());               
 
                 int customerID = c.getCustomerID();
-                Integer staffID = null;
-               
-              
+                int staffID = 1;  
                 String address = (String) session.getAttribute("address");
-
                 String status = "Chờ xử lý";
                 Date Date = new Date(System.currentTimeMillis()); // Lấy ngày hiện tại
-
                 String phoneNumber = (String) session.getAttribute("phoneNumber");
-
                 double total = (double) session.getAttribute("total");
-
               
                     // Thêm đơn hàng vào Order_list
                     OrderDAO orderDAO = new OrderDAO();
-
-                    Order_list order = new Order_list(0, customerID, 1, address, Date, status, phoneNumber, total);
+                    Order_list order = new Order_list(0, customerID, staffID, address, Date, status, phoneNumber, total);
                     int orderID = orderDAO.insertOrder(order); // Lưu đơn hàng và lấy ID
                     session.setAttribute("orderID", orderID);
                     if (orderID > 0) {

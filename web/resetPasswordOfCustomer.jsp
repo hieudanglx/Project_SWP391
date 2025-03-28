@@ -49,7 +49,7 @@
                 <button type="submit" class="xacnhan">Xác nhận</button>
             </form>
 
-            <%-- Hiển thị lỗi từ backend nếu có --%>
+           
             <% String errorMessage = (String) request.getAttribute("errorMessage"); %>
             <% if (errorMessage != null) { %>
             <p class="error-message"><%= errorMessage %></p>
