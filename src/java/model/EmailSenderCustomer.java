@@ -39,7 +39,7 @@ public class EmailSenderCustomer {
             message.setText(content);
 
             Transport.send(message);
-            System.out.println(" Email đã gửi thành công!");
+            System.out.println(" Email đã gửi thành công!"+to);
         } catch (MessagingException e) {
             e.printStackTrace();
             throw new RuntimeException(" Lỗi khi gửi email: " + e.getMessage());
