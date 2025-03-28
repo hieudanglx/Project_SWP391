@@ -35,7 +35,7 @@ public class Cancel_order extends HttpServlet {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
         
             OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID,"Đã Hủy");
+            boolean isUpdated = l.updateOrderStatusC(orderID,"Đã Hủy");
             if (isUpdated) {
              
                  l.restoreProductQuantity(orderID);

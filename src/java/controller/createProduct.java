@@ -145,7 +145,7 @@ public class createProduct extends HttpServlet {
             if (exist) {
 
                 // Nếu sản phẩm đã tồn tại, truyền thông tin lỗi và dữ liệu về JSP
-                request.setAttribute("error", "Product already exists. Please change 1 of the following 4 data fields: Phone Name,Color,RAM,Storage Capacity.");
+                
                 request.setAttribute("product", product);
 
                 // Truyền các giá trị tùy chỉnh về JSP
@@ -166,12 +166,15 @@ public class createProduct extends HttpServlet {
 
                 // Chuyển hướng về trang JSP
                 if (categoryID == 2) {
-                    request.getRequestDispatcher("createProduct.jsp").forward(request, response);
+                    request.setAttribute("error", "Product already exists. Please change 1 of the following 4 data fields: Phone Name,Color,RAM,Storage Capacity.");
+                    request.getRequestDispatcher("createProduct.jsp?duplicate=true").forward(request, response);
                 } else if (categoryID == 3) {
-                    request.getRequestDispatcher("createTablet.jsp").forward(request, response);
+                    request.setAttribute("error", "Product already exists. Please change 1 of the following 4 data fields: Tablet Name,Color,RAM,Storage Capacity.");
+                    request.getRequestDispatcher("createTablet.jsp?duplicate=true").forward(request, response);
 
                 } else if (categoryID == 1) {
-                    request.getRequestDispatcher("createLaptop.jsp").forward(request, response);
+                    request.setAttribute("error", "Product already exists. Please change 1 of the following 5 data fields: Laptop Name,Color,RAM,ROM,Chip Name,GPU Name.");
+                    request.getRequestDispatcher("createLaptop.jsp?duplicate=true").forward(request, response);
                 }
             } else {
                 // Nếu sản phẩm không tồn tại, thêm vào database
@@ -189,7 +192,7 @@ public class createProduct extends HttpServlet {
                 } else if (categoryID == 3) {
 
                     if (isAdded) {
-                        response.sendRedirect("createTablet.jsp?error=Tablet created successfully.");
+                        response.sendRedirect("createTablet.jsp?success=true");
                     } else {
                         response.sendRedirect("createTablet.jsp?error=Failed to create Tablet.");
                     }
@@ -197,7 +200,7 @@ public class createProduct extends HttpServlet {
                 } else if (categoryID == 1) {
 
                     if (isAdded) {
-                        response.sendRedirect("createLaptop.jsp?error=Laptop created successfully.");
+                        response.sendRedirect("createLaptop.jsp?success=true");
                     } else {
                         response.sendRedirect("createLaptop.jsp?error=Failed to create Laptop.");
                     }

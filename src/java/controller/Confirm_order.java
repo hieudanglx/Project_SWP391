@@ -37,10 +37,10 @@ public class Confirm_order extends HttpServlet {
             int orderID = Integer.parseInt(request.getParameter("orderID"));
 
             OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, "Thành Công");
+            boolean isUpdated = l.updateOrderStatusC(orderID, "Thành Công");
             if (isUpdated) {
 
-                l.updateOrderStatus(orderID, "Thành Công");
+                l.updateOrderStatusC(orderID, "Thành Công");
 
                 request.getRequestDispatcher("Filter_Order_For_Customer").forward(request, response);
             } else {

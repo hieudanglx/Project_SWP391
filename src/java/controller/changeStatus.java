@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -32,10 +33,15 @@ public class changeStatus extends HttpServlet {
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            HttpSession session = request.getSession();
+             Integer staffID = (Integer) session.getAttribute("staffId");
+             if(staffID==null){
+                 staffID=1;
+             }                     
             int orderID = Integer.parseInt(request.getParameter("orderID"));
         String newStatus = request.getParameter("status");
             OrderDAO l = new OrderDAO();
-            boolean isUpdated = l.updateOrderStatus(orderID, newStatus);
+            boolean isUpdated = l.updateOrderStatus(orderID, newStatus,staffID);
             if (isUpdated) {
              if(newStatus.equals("Đã Hủy")){
                  l.restoreProductQuantity(orderID);

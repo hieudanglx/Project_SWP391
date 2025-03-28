@@ -265,6 +265,7 @@
                 </c:if>
             </c:forEach>
         </div>
+             <%@include file="footer.jsp" %>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Lấy tất cả các nút feedback

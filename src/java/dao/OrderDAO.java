@@ -69,10 +69,24 @@ public class OrderDAO extends dao.DBContext {
         return orderList;
     }
 
-    public boolean updateOrderStatus(int orderID, String newStatus) {
+    public boolean updateOrderStatus(int orderID, String newStatus,int StaffId) {
+        String query = "UPDATE Order_List SET Status = ?,StaffID = ? WHERE OrderID = ?";
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, newStatus);
+            pstmt.setInt(2, StaffId);
+            pstmt.setInt(3, orderID);
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có ít nhất một hàng được cập nhật
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updateOrderStatusC(int orderID, String newStatus) {
         String query = "UPDATE Order_List SET Status = ? WHERE OrderID = ?";
         try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, newStatus);
+          
             pstmt.setInt(2, orderID);
             int rowsUpdated = pstmt.executeUpdate();
             return rowsUpdated > 0; // Trả về true nếu có ít nhất một hàng được cập nhật

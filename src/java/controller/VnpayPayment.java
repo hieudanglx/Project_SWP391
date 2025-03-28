@@ -47,7 +47,7 @@ public class VnpayPayment extends HttpServlet {
                 List<Product> list = link.getCartByCustomerID(c.getCustomerID());               
 
                 int customerID = c.getCustomerID();
-                int staffID = 1;  
+                int staffID = 2;  
                 String address = (String) session.getAttribute("address");
                 String status = "Chờ xử lý";
                 Date Date = new Date(System.currentTimeMillis()); // Lấy ngày hiện tại

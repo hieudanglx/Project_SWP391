@@ -36,7 +36,7 @@
                                     <img class="d-block w-100" src="images/banner-01.jpg" alt="First slide">
                                 </div>
                                 <div class="carousel-item">
-                                    <img class="d-block w-100" src="images/baner-022.png" alt="Second slide">
+                                    <img class="d-block w-100" src="images/baner-011.png" alt="Second slide">
                                 </div>
                             </div>
                             <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -72,7 +72,7 @@
                                         </h3>
                                         <div class="content-banner">
                                             <a href="#">
-                                                <img src="images/banner.png" alt="">
+                                                <img src="images/BanerSale.png" alt="">
                                             </a>
                                         </div>
                                     </div>

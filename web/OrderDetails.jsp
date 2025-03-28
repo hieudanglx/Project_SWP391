@@ -182,15 +182,22 @@
                 <!-- Tổng tiền -->
                 <div class="d-flex justify-content-between mt-3 p-2 bg-light fw-bold">
                     <div style="flex: 2; text-align: right;">Tổng tiền:</div>
-                    <div class="price-column">
-                        <fmt:formatNumber value="${orderDetails[0].total *1}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
-                    </div>
+                  
+                       <div class="price-column" id="totalAmount"></div>
+             
                 </div>
 
-               
+               <script>
+    // Lấy giá trị từ JSP EL
+    const total = ${orderDetails[0].total};
+    // Format thành dạng có dấu phẩy
+    const formattedTotal = new Intl.NumberFormat('vi-VN').format(total);
+    // Gán vào HTML
+    document.getElementById('totalAmount').innerText = formattedTotal + " VNÐ";
+</script>
 
             </div>
         </div>
-
+<%@include file="footer.jsp" %> 
     </body>
 </html>

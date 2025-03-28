@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -344,45 +345,77 @@
             .custom-input-container {
                 margin-top: 10px;
                 animation: fadeIn 0.3s ease;
+                display: block; /* ??m b?o hi?n th? khi không b? ?n */
             }
 
-            .popup-overlay {
+            .popup {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                display: none;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
                 justify-content: center;
                 align-items: center;
                 z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .popup.active {
+                opacity: 1;
+                visibility: visible;
             }
 
             .popup-content {
-                background: white;
-                padding: 20px;
+                background-color: white;
+                padding: 30px;
                 border-radius: 10px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
                 text-align: center;
                 max-width: 400px;
                 width: 90%;
-                position: relative;
+            }
+
+            .popup-icon {
+                font-size: 50px;
+                margin-bottom: 20px;
+            }
+
+            .popup-success .popup-icon {
+                color: #2ecc71;
+            }
+
+            .popup-error .popup-icon {
+                color: #e74c3c;
+            }
+
+            .popup-title {
+                font-size: 24px;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+
+            .popup-message {
+                margin-bottom: 25px;
+                color: #555;
             }
 
             .popup-close {
-                position: absolute;
-                top: 10px;
-                right: 10px;
+                background-color: #4361ee;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
                 cursor: pointer;
-                color: #6c757d;
-                font-size: 20px;
+                font-weight: 500;
+                transition: background-color 0.3s;
             }
 
-            .popup-success {
-                color: #2ecc71;
-                font-size: 24px;
-                margin-bottom: 15px;
+            .popup-close:hover {
+                background-color: #3a56d4;
             }
 
             @keyframes fadeIn {
@@ -460,315 +493,458 @@
             }
         </style>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-            // Check for success parameter in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const success = urlParams.get('success');
-            if (success === 'true') {
-            showSuccessPopup();
-            }
-
-            // Popup function
-            function showSuccessPopup() {
-            // Create popup overlay
-            const popupOverlay = document.createElement('div');
-            popupOverlay.className = 'popup-overlay';
-            popupOverlay.innerHTML = `
-            <div class="popup-content">
-                <span class="popup-close">&times;</span>
-                <div class="popup-success">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <h3>Phone Created Successfully</h3>
-                <p>The phone has been added to the product list.</p>
-                <button id="closePopupBtn" class="btn-back" style="margin-top: 15px;">Close</button>
-            </div>
-        `;
-            // Append to body
-            document.body.appendChild(popupOverlay);
-            // Show popup
-            popupOverlay.style.display = 'flex';
-            // Close button functionality
-            const closeButton = popupOverlay.querySelector('.popup-close');
-            const closePopupBtn = popupOverlay.querySelector('#closePopupBtn');
-            closeButton.addEventListener('click', closePopup);
-            closePopupBtn.addEventListener('click', closePopup);
-            }
-
-            // Close popup function
-            function closePopup() {
-            const popupOverlay = document.querySelector('.popup-overlay');
-            if (popupOverlay) {
-            popupOverlay.style.display = 'none';
-            popupOverlay.remove();
-            }
-            // Remove success parameter from URL
-            history.replaceState(null, '', window.location.pathname);
-            }
-            });
-            ////////
-            function toggleInput(selectId, inputContainerId, inputId) {
-            var select = document.getElementById(selectId);
-            var inputContainer = document.getElementById(inputContainerId);
-            var input = document.getElementById(inputId);
-            if (select.value === "other") {
-            inputContainer.classList.remove("hidden");
-            inputContainer.classList.add("custom-input-container");
-            input.required = true;
-            } else {
-            inputContainer.classList.add("hidden");
-            inputContainer.classList.remove("custom-input-container");
-            input.required = false;
-            input.value = "";
-            }
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-            // Initialize all dropdowns on page load
-            const dropdowns = document.querySelectorAll('select');
-            dropdowns.forEach(dropdown => {
-            const id = dropdown.id;
-            if (id) {
-            const containerId = id + 'InputContainer';
-            const inputId = id + 'Input';
-            const container = document.getElementById(containerId);
-            if (container && dropdown.value === 'other') {
-            container.classList.remove('hidden');
-            container.classList.add("custom-input-container");
-            const input = document.getElementById(inputId);
-            if (input) input.required = true;
-            }
-            }
-            });
-            function formatInputWithUnit(inputId, unit) {
-            var input = document.getElementById(inputId);
-            if (!input) return;
-            input.addEventListener("input", function () {
-            let value = this.value.replace(/\D/g, ''); // Only keep digits
-            if (value) {
-            this.value = value + unit;
-            }
-            });
-            // Format initial value if present
-            if (input.value && !input.value.endsWith(unit)) {
-            let value = input.value.replace(/\D/g, '');
-            if (value) input.value = value + unit;
-            }
-            }
-
-            formatInputWithUnit("ramInput", "GB");
-            formatInputWithUnit("storageInput", "TB");
-            formatInputWithUnit("refreshRateInput", "Hz");
-            // Add subtle animation on form section hover
-            const formSections = document.querySelectorAll('.form-section');
-            formSections.forEach(section => {
-            section.addEventListener('mouseenter', function() {
-            this.style.backgroundColor = '#fafbff';
-            });
-            section.addEventListener('mouseleave', function() {
-            this.style.backgroundColor = '';
-            });
-            });
-            });
-            document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form');
-            // Validation Utility Functions
-            const validators = {
-                
-            // Required field check
-            required: (value) => value.trim() !== '',
-                    // Positive number check
-                    positiveNumber: (value) => !isNaN(value) && parseFloat(value) >= 0,
-                    // Price range validation
-                    priceRange: (value) => {
-            const numValue = parseFloat(value);
-            return numValue >= 0 && numValue <= 1000000000;
-            },
-                    // URL validation
-                    validURL: (url) => {
-            try {
-            new URL(url);
-            return true;
-            } catch {
-            return false;
-            }
-            },
-                    // Camera specification validation
-                    cameraSpec: (value) => {
-            // Allows formats like: 12MP, 48MP + 12MP, Multiple specs with +
-            const cameraRegex = /^(\d+MP\s*(\+\s*\d+MP)*)?$/;
-            return cameraRegex.test(value.trim());
-            },
-                    // Screen size validation
-                    screenSize: (value) => {
-            const numValue = parseFloat(value);
-            return !isNaN(numValue) && numValue > 0 && numValue <= 10;
-            }
-            
-            };
-            // Error Display Utility
-            function showError(input, message) {
-            // Remove any existing error
-            const existingError = input.parentNode.querySelector('.error-text');
-            if (existingError) existingError.remove();
-            // Create and append error message
-            const errorSpan = document.createElement('span');
-            errorSpan.className = 'error-text';
-            errorSpan.style.color = 'red';
-            errorSpan.style.fontSize = '0.8em';
-            errorSpan.style.marginTop = '5px';
-            errorSpan.textContent = message;
-            input.parentNode.appendChild(errorSpan);
-            input.classList.add('input-error');
-            }
-
-            // Clear Error Utility
-            function clearError(input) {
-            const errorSpan = input.parentNode.querySelector('.error-text');
-            if (errorSpan) errorSpan.remove();
-            input.classList.remove('input-error');
-            }
-
-            // Validate Specific Fields
-            const validationRules = {
-            productName: {
-            validate: validators.required,
-                    errorMessage: 'Product name is required'
-            },
+            document.addEventListener('DOMContentLoaded', function () {
+                // Field validation configuration (adjusted as requested)
+                const fieldValidations = {
+                    productName: {
+                        required: true,
+                        maxLength: 100,
+                        pattern: /^[\w\s\u00C0-\u1EF9\-\.\,\(\)\/]+$/i, // Allows Vietnamese and common characters
+                        errorMessages: {
+                            required: 'Product name is required',
+                            maxLength: 'Product name cannot exceed 100 characters',
+                            pattern: 'Product name contains invalid characters'
+                        }
+                    },
                     price: {
-                    validate: (value) => validators.required(value) &&
-                            validators.positiveNumber(value) &&
-                            validators.priceRange(value),
-                            errorMessage: 'Invalid price. Must be between 0 and 1,000,000,000'
+                        required: true,
+                        min: 0, // Changed to minimum value of 0
+                        max: 1000000000,
+                        pattern: /^\d+$/,
+                        errorMessages: {
+                            required: 'Price is required',
+                            min: 'Minimum price is 0',
+                            max: 'Maximum price is 1,000,000,000',
+                            pattern: 'Price must be an integer'
+                        }
                     },
                     color: {
-                    validate: validators.required,
-                            errorMessage: 'Color is required'
+                        required: true,
+                        maxLength: 30,
+                        pattern: /^[a-zA-Z\s\u00C0-\u1EF9\-]+$/,
+                        errorMessages: {
+                            required: 'Color is required',
+                            maxLength: 'Color cannot exceed 30 characters',
+                            pattern: 'Color can only contain letters and hyphens'
+                        }
                     },
                     imageURL: {
-                    validate: (value) => validators.required(value) && validators.validURL(value),
-                            errorMessage: 'Please enter a valid image URL'
+                        required: true,
+                        pattern: /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\?\=\&\w \.-]*)*$/i, // Basic URL validation
+                        errorMessages: {
+                            required: 'Image URL is required',
+                            pattern: 'Invalid URL format'
+                        }
                     },
                     frontCamera: {
-                    validate: (value) => validators.required(value) && validators.cameraSpec(value),
-                            errorMessage: 'Invalid front camera specification (e.g., 12MP)'
+                        required: true,
+                        maxLength: 50,
+                        pattern: /^(\d+MP)(\s*\+\s*\d+MP)*$/, // Format like 12MP or 12MP + 8MP
+                        errorMessages: {
+                            required: 'Front camera is required',
+                            maxLength: 'Front camera cannot exceed 50 characters',
+                            pattern: 'Format must be "12MP" or "12MP + 8MP"'
+                        }
                     },
                     rearCamera: {
-                    validate: (value) => validators.required(value) && validators.cameraSpec(value),
-                            errorMessage: 'Invalid rear camera specification (e.g., 48MP + 12MP)'
+                        required: true,
+                        maxLength: 100,
+                        pattern: /^(\d+MP)(\s*\+\s*\d+MP)*$/, // Format like 12MP or 12MP + 8MP + 5MP
+                        errorMessages: {
+                            required: 'Rear camera is required',
+                            maxLength: 'Rear camera cannot exceed 100 characters',
+                            pattern: 'Format must be "12MP" or "12MP + 8MP + 5MP"'
+                        }
                     },
                     chiptype: {
-                    validate: validators.required,
-                            errorMessage: 'Chip brand is required'
+                        required: true,
+                        maxLength: 30,
+                        pattern: /^[a-zA-Z0-9\s\u00C0-\u1EF9\-\+]+$/,
+                        errorMessages: {
+                            required: 'Chip type is required',
+                            maxLength: 'Chip type cannot exceed 30 characters',
+                            pattern: 'Chip type can only contain letters, numbers, + and hyphens'
+                        }
                     },
                     chip: {
-                    validate: validators.required,
-                            errorMessage: 'Chip name is required'
+                        required: true,
+                        maxLength: 30,
+                        pattern: /^[a-zA-Z0-9\s\u00C0-\u1EF9\-\+]+$/,
+                        errorMessages: {
+                            required: 'Chip name is required',
+                            maxLength: 'Chip name cannot exceed 30 characters',
+                            pattern: 'Chip name can only contain letters, numbers, + and hyphens'
+                        }
                     },
                     gpuType: {
-                    validate: validators.required,
-                            errorMessage: 'GPU brand is required'
+                        required: true,
+                        maxLength: 30,
+                        pattern: /^[a-zA-Z0-9\s\u00C0-\u1EF9\-\+]+$/,
+                        errorMessages: {
+                            required: 'GPU type is required',
+                            maxLength: 'GPU type cannot exceed 30 characters',
+                            pattern: 'GPU type can only contain letters, numbers, + and hyphens'
+                        }
                     },
                     gpuName: {
-                    validate: validators.required,
-                            errorMessage: 'GPU name is required'
+                        required: true,
+                        maxLength: 30,
+                        pattern: /^[a-zA-Z0-9\s\u00C0-\u1EF9\-\+]+$/,
+                        errorMessages: {
+                            required: 'GPU name is required',
+                            maxLength: 'GPU name cannot exceed 30 characters',
+                            pattern: 'GPU name can only contain letters, numbers, + and hyphens'
+                        }
                     },
+
                     size: {
-                    validate: (value) => validators.required(value) && validators.screenSize(value),
-                            errorMessage: 'Invalid screen size (must be between 0 and 10 inches)'
+                        required: true,
+                        min: 1,
+                        max: 20,
+                        step: 0.1,
+                        errorMessages: {
+                            required: 'Screen size is required',
+                            min: 'Minimum size is 1 inch',
+                            max: 'Maximum size is 20 inches',
+                            step: 'Size must be a multiple of 0.1'
+                        }
+                    },
+
+                    resolutionWidth: {
+                        required: true,
+                        min: 100,
+                        max: 10000,
+                        pattern: /^\d+$/,
+                        errorMessages: {
+                            required: 'Width is required',
+                            min: 'Minimum width is 100 pixels',
+                            max: 'Maximum width is 10,000 pixels',
+                            pattern: 'Width must be an integer'
+                        }
+                    },
+                    resolutionHeight: {
+                        required: true,
+                        min: 100,
+                        max: 10000,
+                        pattern: /^\d+$/,
+                        errorMessages: {
+                            required: 'Height is required',
+                            min: 'Minimum height is 100 pixels',
+                            max: 'Maximum height is 10,000 pixels',
+                            pattern: 'Height must be an integer'
+                        }
                     },
                     version: {
-                    validate: validators.required,
-                            errorMessage: 'Operating system version is required'
+                        required: true,
+                        maxLength: 20,
+                        pattern: /^[a-zA-Z0-9\s\u00C0-\u1EF9\.\-]+$/,
+                        errorMessages: {
+                            required: 'OS version is required',
+                            maxLength: 'Version cannot exceed 20 characters',
+                            pattern: 'Version can only contain letters, numbers, dots and hyphens'
+                        }
+                    },
+
+                };
+
+                // Function to toggle input when Other is selected
+                function toggleInput(selectId, containerId, inputId) {
+                    const select = document.getElementById(selectId);
+                    const container = document.getElementById(containerId);
+                    const input = document.getElementById(inputId);
+
+                    if (select.value === 'other') {
+                        container.classList.remove('hidden');
+                        input.required = true;
+
+                        // Add special validation for specific fields
+                        if (selectId === 'ram') {
+                            setupCustomFieldValidation(inputId, /^\d+GB$/i, 'Please enter correct format (e.g., 15GB)');
+                        } else if (selectId === 'storage') {
+                            setupCustomFieldValidation(inputId, /^\d+TB$/i, 'Please enter correct format (e.g., 12TB)');
+                        } else if (selectId === 'refreshRate') {
+                            setupCustomFieldValidation(inputId, /^\d+Hz$/i, 'Please enter correct format (e.g., 15Hz)');
+                        } else {
+                            setupCustomFieldValidation(inputId);
+                        }
+                    } else {
+                        container.classList.add('hidden');
+                        input.required = false;
+                        input.value = '';
+                        clearError(input);
                     }
-            };
-            // Custom Dropdown Validation
-            function validateCustomInput(selectElement) {
-            const customContainer = selectElement.parentNode.querySelector('.custom-input-container:not(.hidden)');
-            if (customContainer) {
-            const customInput = customContainer.querySelector('input');
-            if (customInput && selectElement.value === 'other') {
-            return validators.required(customInput.value);
-            }
-            }
-            return true;
-            }
+                }
 
-            // Form Validation
-            function validateForm(event) {
-            let isValid = true;
-            // Validate standard fields
-            Object.keys(validationRules).forEach(fieldName => {
-            const input = document.getElementById(fieldName);
-            if (input) {
-            const rule = validationRules[fieldName];
-            clearError(input);
-            if (!rule.validate(input.value)) {
-            showError(input, rule.errorMessage);
-            isValid = false;
-            }
-            }
-            });
-            // Validate dropdowns with custom inputs
-            const customDropdowns = ['brand', 'ram', 'storage', 'refreshRate', 'screenResolution', 'os'];
-            customDropdowns.forEach(dropdownId => {
-            const select = document.getElementById(dropdownId);
-            if (select) {
-            clearError(select);
-            if (!validateCustomInput(select)) {
-            showError(select, 'Custom input is required when "Other" is selected');
-            isValid = false;
-            }
-            }
-            });
-            // Prevent form submission if validation fails
-            if (!isValid) {
-            event.preventDefault();
-            }
-            }
+                // Set up validation for custom fields (when Other is selected)
+                function setupCustomFieldValidation(fieldId, customPattern = null, customErrorMessage = null) {
+                    const field = document.getElementById(fieldId);
+                    if (!field)
+                        return;
 
-            // Add event listeners
-            form.addEventListener('submit', validateForm);
-            // Live validation on input
-            Object.keys(validationRules).forEach(fieldName => {
-            const input = document.getElementById(fieldName);
-            if (input) {
-            input.addEventListener('input', () => {
-            const rule = validationRules[fieldName];
-            clearError(input);
-            if (!rule.validate(input.value)) {
-            showError(input, rule.errorMessage);
-            }
+                    const baseId = fieldId.replace('Input', '');
+                    let validationConfig = fieldValidations[baseId] || {
+                        required: true,
+                        maxLength: 30,
+                        errorMessages: {
+                            required: 'This field is required when selecting Other',
+                            maxLength: 'Cannot exceed 30 characters'
+                        }
+                    };
+
+                    // Apply custom pattern and error message if provided
+                    if (customPattern && customErrorMessage) {
+                        validationConfig = {
+                            ...validationConfig,
+                            pattern: customPattern,
+                            errorMessages: {
+                                ...validationConfig.errorMessages,
+                                pattern: customErrorMessage
+                            }
+                        };
+                    }
+
+                    field.addEventListener('input', () => {
+                        validateField(field, validationConfig);
+                    });
+
+                    // Validate immediately if there's a value
+                    if (field.value) {
+                        validateField(field, validationConfig);
+                }
+                }
+
+                // Attach events to select boxes
+                const selectIds = ['brand', 'ram', 'storage', 'refreshRate', 'screenResolution', 'os'];
+                selectIds.forEach(id => {
+                    const select = document.getElementById(id);
+                    if (select) {
+                        select.addEventListener('change', function () {
+                            const containerId = id + 'InputContainer';
+                            const inputId = id + 'Input';
+                            toggleInput(id, containerId, inputId);
+                        });
+
+                        // Check on initial page load
+                        const containerId = id + 'InputContainer';
+                        const inputId = id + 'Input';
+                        toggleInput(id, containerId, inputId);
+                    }
+                });
+
+                // Set up real-time validation for all fields
+                function setupRealTimeValidation() {
+                    Object.keys(fieldValidations).forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            field.addEventListener('input', () => {
+                                validateField(field, fieldValidations[fieldId]);
+                            });
+
+                            // Validate on page load if there's a value
+                            if (field.value) {
+                                validateField(field, fieldValidations[fieldId]);
+                            }
+                        }
+                    });
+                }
+
+                // Validate on form submit
+                const form = document.querySelector('form');
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        let isValid = true;
+
+                        // Validate all main fields
+                        Object.keys(fieldValidations).forEach(fieldId => {
+                            const field = document.getElementById(fieldId);
+                            if (field && !validateField(field, fieldValidations[fieldId])) {
+                                isValid = false;
+                            }
+                        });
+
+                        // Validate custom fields (when Other is selected)
+                        selectIds.forEach(id => {
+                            const select = document.getElementById(id);
+                            if (select && select.value === 'other') {
+                                const inputId = id + 'Input';
+                                const input = document.getElementById(inputId);
+                                const baseId = inputId.replace('Input', '');
+                                const validationConfig = fieldValidations[baseId] || {
+                                    required: true,
+                                    maxLength: 30,
+                                    errorMessages: {
+                                        required: 'This field is required when selecting Other',
+                                        maxLength: 'Cannot exceed 30 characters'
+                                    }
+                                };
+
+                                if (!validateField(input, validationConfig)) {
+                                    isValid = false;
+                                }
+                            }
+                        });
+
+                        if (!isValid) {
+                            e.preventDefault();
+                            showGlobalError('Please correct all errors before submitting');
+                            scrollToFirstError();
+                        }
+                    });
+                }
+
+                // ===== VALIDATION FUNCTIONS =====
+                function validateField(field, config) {
+                    if (!field)
+                        return true;
+
+                    const value = field.value.trim();
+                    let isValid = true;
+
+                    // Check required
+                    if (config.required && !value) {
+                        showError(field, config.errorMessages.required);
+                        return false;
+                    }
+
+                    // If field is not required and empty, skip other checks
+                    if (!config.required && !value) {
+                        clearError(field);
+                        return true;
+                    }
+
+                    // Check maxLength
+                    if (config.maxLength && value.length > config.maxLength) {
+                        showError(field, config.errorMessages.maxLength);
+                        isValid = false;
+                    }
+
+                    // Check pattern (regex)
+                    if (config.pattern && !config.pattern.test(value)) {
+                        showError(field, config.errorMessages.pattern);
+                        isValid = false;
+                    }
+
+                    // Check numeric values
+                    if (config.min !== undefined || config.max !== undefined) {
+                        const numValue = parseFloat(value);
+                        if (isNaN(numValue)) {
+                            showError(field, 'Please enter a valid number');
+                            isValid = false;
+                        } else {
+                            if (config.min !== undefined && numValue < config.min) {
+                                showError(field, config.errorMessages.min);
+                                isValid = false;
+                            }
+                            if (config.max !== undefined && numValue > config.max) {
+                                showError(field, config.errorMessages.max);
+                                isValid = false;
+                            }
+                            if (config.step !== undefined) {
+                                const remainder = (numValue * 10) % (config.step * 10);
+                                if (remainder !== 0) {
+                                    showError(field, config.errorMessages.step);
+                                    isValid = false;
+                                }
+                            }
+                        }
+                    }
+
+                    if (isValid) {
+                        clearError(field);
+                    }
+
+                    return isValid;
+                }
+
+                // ===== ERROR DISPLAY FUNCTIONS =====
+                function showError(input, message) {
+                    if (!input)
+                        return;
+
+                    input.classList.add('input-error');
+                    let errorElement = input.nextElementSibling;
+
+                    if (!errorElement || !errorElement.classList.contains('error-text')) {
+                        errorElement = document.createElement('span');
+                        errorElement.className = 'error-text';
+                        input.parentNode.insertBefore(errorElement, input.nextSibling);
+                    }
+
+                    errorElement.textContent = message;
+                }
+
+                function clearError(input) {
+                    if (!input)
+                        return;
+
+                    input.classList.remove('input-error');
+                    const errorElement = input.nextElementSibling;
+                    if (errorElement && errorElement.classList.contains('error-text')) {
+                        errorElement.textContent = '';
+                    }
+                }
+
+                function showGlobalError(message) {
+                    let existingError = document.querySelector('.global-error-message');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message global-error-message';
+                    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+
+                    const title = document.querySelector('h2');
+                    if (title) {
+                        title.insertAdjacentElement('afterend', errorDiv);
+                    }
+                }
+
+                function scrollToFirstError() {
+                    const firstError = document.querySelector('.input-error');
+                    if (firstError) {
+                        firstError.scrollIntoView({behavior: 'smooth', block: 'center'});
+                        firstError.focus();
+                    }
+                }
+
+                // Initialize real-time validation
+                setupRealTimeValidation();
             });
-            }
-            });
-            // Dynamic custom input validation
-            const customDropdowns = document.querySelectorAll('select');
-            customDropdowns.forEach(select => {
-            select.addEventListener('change', function() {
-            const customContainer = this.parentNode.querySelector('.custom-input-container');
-            if (customContainer) {
-            const customInput = customContainer.querySelector('input');
-            if (this.value === 'other') {
-            customContainer.classList.remove('hidden');
-            customInput.required = true;
-            } else {
-            customContainer.classList.add('hidden');
-            customInput.required = false;
-            customInput.value = '';
-            }
-            }
-            });
-            });
-            });
-// Additional CSS for error styling (can be added to existing stylesheet)
-            const styleElement = document.createElement('style');
-            styleElement.textContent = `
-   
-`;
-            document.head.appendChild(styleElement);
+            // Function to show popup
+function showPopup(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.classList.add('active');
+    }
+}
+
+// Function to close popup
+function closePopup(popupId) {
+    const popup = document.getElementById(popupId);
+    if (popup) {
+        popup.classList.remove('active');
+    }
+}
+
+// Check for success or duplicate in URL parameters on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the current URL
+    const url = new URL(window.location.href);
+    
+    // Check for duplicate parameter
+    if (url.searchParams.get('duplicate') === 'true') {
+        showPopup('duplicatePopup');
+    }
+    
+    // Check for success parameter
+    if (url.searchParams.get('success') === 'true') {
+        showPopup('successPopup');
+    }
+});
         </script>
     </head>
+
     <body>
         <jsp:include page="sidebar.jsp" />
         <div class="content">
@@ -793,7 +969,6 @@
                         <input type="hidden" name="ramType" value="">
                         <input type="hidden" name="supportsUpgradingRAM" value="">
                         <input type="hidden" name="supportsUpgradingROM" value="">
-
                         <div class="form-section">
                             <div class="form-section-title"><i class="fas fa-info-circle"></i> Basic Information</div>
                             <div class="form-row">
@@ -996,6 +1171,29 @@
                         </div>
                     </form>
                 </div>
+            </div>
+        </div>
+        <!-- Success Popup -->
+        <div id="successPopup" class="popup popup-success">
+            <div class="popup-content">
+                <div class="popup-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3 class="popup-title">Success</h3>
+                <p class="popup-message">Product added successfully!</p>
+                <button class="popup-close" onclick="closePopup('successPopup')">OK</button>
+            </div>
+        </div>
+
+        <!-- Duplicate Product Popup -->
+        <div id="duplicatePopup" class="popup popup-error">
+            <div class="popup-content">
+                <div class="popup-icon">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h3 class="popup-title">Duplicate Product</h3>
+                <p class="popup-message">Product already exists. Please change 1 of the following 4 data fields: Phone Name, Color, RAM, Storage Capacity.</p>
+                <button class="popup-close" onclick="closePopup('duplicatePopup')">OK</button>
             </div>
         </div>
     </body>
