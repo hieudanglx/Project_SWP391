@@ -23,13 +23,48 @@
                     <h1 class="sidebar-heading">
                         Lọc bằng
                     </h1>
-                    <c:set var="maxPrice" value="0" />
 
-                    <c:forEach items="${list}" var="product">
-                        <c:if test="${product.price gt maxPrice}">
-                            <c:set var="maxPrice" value="${product.price}" />
-                        </c:if>
-                    </c:forEach>
+                    <%-- Xử lý maxPrice --%>
+                    <c:choose>
+                        <%-- Nếu có sản phẩm --%>
+                        <c:when test="${not empty list and list.size() > 1}">
+                            <c:set var="maxPrice" value="0" scope="request"/>
+                            
+                            <c:forEach items="${list}" var="product">
+                                <c:if test="${product.price > maxPrice}">
+                                    <c:set var="maxPrice" value="${product.price}"/>
+                                </c:if>
+                            </c:forEach>
+                            <c:set var="minPrice" value="${maxPrice}" scope="request"/>
+                            <c:forEach items="${list}" var="product">
+                                <c:if test="${product.price < minPrice}">
+                                    <c:set var="minPrice" value="${product.price}"/>
+                                </c:if>
+                            </c:forEach>
+                        </c:when>
+
+                        <%-- Nếu không có sản phẩm - set giá mặc định theo category --%>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${CategoryID == 1}">
+                                    <c:set var="maxPrice" value="75000000"/>
+                                    <c:set var="minPrice" value="0"/>
+                                </c:when>
+                                <c:when test="${CategoryID == 2}">
+                                    <c:set var="maxPrice" value="50000000"/>
+                                    <c:set var="minPrice" value="0"/>
+                                </c:when>
+                                <c:when test="${CategoryID == 3}">
+                                    <c:set var="maxPrice" value="35000000"/>
+                                    <c:set var="minPrice" value="0"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="maxPrice" value="100000000"/>
+                                    <c:set var="minPrice" value="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
 
                     <ul class="filter ul-reset">
                         <li class="filter-item">
@@ -250,18 +285,19 @@
                                 <h1 class="filter-item-inner-heading">
                                     Phạm vi giá
                                 </h1>
+
                                 <ul class="filter-item ul-reset">
                                     <div class="price-input">
                                         <div class="field">
                                             <input type="text" 
-                                                   class="input-min" 
-                                                   value="<fmt:formatNumber value="0" pattern="#,##0" />"
-                                                   data-raw-value="0">
+                                                   class="input-min" disabled
+                                                   value="<fmt:formatNumber value="${minPrice}" pattern="#,##0" />"
+                                                   data-raw-value="${minPrice}">
                                         </div>
                                         <div class="separator">-</div>
                                         <div class="field">
                                             <input type="text" 
-                                                   class="input-max" 
+                                                   class="input-max" disabled
                                                    value="<fmt:formatNumber value="${maxPrice}" pattern="#,##0" />"
                                                    data-raw-value="${maxPrice}">
                                         </div>
@@ -271,8 +307,8 @@
                                     </div>
                                     <div class="range-input">
 
-                                        <input type="range" name="minPrice" class="range-min" min="0" max="${maxPrice}" value="0" step="1000000">
-                                        <input type="range" name="maxPrice" class="range-max" min="0" max="${maxPrice}" value="${maxPrice}" step="1000000">
+                                        <input type="range" name="minPrice" class="range-min" min="${minPrice}" max="${maxPrice}" value="${minPrice}" step="1000000">
+                                        <input type="range" name="maxPrice" class="range-max" min="${minPrice}" max="${maxPrice}" value="${maxPrice}" step="1000000">
                                     </div>
                                 </ul>
                             </section>

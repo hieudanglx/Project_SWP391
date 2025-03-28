@@ -75,6 +75,10 @@
     <servlet>
         <servlet-name>ReOTPController</servlet-name>
         <servlet-class>controller.ReOTPController</servlet-class>
+         </servlet>
+         <servlet>
+        <servlet-name>ExportRevenue</servlet-name>
+        <servlet-class>controller.ExportRevenue</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
@@ -160,10 +164,7 @@
         <servlet-name>importExcel</servlet-name>
         <url-pattern>/importExcel</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ReOTPController</servlet-name>
-        <url-pattern>/ReOTPController</url-pattern>
-    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

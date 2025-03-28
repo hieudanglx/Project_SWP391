@@ -126,6 +126,65 @@
                     window.location.href = "logoutOfCustomerController";
                 }
             }
+            // Thêm code này vào phần <script> trong file header.jsp
+            document.querySelector('form[action="SearchController"]').addEventListener('submit', function (e) {
+                // Lấy các phần tử
+                const categorySelect = document.querySelector('select[name="CategoryID"]');
+                const keywordInput = document.querySelector('input[name="keyword"]');
+                const errorMessages = [];
+
+                // 1. Kiểm tra danh mục
+                if (categorySelect.value === "") {
+                    errorMessages.push("Vui lòng chọn danh mục");
+                    categorySelect.classList.add('error-border');
+                } else {
+                    categorySelect.classList.remove('error-border');
+                }
+
+                // 2. Kiểm tra từ khóa
+                const keyword = keywordInput.value.trim();
+                const specialCharRegex = /[!@#$%^&*()_\-=\[\]{};':"\\|<>\/?]/g;
+
+                if (keyword === "") {
+                    errorMessages.push("Vui lòng nhập từ khóa tìm kiếm");
+                    keywordInput.classList.add('error-border');
+                } else if (specialCharRegex.test(keyword)) {
+                    errorMessages.push("Từ khóa không được chứa ký tự đặc biệt");
+                    keywordInput.classList.add('error-border');
+                } else {
+                    keywordInput.classList.remove('error-border');
+                }
+
+                // Xử lý lỗi
+                if (errorMessages.length > 0) {
+                    e.preventDefault(); // Ngăn submit form
+
+                    // Hiển thị popup lỗi (sử dụng hàm đã có trong popup.js)
+                    showAlertPopup('error', errorMessages.join('<br>'));
+
+                    // Hoặc dùng alert thông thường
+                    // alert(errorMessages.join('\n'));
+
+                    return false;
+                }
+
+                return true;
+            });
+
+// Thêm CSS cho border lỗi
+            const style = document.createElement('style');
+            style.textContent = `
+    .error-border {
+        border: 2px solid #dc3545 !important;
+        animation: shake 0.5s;
+    }
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+`;
+            document.head.appendChild(style);
         </script>
         <script src="libs/jquery-3.4.1.min.js"></script>
         <script src="libs/bootstrap/js/bootstrap.min.js"></script>
