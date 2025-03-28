@@ -1,8 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -11,7 +10,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <style>
-            body {
+            .OrderHistory{
+                 body {
                 background-color: #f8f9fa;
             }
             .container {
@@ -100,9 +100,13 @@
             .order-actions a {
                 margin-left: 10px;
             }
+            
+            }
         </style>
     </head>
+    
     <body>
+        <%@include file="header.jsp" %>
         <%-- Hiển thị thông báo thành công hoặc lỗi --%>
         <c:if test="${not empty successMessage}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -120,12 +124,10 @@
             <c:remove var="errorMessage" scope="session"/>
         </c:if>
 
-        <div class="container">
+        <div class="OrderHistory container">
             <h2 class="text-center">Lịch sử đơn hàng</h2>
 
-            <div class="text-center mb-3">
-                <a href="ViewProfileOfCustomer" class="btn btn-outline-primary">Quay về trang cá nhân</a>
-            </div>
+            
 
 
             <%-- Hiển thị thông báo khi hủy đơn --%>
@@ -159,8 +161,19 @@
                     <div class="order-card">
                         <img src="${order.imageURL}" alt="Product Image">
                         <div class="order-info">
-                            <h5>Đơn hàng #${order.orderID}</h5>
+                            <h5>${order.productName} <small class="text-muted">(Đơn #${order.orderID})</small></h5>
                             <div>
+                                <div class="text-muted small">
+                                    <c:set var="orderCount" value="0" />
+                                    <c:forEach items="${orderDetails}" var="detailItem">
+                                        <c:if test="${detailItem.orderID == order.orderID}">
+                                            <c:set var="orderCount" value="${orderCount + 1}" />
+                                        </c:if>
+                                    </c:forEach>
+                                    <c:if test="${orderCount > 1}">
+                                        và sản phẩm khác
+                                    </c:if>
+                                </div>   
                                 <c:choose>
                                     <c:when test="${order.status eq 'Thành công'}">
                                         <span class="status-label status-success">${order.status}</span>
@@ -229,13 +242,6 @@
                                     </div>
                                 </div>
                             </c:if>
-
-
-
-
-
-
-
                             <%-- Chỉ hiển thị nút hủy nếu đơn hàng đang chờ xử lý --%>
                             <c:if test="${fn:trim(order.status) eq 'Chờ Xử Lý' or fn:trim(order.status) eq 'Chờ xử lý'}">
                                 <form action="Cancel_order" method="post" style="display:inline;">
@@ -259,14 +265,6 @@
                 </c:if>
             </c:forEach>
         </div>
-        <script>
-//            var feedbackModal = document.getElementById('feedbackModal');
-//            feedbackModal.addEventListener('show.bs.modal', function (event) {
-//                var button = event.relatedTarget;
-//                var orderID = button.getAttribute('data-orderid');
-//                document.getElementById('orderID').value = orderID;
-//            });
-        </script>
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Lấy tất cả các nút feedback

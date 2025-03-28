@@ -3,7 +3,7 @@
     Created on : Feb 22, 2025
     Author     : Tran Phong Hai - CE180803
 --%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -14,7 +14,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
-
+        <fmt:setLocale value="vi_VN" />
 
         <!-- Products Table -->
         <table class="table table-striped">

@@ -182,3 +182,36 @@ header .main-menu-header #nav-menu ul li:hover ul{
 header .main-menu-header #nav-menu ul li.current-menu-item a{
     background:#0071cc
 }
+.username-link {
+    color: #ff6b6b;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-right: 10px;
+    transition: color 0.3s;
+}
+
+.username-link:hover {
+    color: #ff0000;
+    text-decoration: none;
+}
+
+.welcome-text {
+    color: #333;
+}
+
+.logout-btn {
+    padding: 3px 10px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.login-btn {
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.login-btn:hover {
+    color: #ff6b6b;
+    text-decoration: none;
+}

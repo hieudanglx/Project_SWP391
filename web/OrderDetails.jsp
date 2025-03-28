@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<<%@ page contentType="text/html" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
 
         <style>
+            .OrderDetails{
             body {
                 background: linear-gradient(to right, #f8f9fa, #e9ecef);
                 font-family: 'Arial', sans-serif;
@@ -120,12 +121,13 @@
                 transform: translateY(-2px);
                 box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.3);
             }
+            }
         </style>
 
     </head>
     <body>
-
-        <div class="container">
+        <%@include file="header.jsp" %>
+        <div class="OrderDetails container">
             <!-- LOGO SHOP -->
             <div class="logo-container">
                 <img src="images/logo1.png" alt="Shop Logo">
@@ -185,9 +187,7 @@
                     </div>
                 </div>
 
-                <div class="text-center mt-4">
-                    <a href="Order_History?" class="btn btn-warning">VỀ TRANG DANH SÁCH ĐƠN HÀNG</a>
-                </div>
+               
 
             </div>
         </div>

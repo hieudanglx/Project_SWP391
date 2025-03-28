@@ -33,11 +33,14 @@
                                     <li>
                                         <c:choose>
                                             <c:when test="${not empty sessionScope.customer}">
-                                                Chào, <a href="/ViewProfileOfCustomer" class="username-link">${sessionScope.customer.fullName}</a>!
-                                                <button class="btn btn-danger logout-btn" onclick="confirmLogout(event)">Logout</button>
+                                                <span class="welcome-text">Chào, </span>
+                                                <a href="/ViewProfileOfCustomer" class="username-link" style="color: #ff6b6b; font-weight: bold; text-decoration: underline; margin-right: 10px;">
+                                                    ${sessionScope.customer.fullName}
+                                                </a>
+                                                <button class="btn btn-danger logout-btn" style="padding: 3px 10px; font-size: 14px;" onclick="confirmLogout(event)">Đăng xuất</button>
                                             </c:when>
                                             <c:otherwise>
-                                                <a href="choiceLogin.jsp" class="login-btn">Đăng nhập</a>
+                                                <a href="choiceLogin.jsp" class="login-btn" style="color: #333; font-weight: bold;">Đăng nhập</a>
                                             </c:otherwise>
                                         </c:choose>
                                     </li>
@@ -85,7 +88,7 @@
                                     <c:if test="${not empty sessionScope.customer}">
                                         <p>Giỏ hàng</p>
                                         <span class="cart-count">
-                                        <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
+                                            <fmt:formatNumber value="${sessionScope.total}" type="number" groupingUsed="true" maxFractionDigits="0" /> VNÐ
                                         </span>
                                     </c:if>
                                 </div>

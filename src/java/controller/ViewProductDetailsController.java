@@ -48,7 +48,7 @@ public class ViewProductDetailsController extends HttpServlet {
         }
 
         Map<Integer, String> customerNames = feedbackDao.getCustomerNames();
-        List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(productID, customerNames);
+        List<Feedback> feedbackList = feedbackDao.getFeedbackByProductID(selectedProduct.getProductID(), customerNames);
         List<Reply_Feedback> replyFeedbackList = reply_feedbackDAO.getAllReplyFeedback();
 
         request.setAttribute("replyFeedbackList", replyFeedbackList);
