@@ -215,9 +215,11 @@
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     <input type="text" id="importDate" name="importDate" class="form-control"
                                            value="${inventory.getDATE() != null ? 
-                                                    inventory.getDATE().format(java.time.format.DateTimeFormatter.ofPattern('yyyy/MM/dd')) : ''}" required />
+                                                    inventory.getDATE().format(java.time.format.DateTimeFormatter.ofPattern('yyyy/MM/dd')) : ''}" 
+                                           required />
                                 </div>
                             </div>
+
 
                             <div class="col-12">
                                 <div class="d-flex justify-content-between align-items-center mt-3">
@@ -267,15 +269,13 @@
                         event.preventDefault();
                         return false;
                     }
+                    let dateInput = document.getElementById("importDate");
+                    dateInput.addEventListener("input", function () {
+                        this.value = this.value.replace(/-/g, "/"); // Thay dấu "-" bằng "/"
+                    
                 });
             });
-            document.getElementById("importDate").addEventListener("blur", function () {
-                let value = this.value;
-                if (!/^\d{4}\/\d{2}\/\d{2}$/.test(value)) {
-                    alert("❌ Định dạng ngày phải là YYYY/MM/DD");
-                    this.value = "";
-                }
-            });
+            
         </script>
     </body>
 </html>

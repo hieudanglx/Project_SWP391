@@ -95,7 +95,6 @@ public class InventoryDAO extends dao.DBContext {
 //        }
 //        return productId;
 //    }
-
     public List<Inventory> getInventoryListByCategory(String categoryType) {
         List<Inventory> inventoryList = new ArrayList<>();
         String query = "SELECT P.ProductID, P.ProductName,P.Color, P.Rom, I.Date AS Latest_Import_Date, "
@@ -164,16 +163,16 @@ public class InventoryDAO extends dao.DBContext {
 
     public List<Inventory> searchInventory(String keyword) {
         List<Inventory> inventories = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.ProductName, i.Latest_Import_Date, "
-                + "p.Price, p.Quantity_Product "
+        String sql = "SELECT p.ProductID, p.ProductName, p.Color, p.Rom, "
+                + "i.Latest_Import_Date, i.Import_price, p.Price,  p.Quantity_Product  "
                 + "FROM Product p "
                 + "LEFT JOIN ( "
-                + "    SELECT ProductID, MAX(Date) AS Latest_Import_Date "
+                + "    SELECT ProductID, MAX(Date) AS Latest_Import_Date, "
+                + "           MAX(Import_price) AS Import_price " // Thêm cột này
                 + "    FROM Import_Inventory "
                 + "    GROUP BY ProductID "
                 + ") i ON p.ProductID = i.ProductID "
                 + "WHERE p.ProductName LIKE ?;";
-
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, "%" + keyword + "%");  // Thêm ký tự % để tìm kiếm gần đúng
 
@@ -182,8 +181,11 @@ public class InventoryDAO extends dao.DBContext {
                     Inventory inventory = new Inventory(
                             rs.getInt("ProductID"),
                             rs.getString("ProductName"),
-                            rs.getDate("Latest_Import_Date"),
-                            rs.getInt("Price"),
+                            rs.getString("Color"),
+                            rs.getString("Rom"),
+                            rs.getDate("Latest_Import_Date"), // Đúng tên cột
+                            rs.getInt("Import_Price"), // Đúng tên cột
+
                             rs.getInt("Quantity_Product")
                     );
                     inventories.add(inventory);
