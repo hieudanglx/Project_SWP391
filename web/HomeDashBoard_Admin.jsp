@@ -223,14 +223,11 @@
                                     <div class="stat-label">Total Sales</div>
                                     <%
                                         Object totalSalesObj = request.getAttribute("totalSales");
-                                        double totalSales = 0.0;
+                                        String formattedTotalSales = "0 VND";
 
                                         if (totalSalesObj != null) {
-                                            totalSales = (double) totalSalesObj;
+                                            formattedTotalSales = totalSalesObj.toString(); // Tránh ép kiểu sai
                                         }
-
-                                        java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
-                                        String formattedTotalSales = formatter.format(totalSales);
                                     %>
                                     <div class="stat-value"><%= formattedTotalSales %> VND</div>
                                 </div>

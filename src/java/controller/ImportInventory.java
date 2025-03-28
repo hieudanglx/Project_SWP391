@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import static java.util.Calendar.DATE;
 import java.util.List;
 import model.Inventory;
@@ -79,7 +80,11 @@ public class ImportInventory extends HttpServlet {
             int price = Integer.parseInt(priceStr);
             int importQuantity = Integer.parseInt(importQuantityStr);
             int importPrice = Integer.parseInt(importPriceStr);
-            Date importDate = Date.valueOf(importDateStr);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDate importLocalDate = LocalDate.parse(importDateStr, formatter);
+            Date importDate = Date.valueOf(importLocalDate);
+//            Date importDate = Date.valueOf(importDateStr);
 
             // Kiểm tra số lượng & giá nhập phải lớn hơn 0
             if (importQuantity <= 0 || importPrice <= 0) {

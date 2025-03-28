@@ -5,6 +5,7 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -134,8 +135,8 @@
                 </button>
             </div>
         </nav>
-        
-       
+
+
         <div class="content">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -155,7 +156,7 @@
                     </div>
                     <% } %>
 
-                    
+
                     <form action="importInventory" method="post">
                         <div class="row g-3">
                             <div class="col-md-6">
@@ -212,7 +213,9 @@
                                 <label for="importDate" class="form-label">Import Date:</label>
                                 <div class="input-group input-with-icon mb-3">
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                    <input type="date" id="importDate" name="importDate" class="form-control" value="${param.importDate != null ? param.importDate : inventory.getDATE()}" required />
+                                    <input type="text" id="importDate" name="importDate" class="form-control"
+                                           value="${inventory.getDATE() != null ? 
+                                                    inventory.getDATE().format(java.time.format.DateTimeFormatter.ofPattern('yyyy/MM/dd')) : ''}" required />
                                 </div>
                             </div>
 
@@ -265,6 +268,13 @@
                         return false;
                     }
                 });
+            });
+            document.getElementById("importDate").addEventListener("blur", function () {
+                let value = this.value;
+                if (!/^\d{4}\/\d{2}\/\d{2}$/.test(value)) {
+                    alert("❌ Định dạng ngày phải là YYYY/MM/DD");
+                    this.value = "";
+                }
             });
         </script>
     </body>

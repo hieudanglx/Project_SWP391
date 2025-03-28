@@ -41,6 +41,20 @@ public class Inventory {
         this.Rom = Rom;
     }
 
+    public Inventory(int ProductID, String productName, String Color, String Rom, Date DATE, int price, int quantityProduct) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.Color = Color;
+        this.Rom = Rom; 
+        this.DATE = DATE;
+        this.price = price;
+        this.quantityProduct = quantityProduct;
+       
+        
+    }
+    
+    
+
     public String getBrand() {
         return Brand;
     }

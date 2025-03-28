@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <%--<jsp:useBean id="importList" scope="request" type="java.util.List<model.Inventory>" />--%>
 <c:set var="importList" value="${requestScope.importList}" />
@@ -194,7 +195,7 @@
                             <th>Rom</th>
                             <th>Import Date</th>
                             <th>Sale Price</th>
-                            <th>Import Quantity</th>
+                            <th>Quantity Stock</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -213,7 +214,7 @@
                                         <td>${inventory.color}</td>
                                         <td>${inventory.rom}</td>
                                         <td>${inventory.DATE}</td>
-                                        <td>${inventory.price}</td>
+                                        <td><fmt:formatNumber value="${inventory.price}" type="number" groupingUsed="true" /></td>
                                         <td>${inventory.quantityProduct}</td>
                                         <td>
                                             <a href="importInventory?productID=${inventory.productID}" class="btn btn-warning btn-sm">

@@ -4,24 +4,26 @@
  */
 package controller;
 
-import com.google.gson.Gson;
 import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import model.Order_list;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author Tran Phong Hai - CE180803
  */
-@WebServlet("/RevenueByMonth")
-public class RevenueByMonth extends HttpServlet {
+public class ExportRevenue extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class RevenueByMonth extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RevenueByMonth</title>");
+            out.println("<title>Servlet ExportRevenue</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RevenueByMonth at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ExportRevenue at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,22 +63,72 @@ public class RevenueByMonth extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String filter = request.getParameter("filter");
-        List<Order_list> revenueList = null;
-      
         OrderDAO orderDAO = new OrderDAO();
+        List<Order_list> revenueList = null;
+
         if ("month".equals(filter)) {
             revenueList = orderDAO.getRevenueByMonth();
         } else if ("quarter".equals(filter)) {
             revenueList = orderDAO.getRevenueByQuarter();
         } else if ("year".equals(filter)) {
             revenueList = orderDAO.getRevenueByYear();
+        } else {
+            revenueList = orderDAO.getAllOrders();
         }
 
-        request.setAttribute("revenuelist", revenueList);
-        request.setAttribute("filterType", filter);
-        request.getRequestDispatcher("manageRevenue.jsp").forward(request, response);
-    
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=revenue.xlsx");
+
+        try ( Workbook workbook = new XSSFWorkbook();  ServletOutputStream out = response.getOutputStream()) {
+            Sheet sheet = workbook.createSheet("Revenue Data");
+            Row headerRow = sheet.createRow(0);
+
+            // Tạo tiêu đề cột
+            headerRow.createCell(0).setCellValue("Năm");
+            if ("month".equals(filter)) {
+                headerRow.createCell(1).setCellValue("Tháng");
+                headerRow.createCell(2).setCellValue("Doanh Thu");
+            } else if ("quarter".equals(filter)) {
+                headerRow.createCell(1).setCellValue("Quý");
+                headerRow.createCell(2).setCellValue("Doanh Thu");
+            } else if ("year".equals(filter)) {
+                headerRow.createCell(1).setCellValue("Doanh Thu");
+            } else {
+                headerRow.createCell(1).setCellValue("Ngày");
+                headerRow.createCell(2).setCellValue("Tổng tiền");
+            }
+
+            // Điền dữ liệu
+            int rowNum = 1;
+            for (Order_list order : revenueList) {
+                Row row = sheet.createRow(rowNum++);
+                if ("month".equals(filter) || "quarter".equals(filter) || "year".equals(filter)) {
+                    row.createCell(0).setCellValue(order.getYear());
+                } else {
+                    row.createCell(0).setCellValue(order.getDate().toLocalDate().getYear());
+                }
+
+                if ("month".equals(filter)) {
+                    row.createCell(1).setCellValue(order.getPeriod()); // Tháng
+                    row.createCell(2).setCellValue(order.getRevenue()); // Doanh thu
+                } else if ("quarter".equals(filter)) {
+                    row.createCell(1).setCellValue(order.getPeriod()); // Quý
+                    row.createCell(2).setCellValue(order.getRevenue());
+                } else if ("year".equals(filter)) {
+                    row.createCell(1).setCellValue(order.getRevenue());
+                } else {
+                    row.createCell(1).setCellValue(order.getDate().toString()); // Ngày
+                    row.createCell(2).setCellValue(order.getTotal());
+                }
+            }
+            workbook.write(out);
+            workbook.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

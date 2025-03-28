@@ -72,6 +72,10 @@
         <servlet-name>importExcel</servlet-name>
         <servlet-class>controller.importExcel</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ExportRevenue</servlet-name>
+        <servlet-class>controller.ExportRevenue</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UpdateStatusCustomer</servlet-name>
         <url-pattern>/UpdateStatusCustomer</url-pattern>
@@ -155,6 +159,10 @@
     <servlet-mapping>
         <servlet-name>importExcel</servlet-name>
         <url-pattern>/importExcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportRevenue</servlet-name>
+        <url-pattern>/ExportRevenue</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
