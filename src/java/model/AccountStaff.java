@@ -21,6 +21,7 @@ public class AccountStaff {
     private String dob;
     private String province_city;
     private int status;
+    private boolean isDelete;
 
     public AccountStaff() {
     }
@@ -53,6 +54,7 @@ public class AccountStaff {
         this.dob = dob;
         this.sex = sex;
         this.status = status;
+        this.isDelete = false;
     }
 
     public int getStaffID() {
@@ -69,6 +71,14 @@ public class AccountStaff {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+     public boolean isDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     public String getEmail() {
