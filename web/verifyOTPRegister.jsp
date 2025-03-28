@@ -1,6 +1,6 @@
 <%-- 
-    Document   : verifyStaffOTP
-    Created on : Mar 4, 2025, 3:17:45 PM
+    Document   : verifyOTPRegister
+    Created on : Mar 28, 2025, 7:27:48 PM
     Author     : nguye
 --%>
 
@@ -29,7 +29,7 @@
     <%@include file="header.jsp" %>
     <div class="container">
         <h2 class="mt-5">Nhập mã OTP</h2>
-        <form action="verifyOTPStaffController" method="post">
+        <form action="verifyOTPRegisterController" method="post">
             <div class="mb-3">
                 <label for="otp" class="form-label">Nhập mã OTP đã gửi đến email:</label>
                 <input type="text" class="form-control" id="otp" name="otp" required>
@@ -66,4 +66,3 @@
      <%@include file="footer.jsp" %>
 </body>
 </html>
-

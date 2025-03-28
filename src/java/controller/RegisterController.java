@@ -17,7 +17,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Customer;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpSession;
 import java.util.Date;
+import model.EmailSenderCustomer;
+import model.OTPGenerate;
 
 /**
  * Servlet xử lý đăng ký khách hàng mới
@@ -66,11 +69,18 @@ public class RegisterController extends HttpServlet {
             }
 
             Customer newCustomer = new Customer(username, fullName, email, password, address, phoneNumber, sex, dob, null, null);
-            customerDAO.add(newCustomer);
+            // Nếu mọi thứ hợp lệ, gửi OTP qua email
+            String otp = OTPGenerate.generateOTP();
+            HttpSession session = request.getSession();
+            session.setAttribute("otp", otp);
+            session.setAttribute("email", email);
+            session.setAttribute("newCustomer", newCustomer);
 
-            // Đăng ký thành công
-            request.setAttribute("successMessage", "Đăng ký thành công! Bây giờ bạn có thể đăng nhập.");
-            request.getRequestDispatcher("loginOfCustomer.jsp").forward(request, response);
+            EmailSenderCustomer.sendEmail(email, "Mã OTP đặt lại mật khẩu",
+                    "Mã OTP của bạn là: " + otp + "\nVui lòng nhập OTP này để tiếp tục.");
+
+            request.getRequestDispatcher("verifyOTPRegister.jsp").forward(request, response);
+            
         } catch (Exception e) {
             request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
             request.getRequestDispatcher("register.jsp").forward(request, response);

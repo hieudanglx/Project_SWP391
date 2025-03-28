@@ -104,7 +104,7 @@ public class loginOfCustomerController extends HttpServlet {
                     session.setAttribute("customer", customer);
                     session.setAttribute("customerID", customer.getCustomerID());
 
-                    request.getRequestDispatcher("ViewListProductGC?CategoryID=1").forward(request, response);
+                    request.getRequestDispatcher("homeController?CategoryID=2").forward(request, response);
 
                 } else if (status == 1) { // Tài khoản bị chặn
                     request.setAttribute("errorMessage", "Tài khoản của bạn đã bị chặn. Vui lòng liên hệ với quản trị viên!");

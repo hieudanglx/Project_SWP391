@@ -100,7 +100,7 @@ public class CustomerDAO extends DBContext {
         String sql = "SELECT status FROM Customer WHERE username = ? AND password = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, hashPassword(password));
             System.out.println("Đang kiểm tra tài khoản: " + username); // Log kiểm tra
 
             try ( ResultSet rs = ps.executeQuery()) {
@@ -126,7 +126,7 @@ public class CustomerDAO extends DBContext {
         String sql = "SELECT * FROM Customer WHERE Username = ? and Password = ?";
         try ( PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
-            ps.setString(2, password);
+            ps.setString(2, hashPassword(password));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Customer(
@@ -196,7 +196,7 @@ public class CustomerDAO extends DBContext {
     public boolean updatePassword(String email, String newPassword) {
         String sql = "UPDATE Customer SET password = ? WHERE email = ?";
         try ( PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, newPassword);
+            stmt.setString(1, hashPassword(newPassword));
             stmt.setString(2, email);
 
             int rowsAffected = stmt.executeUpdate();
@@ -213,7 +213,7 @@ public class CustomerDAO extends DBContext {
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getFullName());
             ps.setString(3, customer.getEmail());
-            ps.setString(4, customer.getPassword());
+            ps.setString(4, hashPassword(customer.getPassword()));
             ps.setString(5, customer.getAddress());
             ps.setString(6, customer.getPhoneNumber());
             ps.setString(7, customer.getSex());
@@ -232,7 +232,7 @@ public class CustomerDAO extends DBContext {
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getFullName());
             ps.setString(3, customer.getEmail());
-            ps.setString(4, customer.getPassword());
+            ps.setString(4, hashPassword(customer.getPassword()));
             ps.setString(5, customer.getAddress());
             ps.setString(6, customer.getPhoneNumber());
             ps.setString(7, customer.getSex());
@@ -360,7 +360,7 @@ public class CustomerDAO extends DBContext {
             ps.setString(2, customer.getFullName());
             ps.setString(3, customer.getEmail());
             if (updatePassword) {
-                ps.setString(4, customer.getPassword());
+                ps.setString(4, hashPassword(customer.getPassword()));
                 ps.setString(5, customer.getAddress());
                 ps.setString(6, customer.getPhoneNumber());
                 ps.setString(7, customer.getSex());

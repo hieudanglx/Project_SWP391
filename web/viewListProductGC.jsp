@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setLocale value="vi_VN" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
@@ -68,8 +69,8 @@
                 <div class="product-box">
                     <div class="container">
 
-                        <div style="margin: 20px 0 ">
-                            <a href="homeController?CatogoryID=2">Trang chủ </a>
+                        <div style="margin-top: 180px; margin-bottom: 20px ">
+                            <a href="homeController?CategoryID=2">Trang chủ </a>
                             <span>> ${list.size()} sản phẩm</span>
                         </div>
 
