@@ -129,10 +129,7 @@
         <%@include file="header.jsp" %>
         <div class="OrderDetails container">
             <!-- LOGO SHOP -->
-            <div class="logo-container">
-                <img src="images/logo1.png" alt="Shop Logo">
-            </div>
-
+            
             <div class="order-container">
 
                 <h4>Chi tiết đơn hàng #${orderDetails[0].orderID} - 
@@ -191,6 +188,6 @@
 
             </div>
         </div>
-
+<%@include file="footer.jsp" %>
     </body>
 </html>

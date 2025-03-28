@@ -24,7 +24,7 @@
         <link rel="stylesheet" href="css/home.css">
         <link rel="stylesheet" href="css/popup.css">
     </head>
-    <body>
+    <body data-status="${sessionScope.status}" data-message="${sessionScope.message}">
         <div id="wallpaper">
             <%@include file="header.jsp" %>
             <div id="content">
@@ -97,9 +97,9 @@
                                         <div class="bar-menu"><i class="fa fa-bars"></i></div>
                                         <div class="list-child">
                                             <ul>
-                                                <li><a href="homeController?CatogoryID=2">Điện thoại</a></li>
-                                                <li><a href="homeController?CatogoryID=3">Máy tính bảng</a></li>
-                                                <li><a href="homeController?CatogoryID=1">Laptop</a></li>
+                                                <li><a href="homeController?CategoryID=2">Điện thoại</a></li>
+                                                <li><a href="homeController?CategoryID=3">Máy tính bảng</a></li>
+                                                <li><a href="homeController?CategoryID=1">Laptop</a></li>
                                             </ul>
                                         </div>
                                         <div class="clear"></div>
@@ -148,6 +148,14 @@
                 </div>
             </div>
             <%@include file="footer.jsp" %>
+        </div>
+        <!-- Popup Thông Báo (Dùng cho các trang khác) -->
+        <div class="alert-popup-overlay" id="alertPopup">
+            <div class="alert-popup-content">
+                <div class="alert-popup-icon" id="alertIcon"></div>
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <h5 class="alert-popup-message" id="alertMessage"></h5>
+            </div>
         </div>
     </body>
     <script src="libs/jquery-3.4.1.min.js"></script>
