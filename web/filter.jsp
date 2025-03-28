@@ -23,6 +23,13 @@
                     <h1 class="sidebar-heading">
                         Lọc bằng
                     </h1>
+                    <c:set var="maxPrice" value="0" />
+
+                    <c:forEach items="${list}" var="product">
+                        <c:if test="${product.price gt maxPrice}">
+                            <c:set var="maxPrice" value="${product.price}" />
+                        </c:if>
+                    </c:forEach>
 
                     <ul class="filter ul-reset">
                         <li class="filter-item">
@@ -248,23 +255,24 @@
                                         <div class="field">
                                             <input type="text" 
                                                    class="input-min" 
-                                                   value="<fmt:formatNumber value="25000000" pattern="#,##0" />"
-                                                   data-raw-value="25000000">
+                                                   value="<fmt:formatNumber value="0" pattern="#,##0" />"
+                                                   data-raw-value="0">
                                         </div>
                                         <div class="separator">-</div>
                                         <div class="field">
                                             <input type="text" 
                                                    class="input-max" 
-                                                   value="<fmt:formatNumber value="75000000" pattern="#,##0" />"
-                                                   data-raw-value="75000000">
+                                                   value="<fmt:formatNumber value="${maxPrice}" pattern="#,##0" />"
+                                                   data-raw-value="${maxPrice}">
                                         </div>
                                     </div>
                                     <div class="slider">
                                         <div class="progress"></div>
                                     </div>
                                     <div class="range-input">
-                                        <input type="range" name="minPrice" class="range-min" min="0" max="100000000" value="25000000" step="1000000">
-                                        <input type="range" name="maxPrice" class="range-max" min="0" max="100000000" value="75000000" step="1000000">
+
+                                        <input type="range" name="minPrice" class="range-min" min="0" max="${maxPrice}" value="0" step="1000000">
+                                        <input type="range" name="maxPrice" class="range-max" min="0" max="${maxPrice}" value="${maxPrice}" step="1000000">
                                     </div>
                                 </ul>
                             </section>

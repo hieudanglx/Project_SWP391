@@ -128,7 +128,9 @@
         <c:remove var="status" scope="session"/>
         <c:remove var="message" scope="session"/>
         <%@include file="header.jsp" %>
-
+        <c:if test="${empty sessionScope.customer}">
+            <c:redirect url="choiceLogin.jsp"></c:redirect>
+        </c:if>
         <!-- Main Container -->
         <form action="PaymentController" method="post">
             <div class="container-lg cart-container">
