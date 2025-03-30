@@ -253,19 +253,7 @@
                     </div>
 
                     <!-- Nhân viên xử lý -->
-                    <div class="section">
-                        <h3>Processing staff</h3>
-                        <p><strong>Staff name:</strong>
-                            <c:choose>
-                                <c:when test="${empty orderDetails[0].fullNameStaff}">
-                                    Admin
-                                </c:when>
-                                <c:otherwise>
-                                    ${orderDetails[0].fullNameStaff}
-                                </c:otherwise>
-                            </c:choose>
-                        </p>
-                    </div>
+
 
                     <!-- Bảng danh sách sản phẩm -->
                     <table>

@@ -125,7 +125,7 @@
         </c:if>
 
         <div class="OrderHistory container">
-            <h2 class="text-center">Lịch sử đơn hàng</h2>
+            
 
             
 

@@ -29,7 +29,7 @@ public class OrderDAO extends dao.DBContext {
             while (rs.next()) {
                 int orderID = rs.getInt("OrderID");
                 Date date = rs.getDate("Date");
-                double total = rs.getInt("Total") * 1.0; // Chuyển int -> double
+                double total = rs.getDouble("Total"); // Chuyển int -> double
 
                 // Làm tròn tổng tiền về 2 chữ số thập phân
                 BigDecimal roundedTotal = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
@@ -187,7 +187,7 @@ public class OrderDAO extends dao.DBContext {
 
     public List<Order_list> getRevenueByMonth() {
         String sql = "SELECT YEAR(Date) AS Nam, MONTH(Date) AS Thang, "
-                + "SUM(Total) AS DoanhThu "
+                + "SUM(CAST(Total AS DECIMAL(18,2))) AS DoanhThu "
                 + "FROM Order_List "
                 + "WHERE Status = 'Thành Công' "
                 + "GROUP BY YEAR(Date), MONTH(Date) "
@@ -196,7 +196,7 @@ public class OrderDAO extends dao.DBContext {
     }
 
     public List<Order_list> getRevenueByYear() {
-        String sql = "SELECT YEAR(Date) AS Nam, SUM(Total) AS DoanhThu "
+        String sql = "SELECT YEAR(Date) AS Nam, SUM(CAST(Total AS DECIMAL(18,2))) AS DoanhThu "
                 + "FROM Order_List "
                 + "WHERE Status IN ('Thành Công') "
                 + "GROUP BY YEAR(Date) "
@@ -212,9 +212,9 @@ public class OrderDAO extends dao.DBContext {
                 + "  WHEN MONTH(Date) BETWEEN 7 AND 9 THEN 3 "
                 + "  ELSE 4 "
                 + "END AS Quy, "
-                + "SUM(Total) AS DoanhThu "
+                + "COALESCE(SUM(CAST(Total AS DECIMAL(18,2))), 0) AS DoanhThu "
                 + "FROM Order_List "
-                + "WHERE Status IN ('Thành Công') "
+                + "WHERE Status = 'Thành Công' "
                 + "GROUP BY YEAR(Date), "
                 + "CASE "
                 + "  WHEN MONTH(Date) BETWEEN 1 AND 3 THEN 1 "
@@ -222,7 +222,7 @@ public class OrderDAO extends dao.DBContext {
                 + "  WHEN MONTH(Date) BETWEEN 7 AND 9 THEN 3 "
                 + "  ELSE 4 "
                 + "END "
-                + "ORDER BY Nam, Quy";
+                + "ORDER BY Nam DESC, Quy DESC";
         return getRevenueData(sql, "quarter");
     }
 
@@ -230,7 +230,7 @@ public class OrderDAO extends dao.DBContext {
         List<Integer> years = new ArrayList<>();
         String sql = "SELECT DISTINCT YEAR(Date) AS year FROM Order_List ORDER BY year DESC";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
+        try ( PreparedStatement stmt = connection.prepareStatement(sql);  ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 years.add(rs.getInt(1));
@@ -246,7 +246,6 @@ public class OrderDAO extends dao.DBContext {
         return years;
     }
 
-    
     public List<Order_Details> getOrderDetailsByOrderID(int orderID) {
         List<Order_Details> orderDetailsList = new ArrayList<>();
         String sql = "SELECT od.OrderDetailID, od.Quantity, od.ProductID, ol.OrderID, "
@@ -276,7 +275,7 @@ public class OrderDAO extends dao.DBContext {
                         rs.getString("FullName"),
                         rs.getString("Address"),
                         rs.getString("PhoneNumber"),
-                        rs.getInt("Total") // Lấy thêm Total
+                        rs.getDouble("Total") // Lấy thêm Total
                 );
                 orderDetailsList.add(orderDetail);
             }
@@ -374,33 +373,34 @@ public class OrderDAO extends dao.DBContext {
         return revenueList;
     }
 
-    public double getTotalSales() {
-        double totalSales = 0;
-        String sql = "SELECT SUM(Total) FROM Order_List WHERE Status IN ('Thành Công')";
-        try ( PreparedStatement ps = connection.prepareStatement(sql);  ResultSet rs = ps.executeQuery()) {
+    public BigDecimal getTotalSales() {
+        BigDecimal totalSales = BigDecimal.ZERO;
+        try {
+            String query = "SELECT COALESCE(SUM(CAST(Total AS BIGINT)), 0) FROM Order_list";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                totalSales = rs.getDouble(1);
+                totalSales = rs.getBigDecimal(1); // Lấy giá trị chính xác từ DB
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return totalSales;
     }
-    
-    public List<Order_list> getOrdernew(){
-    List<Order_list> order_list = new ArrayList<>();
-    String sql = "SELECT TOP 10 c.FullName, ol.Date, ol.Address, p.ProductName, " +
-                     "p.Price, ol.Status, od.Quantity, ol.Total " +
-                     "FROM Order_List ol " +
-                     "JOIN Order_Details od ON ol.OrderID = od.OrderID " +
-                     "JOIN Product p ON od.ProductID = p.ProductID " +
-                     "JOIN Customer c ON ol.CustomerID = c.CustomerID " +
-                     "ORDER BY ol.Date DESC";
-    
-    try(PreparedStatement pstmt = connection.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery()){
-       while (rs.next()){
-          Order_list order = new Order_list();
+
+    public List<Order_list> getOrdernew() {
+        List<Order_list> order_list = new ArrayList<>();
+        String sql = "SELECT TOP 10 c.FullName, ol.Date, ol.Address, p.ProductName, "
+                + "p.Price, ol.Status, od.Quantity, ol.Total "
+                + "FROM Order_List ol "
+                + "JOIN Order_Details od ON ol.OrderID = od.OrderID "
+                + "JOIN Product p ON od.ProductID = p.ProductID "
+                + "JOIN Customer c ON ol.CustomerID = c.CustomerID "
+                + "ORDER BY ol.Date DESC";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(sql);  ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                Order_list order = new Order_list();
                 order.setFullname(rs.getString("FullName"));
                 order.setDate(rs.getDate("Date"));
                 order.setAddress(rs.getString("Address"));
@@ -410,11 +410,11 @@ public class OrderDAO extends dao.DBContext {
                 order.setQuantity(rs.getInt("Quantity"));
                 order.setTotal(rs.getDouble("Total"));
                 order_list.add(order);
-       }
-    }catch(Exception e){
-     e.printStackTrace();
-    }
-        return order_list;    
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return order_list;
     }
 
 //    public static void main(String[] args) {

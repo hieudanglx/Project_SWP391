@@ -24,7 +24,7 @@ public class Inventory {
     private int total_QuantitySell;
     private String Supplier;
     private String Brand;
-    
+
     private String Rom;
     private String Color;
 
@@ -49,7 +49,7 @@ public class Inventory {
         this.Brand = Brand;
     }
 
-    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int quantityProduct , String Supplier) {
+    public Inventory(int ProductID, String productName, Date DATE, int Import_price, int price, int quantityProduct, String Supplier) {
         this.ProductID = ProductID;
         this.productName = productName;
         this.DATE = DATE;
@@ -71,7 +71,7 @@ public class Inventory {
         this.Brand = Brand;
     }
 
-    public Inventory(int ProductID, String productName, String Color, String Rom,  Date DATE, int Import_price, int price, int quantityProduct, String Supplier) {
+    public Inventory(int ProductID, String productName, String Color, String Rom, Date DATE, int Import_price, int price, int quantityProduct, String Supplier) {
         this.ProductID = ProductID;
         this.productName = productName;
         this.Rom = Rom;
@@ -80,10 +80,8 @@ public class Inventory {
         this.Import_price = Import_price;
         this.price = price;
         this.quantityProduct = quantityProduct;
-        
+
     }
-    
-    
 
     public Inventory(int ProductID, String productName, Date DATE, int price, int quantityProduct) {
         this.ProductID = ProductID;
@@ -92,12 +90,17 @@ public class Inventory {
         this.price = price;
         this.quantityProduct = quantityProduct;
     }
-    
-    
 
-    
- 
-    
+    public Inventory(int ProductID, String productName, String Color, String Rom, Date DATE, int price, int quantityProduct) {
+        this.ProductID = ProductID;
+        this.productName = productName;
+        this.Color = Color;
+        this.Rom = Rom;
+        this.DATE = DATE;
+        this.price = price;
+        this.quantityProduct = quantityProduct;
+
+    }
 
     public Inventory(int ProductID, String productName, int Import_price, int price, int Import_quantity, int quantityProduct, int quantitySell, String Supplier) {
         this.ProductID = ProductID;
@@ -152,7 +155,6 @@ public class Inventory {
         this.Color = Color;
     }
 
-    
     public int getTotal_QuantityStock() {
         return total_QuantityStock;
     }

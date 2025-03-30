@@ -95,7 +95,7 @@ public class importExcel extends HttpServlet {
                 Date importDate;
 
                 try {
-                    importDate = Date.valueOf(row.getCell(4).getStringCellValue()); // Chuyển đổi ngày
+                    importDate = new Date(row.getCell(4).getDateCellValue().getTime()); // Chuyển đổi ngày
                 } catch (Exception e) {
                     request.setAttribute("error", "❌ Lỗi định dạng ngày cho sản phẩm ID: " + productID);
                     request.getRequestDispatcher("import_inventory.jsp").forward(request, response);

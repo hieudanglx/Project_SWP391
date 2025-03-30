@@ -46,16 +46,20 @@ public class feedback extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+
         Integer staffId = (Integer) session.getAttribute("staffId");
 
         String action = request.getParameter("action");
         if ("delete".equals(action)) {
             try {
+                session.removeAttribute("errorMessage");  // Xóa thông báo cũ
+                session.removeAttribute("repSuccess");
+                session.removeAttribute("error");
                 int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
                 boolean isDeleted = feedbackDAO.deleteFeedback(feedbackID);
 
                 if (isDeleted) {
-                    session.setAttribute("repSuccess", "Xóa đánh giá thành công!");
+                    session.setAttribute("successMessage", "Xóa đánh giá thành công!");
                 } else {
                     session.setAttribute("errorMessage", "Không thể xóa đánh giá. ID không tồn tại hoặc bị ràng buộc.");
                 }
@@ -90,21 +94,25 @@ public class feedback extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("reply".equals(action)) {
+            session.removeAttribute("successMessage"); // Xóa thông báo cũ
+            session.removeAttribute("errorMessage");
+            session.removeAttribute("repSuccess");
+            session.removeAttribute("error");
             int feedbackID = Integer.parseInt(request.getParameter("feedbackID"));
             int customerID = Integer.parseInt(request.getParameter("customerID"));
             String staffIDStr = request.getParameter("staffID");
             int staffID;
             if (staffIDStr.equalsIgnoreCase("admin")) {
-                  staffID = 1;               
+                staffID = 1;
             } else {
-                  staffID = Integer.parseInt(staffIDStr);
+                staffID = Integer.parseInt(staffIDStr);
             }
-           
+
             String content_Reply = request.getParameter("replyContent");
 
             // Kiểm tra xem feedback đã có phản hồi chưa
             if (reply_feedbackDAO.checkFeedbackHasReply(feedbackID)) {
-                session.setAttribute("errorMessage", "Không thể phản hồi nữa!");
+                session.setAttribute("error", "Không thể phản hồi nữa!");
                 response.sendRedirect("feedback");
                 return;
             }
@@ -113,7 +121,7 @@ public class feedback extends HttpServlet {
             if (repSuccess) {
                 session.setAttribute("repSuccess", "Phản hồi đã được gửi thành công!");
             } else {
-                session.setAttribute("errorMessage", "Lỗi! Không thể gửi phản hồi.");
+                session.setAttribute("error", "Lỗi! Không thể gửi phản hồi.");
             }
 
             response.sendRedirect("feedback");

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
 import model.Order_list;
@@ -64,79 +65,88 @@ public class RevenueTotal extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDao pd = new ProductDao();
-        OrderDAO dao = new OrderDAO();
-        HttpSession session = request.getSession();
-        if ((String) session.getAttribute("Username") == null) {
-            request.getRequestDispatcher("LoginOfDashboard.jsp").forward(request, response);
-        }
-        // Lấy tổng doanh thu
-        String categoryIdParam = request.getParameter("categoryId");
-        int categoryId = (categoryIdParam != null) ? Integer.parseInt(categoryIdParam) : 2; // Mặc định là 1
-        List<Product> products = pd.getTopSellingProducts(categoryId);
+        System.out.println("[DEBUG] Bắt đầu doGet trong RevenueTotal Servlet");
 
+        ProductDao productDao = new ProductDao();
+        OrderDAO orderDao = new OrderDAO();
+        HttpSession session = request.getSession();
+
+        // Kiểm tra đăng nhập
+        if (session.getAttribute("Username") == null) {
+            System.out.println("[DEBUG] Chưa đăng nhập -> Chuyển hướng đến LoginOfDashboard.jsp");
+            response.sendRedirect("LoginOfDashboard.jsp");
+            return;
+        }
+
+        System.out.println("[DEBUG] Đã đăng nhập");
+
+        // Lấy categoryId từ request, mặc định là 2
+        int categoryId = 2;
+        try {
+            String categoryIdParam = request.getParameter("categoryId");
+            if (categoryIdParam != null) {
+                categoryId = Integer.parseInt(categoryIdParam);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("[ERROR] categoryId không hợp lệ.");
+        }
+
+        System.out.println("[DEBUG] categoryId = " + categoryId);
+
+        // Lấy danh sách sản phẩm bán chạy
+        List<Product> products = productDao.getTopSellingProducts(categoryId);
+        System.out.println("[DEBUG] Lấy danh sách sản phẩm thành công");
         request.setAttribute("products", products);
-        double totalSales = dao.getTotalSales();
+
+        // Lấy tổng doanh thu từ OrderDAO
+        BigDecimal totalSales = orderDao.getTotalSales(); // Đảm bảo trả về kiểu long
         System.out.println("[DEBUG] Tổng doanh thu lấy từ DB: " + totalSales);
 
+        // Kiểm tra giá trị totalSales để tránh lỗi khi format
         // Format số với dấu phẩy
         DecimalFormat df = new DecimalFormat("#,###");
         String formattedSales = df.format(totalSales);
-
         System.out.println("[DEBUG] Tổng doanh thu sau khi format: " + formattedSales);
 
-// Gửi dữ liệu sang JSP
-        request.setAttribute("totalSales", totalSales);
+        // Gửi dữ liệu sang JSP
+        request.setAttribute("totalSales", formattedSales);
 
-        int totalProduct = pd.getTotalProduct();
+        // Lấy tổng sản phẩm & đơn hàng giao thành công
+        int totalProducts = productDao.getTotalProduct();
+        System.out.println("[DEBUG] Tổng sản phẩm: " + totalProducts);
 
-        int TotalOrderDelivery = pd.getTotalOrderDelivery();
+        int totalOrderDelivery = productDao.getTotalOrderDelivery();
+        System.out.println("[DEBUG] Tổng đơn hàng giao thành công: " + totalOrderDelivery);
 
-        session.setAttribute("totalProducts", totalProduct); // Lưu vào session
-        session.setAttribute("TotalOrderDelivery", TotalOrderDelivery);
+        int totalOrderSuccessful = productDao.getTotalPendingOrder();
+        // Lưu vào session
+        session.setAttribute("totalProducts", totalProducts);
+        session.setAttribute("totalOrderDelivery", totalOrderDelivery);
+        session.setAttribute("totalOrderSuccessful", totalOrderSuccessful);
+
+        System.out.println("[DEBUG] Chuyển hướng đến HomeDashBoard_Admin.jsp");
         request.getRequestDispatcher("HomeDashBoard_Admin.jsp").forward(request, response);
-
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        return "RevenueTotal Servlet";
+    }
 
+    // Test trực tiếp phương thức getTotalSales()
     public static void main(String[] args) {
-        // Khởi tạo DAO
         OrderDAO dao = new OrderDAO();
-
-        // Gọi phương thức getTotalSales() để lấy tổng doanh thu
-        double totalSales = dao.getTotalSales();
-
-        // Kiểm tra giá trị lấy từ DB
+        BigDecimal totalSales = dao.getTotalSales();
         System.out.println("[TEST] Tổng doanh thu lấy từ DB: " + totalSales);
 
-        // Format số theo dạng có dấu phẩy ngăn cách
         DecimalFormat df = new DecimalFormat("#,###");
         String formattedSales = df.format(totalSales);
-
-        // In kết quả sau khi format
         System.out.println("[TEST] Tổng doanh thu sau khi format: " + formattedSales);
     }
 }

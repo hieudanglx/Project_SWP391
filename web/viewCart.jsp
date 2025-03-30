@@ -143,7 +143,7 @@
                                     <h3 class="mb-0 me-3">Giỏ hàng</h3>
                                     <span class="badge bg-primary rounded-pill">${size} sản phẩm</span>
                                 </div>
-
+                                <h1>${product.productID}</h1>
                                 <c:forEach items="${list}" var="product">
                                     <c:if test="${product.quantityProduct>0}">
                                         <div class="card mb-3 shadow-sm">

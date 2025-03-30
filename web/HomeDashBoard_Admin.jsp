@@ -223,14 +223,11 @@
                                     <div class="stat-label">Total Sales</div>
                                     <%
                                         Object totalSalesObj = request.getAttribute("totalSales");
-                                        double totalSales = 0.0;
+                                        String formattedTotalSales = "0 VND";
 
                                         if (totalSalesObj != null) {
-                                            totalSales = (double) totalSalesObj;
+                                            formattedTotalSales = totalSalesObj.toString(); // Tránh ép kiểu sai
                                         }
-
-                                        java.text.NumberFormat formatter = java.text.NumberFormat.getInstance();
-                                        String formattedTotalSales = formatter.format(totalSales);
                                     %>
                                     <div class="stat-value"><%= formattedTotalSales %> VND</div>
                                 </div>
@@ -249,7 +246,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="stat-label">Successful Orders</div>
-                                    <div class="stat-value">${totalOrderSuccessful != null ? totalOrderSuccessful : "25"}</div>
+                                   <div class="stat-value">${totalOrderSuccessful != null ? totalOrderSuccessful : "25"}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-check-circle stat-icon text-warning"></i>

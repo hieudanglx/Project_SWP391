@@ -53,7 +53,7 @@ public class PaymentController extends HttpServlet {
                 String paymentMethod = request.getParameter("paymentMethod");
 
                 int customerID = c.getCustomerID();
-                int staffID = 2;
+                int staffID = 1;
                 String city = request.getParameter("cityName"); // Lấy tên tỉnh
                 String district = request.getParameter("districtName"); // Lấy tên huyện
                 String street = request.getParameter("street");

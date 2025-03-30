@@ -40,7 +40,7 @@ public class ViewProductDetailsController extends HttpServlet {
         String selectedColor = (request.getParameter("selectedColor") == null
                 || request.getParameter("selectedColor").isEmpty()) ? currentProduct.getColor() : request.getParameter("selectedColor");
 
-        Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor);
+        Product selectedProduct = findProductByRomAndColor(list, selectedRom, selectedColor, currentProduct.getRam());
         if (selectedProduct == null) {
             selectedProduct = currentProduct;
         } else if (list.size() > 2) {
@@ -58,11 +58,12 @@ public class ViewProductDetailsController extends HttpServlet {
         request.getRequestDispatcher("ViewProductDetails.jsp").forward(request, response);
     }
 
-    private Product findProductByRomAndColor(List<Product> list, String rom, String color) {
+    private Product findProductByRomAndColor(List<Product> list, String rom, String color, String ram) {
         for (Product p : list) {
+            boolean ramMatch = (rom == null) || p.getRam().equals(ram);
             boolean romMatch = (rom == null) || p.getRom().equals(rom);
             boolean colorMatch = (color == null) || p.getColor().equals(color);
-            if (romMatch && colorMatch) {
+            if (romMatch && colorMatch && ramMatch) {
                 return p;
             }
         }

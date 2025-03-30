@@ -47,7 +47,10 @@ public class createProduct extends HttpServlet {
             String gpuName = request.getParameter("gpuName");
             String ramType = request.getParameter("ramType");
             String supportsUpgradingRAM = request.getParameter("supportsUpgradingRAM");
+            supportsUpgradingRAM = (supportsUpgradingRAM != null && supportsUpgradingRAM.equals("1")) ? "1" : "0";
+
             String supportsUpgradingROM = request.getParameter("supportsUpgradingROM");
+             supportsUpgradingROM = (supportsUpgradingROM != null && supportsUpgradingROM.equals("1")) ? "1" : "0";
             String imageURL = request.getParameter("imageURL");
             int isDelete = 0; // Mặc định là chưa bị xóa
 
